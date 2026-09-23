@@ -27,6 +27,10 @@ import { EmployeeIdentityDto } from '../models/employeeIdentityDto';
 // @ts-ignore
 import { EmployeeProfileDto } from '../models/employeeProfileDto';
 // @ts-ignore
+import { EmployeeStatusCountsResponse } from '../models/employeeStatusCountsResponse';
+// @ts-ignore
+import { EnableEmployeeRequestDto } from '../models/enableEmployeeRequestDto';
+// @ts-ignore
 import { PagedResponseEmployeeSummaryDto } from '../models/pagedResponseEmployeeSummaryDto';
 // @ts-ignore
 import { UpdateEmployeeRequest } from '../models/updateEmployeeRequest';
@@ -189,6 +193,80 @@ export class EmployeeAPIService extends BaseService {
     }
 
     /**
+     * Enable A Disabled Employee
+     * Reactivates a DISABLED employee, setting status ACTIVE with a fresh statusEffectiveAt. This is the explicit DISABLED -&gt; ACTIVE transition DECISION-PEOPLE-001 calls for, and the direct inverse of disableEmployee: staffing assignments are left exactly as disableEmployee\&#39;s offboarding policy left them, never silently resurrected. Use this tool to bring a DISABLED employee back to ACTIVE; do not use updateEmployee to force the status field, which is gated on the broader profile-edit permission rather than this activation permission and runs no confirmation semantics, and do not use this tool for ON_LEAVE or SUSPENDED employees, which carry dates and a reason that only updateEmployee collects. Preconditions: the employee must exist and currently be DISABLED; TERMINATED is rejected as irreversible, ACTIVE is rejected as already active, and ON_LEAVE or SUSPENDED are rejected in favor of updateEmployee. Required inputs: employeeId (UUID) path parameter; the request body is required and carries updatedAt, the concurrency token also returned as EmployeeProfileDto.updatedAt — submit back the value most recently read for this employee so a change made in the meantime is caught rather than silently overwritten. Emits a PEOPLE_EMPLOYEE_ENABLE event and publishes a people.employee.updated fact, so the downstream replicas disableEmployee notified converge back to ACTIVE without a manual replay. Returns 404 when the employee does not exist, and 409 when the employee is TERMINATED (irreversible), ON_LEAVE or SUSPENDED (use updateEmployee instead), already ACTIVE, or when the submitted updatedAt no longer matches the employee\&#39;s current value.
+     * @endpoint post /v1/people/employees/{employeeId}/enable
+     * @param employeeId
+     * @param enableEmployeeRequestDto Concurrency token guarding the reactivation: the updatedAt value most recently read for this employee.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public enableEmployee(employeeId: string, enableEmployeeRequestDto: EnableEmployeeRequestDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<EmployeeProfileDto>;
+    public enableEmployee(employeeId: string, enableEmployeeRequestDto: EnableEmployeeRequestDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EmployeeProfileDto>>;
+    public enableEmployee(employeeId: string, enableEmployeeRequestDto: EnableEmployeeRequestDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EmployeeProfileDto>>;
+    public enableEmployee(employeeId: string, enableEmployeeRequestDto: EnableEmployeeRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (employeeId === null || employeeId === undefined) {
+            throw new Error('Required parameter employeeId was null or undefined when calling enableEmployee.');
+        }
+        if (enableEmployeeRequestDto === null || enableEmployeeRequestDto === undefined) {
+            throw new Error('Required parameter enableEmployeeRequestDto was null or undefined when calling enableEmployee.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/people/employees/${this.configuration.encodeParam({name: "employeeId", value: employeeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/enable`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<EmployeeProfileDto>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: enableEmployeeRequestDto,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Get Employee Profile By Person Id
      * Returns the full employee profile for a person id, merging identity fields from the pos-people-contact replica with local employment fields, including the contactInfo block: personal address, personal phone numbers, personal email and emergency contact. Use this tool when the person id is already known; use getEmployeeByNumber instead to resolve a human-entered employee number, and searchEmployees to list or pick an employee without their personal contact detail. Preconditions: the caller holds people:employee_pii:view, which is narrower than the people:employee:view held by the structural reads; an employee row or identity-replica row must exist for the id; identity fields may briefly be null right after creation while the replica catches up. Required inputs: employeeId (UUID) path parameter, which is the person id; there is no request body. Emits a PEOPLE_EMPLOYEE_GET audit event but changes no state; this is a read-only projection. Returns 403 when the caller does not hold people:employee_pii:view, and 404 when neither an employee record nor a person replica row exists for the id.
      * @endpoint get /v1/people/employees/{employeeId}
@@ -309,20 +387,18 @@ export class EmployeeAPIService extends BaseService {
     }
 
     /**
-     * Search Employees By Name Or Number
-     * Returns a paged list of slim employee rows matching a case-insensitive substring search across first name, last name, preferred name, and employee number. Use this tool when listing or typeahead-filtering employees; do not use getEmployee, which requires the person id already be known, and do not use getEmployeeByNumber, which resolves one exact employee number rather than searching. Preconditions: none; an empty result set is returned rather than an error when nothing matches. Required inputs: none are mandatory; q defaults to blank, which lists every employee, page defaults to 0, and size defaults to 20 with a maximum of 100. Emits a PEOPLE_EMPLOYEE_SEARCH audit event but changes no state; this is a read-only projection merged in memory from local employment rows and the pos-people-contact identity replica. Returns 200 with an empty items list and correct totals when the page or query matches nothing.
-     * @endpoint get /v1/people/employees
-     * @param q Case-insensitive substring match on name or employee number; blank lists all
-     * @param page Zero-based page index
-     * @param size Page size, up to 100
+     * Get Employee Status Histogram For The Register
+     * Returns a per-status employee count for the employee register\&#39;s stat tiles, computed over the same case-insensitive name/employee-number q filter searchEmployees applies, before any status filter -- so every tile reports what selecting that status would return out of the current search, including for a status not currently selected. Use this tool alongside searchEmployees to render the register\&#39;s stat-tile row; do not use it in place of searchEmployees, which alone returns the paged row list (durion#2158: this histogram used to be folded into that endpoint\&#39;s response, which changed its shape for every caller -- it is now this separate, additive endpoint instead). Preconditions: none; an empty tenant, or a q that matches nothing, returns an empty counts map rather than an error. Required inputs: none are mandatory; q defaults to blank, which counts every employee. Unlike searchEmployees this endpoint takes no status, sort, page, size, or include parameters -- the histogram always covers the whole q-filtered set, never one page of it. Emits a PEOPLE_EMPLOYEE_STATUS_COUNTS audit event but changes no state; this is a read-only projection merged in memory the same way searchEmployees is, and carries a bucket for an employee with no status recorded (a legacy row) so the counts always sum to the q-filtered total. Returns 200 with an empty counts map when q matches nothing.
+     * @endpoint get /v1/people/employees/status-counts
+     * @param q Case-insensitive substring match on name or employee number; blank counts all
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public searchEmployees(q?: string, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponseEmployeeSummaryDto>;
-    public searchEmployees(q?: string, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponseEmployeeSummaryDto>>;
-    public searchEmployees(q?: string, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponseEmployeeSummaryDto>>;
-    public searchEmployees(q?: string, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getEmployeeStatusCounts(q?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<EmployeeStatusCountsResponse>;
+    public getEmployeeStatusCounts(q?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EmployeeStatusCountsResponse>>;
+    public getEmployeeStatusCounts(q?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EmployeeStatusCountsResponse>>;
+    public getEmployeeStatusCounts(q?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -330,6 +406,98 @@ export class EmployeeAPIService extends BaseService {
             localVarQueryParameters,
             'q',
             <any>q,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/people/employees/status-counts`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<EmployeeStatusCountsResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Search Employees By Name Or Number
+     * Returns a paged list of slim employee rows matching a case-insensitive substring search across first name, last name, preferred name, and employee number, optionally narrowed to one or more employment statuses and sorted. Use this tool when listing, filtering, sorting, or typeahead-filtering employees; do not use getEmployee, which requires the person id already be known, or getEmployeeByNumber, which resolves one exact employee number rather than searching, and use getEmployeeStatusCounts instead of this endpoint to render the register\&#39;s stat tiles. Preconditions: none; an empty result set is returned rather than an error when nothing matches. Required inputs: none are mandatory -- q defaults to blank and lists every employee, status defaults to no filter, sort defaults to lastName,asc, page defaults to 0, and size defaults to 20 with a maximum of 100; the repeatable include parameter (durion#2155, plus ALLOWED_ACTIONS from durion#2159) adds one extra field group per token (USERNAME, CONTACT_INFO, ROLE_ASSIGNMENTS, LOCATION, JOB_ROLE, ALLOWED_ACTIONS) to the returned rows, with CONTACT_INFO gated by people:employee_pii:view (#1898) and ROLE_ASSIGNMENTS gated by people-contact:role:view, each silently omitted rather than returning 403 when the caller lacks that permission, and ALLOWED_ACTIONS is a rendering hint computed by EmployeeActionPolicy that never substitutes for the @PreAuthorize and service-level guards those actions still enforce independently. Emits a PEOPLE_EMPLOYEE_SEARCH audit event but changes no state, merging local employment rows with the pos-people-contact identity replica in memory, with every requested include category resolved only against the page actually returned so response cost stays flat as the tenant grows. Returns 200 with an empty items list and correct totals when the page, query, or status filter matches nothing, and returns 400 for an unsupported sort field or direction.
+     * @endpoint get /v1/people/employees
+     * @param q Case-insensitive substring match on name or employee number; blank lists all
+     * @param status Employment status filter; repeatable (?status&#x3D;ACTIVE&amp;status&#x3D;DISABLED). Omitted or empty applies no status filter and lists every status.
+     * @param sort Sort field with optional direction, e.g. \&#39;lastName,desc\&#39;. Only lastName is supported today. Direction defaults to asc.
+     * @param page Zero-based page index
+     * @param size Page size, up to 100
+     * @param include Register-enrichment categories (durion#2155, plus ALLOWED_ACTIONS from durion#2159); repeatable (?include&#x3D;USERNAME&amp;include&#x3D;ROLE_ASSIGNMENTS), matching how &#x60;status&#x60; above is passed. Omitted or empty returns the thin pre-#2155 row: username, contactInfo, roleAssignments, primaryLocation, otherLocationCount, jobRole and allowedActions are all null. CONTACT_INFO additionally requires people:employee_pii:view (#1898) and ROLE_ASSIGNMENTS additionally requires people-contact:role:view; without the relevant permission that field is simply absent, never a 403. ALLOWED_ACTIONS is a rendering hint only -- see EmployeeSummaryDto.allowedActions.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public searchEmployees(q?: string, status?: Array<'ACTIVE' | 'ON_LEAVE' | 'SUSPENDED' | 'TERMINATED' | 'DISABLED'>, sort?: string, page?: number, size?: number, include?: Array<'USERNAME' | 'CONTACT_INFO' | 'ROLE_ASSIGNMENTS' | 'LOCATION' | 'JOB_ROLE' | 'ALLOWED_ACTIONS'>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponseEmployeeSummaryDto>;
+    public searchEmployees(q?: string, status?: Array<'ACTIVE' | 'ON_LEAVE' | 'SUSPENDED' | 'TERMINATED' | 'DISABLED'>, sort?: string, page?: number, size?: number, include?: Array<'USERNAME' | 'CONTACT_INFO' | 'ROLE_ASSIGNMENTS' | 'LOCATION' | 'JOB_ROLE' | 'ALLOWED_ACTIONS'>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponseEmployeeSummaryDto>>;
+    public searchEmployees(q?: string, status?: Array<'ACTIVE' | 'ON_LEAVE' | 'SUSPENDED' | 'TERMINATED' | 'DISABLED'>, sort?: string, page?: number, size?: number, include?: Array<'USERNAME' | 'CONTACT_INFO' | 'ROLE_ASSIGNMENTS' | 'LOCATION' | 'JOB_ROLE' | 'ALLOWED_ACTIONS'>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponseEmployeeSummaryDto>>;
+    public searchEmployees(q?: string, status?: Array<'ACTIVE' | 'ON_LEAVE' | 'SUSPENDED' | 'TERMINATED' | 'DISABLED'>, sort?: string, page?: number, size?: number, include?: Array<'USERNAME' | 'CONTACT_INFO' | 'ROLE_ASSIGNMENTS' | 'LOCATION' | 'JOB_ROLE' | 'ALLOWED_ACTIONS'>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'q',
+            <any>q,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'status',
+            <any>status,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'sort',
+            <any>sort,
             QueryParamStyle.Form,
             true,
         );
@@ -348,6 +516,15 @@ export class EmployeeAPIService extends BaseService {
             localVarQueryParameters,
             'size',
             <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'include',
+            <any>include,
             QueryParamStyle.Form,
             true,
         );

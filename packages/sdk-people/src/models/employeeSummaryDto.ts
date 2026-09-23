@@ -7,16 +7,25 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { EmployeeLocationDto } from './employeeLocationDto';
+import { EmployeeRoleAssignmentDto } from './employeeRoleAssignmentDto';
+import { EmployeeContactInfoDto } from './employeeContactInfoDto';
+import { EmployeeJobRoleDto } from './employeeJobRoleDto';
 
 
 /**
- * Slim employee row for search results
+ * Employee row for search results; the fields below `active` are populated only when requested via `include=` (and, for `contactInfo`, only when the caller also holds `people:employee_pii:view`)
  */
 export interface EmployeeSummaryDto {
     /**
      * True when the employee is in an ACTIVE employment status
      */
     active: boolean;
+    /**
+     * Actions the calling user may take on this row (durion#2159); null unless `include=ALLOWED_ACTIONS` was requested. Computed from the caller\'s permissions and the row\'s status by EmployeeActionPolicy, the single place this transition table lives -- see EmployeeProfileDto.allowedActions for the full rendering-hint and location-scope caveats, which apply identically here.
+     */
+    allowedActions?: Array<EmployeeSummaryDtoAllowedActionsEnum> | null;
+    contactInfo?: EmployeeContactInfoDto;
     /**
      * Employee record identifier
      */
@@ -29,10 +38,15 @@ export interface EmployeeSummaryDto {
      * First (given) name, from the identity replica; null when the replica has not caught up
      */
     firstName?: string;
+    jobRole?: EmployeeJobRoleDto;
     /**
      * Last (family) name, from the identity replica; null when the replica has not caught up
      */
     lastName?: string;
+    /**
+     * Count of the person\'s other active staffing assignments beyond primaryLocation (\"Charlotte Main · +1 more\"); null unless `include=LOCATION` was requested, 0 when requested but the person has no other active assignment
+     */
+    otherLocationCount?: number | null;
     /**
      * Stable person identifier the employee maps to
      */
@@ -41,11 +55,28 @@ export interface EmployeeSummaryDto {
      * Preferred name, from the identity replica
      */
     preferredName?: string;
+    primaryLocation?: EmployeeLocationDto;
+    /**
+     * Active application-role assignments (DECISION-PEOPLE-026); null unless `include=ROLE_ASSIGNMENTS` was requested, empty when requested but the person holds none
+     */
+    roleAssignments?: Array<EmployeeRoleAssignmentDto> | null;
     /**
      * Employment status
      */
     status?: string;
+    /**
+     * Login username, from the identity replica; null unless `include=USERNAME` was requested or the person has no linked user account
+     */
+    username?: string | null;
 }
+export enum EmployeeSummaryDtoAllowedActionsEnum {
+    ViewPii = 'VIEW_PII',
+    Update = 'UPDATE',
+    Disable = 'DISABLE',
+    Enable = 'ENABLE'
+};
+
+
 
 function isOptionalEmployeeSummaryDtoPropertyOfType(
     value: Record<string, unknown>,
@@ -86,8 +117,8 @@ export function instanceOfEmployeeSummaryDto(value: object): value is EmployeeSu
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createEmployeeSummaryDtoPropertyNames('active', 'employeeId', 'personId', );
-    const optionalStringProperties = createEmployeeSummaryDtoOptionalProperties({ name: 'employeeId', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'personId', nullable: false }, { name: 'preferredName', nullable: false }, { name: 'status', nullable: false }, );
-    const optionalNumberProperties = createEmployeeSummaryDtoOptionalProperties();
+    const optionalStringProperties = createEmployeeSummaryDtoOptionalProperties({ name: 'employeeId', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'personId', nullable: false }, { name: 'preferredName', nullable: false }, { name: 'status', nullable: false }, { name: 'username', nullable: true }, );
+    const optionalNumberProperties = createEmployeeSummaryDtoOptionalProperties({ name: 'otherLocationCount', nullable: true }, );
     const optionalBooleanProperties = createEmployeeSummaryDtoOptionalProperties({ name: 'active', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

@@ -8,12 +8,17 @@
  * Do not edit the class manually.
  */
 import { EmployeeContactInfoDto } from './employeeContactInfoDto';
+import { EmployeeJobRoleDto } from './employeeJobRoleDto';
 
 
 /**
  * Employee profile returned by employee read and write operations
  */
 export interface EmployeeProfileDto {
+    /**
+     * Actions the calling user may take on this employee (durion#2159), computed from the caller\'s permissions and the employee\'s current status by EmployeeActionPolicy -- the single place this transition table lives. This is a RENDERING HINT ONLY: the backend continues to enforce authorization and status transitions independently via @PreAuthorize and its service guards, so a client must never treat an entry here as proof an operation will succeed. Known limitation: the flags consider only permissions and status, not the location-scoped access enforced elsewhere in this module, so a location-scoped caller may occasionally see an action listed that their scope does not actually cover for this employee.
+     */
+    allowedActions: Array<EmployeeProfileDtoAllowedActionsEnum>;
     contactInfo?: EmployeeContactInfoDto;
     /**
      * Timestamp the employee record was created
@@ -35,6 +40,7 @@ export interface EmployeeProfileDto {
      * Employee identifier
      */
     id: string;
+    jobRole?: EmployeeJobRoleDto;
     /**
      * Last (family) name of the employee
      */
@@ -64,6 +70,12 @@ export interface EmployeeProfileDto {
      */
     warnings?: Array<string>;
 }
+export enum EmployeeProfileDtoAllowedActionsEnum {
+    ViewPii = 'VIEW_PII',
+    Update = 'UPDATE',
+    Disable = 'DISABLE',
+    Enable = 'ENABLE'
+};
 export enum EmployeeProfileDtoStatusEnum {
     Active = 'ACTIVE',
     OnLeave = 'ON_LEAVE',
@@ -112,7 +124,7 @@ export function instanceOfEmployeeProfileDto(value: object): value is EmployeePr
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createEmployeeProfileDtoPropertyNames('employeeNumber', 'firstName', 'hireDate', 'id', 'lastName', 'status', );
+    const requiredProperties = createEmployeeProfileDtoPropertyNames('allowedActions', 'employeeNumber', 'firstName', 'hireDate', 'id', 'lastName', 'status', );
     const optionalStringProperties = createEmployeeProfileDtoOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'firstName', nullable: false }, { name: 'hireDate', nullable: false }, { name: 'id', nullable: false }, { name: 'lastName', nullable: false }, { name: 'preferredName', nullable: false }, { name: 'status', nullable: false }, { name: 'statusEffectiveAt', nullable: false }, { name: 'terminationDate', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createEmployeeProfileDtoOptionalProperties();
     const optionalBooleanProperties = createEmployeeProfileDtoOptionalProperties();

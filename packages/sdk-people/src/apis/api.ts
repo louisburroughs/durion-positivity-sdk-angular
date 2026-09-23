@@ -1,4 +1,5 @@
 export * from './employeeAPI.service';
+export * from './jobRoleAPI.service';
 export * from './peopleAvailabilityAPI.service';
 export * from './peopleBulkIngestAPI.service';
 export * from './peopleComplianceAPI.service';
