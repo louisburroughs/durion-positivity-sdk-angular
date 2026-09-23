@@ -32,6 +32,10 @@ export interface CreateEmployeeRequest {
      */
     hireDate: string;
     /**
+     * Id of the employee\'s job role, from the tenant\'s job-role list; omit for none
+     */
+    jobRoleId?: string;
+    /**
      * Last (family) name of the employee
      */
     lastName: string;
@@ -101,7 +105,7 @@ export function instanceOfCreateEmployeeRequest(value: object): value is CreateE
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCreateEmployeeRequestPropertyNames('employeeNumber', 'firstName', 'hireDate', 'lastName', 'status', );
-    const optionalStringProperties = createCreateEmployeeRequestOptionalProperties({ name: 'duplicatePolicy', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'firstName', nullable: false }, { name: 'hireDate', nullable: false }, { name: 'lastName', nullable: false }, { name: 'preferredName', nullable: false }, { name: 'status', nullable: false }, { name: 'terminationDate', nullable: false }, );
+    const optionalStringProperties = createCreateEmployeeRequestOptionalProperties({ name: 'duplicatePolicy', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'firstName', nullable: false }, { name: 'hireDate', nullable: false }, { name: 'jobRoleId', nullable: false }, { name: 'lastName', nullable: false }, { name: 'preferredName', nullable: false }, { name: 'status', nullable: false }, { name: 'terminationDate', nullable: false }, );
     const optionalNumberProperties = createCreateEmployeeRequestOptionalProperties();
     const optionalBooleanProperties = createCreateEmployeeRequestOptionalProperties();
 
