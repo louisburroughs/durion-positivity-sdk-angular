@@ -26,6 +26,10 @@ export interface CreateAdjustmentRequest {
      */
     createdByUserId: string;
     /**
+     * Storage location whose stock was counted. Required for the variance to post against a shelf when the adjustment has no task; when the task\'s bin names a location this may be omitted, and if supplied must match it. Omitted with no task, the variance posts against the stock item\'s location-less balance.
+     */
+    locationId?: string;
+    /**
      * Quantity on hand recorded before the count was applied
      */
     quantityOnHandBefore: number;
@@ -82,7 +86,7 @@ export function instanceOfCreateAdjustmentRequest(value: object): value is Creat
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCreateAdjustmentRequestPropertyNames('costAtTimeOfAdjustment', 'countedQuantity', 'createdByUserId', 'quantityOnHandBefore', 'reasonCode', 'stockItemId', );
-    const optionalStringProperties = createCreateAdjustmentRequestOptionalProperties({ name: 'createdByUserId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'taskId', nullable: false }, );
+    const optionalStringProperties = createCreateAdjustmentRequestOptionalProperties({ name: 'createdByUserId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'taskId', nullable: false }, );
     const optionalNumberProperties = createCreateAdjustmentRequestOptionalProperties({ name: 'costAtTimeOfAdjustment', nullable: false }, { name: 'countedQuantity', nullable: false }, { name: 'quantityOnHandBefore', nullable: false }, );
     const optionalBooleanProperties = createCreateAdjustmentRequestOptionalProperties();
 

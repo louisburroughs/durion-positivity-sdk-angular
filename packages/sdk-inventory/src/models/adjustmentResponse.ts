@@ -50,6 +50,10 @@ export interface AdjustmentResponse {
      */
     ledgerEntryId?: string;
     /**
+     * Storage location the variance posts against: the task\'s bin, or the location named on the create request. Absent when neither named one.
+     */
+    locationId?: string;
+    /**
      * Timestamp when the adjustment was posted to the inventory ledger, if posted
      */
     postedAt?: string;
@@ -164,7 +168,7 @@ export function instanceOfAdjustmentResponse(value: object): value is Adjustment
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAdjustmentResponsePropertyNames('adjustmentId', 'costAtTimeOfAdjustment', 'countedQuantity', 'createdAt', 'createdByUserId', 'quantityChange', 'quantityOnHandBefore', 'reasonCode', 'status', 'stockItemId', 'updatedAt', );
-    const optionalStringProperties = createAdjustmentResponseOptionalProperties({ name: 'adjustmentId', nullable: false }, { name: 'approvedAt', nullable: false }, { name: 'approvedByUserId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'errorMessage', nullable: false }, { name: 'ledgerEntryId', nullable: false }, { name: 'postedAt', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'rejectedAt', nullable: false }, { name: 'rejectedByUserId', nullable: false }, { name: 'rejectionReason', nullable: false }, { name: 'requiredApprovalTier', nullable: false }, { name: 'status', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'taskId', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const optionalStringProperties = createAdjustmentResponseOptionalProperties({ name: 'adjustmentId', nullable: false }, { name: 'approvedAt', nullable: false }, { name: 'approvedByUserId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'errorMessage', nullable: false }, { name: 'ledgerEntryId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'postedAt', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'rejectedAt', nullable: false }, { name: 'rejectedByUserId', nullable: false }, { name: 'rejectionReason', nullable: false }, { name: 'requiredApprovalTier', nullable: false }, { name: 'status', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'taskId', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createAdjustmentResponseOptionalProperties({ name: 'costAtTimeOfAdjustment', nullable: false }, { name: 'countedQuantity', nullable: false }, { name: 'quantityChange', nullable: false }, { name: 'quantityOnHandBefore', nullable: false }, { name: 'variancePercentage', nullable: false }, { name: 'varianceValue', nullable: false }, );
     const optionalBooleanProperties = createAdjustmentResponseOptionalProperties();
 
