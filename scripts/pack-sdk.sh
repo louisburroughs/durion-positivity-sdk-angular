@@ -146,8 +146,10 @@ for package_dir in "${packages[@]}"; do
 	fi
 
 	# Generated clients must ship one Configuration and BASE_PATH, in the
-	# /configuration entry point only. sdk-transport has no such entry point.
-	if [[ -f "${package_dir}/configuration/ng-package.json" ]]; then
+	# /configuration entry point only. sdk-transport is built with tsc and has
+	# no such entry point; every other package is checked, so one that lost its
+	# configuration/ entry fails here instead of packing without ./configuration.
+	if [[ "$package_dir" != "packages/sdk-transport" ]]; then
 		node scripts/check-configuration-entry.mjs "$package_dir"
 	fi
 
