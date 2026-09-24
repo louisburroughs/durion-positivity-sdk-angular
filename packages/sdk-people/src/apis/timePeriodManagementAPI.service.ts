@@ -43,9 +43,9 @@ export class TimePeriodManagementAPIService extends BaseService {
 
     /**
      * Create Pay Period
-     * Creates a pay period for a tenant with an inclusive start and end date and an initial lifecycle status. Use this tool for corrections and off-grid periods; do not create routine periods manually, the scheduled rollover opens those on the configured cadence instead. Preconditions: the range must not overlap any existing period for the tenant, and endDate must not be before startDate. Required inputs: a body with tenantId (UUID), startDate, and endDate; status is optional and defaults to OPEN. Emits PEOPLE_TIME_PERIOD_CREATE. Returns 400 when the range is invalid, and 409 when the range overlaps an existing period.
+     * Creates a pay period for the caller\&#39;s tenant with an inclusive start and end date and an initial lifecycle status; the tenant comes from the access token, never the body. Use this tool for corrections and off-grid periods; do not create routine periods manually, the scheduled rollover opens those on the configured cadence instead. Preconditions: the range must not overlap any existing period for the tenant, and endDate must not be before startDate. Required inputs: a body with startDate and endDate; status is optional and defaults to OPEN. Emits PEOPLE_TIME_PERIOD_CREATE. Returns 400 when the range is invalid, and 409 when the range overlaps an existing period.
      * @endpoint post /v1/people/time-periods
-     * @param createTimePeriodRequest Tenant, inclusive date range, and optional initial status of the new period.
+     * @param createTimePeriodRequest Inclusive date range and optional initial status of the new period.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

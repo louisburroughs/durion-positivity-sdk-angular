@@ -10,7 +10,7 @@
 
 
 /**
- * Request to create a pay period for timekeeping approval
+ * Request to create a pay period for timekeeping approval; the tenant is the caller\'s own, taken from the access token (ADR-0062), never from the body
  */
 export interface CreateTimePeriodRequest {
     /**
@@ -25,10 +25,6 @@ export interface CreateTimePeriodRequest {
      * Initial lifecycle status; defaults to OPEN when omitted
      */
     status?: CreateTimePeriodRequestStatusEnum;
-    /**
-     * Tenant the period belongs to
-     */
-    tenantId: string;
 }
 export enum CreateTimePeriodRequestStatusEnum {
     Open = 'OPEN',
@@ -76,8 +72,8 @@ export function instanceOfCreateTimePeriodRequest(value: object): value is Creat
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateTimePeriodRequestPropertyNames('endDate', 'startDate', 'tenantId', );
-    const optionalStringProperties = createCreateTimePeriodRequestOptionalProperties({ name: 'endDate', nullable: false }, { name: 'startDate', nullable: false }, { name: 'status', nullable: false }, { name: 'tenantId', nullable: false }, );
+    const requiredProperties = createCreateTimePeriodRequestPropertyNames('endDate', 'startDate', );
+    const optionalStringProperties = createCreateTimePeriodRequestOptionalProperties({ name: 'endDate', nullable: false }, { name: 'startDate', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createCreateTimePeriodRequestOptionalProperties();
     const optionalBooleanProperties = createCreateTimePeriodRequestOptionalProperties();
 
