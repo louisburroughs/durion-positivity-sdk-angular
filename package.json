@@ -12,6 +12,7 @@
     "lint": "eslint . --ext .ts,.tsx",
     "generate": "bash scripts/generate-openapi.sh",
     "pack": "bash scripts/pack-sdk.sh",
+    "check:configuration-entry": "node scripts/check-configuration-entry.mjs",
     "version:current": "node scripts/version.mjs current",
     "version:next": "node scripts/version.mjs next",
     "version:bump": "node scripts/version.mjs bump",

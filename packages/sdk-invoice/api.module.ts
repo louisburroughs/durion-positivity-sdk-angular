@@ -1,5 +1,5 @@
 import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core';
-import { Configuration } from './configuration';
+import { Configuration } from '@durion-sdk/invoice/configuration';
 import { HttpClient } from '@angular/common/http';
 
 

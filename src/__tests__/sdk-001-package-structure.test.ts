@@ -74,8 +74,8 @@ describe('sdk-001 package structure', () => {
 
     it('exposes provideApi via the package surface', () => {
       expect(existsSync(join(pkgDir, 'src', 'apis', 'api.ts'))).toBe(true);
-      expect(existsSync(join(pkgDir, 'provide-api.ts'))).toBe(true);
-      const provideApi = readFileSync(join(pkgDir, 'provide-api.ts'), 'utf8');
+      expect(existsSync(join(pkgDir, 'configuration', 'provide-api.ts'))).toBe(true);
+      const provideApi = readFileSync(join(pkgDir, 'configuration', 'provide-api.ts'), 'utf8');
       expect(provideApi).toMatch(/export function provideApi/);
     });
 
@@ -89,7 +89,7 @@ describe('sdk-001 package structure', () => {
         return;
       }
 
-      const baseService = readFileSync(join(pkgDir, 'api.base.service.ts'), 'utf8');
+      const baseService = readFileSync(join(pkgDir, 'configuration', 'api.base.service.ts'), 'utf8');
       expect(baseService).toContain(`protected basePath = '${expectedBasePath}';`);
       expect(baseService).not.toContain('/v1/');
       expect(baseService).not.toContain('http://localhost:8086');

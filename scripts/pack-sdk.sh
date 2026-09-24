@@ -145,6 +145,12 @@ for package_dir in "${packages[@]}"; do
 		exit 1
 	fi
 
+	# Generated clients must ship one Configuration and BASE_PATH, in the
+	# /configuration entry point only. sdk-transport has no such entry point.
+	if [[ -f "${package_dir}/configuration/ng-package.json" ]]; then
+		node scripts/check-configuration-entry.mjs "$package_dir"
+	fi
+
 	echo "[pack] Packing ${package_dir}/dist..."
 	npm pack "$dist_dir" --pack-destination "$out_dir" >/dev/null
 

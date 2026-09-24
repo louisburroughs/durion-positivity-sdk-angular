@@ -1,1 +1,1 @@
-export * from '../configuration';
+export * from '@durion-sdk/warranty/configuration';

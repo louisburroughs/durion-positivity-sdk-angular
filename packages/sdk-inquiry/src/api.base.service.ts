@@ -1,1 +1,1 @@
-export * from '../api.base.service';
+export * from '@durion-sdk/inquiry/configuration';

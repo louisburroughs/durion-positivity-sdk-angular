@@ -1,6 +1,3 @@
 export * from './src/apis/api';
-export * from './variables';
-export * from './configuration';
+export * from '@durion-sdk/inquiry/configuration';
 export * from './api.module';
-export * from './provide-api';
-export * from './param';

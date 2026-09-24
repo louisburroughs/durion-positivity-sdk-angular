@@ -5,6 +5,9 @@ const config = {
   testMatch: ['**/*.test.ts'],
   coverageProvider: 'v8',
   moduleNameMapper: {
+    // Secondary entry points first: the general mapper below would turn
+    // @durion-sdk/<pkg>/configuration into a path that does not exist.
+    '^@durion-sdk/([^/]+)/configuration$': '<rootDir>/packages/sdk-$1/configuration/index.ts',
     '^@durion-sdk/(.+)$': '<rootDir>/packages/sdk-$1/src/index.ts',
   },
   passWithNoTests: true,

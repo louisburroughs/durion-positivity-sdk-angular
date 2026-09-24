@@ -1,1 +1,1 @@
-export * from '../query.params';
+export * from '@durion-sdk/order/configuration';
