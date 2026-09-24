@@ -53,6 +53,25 @@ __Note for Windows users:__ The Angular CLI has troubles to use linked npm packa
 Please refer to this issue <https://github.com/angular/angular-cli/issues/8284> for a solution / workaround.
 Published packages are not effected by this issue.
 
+### The `@durion-sdk/workorder/configuration` entry point
+
+`Configuration`, `BASE_PATH`, `COLLECTION_FORMATS`, `provideApi` and the `Param` types
+live in a secondary entry point, `@durion-sdk/workorder/configuration`. Import them from there in
+startup code such as `app.config.ts`:
+
+```typescript
+import { BASE_PATH, Configuration, provideApi } from '@durion-sdk/workorder/configuration';
+```
+
+Importing from the primary entry, `@durion-sdk/workorder`, pulls that module into the importing
+chunk, and with it every generated service the app uses anywhere, including services
+only lazy-loaded pages call. The secondary entry holds no services, so startup code
+that imports only it leaves each service in the chunk of the page that uses it.
+
+The primary entry re-exports the same symbols, so `import { Configuration } from '@durion-sdk/workorder'`
+still compiles and yields the same class. The package ships exactly one `Configuration`
+class and one `BASE_PATH` token, both in the secondary entry.
+
 ### General usage
 
 In your Angular project:
@@ -61,7 +80,7 @@ In your Angular project:
 
 import { ApplicationConfig } from '@angular/core';
 import { provideHttpClient } from '@angular/common/http';
-import { provideApi } from '@durion-sdk/workorder';
+import { provideApi } from '@durion-sdk/workorder/configuration';
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -83,7 +102,7 @@ If different from the generated base path, during app bootstrap, you can provide
 ```typescript
 import { ApplicationConfig } from '@angular/core';
 import { provideHttpClient } from '@angular/common/http';
-import { provideApi } from '@durion-sdk/workorder';
+import { provideApi } from '@durion-sdk/workorder/configuration';
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -98,7 +117,7 @@ export const appConfig: ApplicationConfig = {
 // with a custom configuration
 import { ApplicationConfig } from '@angular/core';
 import { provideHttpClient } from '@angular/common/http';
-import { provideApi } from '@durion-sdk/workorder';
+import { provideApi } from '@durion-sdk/workorder/configuration';
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -117,7 +136,7 @@ export const appConfig: ApplicationConfig = {
 // with factory building a custom configuration
 import { ApplicationConfig } from '@angular/core';
 import { provideHttpClient } from '@angular/common/http';
-import { provideApi, Configuration } from '@durion-sdk/workorder';
+import { provideApi, Configuration } from '@durion-sdk/workorder/configuration';
 
 export const appConfig: ApplicationConfig = {
     providers: [

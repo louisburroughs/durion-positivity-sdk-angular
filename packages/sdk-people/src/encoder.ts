@@ -1,1 +1,1 @@
-export * from '../encoder';
+export * from '@durion-sdk/people/configuration';

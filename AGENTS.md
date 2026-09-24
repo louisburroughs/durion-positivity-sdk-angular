@@ -30,6 +30,7 @@ npm run version:set -- 1.0.0  # major bumps only, by hand
 - Update the package `src/index.ts` when changing the public surface.
 - Prefer backend OpenAPI/spec changes over hand-editing generated clients.
 - Keep ADRs and repo docs aligned with generation changes.
+- Generated packages keep `Configuration`, `BASE_PATH` and the other support files in the `@durion-sdk/<pkg>/configuration` secondary entry (`packages/sdk-<pkg>/configuration/`). Files in the primary entry must import them by that package name, never by relative path; see README "Package Entry Points".
 
 ## Where to Look
 

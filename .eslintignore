@@ -14,6 +14,7 @@ packages/sdk-*/src/api.base.service.ts
 packages/sdk-*/src/provide-api.ts
 packages/sdk-*/src/query.params.ts
 packages/sdk-*/api.base.service.ts
+packages/sdk-*/configuration/
 packages/sdk-*/configuration.ts
 packages/sdk-*/encoder.ts
 packages/sdk-*/variables.ts

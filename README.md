@@ -17,6 +17,42 @@ npm test
 npm run lint
 ```
 
+## Package Entry Points
+
+Every generated package (all but `sdk-transport`) has two ng-packagr entry points:
+
+| Import | Holds |
+| --- | --- |
+| `@durion-sdk/<pkg>` | the generated services, models, `ApiModule`, and a re-export of the configuration entry |
+| `@durion-sdk/<pkg>/configuration` | `Configuration`, `BASE_PATH`, `COLLECTION_FORMATS`, `provideApi`, `Param` and the other support types |
+
+Import from `@durion-sdk/<pkg>/configuration` in app startup code, e.g. `app.config.ts`:
+
+```typescript
+import { Configuration } from '@durion-sdk/accounting/configuration';
+```
+
+The Angular CLI puts a module in one chunk. Importing `Configuration` from the primary
+entry puts that module, and every generated service the app uses anywhere, into the
+initial chunk, even services only lazy-loaded pages call. The configuration entry holds
+no services, so a lazy page's services stay in its own chunk. Existing imports from
+`@durion-sdk/<pkg>` still compile and yield the same class.
+
+The support files live in `packages/sdk-<pkg>/configuration/`. `npm run generate`
+moves them there after each generator run, and the files in the primary entry
+(`index.ts`, `api.module.ts`, the `src/*.ts` shims the services import) reach them only
+by package name. A relative import would compile a second `Configuration` class and
+`BASE_PATH` token into the primary bundle; the app would then provide a `Configuration`
+the services never inject, and every request would silently go to the generated default
+`basePath`. Two checks stop that from shipping:
+
+- `src/__tests__/sdk-009-configuration-entry.test.ts` asserts both entries and the
+  services see the same `Configuration` and `BASE_PATH`.
+- `npm run pack` runs `scripts/check-configuration-entry.mjs` on each built package and
+  fails if a primary `fesm2022` bundle defines `class Configuration` or
+  `new InjectionToken('basePath')`. Run it on its own after a build with
+  `npm run check:configuration-entry`.
+
 ## Versioning
 
 Every package in this repo shares one version. `scripts/version.mjs` is the only

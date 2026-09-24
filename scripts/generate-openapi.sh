@@ -49,7 +49,72 @@ patch_package_tsconfig() {
 	:
 }
 
+# Support files the generator writes at the package root. They hold no
+# services, so they are moved into the `@durion-sdk/<pkg>/configuration`
+# secondary entry point (see move_support_files_to_configuration_entry).
+CONFIGURATION_ENTRY_FILES=(configuration api.base.service query.params encoder param variables provide-api)
+
+# An Angular app imports each package's Configuration at startup. With a single
+# entry point per package, that import put the whole package module - every
+# generated service the app uses anywhere, lazy pages included - into the app's
+# initial chunk. The support files now live in a secondary entry point,
+# packages/sdk-<pkg>/configuration/, which ng-packagr builds into its own
+# module and exports as `@durion-sdk/<pkg>/configuration`.
+#
+# The generator rewrites the support files at the package root on every run, so
+# this moves them again each time. Their relative imports of one another stay
+# valid because they all move together.
+#
+# Invariant: the primary entry must reach these files only by package name
+# (`@durion-sdk/<pkg>/configuration`), never by relative path. A relative
+# import compiles a second Configuration class and BASE_PATH token into the
+# primary bundle; the app then provides a Configuration the services never
+# inject and every request silently goes to the generated default basePath.
+# scripts/check-configuration-entry.mjs fails the pack if that happens.
+move_support_files_to_configuration_entry() {
+	local module_name="$1"
+	local package_dir="packages/sdk-${module_name}"
+	local entry_dir="${package_dir}/configuration"
+	local npm_name="@durion-sdk/${module_name}"
+	local support_file
+
+	mkdir -p "${entry_dir}"
+
+	for support_file in "${CONFIGURATION_ENTRY_FILES[@]}"; do
+		if [[ -f "${package_dir}/${support_file}.ts" ]]; then
+			mv -f "${package_dir}/${support_file}.ts" "${entry_dir}/${support_file}.ts"
+		fi
+		if [[ ! -f "${entry_dir}/${support_file}.ts" ]]; then
+			echo "[generate] Missing ${support_file}.ts for sdk-${module_name}; cannot build the configuration entry point" >&2
+			return 1
+		fi
+	done
+
+	: > "${entry_dir}/index.ts"
+	for support_file in "${CONFIGURATION_ENTRY_FILES[@]}"; do
+		echo "export * from './${support_file}';" >> "${entry_dir}/index.ts"
+	done
+
+	cat > "${entry_dir}/ng-package.json" <<'EOF'
+{
+  "$schema": "../node_modules/ng-packagr/ng-package.schema.json",
+  "lib": {
+    "entryFile": "index.ts"
+  }
+}
+EOF
+
+	# api.module.ts stays in the primary entry; point it at the secondary one.
+	if [[ -f "${package_dir}/api.module.ts" ]]; then
+		sed -i "s|from '\./configuration'|from '${npm_name}/configuration'|" "${package_dir}/api.module.ts"
+	fi
+}
+
 write_src_support_shims() {
+	# The generated services under src/apis import ../configuration,
+	# ../variables, ../api.base.service and ../query.params. These shims send
+	# those imports to the configuration entry point by package name, so the
+	# services share its single Configuration class and BASE_PATH token.
 	local module_name="$1"
 	local package_dir="packages/sdk-${module_name}"
 	local src_dir="${package_dir}/src"
@@ -58,7 +123,7 @@ write_src_support_shims() {
 
 	for support_file in configuration api.base.service query.params encoder param variables; do
 		cat > "${src_dir}/${support_file}.ts" <<EOF
-export * from '../${support_file}';
+export * from '@durion-sdk/${module_name}/configuration';
 EOF
 	done
 }
@@ -310,7 +375,7 @@ gateway_base_path_for_module() {
 apply_gateway_base_path_default() {
 	local module_name="$1"
 	local package_dir="packages/sdk-${module_name}"
-	local api_base_service="${package_dir}/api.base.service.ts"
+	local api_base_service="${package_dir}/configuration/api.base.service.ts"
 	local gateway_base_path
 
 	if ! gateway_base_path="$(gateway_base_path_for_module "${module_name}")"; then
@@ -355,6 +420,7 @@ if [[ -n "$module" ]]; then
 	npx @openapitools/openapi-generator-cli generate --generator-key "sdk-${module}"
 
 	patch_package_tsconfig "$module"
+	move_support_files_to_configuration_entry "$module"
 	write_src_support_shims "$module"
 	fix_model_import_paths "$module"
 	if [[ "$module" == "inventory" ]]; then
@@ -380,6 +446,7 @@ else
 		npx @openapitools/openapi-generator-cli generate --generator-key "sdk-${m}"
 
 		patch_package_tsconfig "$m"
+		move_support_files_to_configuration_entry "$m"
 		write_src_support_shims "$m"
 		fix_model_import_paths "$m"
 		if [[ "$m" == "inventory" ]]; then

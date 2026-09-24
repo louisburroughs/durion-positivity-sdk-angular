@@ -145,6 +145,14 @@ for package_dir in "${packages[@]}"; do
 		exit 1
 	fi
 
+	# Generated clients must ship one Configuration and BASE_PATH, in the
+	# /configuration entry point only. sdk-transport is built with tsc and has
+	# no such entry point; every other package is checked, so one that lost its
+	# configuration/ entry fails here instead of packing without ./configuration.
+	if [[ "$package_dir" != "packages/sdk-transport" ]]; then
+		node scripts/check-configuration-entry.mjs "$package_dir"
+	fi
+
 	echo "[pack] Packing ${package_dir}/dist..."
 	npm pack "$dist_dir" --pack-destination "$out_dir" >/dev/null
 

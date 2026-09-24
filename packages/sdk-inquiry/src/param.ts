@@ -1,1 +1,1 @@
-export * from '../param';
+export * from '@durion-sdk/inquiry/configuration';
