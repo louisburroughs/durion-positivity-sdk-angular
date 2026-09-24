@@ -38,9 +38,13 @@ export interface GetPartyResponse {
      */
     partyId: string;
     /**
-     * Party type discriminator
+     * Party type discriminator (COMMERCIAL|PERSON)
      */
     partyType: string;
+    /**
+     * Canonical pos-people person id, present only when partyType is PERSON. Pass it to getPerson for the individual\'s names, contact points and preferred contact method.
+     */
+    personId?: string;
     /**
      * Current status of the party
      */
@@ -90,7 +94,7 @@ export function instanceOfGetPartyResponse(value: object): value is GetPartyResp
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createGetPartyResponsePropertyNames('createdAt', 'legalName', 'partyId', 'partyType', 'status', );
-    const optionalStringProperties = createGetPartyResponseOptionalProperties({ name: 'billingTermsId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'displayName', nullable: false }, { name: 'legalName', nullable: false }, { name: 'modifiedAt', nullable: false }, { name: 'partyId', nullable: false }, { name: 'partyType', nullable: false }, { name: 'status', nullable: false }, { name: 'taxId', nullable: false }, );
+    const optionalStringProperties = createGetPartyResponseOptionalProperties({ name: 'billingTermsId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'displayName', nullable: false }, { name: 'legalName', nullable: false }, { name: 'modifiedAt', nullable: false }, { name: 'partyId', nullable: false }, { name: 'partyType', nullable: false }, { name: 'personId', nullable: false }, { name: 'status', nullable: false }, { name: 'taxId', nullable: false }, );
     const optionalNumberProperties = createGetPartyResponseOptionalProperties();
     const optionalBooleanProperties = createGetPartyResponseOptionalProperties();
 
