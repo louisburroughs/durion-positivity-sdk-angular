@@ -116,7 +116,8 @@ export enum AccountingEventResponseStatusEnum {
     Processing = 'PROCESSING',
     Processed = 'PROCESSED',
     Failed = 'FAILED',
-    Suspended = 'SUSPENDED'
+    Suspended = 'SUSPENDED',
+    Skipped = 'SKIPPED'
 };
 
 
