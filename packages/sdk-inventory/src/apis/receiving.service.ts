@@ -25,6 +25,8 @@ import { CrossDockRequest } from '../models/crossDockRequest';
 // @ts-ignore
 import { CrossDockResponse } from '../models/crossDockResponse';
 // @ts-ignore
+import { CrossDockWorkorderSearchResultDto } from '../models/crossDockWorkorderSearchResultDto';
+// @ts-ignore
 import { ReceiveItemsRequest } from '../models/receiveItemsRequest';
 // @ts-ignore
 import { ReceiveItemsResponse } from '../models/receiveItemsResponse';
@@ -319,6 +321,75 @@ export class ReceivingService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: receiveItemsRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Search Cross-Dock Workorders
+     * Searches the workorders eligible to receive a cross-docked receiving line: status not COMPLETED, CANCELLED or CLOSED, and at least one demanded part line. Use this tool to find the workorderId/workorderLineId to pass to crossDockReceivingLine; do not use it for workorders with no part lines, which are never eligible and never returned. Preconditions: none; an unmatched query yields an empty array. Required inputs: none. Optional query parameter query matches workorderNumber (case-insensitive contains) or an exact workorder UUID; a blank or omitted query returns up to 50 most-recently-updated eligible workorders. Read-only: no state changes. Emits an INVENTORY_RECEIVING_WORKORDER_SEARCH event (the module\&#39;s read-audit convention for a search endpoint) even though nothing is written. Returns 200 with an empty array when nothing matches.
+     * @endpoint get /v1/inventory/receiving/workorders
+     * @param query Workorder number fragment or exact workorder UUID
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public searchCrossDockWorkorders(query?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<CrossDockWorkorderSearchResultDto>>;
+    public searchCrossDockWorkorders(query?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<CrossDockWorkorderSearchResultDto>>>;
+    public searchCrossDockWorkorders(query?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<CrossDockWorkorderSearchResultDto>>>;
+    public searchCrossDockWorkorders(query?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'query',
+            <any>query,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/inventory/receiving/workorders`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<CrossDockWorkorderSearchResultDto>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

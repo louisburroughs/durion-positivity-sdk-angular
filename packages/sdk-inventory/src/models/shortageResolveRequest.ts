@@ -14,13 +14,13 @@
  */
 export interface ShortageResolveRequest {
     /**
-     * Identifier of the allocation to resolve
+     * Identifier of the allocation to resolve; the UI\'s allocationLineId names the same allocation
      */
     allocationId: string;
     /**
-     * Retry-safe idempotency key; a replay with the same key returns the original result
+     * Retry-safe idempotency key; a replay with the same key returns the original result. When omitted, defaults to \"<allocationId>:<optionType>\"
      */
-    idempotencyKey: string;
+    idempotencyKey?: string;
     /**
      * Site the demand is short at (required for BACKORDER / TRANSFER_IN)
      */
@@ -34,13 +34,13 @@ export interface ShortageResolveRequest {
      */
     optionType: ShortageResolveRequestOptionTypeEnum;
     /**
-     * Quantity that is short and to be resolved
+     * Quantity that is short and to be resolved. When omitted, derived from the named allocation\'s reservation as requiredQuantity minus allocatedQuantity
      */
-    shortQuantity: number;
+    shortQuantity?: number;
     /**
-     * SKU / stock-item identifier that is short
+     * SKU / stock-item identifier that is short. When omitted, derived from the named allocation\'s reservation
      */
-    sku: string;
+    sku?: string;
     /**
      * Source site to pull surplus from; required when optionType is TRANSFER_IN
      */
@@ -102,7 +102,7 @@ export function instanceOfShortageResolveRequest(value: object): value is Shorta
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createShortageResolveRequestPropertyNames('allocationId', 'idempotencyKey', 'optionType', 'shortQuantity', 'sku', );
+    const requiredProperties = createShortageResolveRequestPropertyNames('allocationId', 'optionType', );
     const optionalStringProperties = createShortageResolveRequestOptionalProperties({ name: 'allocationId', nullable: false }, { name: 'idempotencyKey', nullable: false }, { name: 'locationId', nullable: false }, { name: 'notes', nullable: false }, { name: 'optionType', nullable: false }, { name: 'sku', nullable: false }, { name: 'sourceLocationId', nullable: false }, { name: 'substituteSku', nullable: false }, { name: 'workorderLineId', nullable: false }, );
     const optionalNumberProperties = createShortageResolveRequestOptionalProperties({ name: 'shortQuantity', nullable: false }, );
     const optionalBooleanProperties = createShortageResolveRequestOptionalProperties();

@@ -315,7 +315,7 @@ export class PickListsService extends BaseService {
 
     /**
      * List pick lists for workorder
-     * Returns every pick list linked to a workorder. Use this tool to find a workorder\&#39;s pick lists and their statuses; use getPickList instead when the pickListId is already known. Preconditions: none; an unknown workorderId simply yields an empty array. Required inputs: workorderId (UUID) as a query parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty array when the workorder has no pick lists.
+     * Returns every pick list linked to a workorder whose site is within the caller\&#39;s location scope (ADR-0061 §3, #2204); a list at a site outside the caller\&#39;s reach is dropped from the result, not rejected. Use this tool to find a workorder\&#39;s pick lists and their statuses; use getPickList instead when the pickListId is already known. Preconditions: none; an unknown workorderId simply yields an empty array. Required inputs: workorderId (UUID) as a query parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty array when the workorder has no pick lists, or none within reach.
      * @endpoint get /v1/inventory/pick-lists
      * @param workorderId Workorder identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

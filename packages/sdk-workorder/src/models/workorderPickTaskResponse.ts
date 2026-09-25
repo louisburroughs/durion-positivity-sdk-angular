@@ -30,6 +30,10 @@ export interface WorkorderPickTaskResponse {
      */
     pickedQty: number;
     /**
+     * The SKU\'s scannable EAN/UPC code, for verifying a barcode scan against this task. Null when the SKU carries no scannable code, or for a task last updated before scan codes were replicated (#2217).
+     */
+    productCode?: string;
+    /**
      * Quantity remaining to pick
      */
     remainingQty: number;
@@ -49,6 +53,14 @@ export interface WorkorderPickTaskResponse {
      * Status of the pick task
      */
     status: string;
+    /**
+     * The pick location\'s barcode, when it carries one. Null when the location has no barcode, is not yet replicated, or for a task last updated before scan codes were replicated (#2217).
+     */
+    storageLocationBarcode?: string;
+    /**
+     * The pick location\'s human-readable name, used as its scan code. Null when not yet replicated, or for a task last updated before scan codes were replicated (#2217).
+     */
+    storageLocationCode?: string;
     /**
      * Optimistic-locking version of the pick task
      */
@@ -94,7 +106,7 @@ export function instanceOfWorkorderPickTaskResponse(value: object): value is Wor
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkorderPickTaskResponsePropertyNames('locationId', 'pickListId', 'pickTaskId', 'pickedQty', 'remainingQty', 'requiredQty', 'skuId', 'sortOrder', 'status', 'version', );
-    const optionalStringProperties = createWorkorderPickTaskResponseOptionalProperties({ name: 'locationId', nullable: false }, { name: 'pickListId', nullable: false }, { name: 'pickTaskId', nullable: false }, { name: 'skuId', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createWorkorderPickTaskResponseOptionalProperties({ name: 'locationId', nullable: false }, { name: 'pickListId', nullable: false }, { name: 'pickTaskId', nullable: false }, { name: 'productCode', nullable: false }, { name: 'skuId', nullable: false }, { name: 'status', nullable: false }, { name: 'storageLocationBarcode', nullable: false }, { name: 'storageLocationCode', nullable: false }, );
     const optionalNumberProperties = createWorkorderPickTaskResponseOptionalProperties({ name: 'pickedQty', nullable: false }, { name: 'remainingQty', nullable: false }, { name: 'requiredQty', nullable: false }, { name: 'sortOrder', nullable: false }, { name: 'version', nullable: false }, );
     const optionalBooleanProperties = createWorkorderPickTaskResponseOptionalProperties();
 
