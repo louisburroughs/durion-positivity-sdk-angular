@@ -18,11 +18,11 @@ export interface ReturnableItemDto {
      */
     description?: string;
     /**
-     * Identifier of the returnable item
+     * Identifier of the returnable item; equal to workorderLineId, kept for compatibility with callers that read itemId rather than workorderLineId (they name the same work order line)
      */
     itemId: string;
     /**
-     * Quantity of the item that can still be returned
+     * Quantity of the item that can still be returned: quantity consumed against this line minus quantity already returned against it, floored at 0
      */
     quantityReturnable: number;
     /**
@@ -30,9 +30,17 @@ export interface ReturnableItemDto {
      */
     sku: string;
     /**
+     * Unit of measure the returnable quantity is expressed in (the product\'s base UoM); null when it cannot be resolved
+     */
+    uom?: string;
+    /**
      * Identifier of the workorder the item was issued against
      */
     workorderId: string;
+    /**
+     * Work order line this returnable quantity was issued against; identical to itemId
+     */
+    workorderLineId: string;
 }
 
 function isOptionalReturnableItemDtoPropertyOfType(
@@ -73,8 +81,8 @@ export function instanceOfReturnableItemDto(value: object): value is ReturnableI
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReturnableItemDtoPropertyNames('itemId', 'quantityReturnable', 'sku', 'workorderId', );
-    const optionalStringProperties = createReturnableItemDtoOptionalProperties({ name: 'description', nullable: false }, { name: 'itemId', nullable: false }, { name: 'sku', nullable: false }, { name: 'workorderId', nullable: false }, );
+    const requiredProperties = createReturnableItemDtoPropertyNames('itemId', 'quantityReturnable', 'sku', 'workorderId', 'workorderLineId', );
+    const optionalStringProperties = createReturnableItemDtoOptionalProperties({ name: 'description', nullable: false }, { name: 'itemId', nullable: false }, { name: 'sku', nullable: false }, { name: 'uom', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderLineId', nullable: false }, );
     const optionalNumberProperties = createReturnableItemDtoOptionalProperties({ name: 'quantityReturnable', nullable: false }, );
     const optionalBooleanProperties = createReturnableItemDtoOptionalProperties();
 

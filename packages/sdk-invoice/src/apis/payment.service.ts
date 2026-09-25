@@ -24,6 +24,8 @@ import { CaptureAmountRequest } from '../models/captureAmountRequest';
 import { InitiatePaymentRequest } from '../models/initiatePaymentRequest';
 // @ts-ignore
 import { InitiatePaymentResponse } from '../models/initiatePaymentResponse';
+// @ts-ignore
+import { PaymentIntentResponse } from '../models/paymentIntentResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -120,6 +122,70 @@ export class PaymentService extends BaseService {
     }
 
     /**
+     * Get Payment Detail
+     * Returns the full detail of a single payment intent under an invoice, including its captured, voided and refunded amounts and the balance still refundable — never the tokenised card reference or the raw gateway response. Use this tool to render a single payment\&#39;s detail; do not use listInvoicePayments unless you need the invoice\&#39;s full payment history. Preconditions: the payment intent must exist and belong to the given invoice; the caller needs the invoice:invoice:view authority, scoped to the invoice\&#39;s location (ADR-0061). Required inputs: invoiceId and paymentId (both UUID) as path parameters. Emits an INVOICE_PAYMENT_VIEW audit event; no state changes — this is a read-only projection. Returns 200 with the payment intent detail, 403 when invoice:invoice:view is missing or the invoice\&#39;s location is outside the caller\&#39;s reach, and 404 when no payment intent with that id exists under that invoice — a payment intent that exists under a different invoice also reports 404, so the response never confirms another invoice\&#39;s payment id.
+     * @endpoint get /v1/invoices/{invoiceId}/payments/{paymentId}
+     * @param invoiceId
+     * @param paymentId
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getInvoicePayment(invoiceId: string, paymentId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PaymentIntentResponse>;
+    public getInvoicePayment(invoiceId: string, paymentId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PaymentIntentResponse>>;
+    public getInvoicePayment(invoiceId: string, paymentId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PaymentIntentResponse>>;
+    public getInvoicePayment(invoiceId: string, paymentId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (invoiceId === null || invoiceId === undefined) {
+            throw new Error('Required parameter invoiceId was null or undefined when calling getInvoicePayment.');
+        }
+        if (paymentId === null || paymentId === undefined) {
+            throw new Error('Required parameter paymentId was null or undefined when calling getInvoicePayment.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/invoices/${this.configuration.encodeParam({name: "invoiceId", value: invoiceId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/payments/${this.configuration.encodeParam({name: "paymentId", value: paymentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PaymentIntentResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Initiate Card Payment on Invoice
      * Initiates a card payment against an invoice through the payment gateway, creating a payment intent that is CAPTURED immediately (SALE_CAPTURE) or left AUTHORIZED as a hold (AUTH_ONLY). Use this tool to take card tender; do not use capturePayment, which settles an existing AUTH_ONLY hold rather than starting a new payment. Preconditions: the invoice must exist; the caller needs the PROCESS_PAYMENT authority, plus OVERRIDE_PAYMENT_LIMIT when the amount exceeds 500.00 and SELECT_PAYMENT_FLOW to choose AUTH_ONLY. Required inputs: paymentFlow (SALE_CAPTURE or AUTH_ONLY), amount (positive), idempotencyKey and paymentToken (tokenised card reference, never a PAN); a replayed idempotencyKey with an identical payload returns the existing intent instead of charging twice. Emits an INVOICE_PAYMENT_INITIATE event and records the gateway result on the intent. Returns 201 with the intent, 404 when the invoice does not exist, 409 when the idempotencyKey was already used with a different payload, 422 when the gateway declines, and 403 when a required payment authority is missing.
      * @endpoint post /v1/invoices/{invoiceId}/payments
@@ -183,6 +249,66 @@ export class PaymentService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: initiatePaymentRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List Payments for an Invoice
+     * Returns every payment intent raised against an invoice, each carrying its captured, voided and refunded amounts and the balance still refundable. Use this tool to see an invoice\&#39;s full payment history; do not use getInvoicePayment, which reads a single payment intent by id. Preconditions: the invoice must exist; the caller needs the invoice:invoice:view authority, scoped to the invoice\&#39;s location (ADR-0061). Required inputs: invoiceId (UUID) as a path parameter; there is no request body or filtering. Emits an INVOICE_PAYMENT_LIST audit event; no state changes — this is a read-only projection. Returns 200 with the invoice\&#39;s payment intents, 403 when invoice:invoice:view is missing or the invoice\&#39;s location is outside the caller\&#39;s reach, and 404 when the invoice does not exist.
+     * @endpoint get /v1/invoices/{invoiceId}/payments
+     * @param invoiceId
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listInvoicePayments(invoiceId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<PaymentIntentResponse>>;
+    public listInvoicePayments(invoiceId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<PaymentIntentResponse>>>;
+    public listInvoicePayments(invoiceId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<PaymentIntentResponse>>>;
+    public listInvoicePayments(invoiceId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (invoiceId === null || invoiceId === undefined) {
+            throw new Error('Required parameter invoiceId was null or undefined when calling listInvoicePayments.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/invoices/${this.configuration.encodeParam({name: "invoiceId", value: invoiceId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/payments`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<PaymentIntentResponse>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

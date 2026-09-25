@@ -22,9 +22,17 @@ export interface LocationInventoryInquiryResponse {
      */
     locationId: string;
     /**
+     * Human-readable name of the location, from the site registry or the storage-location replica; null when it cannot be resolved
+     */
+    locationName?: string;
+    /**
      * Current on-hand quantity across all stock items at the location
      */
     onHandQuantity: number;
+    /**
+     * Outstanding allocations at the location — the quantity subtracted from on-hand to get availableToPromiseQuantity. Null for as-of (historical) requests, same as availableToPromiseQuantity
+     */
+    reservedQuantity?: number;
 }
 
 function isOptionalLocationInventoryInquiryResponsePropertyOfType(
@@ -66,8 +74,8 @@ export function instanceOfLocationInventoryInquiryResponse(value: object): value
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createLocationInventoryInquiryResponsePropertyNames('locationId', 'onHandQuantity', );
-    const optionalStringProperties = createLocationInventoryInquiryResponseOptionalProperties({ name: 'locationId', nullable: false }, );
-    const optionalNumberProperties = createLocationInventoryInquiryResponseOptionalProperties({ name: 'availableToPromiseQuantity', nullable: false }, { name: 'onHandQuantity', nullable: false }, );
+    const optionalStringProperties = createLocationInventoryInquiryResponseOptionalProperties({ name: 'locationId', nullable: false }, { name: 'locationName', nullable: false }, );
+    const optionalNumberProperties = createLocationInventoryInquiryResponseOptionalProperties({ name: 'availableToPromiseQuantity', nullable: false }, { name: 'onHandQuantity', nullable: false }, { name: 'reservedQuantity', nullable: false }, );
     const optionalBooleanProperties = createLocationInventoryInquiryResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

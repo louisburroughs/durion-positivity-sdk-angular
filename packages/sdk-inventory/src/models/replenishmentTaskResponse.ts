@@ -38,6 +38,10 @@ export interface ReplenishmentTaskResponse {
      */
     itemSKU: string;
     /**
+     * Site the task belongs to: the destination location\'s site, or the destination location itself when it is already a site; null when it cannot be resolved
+     */
+    locationId?: string;
+    /**
      * Quantity of the item to be moved by this replenishment task
      */
     quantity: number;
@@ -61,6 +65,10 @@ export interface ReplenishmentTaskResponse {
      * Mechanism that triggered the task, such as a manual request or automatic threshold breach
      */
     triggerType?: string;
+    /**
+     * Product\'s base unit of measure; null when it cannot be resolved
+     */
+    uom?: string;
 }
 
 function isOptionalReplenishmentTaskResponsePropertyOfType(
@@ -102,7 +110,7 @@ export function instanceOfReplenishmentTaskResponse(value: object): value is Rep
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createReplenishmentTaskResponsePropertyNames('createdAt', 'destinationLocationId', 'itemSKU', 'quantity', 'status', 'taskId', );
-    const optionalStringProperties = createReplenishmentTaskResponseOptionalProperties({ name: 'assignedTo', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'deadlineDate', nullable: false }, { name: 'decisionReason', nullable: false }, { name: 'destinationLocationId', nullable: false }, { name: 'itemSKU', nullable: false }, { name: 'sourceLocationId', nullable: false }, { name: 'sourcingReason', nullable: false }, { name: 'status', nullable: false }, { name: 'taskId', nullable: false }, { name: 'triggerType', nullable: false }, );
+    const optionalStringProperties = createReplenishmentTaskResponseOptionalProperties({ name: 'assignedTo', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'deadlineDate', nullable: false }, { name: 'decisionReason', nullable: false }, { name: 'destinationLocationId', nullable: false }, { name: 'itemSKU', nullable: false }, { name: 'locationId', nullable: false }, { name: 'sourceLocationId', nullable: false }, { name: 'sourcingReason', nullable: false }, { name: 'status', nullable: false }, { name: 'taskId', nullable: false }, { name: 'triggerType', nullable: false }, { name: 'uom', nullable: false }, );
     const optionalNumberProperties = createReplenishmentTaskResponseOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createReplenishmentTaskResponseOptionalProperties();
 

@@ -30,7 +30,7 @@ export interface InventoryLedgerEntryDto {
      */
     eventType: InventoryLedgerEntryDtoEventTypeEnum;
     /**
-     * Source location for transfer events
+     * The storage location (bin) or site the stock left, on whichever granularity the posting path used: a bin for a bin-level move (e.g. a pick or a putaway), a site for a site-level move (e.g. a transfer). This IS the storage-location id for a bin-level posting; there is no separate storage-location field to read instead
      */
     fromLocationId?: string;
     /**
@@ -66,7 +66,7 @@ export interface InventoryLedgerEntryDto {
      */
     timestamp: string;
     /**
-     * Destination location for transfer events
+     * The storage location (bin) or site the stock entered, on whichever granularity the posting path used: a bin for a bin-level move (e.g. a pick or a putaway), a site for a site-level move (e.g. a transfer). This IS the storage-location id for a bin-level posting; there is no separate storage-location field to read instead
      */
     toLocationId?: string;
     /**
@@ -85,6 +85,14 @@ export interface InventoryLedgerEntryDto {
      * Timestamp when the entry record was last updated
      */
     updatedAt?: string;
+    /**
+     * Work order this entry was posted for, when the posting path knows one (pick-task consumption, cross-dock receipt/issue, returns to stock); null otherwise
+     */
+    workorderId?: string;
+    /**
+     * Work order line this entry was posted for, when the posting path knows one; null when only the work order (not the line) is known
+     */
+    workorderLineId?: string;
 }
 export enum InventoryLedgerEntryDtoEventTypeEnum {
     GoodsReceipt = 'GOODS_RECEIPT',
@@ -151,7 +159,7 @@ export function instanceOfInventoryLedgerEntryDto(value: object): value is Inven
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createInventoryLedgerEntryDtoPropertyNames('changeInQuantity', 'eventType', 'ledgerEntryId', 'quantityAfter', 'stockItemId', 'timestamp', );
-    const optionalStringProperties = createInventoryLedgerEntryDtoOptionalProperties({ name: 'adjustmentId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'eventType', nullable: false }, { name: 'fromLocationId', nullable: false }, { name: 'ledgerEntryId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'notes', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'sourceTransactionId', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'timestamp', nullable: false }, { name: 'toLocationId', nullable: false }, { name: 'transactionUserId', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const optionalStringProperties = createInventoryLedgerEntryDtoOptionalProperties({ name: 'adjustmentId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'eventType', nullable: false }, { name: 'fromLocationId', nullable: false }, { name: 'ledgerEntryId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'notes', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'sourceTransactionId', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'timestamp', nullable: false }, { name: 'toLocationId', nullable: false }, { name: 'transactionUserId', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderLineId', nullable: false }, );
     const optionalNumberProperties = createInventoryLedgerEntryDtoOptionalProperties({ name: 'changeInQuantity', nullable: false }, { name: 'quantityAfter', nullable: false }, { name: 'unitCost', nullable: false }, );
     const optionalBooleanProperties = createInventoryLedgerEntryDtoOptionalProperties();
 

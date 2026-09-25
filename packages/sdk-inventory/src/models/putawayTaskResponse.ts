@@ -34,6 +34,10 @@ export interface PutawayTaskResponse {
      */
     finalSuggestedLocationId?: string;
     /**
+     * Site the task belongs to: the source receipt\'s location, or the source location\'s site when the source location is a bin; null when it cannot be resolved
+     */
+    locationId?: string;
+    /**
      * Originally suggested destination location before any fallback
      */
     originalSuggestedLocationId?: string;
@@ -65,6 +69,10 @@ export interface PutawayTaskResponse {
      * Unique identifier of the putaway task
      */
     taskId: string;
+    /**
+     * Product\'s base unit of measure; null when it cannot be resolved
+     */
+    uom?: string;
     /**
      * Timestamp when the putaway task was last updated
      */
@@ -110,7 +118,7 @@ export function instanceOfPutawayTaskResponse(value: object): value is PutawayTa
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPutawayTaskResponsePropertyNames('createdAt', 'productId', 'quantity', 'sourceReceiptId', 'status', 'taskId', 'updatedAt', );
-    const optionalStringProperties = createPutawayTaskResponseOptionalProperties({ name: 'actualDestinationLocationId', nullable: false }, { name: 'assigneeId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'fallbackReason', nullable: false }, { name: 'finalSuggestedLocationId', nullable: false }, { name: 'originalSuggestedLocationId', nullable: false }, { name: 'productId', nullable: false }, { name: 'sourceLocationId', nullable: false }, { name: 'sourceReceiptId', nullable: false }, { name: 'status', nullable: false }, { name: 'suggestedDestinationLocationId', nullable: false }, { name: 'taskId', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const optionalStringProperties = createPutawayTaskResponseOptionalProperties({ name: 'actualDestinationLocationId', nullable: false }, { name: 'assigneeId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'fallbackReason', nullable: false }, { name: 'finalSuggestedLocationId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'originalSuggestedLocationId', nullable: false }, { name: 'productId', nullable: false }, { name: 'sourceLocationId', nullable: false }, { name: 'sourceReceiptId', nullable: false }, { name: 'status', nullable: false }, { name: 'suggestedDestinationLocationId', nullable: false }, { name: 'taskId', nullable: false }, { name: 'uom', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createPutawayTaskResponseOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createPutawayTaskResponseOptionalProperties();
 

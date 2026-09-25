@@ -10,17 +10,25 @@
 
 
 /**
- * Request to resolve a scanned SKU and location against a pick task
+ * Request to resolve a scanned product and location against a pick task. Exactly one of scannedSkuId/scannedProductCode must be supplied, and exactly one of scannedLocationId/scannedLocationCode (#2217); violating either answers 400 VALIDATION_FAILED with a fieldErrors entry named productTargetValid and/or locationTargetValid.
  */
 export interface ResolveScanRequest {
     /**
-     * Identifier of the location where the scan occurred
+     * The location\'s human-readable name or barcode read off a scan; mutually exclusive with scannedLocationId. Compared case-insensitively, trimmed, against both the location\'s name and its barcode (#2217).
      */
-    scannedLocationId: string;
+    scannedLocationCode?: string;
     /**
-     * Identifier of the SKU that was scanned
+     * Identifier of the location where the scan occurred; mutually exclusive with scannedLocationCode
      */
-    scannedSkuId: string;
+    scannedLocationId?: string;
+    /**
+     * The scannable EAN/UPC code read off a barcode scan; mutually exclusive with scannedSkuId. Compared case-insensitively, trimmed (#2217).
+     */
+    scannedProductCode?: string;
+    /**
+     * Identifier of the SKU that was scanned; mutually exclusive with scannedProductCode
+     */
+    scannedSkuId?: string;
 }
 
 function isOptionalResolveScanRequestPropertyOfType(
@@ -61,8 +69,8 @@ export function instanceOfResolveScanRequest(value: object): value is ResolveSca
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createResolveScanRequestPropertyNames('scannedLocationId', 'scannedSkuId', );
-    const optionalStringProperties = createResolveScanRequestOptionalProperties({ name: 'scannedLocationId', nullable: false }, { name: 'scannedSkuId', nullable: false }, );
+    const requiredProperties = createResolveScanRequestPropertyNames();
+    const optionalStringProperties = createResolveScanRequestOptionalProperties({ name: 'scannedLocationCode', nullable: false }, { name: 'scannedLocationId', nullable: false }, { name: 'scannedProductCode', nullable: false }, { name: 'scannedSkuId', nullable: false }, );
     const optionalNumberProperties = createResolveScanRequestOptionalProperties();
     const optionalBooleanProperties = createResolveScanRequestOptionalProperties();
 
