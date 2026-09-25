@@ -1,4 +1,4 @@
-# @durion-sdk/tenant@0.62.0-alpha
+# @durion-sdk/tenant@0.63.0-alpha
 
 Tenant registry and the accounts that own each tenancy (ADR-0062 section 7). Platform-tenant callers only; reached via the API Gateway under /tenant.
 
@@ -24,7 +24,7 @@ Navigate to the folder of your consuming project and run one of next commands.
 _published:_
 
 ```console
-npm install @durion-sdk/tenant@0.62.0-alpha --save
+npm install @durion-sdk/tenant@0.63.0-alpha --save
 ```
 
 _without publishing (not recommended):_
