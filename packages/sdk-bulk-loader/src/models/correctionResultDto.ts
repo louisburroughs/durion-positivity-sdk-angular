@@ -18,52 +18,14 @@ export interface CorrectionResultDto {
      */
     auditRecordId: string;
     /**
-     * Serialized corrected values submitted for the row, if any
-     */
-    correctedValues?: string | null;
-    /**
-     * Timestamp when the audit record was created (ISO 8601)
-     */
-    createdAt?: string | null;
-    /**
-     * Identifier of the entity created or updated from the row, if any
-     */
-    entityId?: string | null;
-    /**
-     * Type of the target entity for the processed row
-     */
-    entityType?: string | null;
-    /**
-     * Serialized original values from the source row
-     */
-    originalValues?: string | null;
-    /**
-     * Machine-readable reason codes describing why the row needs review
-     */
-    reasonCodes?: string | null;
-    /**
      * Reason for rejection if status is REJECTED
      */
     rejectionReason?: string | null;
-    /**
-     * Review status of the audit record
-     */
-    reviewStatus?: CorrectionResultDtoReviewStatusEnum | null;
-    /**
-     * One-based row number within the source file
-     */
-    rowNumber?: number | null;
     /**
      * Whether the correction was accepted or rejected
      */
     status: CorrectionResultDtoStatusEnum;
 }
-export enum CorrectionResultDtoReviewStatusEnum {
-    Pending = 'PENDING',
-    Approved = 'APPROVED',
-    Rejected = 'REJECTED',
-    Corrected = 'CORRECTED'
-};
 export enum CorrectionResultDtoStatusEnum {
     Accepted = 'ACCEPTED',
     Rejected = 'REJECTED'
@@ -110,8 +72,8 @@ export function instanceOfCorrectionResultDto(value: object): value is Correctio
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCorrectionResultDtoPropertyNames('auditRecordId', 'status', );
-    const optionalStringProperties = createCorrectionResultDtoOptionalProperties({ name: 'auditRecordId', nullable: false }, { name: 'correctedValues', nullable: true }, { name: 'createdAt', nullable: true }, { name: 'entityId', nullable: true }, { name: 'entityType', nullable: true }, { name: 'originalValues', nullable: true }, { name: 'reasonCodes', nullable: true }, { name: 'rejectionReason', nullable: true }, { name: 'reviewStatus', nullable: true }, { name: 'status', nullable: false }, );
-    const optionalNumberProperties = createCorrectionResultDtoOptionalProperties({ name: 'rowNumber', nullable: true }, );
+    const optionalStringProperties = createCorrectionResultDtoOptionalProperties({ name: 'auditRecordId', nullable: false }, { name: 'rejectionReason', nullable: true }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createCorrectionResultDtoOptionalProperties();
     const optionalBooleanProperties = createCorrectionResultDtoOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
