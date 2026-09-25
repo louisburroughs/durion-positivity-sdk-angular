@@ -7,11 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { IdempotencyOutcomesContract } from './idempotencyOutcomesContract';
-import { ProcessingStatusesContract } from './processingStatusesContract';
 import { ContractField } from './contractField';
-import { IdentifierStrategy } from './identifierStrategy';
-import { TraceabilityIdDescriptor } from './traceabilityIdDescriptor';
 
 
 /**
@@ -26,13 +22,6 @@ export interface EventEnvelopeContract {
      * Field definitions in the event envelope
      */
     fields: Array<ContractField>;
-    idempotencyOutcomes?: IdempotencyOutcomesContract;
-    identifierStrategy?: IdentifierStrategy;
-    processingStatuses?: ProcessingStatusesContract;
-    /**
-     * Identifiers usable to trace an event across the ingestion pipeline
-     */
-    traceabilityIds?: Array<TraceabilityIdDescriptor>;
     /**
      * Contract schema version
      */

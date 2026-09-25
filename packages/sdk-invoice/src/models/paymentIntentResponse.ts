@@ -48,7 +48,7 @@ export interface PaymentIntentResponse {
     /**
      * capturedAmount minus refundedAmount; null when the intent is not CAPTURED
      */
-    refundableAmount?: number;
+    refundableAmount?: number | null;
     /**
      * Sum of non-FAILED refunds recorded against this payment intent
      */
@@ -121,7 +121,7 @@ export function instanceOfPaymentIntentResponse(value: object): value is Payment
 
     const requiredProperties = createPaymentIntentResponsePropertyNames('createdAt', 'invoiceId', 'paymentFlow', 'paymentId', 'status', 'updatedAt', );
     const optionalStringProperties = createPaymentIntentResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'gatewayProvider', nullable: false }, { name: 'gatewayReference', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'paymentFlow', nullable: false }, { name: 'paymentId', nullable: false }, { name: 'status', nullable: false }, { name: 'updatedAt', nullable: false }, );
-    const optionalNumberProperties = createPaymentIntentResponseOptionalProperties({ name: 'authorizedAmount', nullable: false }, { name: 'capturedAmount', nullable: false }, { name: 'refundableAmount', nullable: false }, { name: 'refundedAmount', nullable: false }, { name: 'voidedRemainderAmount', nullable: false }, );
+    const optionalNumberProperties = createPaymentIntentResponseOptionalProperties({ name: 'authorizedAmount', nullable: false }, { name: 'capturedAmount', nullable: false }, { name: 'refundableAmount', nullable: true }, { name: 'refundedAmount', nullable: false }, { name: 'voidedRemainderAmount', nullable: false }, );
     const optionalBooleanProperties = createPaymentIntentResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

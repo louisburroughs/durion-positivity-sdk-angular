@@ -16,15 +16,15 @@ export interface ResolveScanResponse {
     /**
      * The task\'s expected location barcode, so the UI can tell the mechanic what was expected. Null when the task carries no replicated location barcode.
      */
-    expectedLocationBarcode?: string;
+    expectedLocationBarcode?: string | null;
     /**
      * The task\'s expected location name, so the UI can tell the mechanic what was expected. Null when the task carries no replicated location name.
      */
-    expectedLocationCode?: string;
+    expectedLocationCode?: string | null;
     /**
      * The task\'s expected scannable product code, so the UI can tell the mechanic what was expected. Null when the task carries no replicated product code.
      */
-    expectedProductCode?: string;
+    expectedProductCode?: string | null;
     /**
      * Status describing the match outcome, backed by MatchStatus: MATCHED (both the product and location scans matched); SKU_MISMATCH (location matched, product did not); LOCATION_MISMATCH (product matched, location did not); NO_MATCH (neither matched); PRODUCT_CODE_UNAVAILABLE (a product code was scanned but the task carries no replicated code to compare against — this cannot verify, it is not necessarily wrong); LOCATION_CODE_UNAVAILABLE (same, for a scanned location code). Unknown-vs-wrong on a code scan cannot be distinguished further without a synchronous catalog/location lookup, which ADR-0044 forbids here; ambiguity across tasks is not a concern because comparison is scoped to one task and EAN/UPC codes are unique per tenant (ADR-0053 §5).
      */
@@ -44,11 +44,11 @@ export interface ResolveScanResponse {
     /**
      * Identifier of the location resolved for the scan
      */
-    resolvedLocationId?: string;
+    resolvedLocationId?: string | null;
     /**
      * Identifier of the SKU resolved for the scan (may differ from scanned SKU after substitution)
      */
-    resolvedSkuId?: string;
+    resolvedSkuId?: string | null;
 }
 export enum ResolveScanResponseMatchStatusEnum {
     Matched = 'MATCHED',
@@ -100,7 +100,7 @@ export function instanceOfResolveScanResponse(value: object): value is ResolveSc
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createResolveScanResponsePropertyNames('matched', 'pickListId', 'pickTaskId', );
-    const optionalStringProperties = createResolveScanResponseOptionalProperties({ name: 'expectedLocationBarcode', nullable: false }, { name: 'expectedLocationCode', nullable: false }, { name: 'expectedProductCode', nullable: false }, { name: 'matchStatus', nullable: false }, { name: 'pickListId', nullable: false }, { name: 'pickTaskId', nullable: false }, { name: 'resolvedLocationId', nullable: false }, { name: 'resolvedSkuId', nullable: false }, );
+    const optionalStringProperties = createResolveScanResponseOptionalProperties({ name: 'expectedLocationBarcode', nullable: true }, { name: 'expectedLocationCode', nullable: true }, { name: 'expectedProductCode', nullable: true }, { name: 'matchStatus', nullable: false }, { name: 'pickListId', nullable: false }, { name: 'pickTaskId', nullable: false }, { name: 'resolvedLocationId', nullable: true }, { name: 'resolvedSkuId', nullable: true }, );
     const optionalNumberProperties = createResolveScanResponseOptionalProperties();
     const optionalBooleanProperties = createResolveScanResponseOptionalProperties({ name: 'matched', nullable: false }, );
 
