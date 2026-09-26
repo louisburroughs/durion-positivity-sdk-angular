@@ -460,6 +460,66 @@ export class InvoiceService extends BaseService {
     }
 
     /**
+     * Get Invoice Details by Workorder
+     * Returns the full invoice detail — status, line items, adjustments, totals, tax breakdown, due date and the resolved workorder number — for the invoice linked to a workorder. Use this tool when only the workorderId is known and there is no other side-effect-free path to its invoiceId; use getInvoice instead once the invoiceId is already known. Preconditions: the workorder must have a linked invoice (generateWorkorderInvoice has applied). A caller whose invoice:invoice:view grant is location-scoped must have the invoice\&#39;s location within reach (ADR-0061). Required inputs: workorderId (UUID) as a path parameter; there is no request body. Emits an INVOICE_GET_BY_WORKORDER audit event; no state changes — this is a read-only projection. Returns 404 when no invoice is linked to the supplied workorderId, and 403 LOCATION_SCOPE_DENIED when the invoice exists but its location is outside the caller\&#39;s scope.
+     * @endpoint get /v1/invoices/by-workorder/{workorderId}
+     * @param workorderId
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getInvoiceByWorkorder(workorderId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<InvoiceDetailsResponse>;
+    public getInvoiceByWorkorder(workorderId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InvoiceDetailsResponse>>;
+    public getInvoiceByWorkorder(workorderId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InvoiceDetailsResponse>>;
+    public getInvoiceByWorkorder(workorderId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (workorderId === null || workorderId === undefined) {
+            throw new Error('Required parameter workorderId was null or undefined when calling getInvoiceByWorkorder.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/invoices/by-workorder/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<InvoiceDetailsResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Revert Finalized Invoice to Draft
      * Reverts a FINALIZED invoice back to DRAFT within 24 hours of finalization, before GL posting has made it immutable, and voids the provider tax document committed at finalization. Use this tool to correct a wrongly finalized invoice; do not use cancelInvoice, which terminally cancels a DRAFT invoice on the order-void path. Preconditions: the invoice must be FINALIZED (POSTED is immutable), less than 24 hours must have elapsed since finalizedAt, and callers without invoice:finalize:override (or a manager/admin role) must supply a valid elevation token from elevateManagerApproval as managerApprovalCode. Required inputs: invoiceId (UUID) as a path parameter plus managerApprovalCode and a reason in the body; the reverting actor and approving manager are captured for audit. Emits an INVOICE_DRAFT_REVERT event, publishes an invoice-updated notification, and issues a tax void toward pos-tax for the reverted document. Returns 200 with the DRAFT invoice, 404 when the invoice does not exist, 409 when it is POSTED, not FINALIZED, or the 24-hour window has expired, and 403 with MANAGER_APPROVAL_INVALID when the approval code is invalid or expired (a step-up credential the server considers insufficient; a blank approval code is rejected as a 400 request-shape error before this check).
      * @endpoint post /v1/invoices/{invoiceId}/revert

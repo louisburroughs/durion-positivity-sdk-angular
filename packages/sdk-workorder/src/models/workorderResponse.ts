@@ -46,6 +46,10 @@ export interface WorkorderResponse {
      */
     id?: string;
     /**
+     * Invoice linked to this work order. generateWorkorderInvoice only queues the request; the id is recorded when pos-invoice\'s invoice fact is handled, so it is null until that asynchronous linkage has happened
+     */
+    invoiceId?: string | null;
+    /**
      * Whether the completed workorder is currently reopened for controlled edits
      */
     isReopened?: boolean;
@@ -106,7 +110,7 @@ export function instanceOfWorkorderResponse(value: object): value is WorkorderRe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkorderResponsePropertyNames();
-    const optionalStringProperties = createWorkorderResponseOptionalProperties({ name: 'approvedAt', nullable: false }, { name: 'completedAt', nullable: false }, { name: 'crmPartyId', nullable: false }, { name: 'crmVehicleId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'id', nullable: false }, { name: 'reopenedAt', nullable: false }, { name: 'shopId', nullable: false }, { name: 'status', nullable: false }, { name: 'vehicleId', nullable: false }, );
+    const optionalStringProperties = createWorkorderResponseOptionalProperties({ name: 'approvedAt', nullable: false }, { name: 'completedAt', nullable: false }, { name: 'crmPartyId', nullable: false }, { name: 'crmVehicleId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'id', nullable: false }, { name: 'invoiceId', nullable: true }, { name: 'reopenedAt', nullable: false }, { name: 'shopId', nullable: false }, { name: 'status', nullable: false }, { name: 'vehicleId', nullable: false }, );
     const optionalNumberProperties = createWorkorderResponseOptionalProperties();
     const optionalBooleanProperties = createWorkorderResponseOptionalProperties({ name: 'isReopened', nullable: false }, );
 
