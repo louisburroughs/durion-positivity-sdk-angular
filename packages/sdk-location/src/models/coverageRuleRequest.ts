@@ -22,11 +22,11 @@ export interface CoverageRuleRequest {
      */
     priority?: number;
     /**
-     * Type of coverage rule
+     * Type of coverage rule, matched case-insensitively. SERVICE_AREA covers the whole service area; DISTANCE_TIER covers it up to maxDistance, and a unit\'s DISTANCE_TIER rules must be strictly ascending by maxDistance and end with one rule whose maxDistance is null.
      */
-    ruleType: string;
+    ruleType: CoverageRuleRequestRuleTypeEnum;
     /**
-     * Identifier of the service area this rule applies to
+     * Identifier of the service area this rule applies to; must name an existing service area (422 SERVICE_AREA_NOT_FOUND otherwise). Required for every rule type: a DISTANCE_TIER rule is a tier within its service area, and a rule without one never matches an address.
      */
     serviceAreaId: string;
     /**
@@ -34,10 +34,16 @@ export interface CoverageRuleRequest {
      */
     validFrom?: string;
     /**
-     * Date until which the rule is effective
+     * Date until which the rule is effective; must not be before validFrom
      */
     validTo?: string;
 }
+export enum CoverageRuleRequestRuleTypeEnum {
+    ServiceArea = 'SERVICE_AREA',
+    DistanceTier = 'DISTANCE_TIER'
+};
+
+
 
 function isOptionalCoverageRuleRequestPropertyOfType(
     value: Record<string, unknown>,

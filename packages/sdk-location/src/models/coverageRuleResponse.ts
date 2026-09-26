@@ -32,7 +32,7 @@ export interface CoverageRuleResponse {
     /**
      * Type of coverage rule
      */
-    ruleType?: string;
+    ruleType?: CoverageRuleResponseRuleTypeEnum;
     /**
      * Identifier of the service area this rule applies to
      */
@@ -46,6 +46,12 @@ export interface CoverageRuleResponse {
      */
     validTo?: string;
 }
+export enum CoverageRuleResponseRuleTypeEnum {
+    ServiceArea = 'SERVICE_AREA',
+    DistanceTier = 'DISTANCE_TIER'
+};
+
+
 
 function isOptionalCoverageRuleResponsePropertyOfType(
     value: Record<string, unknown>,

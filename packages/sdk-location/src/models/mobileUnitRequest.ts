@@ -15,11 +15,11 @@ import { CoverageRuleRequest } from './coverageRuleRequest';
  */
 export interface MobileUnitRequest {
     /**
-     * Identifier of the base location the mobile unit operates from
+     * Identifier of the base location the mobile unit operates from; must name an existing location (422 LOCATION_NOT_FOUND otherwise)
      */
-    baseLocationId?: string;
+    baseLocationId: string;
     /**
-     * Coverage rules defining where the mobile unit can operate
+     * Coverage rules defining where the mobile unit can operate. Required, non-empty, for an ACTIVE unit.
      */
     coverageRules?: Array<CoverageRuleRequest>;
     /**
@@ -35,14 +35,20 @@ export interface MobileUnitRequest {
      */
     serviceCapabilityCodes?: Array<string>;
     /**
-     * Operational status of the mobile unit
+     * Operational status of the mobile unit, matched case-insensitively; INACTIVE when omitted
      */
-    status?: string;
+    status?: MobileUnitRequestStatusEnum;
     /**
-     * Identifier of the travel buffer policy applied to the mobile unit
+     * Identifier of the travel buffer policy applied to the mobile unit; must name an existing policy (422 TRAVEL_BUFFER_POLICY_NOT_FOUND otherwise). Required for an ACTIVE unit.
      */
     travelBufferPolicyId?: string;
 }
+export enum MobileUnitRequestStatusEnum {
+    Active = 'ACTIVE',
+    Inactive = 'INACTIVE'
+};
+
+
 
 function isOptionalMobileUnitRequestPropertyOfType(
     value: Record<string, unknown>,
@@ -82,7 +88,7 @@ export function instanceOfMobileUnitRequest(value: object): value is MobileUnitR
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createMobileUnitRequestPropertyNames('name', );
+    const requiredProperties = createMobileUnitRequestPropertyNames('baseLocationId', 'name', );
     const optionalStringProperties = createMobileUnitRequestOptionalProperties({ name: 'baseLocationId', nullable: false }, { name: 'name', nullable: false }, { name: 'notes', nullable: false }, { name: 'status', nullable: false }, { name: 'travelBufferPolicyId', nullable: false }, );
     const optionalNumberProperties = createMobileUnitRequestOptionalProperties();
     const optionalBooleanProperties = createMobileUnitRequestOptionalProperties();
