@@ -675,7 +675,7 @@ export class WorkOrderAPIService extends BaseService {
 
     /**
      * Get Workorder by Id
-     * Returns the raw workorder record — status, customer, vehicle, estimate linkage, approval and completion fields — for one workorder id. Use this tool when the plain record is enough; use getWorkorderDetail instead for the role-aware view with capability flags, labor totals, and conditional financials. Preconditions: the workorder must exist. Required inputs: workorderId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no workorder exists for the id.
+     * Returns the raw workorder record — status, customer, vehicle, estimate linkage, approval, completion fields, and the linked invoiceId — null until pos-invoice\&#39;s invoice fact has been handled, since generateWorkorderInvoice only queues the request — for one workorder id. Use this tool when the plain record is enough; use getWorkorderDetail instead for the role-aware view with capability flags, labor totals, and conditional financials. Preconditions: the workorder must exist. Required inputs: workorderId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no workorder exists for the id.
      * @endpoint get /v1/workorders/{workorderId}
      * @param workorderId ID of the work order to retrieve
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

@@ -24,6 +24,8 @@ import { CreateReservationRequest } from '../models/createReservationRequest';
 import { PromoteAllocationRequest } from '../models/promoteAllocationRequest';
 // @ts-ignore
 import { ReservationResponse } from '../models/reservationResponse';
+// @ts-ignore
+import { WorkorderReservationResponse } from '../models/workorderReservationResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -221,6 +223,78 @@ export class InventoryReservationsService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: createReservationRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List reservations for a workorder
+     * Lists the reservations for a workorder\&#39;s part lines, each with its allocations — this read exists for shortage resolution: the shortage page holds only a workorderId (and the frontend\&#39;s allocationLineId, which names an allocation id), but listShortageOptions and resolveShortage need an allocationId, and this is the operation that supplies it. Use this tool to find the allocationId for a workorder line before calling listShortageOptions or resolveShortage; do not use listBackorders, which lists already-opened backorders rather than the live reservation/allocation state. Preconditions: none; a workorder with no part lines, or one with lines but no reservations, is not an error. Required inputs: workorderId (UUID) query parameter; there is no request body. Emits an INVENTORY_RESERVATION_LIST event; no state changes — this is a read-only projection. Each reservation\&#39;s allocations are narrowed to locations the caller\&#39;s token scope covers (ADR-0061); an allocation outside that reach is dropped, but a reservation left with no in-reach allocation is still returned with its quantities. Returns 200 with an empty array when the workorder has no lines, has lines but no reservations, or is unknown — no replica row for the workorder is not an error here.
+     * @endpoint get /v1/inventory/reservations
+     * @param workorderId Workorder identifier
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listReservationsForWorkorder(workorderId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<WorkorderReservationResponse>>;
+    public listReservationsForWorkorder(workorderId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<WorkorderReservationResponse>>>;
+    public listReservationsForWorkorder(workorderId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<WorkorderReservationResponse>>>;
+    public listReservationsForWorkorder(workorderId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (workorderId === null || workorderId === undefined) {
+            throw new Error('Required parameter workorderId was null or undefined when calling listReservationsForWorkorder.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'workorderId',
+            <any>workorderId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/inventory/reservations`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<WorkorderReservationResponse>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
