@@ -45,7 +45,7 @@ export class MobileUnitAPIService extends BaseService {
 
     /**
      * Create a New Mobile Service Unit
-     * Creates a mobile service unit with an optional base location, travel buffer policy, capability list and initial coverage rules. Use this tool when commissioning a van or truck that serves customers off-site; do not use patchMobileUnit, which updates an existing unit, and change coverage later with replaceCoverageRules. Preconditions: a unit created with status ACTIVE must include travelBufferPolicyId, serviceCapabilityCodes and coverageRules; the travel buffer policy must exist, every serviceCapabilityCode must be an active catalog operationCode known to the location service\&#39;s catalog replica, DISTANCE_TIER coverage rules must be strictly ascending by maxDistance and end with a null catch-all tier, and the name must be unique at the base location. Required inputs: name; status defaults to INACTIVE when omitted, and baseLocationId, travelBufferPolicyId, notes, serviceCapabilityCodes and coverageRules are optional for inactive units. Emits a LOCATION_MOBILE_UNIT_CREATE event and persists any supplied coverage rules in the same transaction. Returns 201 with the created unit and 409 when the name is already taken at the base location.
+     * Creates a mobile service unit at a base location, with an optional travel buffer policy, capability list and initial coverage rules. Use this tool when commissioning a van or truck that serves customers off-site; do not use patchMobileUnit, which updates an existing unit, and change coverage later with replaceCoverageRules. Preconditions: a unit created with status ACTIVE must include travelBufferPolicyId, serviceCapabilityCodes and coverageRules; the base location, the travel buffer policy and every rule\&#39;s service area must exist, every serviceCapabilityCode must be an active catalog operationCode known to the location service\&#39;s catalog replica, each coverage rule\&#39;s ruleType must be SERVICE_AREA or DISTANCE_TIER, DISTANCE_TIER coverage rules must be strictly ascending by maxDistance and end with one null catch-all tier, and the name must be unique (ignoring case) at the base location. Required inputs: name and baseLocationId; status is ACTIVE or INACTIVE and defaults to INACTIVE when omitted, and travelBufferPolicyId, notes, serviceCapabilityCodes and coverageRules are optional for inactive units. Emits a LOCATION_MOBILE_UNIT_CREATE event and persists any supplied coverage rules in the same transaction. Returns 201 with the created unit; 400 VALIDATION_ERROR with fieldErrors for a blank name, a missing baseLocationId, an unknown status or a malformed coverage rule; 422 with fieldErrors (LOCATION_NOT_FOUND, TRAVEL_BUFFER_POLICY_NOT_FOUND, SERVICE_AREA_NOT_FOUND) when an id names nothing, and 422 for an incomplete ACTIVE unit or an unknown capability code; 409 MOBILE_UNIT_NAME_TAKEN when the name is already taken at the base location.
      * @endpoint post /v1/mobile-units
      * @param mobileUnitRequest Mobile unit to create; an ACTIVE unit must arrive complete with its travel buffer policy, capabilities and coverage rules.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -295,18 +295,21 @@ export class MobileUnitAPIService extends BaseService {
 
     /**
      * List Mobile Units With Pagination
-     * Lists all mobile units as a page with status, base location and travel buffer policy references. Use this tool to enumerate or browse units; use getMobileUnitById instead when the unit id is known, and findEligibleMobileUnits to match units to a service address. Preconditions: none beyond the location:mobile-unit:read authority. Required inputs: none; page defaults to 0 and size to 20. No events are emitted and no state changes; this is a read-only projection. Returns 200 with a page of mobile units, empty when none exist.
+     * Lists mobile units as a page, ordered by name, with status, base location and travel buffer policy references; optionally narrowed to one base location and/or status, and optionally with each unit\&#39;s coverage rules. Use this tool to enumerate or browse units, or to read one shop\&#39;s units (baseLocationId) and their coverage (include&#x3D;coverageRules) in one request; use getMobileUnitById instead when the unit id is known, and findEligibleMobileUnits to match units to a service address. Preconditions: none beyond the location:mobile-unit:read authority. Required inputs: none; page defaults to 0 and size to 20. baseLocationId (UUID) keeps only units based there and is denied (403 LOCATION_SCOPE_DENIED) for a location-scoped caller outside their reach, status (ACTIVE or INACTIVE) keeps only units in that status, and include accepts coverageRules, which adds each unit\&#39;s rules ordered by priority. No events are emitted and no state changes; this is a read-only projection. Returns 200 with a page of mobile units, empty when none match (including an unknown baseLocationId), and 400 VALIDATION_ERROR for an unknown status or include value.
      * @endpoint get /v1/mobile-units
      * @param page
      * @param size
+     * @param baseLocationId Only units based at this location
+     * @param status Only units in this status (ACTIVE or INACTIVE)
+     * @param include Related data to embed; coverageRules adds each unit\&#39;s coverage rules
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listMobileUnits(page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageMobileUnitResponse>;
-    public listMobileUnits(page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageMobileUnitResponse>>;
-    public listMobileUnits(page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageMobileUnitResponse>>;
-    public listMobileUnits(page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listMobileUnits(page?: number, size?: number, baseLocationId?: string, status?: string, include?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageMobileUnitResponse>;
+    public listMobileUnits(page?: number, size?: number, baseLocationId?: string, status?: string, include?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageMobileUnitResponse>>;
+    public listMobileUnits(page?: number, size?: number, baseLocationId?: string, status?: string, include?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageMobileUnitResponse>>;
+    public listMobileUnits(page?: number, size?: number, baseLocationId?: string, status?: string, include?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -323,6 +326,33 @@ export class MobileUnitAPIService extends BaseService {
             localVarQueryParameters,
             'size',
             <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'baseLocationId',
+            <any>baseLocationId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'status',
+            <any>status,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'include',
+            <any>include,
             QueryParamStyle.Form,
             true,
         );
@@ -374,7 +404,7 @@ export class MobileUnitAPIService extends BaseService {
 
     /**
      * Patch Fields of a Mobile Unit
-     * Applies a partial update to a mobile unit, accepting the keys name, status, notes, travelBufferPolicyId and serviceCapabilityCodes. Use this tool for status transitions, travel-buffer-policy reassignment and replacing the unit\&#39;s capability claim; use replaceCoverageRules instead to change where the unit operates. Preconditions: for an existing unit, the unit as it stands after the patch must satisfy what create demands of an ACTIVE unit, so an ACTIVE result needs a travelBufferPolicyId, at least one serviceCapabilityCode and at least one coverage rule already on the unit; activating an incomplete unit means calling replaceCoverageRules first and then sending the status with the policy and capabilities. For an existing unit, serviceCapabilityCodes replaces the whole claim and every code must be an active catalog operationCode known to the location service\&#39;s catalog replica. When the unit id does not exist none of this is checked: nothing is persisted and a synthesized response carrying only the patched name, status, notes and travelBufferPolicyId is echoed back, without serviceCapabilityCodes, so callers must verify existence first with getMobileUnitById. Required inputs: id (UUID) as a path parameter and a JSON object of the fields to change; status values are upper-cased and a blank status normalizes to INACTIVE. Emits a LOCATION_MOBILE_UNIT_UPDATE event. Returns 200 even for unknown ids (with the unpersisted echo, whatever the patch holds), 409 when a name change collides with another unit at the same base location, and, for an existing unit, 422 when the result would be an incomplete ACTIVE unit or a capability code is unknown.
+     * Applies a partial update to a mobile unit, accepting the keys name, status, notes, travelBufferPolicyId and serviceCapabilityCodes. Use this tool for status transitions, travel-buffer-policy reassignment and replacing the unit\&#39;s capability claim; use replaceCoverageRules instead to change where the unit operates. Preconditions: the unit must exist. The unit as it stands after the patch must satisfy what create demands of an ACTIVE unit, so an ACTIVE result needs a travelBufferPolicyId, at least one serviceCapabilityCode and at least one coverage rule already on the unit; activating an incomplete unit means calling replaceCoverageRules first and then sending the status with the policy and capabilities. serviceCapabilityCodes replaces the whole claim and every code must be an active catalog operationCode known to the location service\&#39;s catalog replica. Required inputs: id (UUID) as a path parameter and a JSON object of the fields to change. name must be non-blank text, unique (ignoring case) at the unit\&#39;s base location; status must be ACTIVE or INACTIVE (any case; null is refused); notes is text or null; travelBufferPolicyId is null to clear it or the id of an existing policy; serviceCapabilityCodes is an array; other keys are ignored. Emits a LOCATION_MOBILE_UNIT_UPDATE event. Returns 200 with the updated unit; 404 NOT_FOUND when the unit does not exist; 400 VALIDATION_ERROR with fieldErrors for a value of the wrong shape; 409 MOBILE_UNIT_NAME_TAKEN when the new name is taken at the base location, or 409 when a concurrent update won the version race; 422 TRAVEL_BUFFER_POLICY_NOT_FOUND with fieldErrors for an unknown policy, and 422 when the result would be an incomplete ACTIVE unit or a capability code is unknown; nothing is saved on any refusal.
      * @endpoint patch /v1/mobile-units/{id}
      * @param id
      * @param body Free-form patch object; only the keys name, status, notes, travelBufferPolicyId and serviceCapabilityCodes are recognized.
@@ -448,7 +478,7 @@ export class MobileUnitAPIService extends BaseService {
 
     /**
      * Replace Coverage Rules for Mobile Unit
-     * Atomically replaces the full set of coverage rules for a mobile unit, deleting the existing rules and inserting the supplied ones in one transaction. Use this tool whenever coverage changes, sending the complete desired rule set; do not use patchMobileUnit, which cannot modify coverage. Preconditions: the mobile unit must exist; a referenced serviceAreaId that does not resolve is stored as a rule without a service area rather than rejected. Required inputs: id (UUID) as a path parameter and a body of the form {\&quot;rules\&quot;: [...]}, each rule carrying ruleType and optionally serviceAreaId, priority (defaults to 0), validFrom, validTo and maxDistance. Emits a LOCATION_COVERAGE_RULES_REPLACE event. Returns 404 when the mobile unit does not exist; an omitted or empty rules array clears all coverage.
+     * Atomically replaces the full set of coverage rules for a mobile unit, deleting the existing rules and inserting the supplied ones in one transaction. Use this tool whenever coverage changes, sending the complete desired rule set; do not use patchMobileUnit, which cannot modify coverage. Preconditions: the mobile unit must exist; every rule\&#39;s serviceAreaId must name an existing service area; DISTANCE_TIER rules must be strictly ascending by maxDistance and end with one null catch-all tier; an ACTIVE unit must keep at least one rule. The replacement set is checked in full before the existing rules are touched, so a refusal changes nothing. Required inputs: id (UUID) as a path parameter and a body of the form {\&quot;rules\&quot;: [...]}, each rule carrying ruleType (SERVICE_AREA or DISTANCE_TIER, any case) and serviceAreaId, and optionally priority (non-negative, defaults to 0), validFrom, validTo (not before validFrom) and maxDistance (non-negative). Emits a LOCATION_COVERAGE_RULES_REPLACE event. Returns 200 with the saved rules ordered by priority; 400 VALIDATION_ERROR with fieldErrors (rules[i].field) for a malformed rule or tiers out of order; 404 when the mobile unit does not exist; 422 SERVICE_AREA_NOT_FOUND with fieldErrors for an unknown service area, and 422 when the set would leave an ACTIVE unit with no rules. An omitted or empty rules array clears all coverage of an INACTIVE unit.
      * @endpoint put /v1/mobile-units/{id}/coverage-rules
      * @param id
      * @param body Envelope holding the complete replacement rule set under the \&quot;rules\&quot; key; existing rules not present here are deleted.

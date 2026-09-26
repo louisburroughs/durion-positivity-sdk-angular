@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { CoverageRuleResponse } from './coverageRuleResponse';
 
 
 /**
@@ -17,6 +18,10 @@ export interface MobileUnitResponse {
      * Identifier of the base location the mobile unit operates from
      */
     baseLocationId?: string;
+    /**
+     * The unit\'s coverage rules ordered by ascending priority. Present only on listMobileUnits with include=coverageRules; absent otherwise (read them with listCoverageRules).
+     */
+    coverageRules?: Array<CoverageRuleResponse>;
     /**
      * Timestamp when the mobile unit was created (ISO 8601)
      */
@@ -40,7 +45,7 @@ export interface MobileUnitResponse {
     /**
      * Operational status of the mobile unit
      */
-    status?: string;
+    status?: MobileUnitResponseStatusEnum;
     /**
      * Identifier of the travel buffer policy applied to the mobile unit
      */
@@ -50,6 +55,12 @@ export interface MobileUnitResponse {
      */
     updatedAt?: string;
 }
+export enum MobileUnitResponseStatusEnum {
+    Active = 'ACTIVE',
+    Inactive = 'INACTIVE'
+};
+
+
 
 function isOptionalMobileUnitResponsePropertyOfType(
     value: Record<string, unknown>,
