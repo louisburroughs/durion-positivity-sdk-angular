@@ -26,6 +26,10 @@ export interface BayBulkIngestRecord {
      */
     maxConcurrentVehicles: number;
     /**
+     * Heaviest GVWR class (1–8) the bay accepts; omit for unconstrained (CAP-325 D13).
+     */
+    maxDutyClass?: number;
+    /**
      * Name of the bay, unique within its location
      */
     name: string;
@@ -75,7 +79,7 @@ export function instanceOfBayBulkIngestRecord(value: object): value is BayBulkIn
 
     const requiredProperties = createBayBulkIngestRecordPropertyNames('bayType', 'maxConcurrentVehicles', 'name', );
     const optionalStringProperties = createBayBulkIngestRecordOptionalProperties({ name: 'bayType', nullable: false }, { name: 'locationId', nullable: false }, { name: 'name', nullable: false }, { name: 'status', nullable: false }, );
-    const optionalNumberProperties = createBayBulkIngestRecordOptionalProperties({ name: 'maxConcurrentVehicles', nullable: false }, );
+    const optionalNumberProperties = createBayBulkIngestRecordOptionalProperties({ name: 'maxConcurrentVehicles', nullable: false }, { name: 'maxDutyClass', nullable: false }, );
     const optionalBooleanProperties = createBayBulkIngestRecordOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
