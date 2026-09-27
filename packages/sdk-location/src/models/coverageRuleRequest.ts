@@ -7,16 +7,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { DistanceDto } from './distanceDto';
 
 
 /**
  * Request payload defining a coverage rule for a mobile unit
  */
 export interface CoverageRuleRequest {
-    /**
-     * Maximum service distance in kilometres covered by the rule
-     */
-    maxDistance?: number;
+    maxDistance?: DistanceDto;
     /**
      * Evaluation priority of the rule (lower is evaluated first)
      */
@@ -26,15 +24,15 @@ export interface CoverageRuleRequest {
      */
     ruleType: CoverageRuleRequestRuleTypeEnum;
     /**
-     * Identifier of the service area this rule applies to; must name an existing service area (422 SERVICE_AREA_NOT_FOUND otherwise). Required for every rule type: a DISTANCE_TIER rule is a tier within its service area, and a rule without one never matches an address.
+     * Identifier of the service area this rule applies to; must name an existing, active service area (422 SERVICE_AREA_NOT_FOUND when unknown, 422 SERVICE_AREA_INACTIVE when it exists but active is false). Required for every rule type: a DISTANCE_TIER rule is a tier within its service area, and a rule without one never matches an address.
      */
     serviceAreaId: string;
     /**
-     * Date from which the rule is effective
+     * UTC instant from which the rule is effective, inclusive (DECISION-LOCATION-017)
      */
     validFrom?: string;
     /**
-     * Date until which the rule is effective; must not be before validFrom
+     * UTC instant until which the rule is effective, exclusive; must be after validFrom (DECISION-LOCATION-017)
      */
     validTo?: string;
 }
@@ -85,7 +83,7 @@ export function instanceOfCoverageRuleRequest(value: object): value is CoverageR
 
     const requiredProperties = createCoverageRuleRequestPropertyNames('ruleType', 'serviceAreaId', );
     const optionalStringProperties = createCoverageRuleRequestOptionalProperties({ name: 'ruleType', nullable: false }, { name: 'serviceAreaId', nullable: false }, { name: 'validFrom', nullable: false }, { name: 'validTo', nullable: false }, );
-    const optionalNumberProperties = createCoverageRuleRequestOptionalProperties({ name: 'maxDistance', nullable: false }, { name: 'priority', nullable: false }, );
+    const optionalNumberProperties = createCoverageRuleRequestOptionalProperties({ name: 'priority', nullable: false }, );
     const optionalBooleanProperties = createCoverageRuleRequestOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

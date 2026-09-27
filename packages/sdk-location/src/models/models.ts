@@ -13,6 +13,7 @@ export * from './bulkIngestResult';
 export * from './conflict';
 export * from './coverageRuleRequest';
 export * from './coverageRuleResponse';
+export * from './distanceDto';
 export * from './eligibleMobileUnitResponse';
 export * from './fieldError';
 export * from './holidayClosureRequest';

@@ -25,7 +25,7 @@ export interface LocationResponseDTO {
      */
     activeBayCount: number;
     /**
-     * Number of mobile units based at the location with status ACTIVE; INACTIVE units are excluded and an inactive location always reports 0
+     * Number of mobile units based at the location with status ACTIVE; units in any other status are excluded and an inactive location always reports 0
      */
     activeMobileUnitCount: number;
     /**
@@ -48,6 +48,10 @@ export interface LocationResponseDTO {
      * Country of the location
      */
     country?: string;
+    /**
+     * Unit this location\'s forms show and accept for a distance value (DECISION-LOCATION-028); every distance in a request or response for this location is expressed in this unit. Storage of a distance is always canonical kilometres regardless of this setting.
+     */
+    distanceUnit: LocationResponseDTODistanceUnitEnum;
     /**
      * Identifier of the associated geographical location
      */
@@ -98,6 +102,12 @@ export interface LocationResponseDTO {
     timezone?: string | null;
     type?: LocationTypeDTO;
 }
+export enum LocationResponseDTODistanceUnitEnum {
+    Km = 'KM',
+    Mi = 'MI'
+};
+
+
 
 function isOptionalLocationResponseDTOPropertyOfType(
     value: Record<string, unknown>,
@@ -137,8 +147,8 @@ export function instanceOfLocationResponseDTO(value: object): value is LocationR
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLocationResponseDTOPropertyNames('active', 'activeBayCount', 'activeMobileUnitCount', 'hasRepairCapability', 'id', 'name', );
-    const optionalStringProperties = createLocationResponseDTOOptionalProperties({ name: 'addressLine1', nullable: false }, { name: 'addressLine2', nullable: false }, { name: 'city', nullable: false }, { name: 'code', nullable: false }, { name: 'country', nullable: false }, { name: 'geographicalLocationId', nullable: false }, { name: 'id', nullable: false }, { name: 'mailingAddress', nullable: false }, { name: 'name', nullable: false }, { name: 'phoneNumber', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'responsiblePersonId', nullable: false }, { name: 'state', nullable: false }, { name: 'timezone', nullable: true }, );
+    const requiredProperties = createLocationResponseDTOPropertyNames('active', 'activeBayCount', 'activeMobileUnitCount', 'distanceUnit', 'hasRepairCapability', 'id', 'name', );
+    const optionalStringProperties = createLocationResponseDTOOptionalProperties({ name: 'addressLine1', nullable: false }, { name: 'addressLine2', nullable: false }, { name: 'city', nullable: false }, { name: 'code', nullable: false }, { name: 'country', nullable: false }, { name: 'distanceUnit', nullable: false }, { name: 'geographicalLocationId', nullable: false }, { name: 'id', nullable: false }, { name: 'mailingAddress', nullable: false }, { name: 'name', nullable: false }, { name: 'phoneNumber', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'responsiblePersonId', nullable: false }, { name: 'state', nullable: false }, { name: 'timezone', nullable: true }, );
     const optionalNumberProperties = createLocationResponseDTOOptionalProperties({ name: 'activeBayCount', nullable: false }, { name: 'activeMobileUnitCount', nullable: false }, );
     const optionalBooleanProperties = createLocationResponseDTOOptionalProperties({ name: 'active', nullable: false }, { name: 'hasRepairCapability', nullable: false }, );
 

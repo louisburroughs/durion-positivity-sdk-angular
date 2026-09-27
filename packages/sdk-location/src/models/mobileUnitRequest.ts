@@ -23,6 +23,18 @@ export interface MobileUnitRequest {
      */
     coverageRules?: Array<CoverageRuleRequest>;
     /**
+     * Advisory expected return-to-service time; not used by scheduling.
+     */
+    expectedReturnAt?: string;
+    /**
+     * License plate number, paired with plateRegion for uniqueness; display only; not used by scheduling. Unique per tenant together with plateRegion when both are set; a patch can clear it with null.
+     */
+    licensePlate?: string;
+    /**
+     * Heaviest GVWR class (1-8) the unit accepts; omit for unconstrained (DECISION-LOCATION-029, the bay\'s axis per CAP-325 D13).
+     */
+    maxDutyClass?: number;
+    /**
      * Display name of the mobile unit
      */
     name: string;
@@ -31,21 +43,50 @@ export interface MobileUnitRequest {
      */
     notes?: string;
     /**
+     * Free-text detail for outOfServiceReason (max 255 characters); required when outOfServiceReason is OTHER, optional otherwise.
+     */
+    outOfServiceNote?: string;
+    /**
+     * Reason the unit is OUT_OF_SERVICE (DECISION-LOCATION-026); required when status is OUT_OF_SERVICE, refused with 422 OUT_OF_SERVICE_REASON_REQUIRED otherwise. Defaults to OTHER when status is omitted entirely.
+     */
+    outOfServiceReason?: MobileUnitRequestOutOfServiceReasonEnum;
+    /**
+     * ISO 3166-2 region code for licensePlate (for example US-NC), normalized to upper case; rejected with 400 unless it matches that format. Display only; not used by scheduling. Unique per tenant together with licensePlate when both are set; a patch can clear it with null.
+     */
+    plateRegion?: string;
+    /**
      * Catalog operation codes this unit can perform off-site (CAP-325 D14): each must be an active catalog operationCode (UPPER-DASH, ADR-0059 §3), matched case-insensitively; unknown or retired codes are rejected 422. Required, non-empty, for an ACTIVE unit.
      */
     serviceCapabilityCodes?: Array<string>;
     /**
-     * Operational status of the mobile unit, matched case-insensitively; INACTIVE when omitted
+     * Operational status of the mobile unit, matched case-insensitively: ACTIVE, OUT_OF_SERVICE or RETIRED. OUT_OF_SERVICE when omitted, with outOfServiceReason OTHER, for a unit staged before its policy, capabilities and coverage are configured.
      */
     status?: MobileUnitRequestStatusEnum;
     /**
      * Identifier of the travel buffer policy applied to the mobile unit; must name an existing policy (422 TRAVEL_BUFFER_POLICY_NOT_FOUND otherwise). Required for an ACTIVE unit.
      */
     travelBufferPolicyId?: string;
+    /**
+     * Fleet/unit number painted on the vehicle; display only; not used by scheduling. Unique per tenant when set; a patch can clear it with null.
+     */
+    unitNumber?: string;
+    /**
+     * 17-character vehicle identification number (ISO 3779), normalized to upper case; rejected with 400 unless it is exactly 17 characters and excludes I, O and Q. Display only; not used by scheduling. Unique per tenant when set; a patch can clear it with null.
+     */
+    vin?: string;
 }
+export enum MobileUnitRequestOutOfServiceReasonEnum {
+    EquipmentFailure = 'EQUIPMENT_FAILURE',
+    ScheduledMaintenance = 'SCHEDULED_MAINTENANCE',
+    Inspection = 'INSPECTION',
+    SafetyHold = 'SAFETY_HOLD',
+    FacilityIssue = 'FACILITY_ISSUE',
+    Other = 'OTHER'
+};
 export enum MobileUnitRequestStatusEnum {
     Active = 'ACTIVE',
-    Inactive = 'INACTIVE'
+    OutOfService = 'OUT_OF_SERVICE',
+    Retired = 'RETIRED'
 };
 
 
@@ -89,8 +130,8 @@ export function instanceOfMobileUnitRequest(value: object): value is MobileUnitR
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createMobileUnitRequestPropertyNames('baseLocationId', 'name', );
-    const optionalStringProperties = createMobileUnitRequestOptionalProperties({ name: 'baseLocationId', nullable: false }, { name: 'name', nullable: false }, { name: 'notes', nullable: false }, { name: 'status', nullable: false }, { name: 'travelBufferPolicyId', nullable: false }, );
-    const optionalNumberProperties = createMobileUnitRequestOptionalProperties();
+    const optionalStringProperties = createMobileUnitRequestOptionalProperties({ name: 'baseLocationId', nullable: false }, { name: 'expectedReturnAt', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'name', nullable: false }, { name: 'notes', nullable: false }, { name: 'outOfServiceNote', nullable: false }, { name: 'outOfServiceReason', nullable: false }, { name: 'plateRegion', nullable: false }, { name: 'status', nullable: false }, { name: 'travelBufferPolicyId', nullable: false }, { name: 'unitNumber', nullable: false }, { name: 'vin', nullable: false }, );
+    const optionalNumberProperties = createMobileUnitRequestOptionalProperties({ name: 'maxDutyClass', nullable: false }, );
     const optionalBooleanProperties = createMobileUnitRequestOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

@@ -18,6 +18,10 @@ export interface MobileUnitBulkIngestRecord {
      */
     baseLocationId?: string;
     /**
+     * Heaviest GVWR class (1-8) the unit accepts; omit for unconstrained (DECISION-LOCATION-029, the bay\'s axis per CAP-325 D13).
+     */
+    maxDutyClass?: number;
+    /**
      * Name of the unit, unique for its base location
      */
     name: string;
@@ -26,7 +30,7 @@ export interface MobileUnitBulkIngestRecord {
      */
     notes?: string;
     /**
-     * Unit status; defaults to INACTIVE. A unit created ACTIVE must also carry a travel buffer policy, capabilities and coverage rules, none of which this record expresses — so an ACTIVE row is rejected by the service rather than created half-configured.
+     * Unit status; defaults to OUT_OF_SERVICE (reason OTHER). A unit created ACTIVE must also carry a travel buffer policy, capabilities and coverage rules, none of which this record expresses — so an ACTIVE row is rejected by the service rather than created half-configured.
      */
     status?: string;
 }
@@ -71,7 +75,7 @@ export function instanceOfMobileUnitBulkIngestRecord(value: object): value is Mo
 
     const requiredProperties = createMobileUnitBulkIngestRecordPropertyNames('name', );
     const optionalStringProperties = createMobileUnitBulkIngestRecordOptionalProperties({ name: 'baseLocationId', nullable: false }, { name: 'name', nullable: false }, { name: 'notes', nullable: false }, { name: 'status', nullable: false }, );
-    const optionalNumberProperties = createMobileUnitBulkIngestRecordOptionalProperties();
+    const optionalNumberProperties = createMobileUnitBulkIngestRecordOptionalProperties({ name: 'maxDutyClass', nullable: false }, );
     const optionalBooleanProperties = createMobileUnitBulkIngestRecordOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

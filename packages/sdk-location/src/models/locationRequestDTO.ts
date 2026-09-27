@@ -49,6 +49,10 @@ export interface LocationRequestDTO {
      */
     country?: string;
     /**
+     * Unit this location\'s forms show and accept for a distance value (DECISION-LOCATION-028); KM when omitted. Storage of a distance is always canonical kilometres regardless of this setting.
+     */
+    distanceUnit?: LocationRequestDTODistanceUnitEnum;
+    /**
      * Identifier of the associated geographical location
      */
     geographicalLocationId?: string;
@@ -94,6 +98,12 @@ export interface LocationRequestDTO {
     timezone?: string;
     type: LocationTypeDTO;
 }
+export enum LocationRequestDTODistanceUnitEnum {
+    Km = 'KM',
+    Mi = 'MI'
+};
+
+
 
 function isOptionalLocationRequestDTOPropertyOfType(
     value: Record<string, unknown>,
@@ -134,7 +144,7 @@ export function instanceOfLocationRequestDTO(value: object): value is LocationRe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createLocationRequestDTOPropertyNames('code', 'name', 'type', );
-    const optionalStringProperties = createLocationRequestDTOOptionalProperties({ name: 'addressLine1', nullable: false }, { name: 'addressLine2', nullable: false }, { name: 'city', nullable: false }, { name: 'code', nullable: false }, { name: 'country', nullable: false }, { name: 'geographicalLocationId', nullable: false }, { name: 'mailingAddress', nullable: false }, { name: 'name', nullable: false }, { name: 'phoneNumber', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'responsiblePersonId', nullable: false }, { name: 'state', nullable: false }, { name: 'timezone', nullable: false }, );
+    const optionalStringProperties = createLocationRequestDTOOptionalProperties({ name: 'addressLine1', nullable: false }, { name: 'addressLine2', nullable: false }, { name: 'city', nullable: false }, { name: 'code', nullable: false }, { name: 'country', nullable: false }, { name: 'distanceUnit', nullable: false }, { name: 'geographicalLocationId', nullable: false }, { name: 'mailingAddress', nullable: false }, { name: 'name', nullable: false }, { name: 'phoneNumber', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'responsiblePersonId', nullable: false }, { name: 'state', nullable: false }, { name: 'timezone', nullable: false }, );
     const optionalNumberProperties = createLocationRequestDTOOptionalProperties({ name: 'checkInBufferMinutes', nullable: false }, { name: 'cleanupBufferMinutes', nullable: false }, );
     const optionalBooleanProperties = createLocationRequestDTOOptionalProperties({ name: 'active', nullable: false }, );
 

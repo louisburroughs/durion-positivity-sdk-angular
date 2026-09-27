@@ -27,9 +27,21 @@ export interface MobileUnitResponse {
      */
     createdAt?: string;
     /**
+     * Advisory expected return-to-service time; not used by scheduling. Null unless status is OUT_OF_SERVICE and one was given.
+     */
+    expectedReturnAt?: string;
+    /**
      * Unique identifier of the mobile unit
      */
     id: string;
+    /**
+     * License plate number; display only, not used by scheduling; null when not set.
+     */
+    licensePlate?: string;
+    /**
+     * Heaviest GVWR class (1-8) the unit accepts; null when unconstrained (DECISION-LOCATION-029).
+     */
+    maxDutyClass?: number;
     /**
      * Display name of the mobile unit
      */
@@ -39,11 +51,23 @@ export interface MobileUnitResponse {
      */
     notes?: string;
     /**
+     * Free-text detail for outOfServiceReason; null unless status is OUT_OF_SERVICE.
+     */
+    outOfServiceNote?: string;
+    /**
+     * Reason the unit is OUT_OF_SERVICE; null unless status is OUT_OF_SERVICE.
+     */
+    outOfServiceReason?: string;
+    /**
+     * ISO 3166-2 region code for licensePlate, upper case; display only, not used by scheduling; null when not set.
+     */
+    plateRegion?: string;
+    /**
      * Catalog operation codes this unit can perform off-site (CAP-325 D14), UPPER-DASH per ADR-0059 §3; empty for a unit that has not declared any.
      */
     serviceCapabilityCodes?: Array<string>;
     /**
-     * Operational status of the mobile unit
+     * Operational status of the mobile unit: ACTIVE, OUT_OF_SERVICE or RETIRED (DECISION-LOCATION-026).
      */
     status?: MobileUnitResponseStatusEnum;
     /**
@@ -51,13 +75,22 @@ export interface MobileUnitResponse {
      */
     travelBufferPolicyId?: string;
     /**
+     * Fleet/unit number painted on the vehicle; display only, not used by scheduling; null when not set.
+     */
+    unitNumber?: string;
+    /**
      * Timestamp when the mobile unit was last updated (ISO 8601)
      */
     updatedAt?: string;
+    /**
+     * 17-character vehicle identification number, upper case; display only, not used by scheduling; null when not set.
+     */
+    vin?: string;
 }
 export enum MobileUnitResponseStatusEnum {
     Active = 'ACTIVE',
-    Inactive = 'INACTIVE'
+    OutOfService = 'OUT_OF_SERVICE',
+    Retired = 'RETIRED'
 };
 
 
@@ -101,8 +134,8 @@ export function instanceOfMobileUnitResponse(value: object): value is MobileUnit
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createMobileUnitResponsePropertyNames('id', );
-    const optionalStringProperties = createMobileUnitResponseOptionalProperties({ name: 'baseLocationId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'notes', nullable: false }, { name: 'status', nullable: false }, { name: 'travelBufferPolicyId', nullable: false }, { name: 'updatedAt', nullable: false }, );
-    const optionalNumberProperties = createMobileUnitResponseOptionalProperties();
+    const optionalStringProperties = createMobileUnitResponseOptionalProperties({ name: 'baseLocationId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'expectedReturnAt', nullable: false }, { name: 'id', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'name', nullable: false }, { name: 'notes', nullable: false }, { name: 'outOfServiceNote', nullable: false }, { name: 'outOfServiceReason', nullable: false }, { name: 'plateRegion', nullable: false }, { name: 'status', nullable: false }, { name: 'travelBufferPolicyId', nullable: false }, { name: 'unitNumber', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'vin', nullable: false }, );
+    const optionalNumberProperties = createMobileUnitResponseOptionalProperties({ name: 'maxDutyClass', nullable: false }, );
     const optionalBooleanProperties = createMobileUnitResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
