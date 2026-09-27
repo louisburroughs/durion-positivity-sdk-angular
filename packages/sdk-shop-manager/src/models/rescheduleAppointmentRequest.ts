@@ -14,9 +14,21 @@
  */
 export interface RescheduleAppointmentRequest {
     /**
+     * Manager\'s reason for approving a reschedule beyond the free allowance (DECISION-SHOPMGMT-004). Required, and must be non-blank, only when this is the 3rd or later reschedule that is not shop-caused; ignored for the first two, or for one that is exempt (reason EQUIPMENT_ISSUE, or the appointment was already affected, DECISION-SHOPMGMT-022).
+     */
+    approvalReason?: string;
+    /**
      * New appointment end instant in UTC (ISO-8601); must be after newStartAt
      */
     newEndAt: string;
+    /**
+     * Optional new resource id to move the appointment onto as part of this reschedule (DECISION-SHOPMGMT-022 rule 3). When newResourceType is omitted it is inferred from whichever replica holds this id, exactly as appointment create infers it. Only the resource the appointment ends up on is validated and conflict-checked — its old resource, if different, is not re-validated by this call.
+     */
+    newResourceId?: string;
+    /**
+     * Optional new resource axis (BAY, MOBILE_UNIT or UNASSIGNED) to move the appointment onto as part of this reschedule (DECISION-SHOPMGMT-022 rule 3). Present alongside or in place of newResourceId; validated exactly as appointment create validates resourceType. Absent together with newResourceId keeps the appointment on its current resource, re-validated unchanged (today\'s behaviour).
+     */
+    newResourceType?: RescheduleAppointmentRequestNewResourceTypeEnum;
     /**
      * New appointment start instant in UTC (ISO-8601)
      */
@@ -34,6 +46,11 @@ export interface RescheduleAppointmentRequest {
      */
     rescheduleReasonNotes?: string;
 }
+export enum RescheduleAppointmentRequestNewResourceTypeEnum {
+    Bay = 'BAY',
+    MobileUnit = 'MOBILE_UNIT',
+    Unassigned = 'UNASSIGNED'
+};
 export enum RescheduleAppointmentRequestReasonEnum {
     CustomerRequest = 'CUSTOMER_REQUEST',
     ShopCapacity = 'SHOP_CAPACITY',
@@ -87,7 +104,7 @@ export function instanceOfRescheduleAppointmentRequest(value: object): value is 
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createRescheduleAppointmentRequestPropertyNames('newEndAt', 'newStartAt', 'reason', );
-    const optionalStringProperties = createRescheduleAppointmentRequestOptionalProperties({ name: 'newEndAt', nullable: false }, { name: 'newStartAt', nullable: false }, { name: 'reason', nullable: false }, { name: 'rescheduleReasonNotes', nullable: false }, );
+    const optionalStringProperties = createRescheduleAppointmentRequestOptionalProperties({ name: 'approvalReason', nullable: false }, { name: 'newEndAt', nullable: false }, { name: 'newResourceId', nullable: false }, { name: 'newResourceType', nullable: false }, { name: 'newStartAt', nullable: false }, { name: 'reason', nullable: false }, { name: 'rescheduleReasonNotes', nullable: false }, );
     const optionalNumberProperties = createRescheduleAppointmentRequestOptionalProperties();
     const optionalBooleanProperties = createRescheduleAppointmentRequestOptionalProperties({ name: 'notifyCustomer', nullable: false }, );
 
