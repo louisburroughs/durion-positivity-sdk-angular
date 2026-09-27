@@ -38,6 +38,10 @@ export interface LocationBulkIngestRecord {
      */
     countryCode?: string;
     /**
+     * Unit this location\'s forms show and accept for a distance value (DECISION-LOCATION-028); KM when omitted.
+     */
+    distanceUnit?: LocationBulkIngestRecordDistanceUnitEnum;
+    /**
      * Name of the location type to resolve during ingest
      */
     locationTypeName?: string;
@@ -62,6 +66,12 @@ export interface LocationBulkIngestRecord {
      */
     timezone?: string;
 }
+export enum LocationBulkIngestRecordDistanceUnitEnum {
+    Km = 'KM',
+    Mi = 'MI'
+};
+
+
 
 function isOptionalLocationBulkIngestRecordPropertyOfType(
     value: Record<string, unknown>,
@@ -102,7 +112,7 @@ export function instanceOfLocationBulkIngestRecord(value: object): value is Loca
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createLocationBulkIngestRecordPropertyNames('code', 'name', );
-    const optionalStringProperties = createLocationBulkIngestRecordOptionalProperties({ name: 'addressLine1', nullable: false }, { name: 'addressLine2', nullable: false }, { name: 'city', nullable: false }, { name: 'code', nullable: false }, { name: 'countryCode', nullable: false }, { name: 'locationTypeName', nullable: false }, { name: 'name', nullable: false }, { name: 'phoneNumber', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'stateOrProvince', nullable: false }, { name: 'timezone', nullable: false }, );
+    const optionalStringProperties = createLocationBulkIngestRecordOptionalProperties({ name: 'addressLine1', nullable: false }, { name: 'addressLine2', nullable: false }, { name: 'city', nullable: false }, { name: 'code', nullable: false }, { name: 'countryCode', nullable: false }, { name: 'distanceUnit', nullable: false }, { name: 'locationTypeName', nullable: false }, { name: 'name', nullable: false }, { name: 'phoneNumber', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'stateOrProvince', nullable: false }, { name: 'timezone', nullable: false }, );
     const optionalNumberProperties = createLocationBulkIngestRecordOptionalProperties();
     const optionalBooleanProperties = createLocationBulkIngestRecordOptionalProperties({ name: 'active', nullable: false }, );
 

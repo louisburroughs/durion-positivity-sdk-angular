@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { DistanceDto } from './distanceDto';
 
 
 /**
@@ -17,10 +18,7 @@ export interface CoverageRuleResponse {
      * Unique identifier of the coverage rule
      */
     id: string;
-    /**
-     * Maximum service distance in kilometres covered by the rule
-     */
-    maxDistance?: number;
+    maxDistance?: DistanceDto;
     /**
      * Identifier of the mobile unit this rule belongs to
      */
@@ -38,11 +36,11 @@ export interface CoverageRuleResponse {
      */
     serviceAreaId: string;
     /**
-     * Date from which the rule is effective
+     * UTC instant from which the rule is effective, inclusive
      */
     validFrom?: string;
     /**
-     * Date until which the rule is effective
+     * UTC instant until which the rule is effective, exclusive
      */
     validTo?: string;
 }
@@ -93,7 +91,7 @@ export function instanceOfCoverageRuleResponse(value: object): value is Coverage
 
     const requiredProperties = createCoverageRuleResponsePropertyNames('id', 'mobileUnitId', 'serviceAreaId', );
     const optionalStringProperties = createCoverageRuleResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'mobileUnitId', nullable: false }, { name: 'ruleType', nullable: false }, { name: 'serviceAreaId', nullable: false }, { name: 'validFrom', nullable: false }, { name: 'validTo', nullable: false }, );
-    const optionalNumberProperties = createCoverageRuleResponseOptionalProperties({ name: 'maxDistance', nullable: false }, { name: 'priority', nullable: false }, );
+    const optionalNumberProperties = createCoverageRuleResponseOptionalProperties({ name: 'priority', nullable: false }, );
     const optionalBooleanProperties = createCoverageRuleResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

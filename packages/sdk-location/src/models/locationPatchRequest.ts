@@ -24,6 +24,10 @@ export interface LocationPatchRequest {
      */
     cleanupBufferMinutes?: number;
     /**
+     * Unit this location\'s forms show and accept for a distance value (DECISION-LOCATION-028); unchanged when omitted. Storage of a distance is always canonical kilometres regardless of this setting.
+     */
+    distanceUnit?: LocationPatchRequestDistanceUnitEnum;
+    /**
      * Holiday closures for the location
      */
     holidayClosures?: Array<HolidayClosureRequest>;
@@ -44,6 +48,12 @@ export interface LocationPatchRequest {
      */
     timezone?: string;
 }
+export enum LocationPatchRequestDistanceUnitEnum {
+    Km = 'KM',
+    Mi = 'MI'
+};
+
+
 
 function isOptionalLocationPatchRequestPropertyOfType(
     value: Record<string, unknown>,
@@ -84,7 +94,7 @@ export function instanceOfLocationPatchRequest(value: object): value is Location
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createLocationPatchRequestPropertyNames();
-    const optionalStringProperties = createLocationPatchRequestOptionalProperties({ name: 'name', nullable: false }, { name: 'status', nullable: false }, { name: 'timezone', nullable: false }, );
+    const optionalStringProperties = createLocationPatchRequestOptionalProperties({ name: 'distanceUnit', nullable: false }, { name: 'name', nullable: false }, { name: 'status', nullable: false }, { name: 'timezone', nullable: false }, );
     const optionalNumberProperties = createLocationPatchRequestOptionalProperties({ name: 'checkInBufferMinutes', nullable: false }, { name: 'cleanupBufferMinutes', nullable: false }, );
     const optionalBooleanProperties = createLocationPatchRequestOptionalProperties();
 

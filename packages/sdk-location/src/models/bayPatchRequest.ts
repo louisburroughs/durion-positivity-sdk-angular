@@ -20,6 +20,14 @@ export interface BayPatchRequest {
     bayType?: string;
     capacity?: BayCapacityRequest;
     /**
+     * Sort key for bay lists and the dispatch board; null leaves the current value unchanged, the same as every other nullable field on this patch.
+     */
+    displayOrder?: number;
+    /**
+     * Advisory expected return-to-service time; not used by scheduling. Null leaves the current value unchanged unless status is patched to ACTIVE, which always clears it.
+     */
+    expectedReturnAt?: string;
+    /**
      * Number of vehicles the bay physically accommodates at once. A bay is a single bookable resource regardless of this value; register separate bays for independently bookable stalls.
      */
     maxConcurrentVehicles?: number;
@@ -32,14 +40,37 @@ export interface BayPatchRequest {
      */
     name?: string;
     /**
+     * Free-text detail for outOfServiceReason (max 255 characters); required when the resulting outOfServiceReason is OTHER. Null leaves the current note unchanged unless status is patched to ACTIVE, which always clears it.
+     */
+    outOfServiceNote?: string;
+    /**
+     * Reason the bay is OUT_OF_SERVICE (DECISION-LOCATION-026); required when the resulting status is OUT_OF_SERVICE, refused with 422 OUT_OF_SERVICE_REASON_REQUIRED otherwise. Null leaves the current reason unchanged unless status is patched to ACTIVE, which always clears it.
+     */
+    outOfServiceReason?: BayPatchRequestOutOfServiceReasonEnum;
+    /**
      * Catalog operation codes this bay type is the only one able to perform (CAP-325 D14). Null leaves unchanged; an empty list clears to general. Each value must be an active catalog operationCode; unknown codes are rejected 422.
      */
     serviceCapabilityCodes?: Array<string>;
     /**
-     * Operational status of the bay
+     * Operational status of the bay: ACTIVE, OUT_OF_SERVICE or RETIRED. Going OUT_OF_SERVICE requires outOfServiceReason in this same request or already on the bay; returning to ACTIVE clears outOfServiceReason, outOfServiceNote and expectedReturnAt. DELETE is the usual way to RETIRE a bay; RETIRED here is reversible the same as OUT_OF_SERVICE.
      */
-    status?: string;
+    status?: BayPatchRequestStatusEnum;
 }
+export enum BayPatchRequestOutOfServiceReasonEnum {
+    EquipmentFailure = 'EQUIPMENT_FAILURE',
+    ScheduledMaintenance = 'SCHEDULED_MAINTENANCE',
+    Inspection = 'INSPECTION',
+    SafetyHold = 'SAFETY_HOLD',
+    FacilityIssue = 'FACILITY_ISSUE',
+    Other = 'OTHER'
+};
+export enum BayPatchRequestStatusEnum {
+    Active = 'ACTIVE',
+    OutOfService = 'OUT_OF_SERVICE',
+    Retired = 'RETIRED'
+};
+
+
 
 function isOptionalBayPatchRequestPropertyOfType(
     value: Record<string, unknown>,
@@ -80,8 +111,8 @@ export function instanceOfBayPatchRequest(value: object): value is BayPatchReque
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBayPatchRequestPropertyNames();
-    const optionalStringProperties = createBayPatchRequestOptionalProperties({ name: 'bayType', nullable: false }, { name: 'name', nullable: false }, { name: 'status', nullable: false }, );
-    const optionalNumberProperties = createBayPatchRequestOptionalProperties({ name: 'maxConcurrentVehicles', nullable: false }, { name: 'maxDutyClass', nullable: false }, );
+    const optionalStringProperties = createBayPatchRequestOptionalProperties({ name: 'bayType', nullable: false }, { name: 'expectedReturnAt', nullable: false }, { name: 'name', nullable: false }, { name: 'outOfServiceNote', nullable: false }, { name: 'outOfServiceReason', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createBayPatchRequestOptionalProperties({ name: 'displayOrder', nullable: false }, { name: 'maxConcurrentVehicles', nullable: false }, { name: 'maxDutyClass', nullable: false }, );
     const optionalBooleanProperties = createBayPatchRequestOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

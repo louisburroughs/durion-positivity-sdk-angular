@@ -20,6 +20,14 @@ export interface BayRequest {
     bayType: string;
     capacity: BayCapacityRequest;
     /**
+     * Sort key for bay lists and the dispatch board; bays without a value sort last, ties broken by name.
+     */
+    displayOrder?: number;
+    /**
+     * Advisory expected return-to-service time; not used by scheduling.
+     */
+    expectedReturnAt?: string;
+    /**
      * Number of vehicles the bay physically accommodates at once. A bay is a single bookable resource regardless of this value; register separate bays for independently bookable stalls.
      */
     maxConcurrentVehicles?: number;
@@ -32,14 +40,37 @@ export interface BayRequest {
      */
     name: string;
     /**
+     * Free-text detail for outOfServiceReason (max 255 characters); required when outOfServiceReason is OTHER, optional otherwise.
+     */
+    outOfServiceNote?: string;
+    /**
+     * Reason the bay is OUT_OF_SERVICE (DECISION-LOCATION-026); required when status is OUT_OF_SERVICE, refused with 422 OUT_OF_SERVICE_REASON_REQUIRED otherwise.
+     */
+    outOfServiceReason?: BayRequestOutOfServiceReasonEnum;
+    /**
      * Catalog operation codes this bay type is the only one able to perform (CAP-325 D14). Omit or send empty for a general bay. Each value must be an active catalog operationCode (UPPER-DASH, ADR-0059 §3); unknown codes are rejected 422.
      */
     serviceCapabilityCodes?: Array<string>;
     /**
-     * Operational status of the bay
+     * Operational status of the bay: ACTIVE, OUT_OF_SERVICE or RETIRED; defaults to ACTIVE.
      */
-    status?: string;
+    status?: BayRequestStatusEnum;
 }
+export enum BayRequestOutOfServiceReasonEnum {
+    EquipmentFailure = 'EQUIPMENT_FAILURE',
+    ScheduledMaintenance = 'SCHEDULED_MAINTENANCE',
+    Inspection = 'INSPECTION',
+    SafetyHold = 'SAFETY_HOLD',
+    FacilityIssue = 'FACILITY_ISSUE',
+    Other = 'OTHER'
+};
+export enum BayRequestStatusEnum {
+    Active = 'ACTIVE',
+    OutOfService = 'OUT_OF_SERVICE',
+    Retired = 'RETIRED'
+};
+
+
 
 function isOptionalBayRequestPropertyOfType(
     value: Record<string, unknown>,
@@ -80,8 +111,8 @@ export function instanceOfBayRequest(value: object): value is BayRequest {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBayRequestPropertyNames('bayType', 'capacity', 'name', );
-    const optionalStringProperties = createBayRequestOptionalProperties({ name: 'bayType', nullable: false }, { name: 'name', nullable: false }, { name: 'status', nullable: false }, );
-    const optionalNumberProperties = createBayRequestOptionalProperties({ name: 'maxConcurrentVehicles', nullable: false }, { name: 'maxDutyClass', nullable: false }, );
+    const optionalStringProperties = createBayRequestOptionalProperties({ name: 'bayType', nullable: false }, { name: 'expectedReturnAt', nullable: false }, { name: 'name', nullable: false }, { name: 'outOfServiceNote', nullable: false }, { name: 'outOfServiceReason', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createBayRequestOptionalProperties({ name: 'displayOrder', nullable: false }, { name: 'maxConcurrentVehicles', nullable: false }, { name: 'maxDutyClass', nullable: false }, );
     const optionalBooleanProperties = createBayRequestOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

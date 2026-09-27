@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../models/apiError';
+// @ts-ignore
 import { EligibleMobileUnitResponse } from '../models/eligibleMobileUnitResponse';
 
 // @ts-ignore
@@ -36,20 +38,22 @@ export class MobileUnitEligibilityControllerService extends BaseService {
     }
 
     /**
-     * Find Eligible Mobile Units for Address
-     * Finds the ACTIVE mobile units whose coverage rules include a postal code on a given date, ordered by ascending rule priority. Use this tool when dispatching a mobile service request to a customer address; use listMobileUnits instead for plain enumeration without eligibility matching. Preconditions: coverage rules must already link units to service areas containing the postal code; units whose status is not ACTIVE are excluded. Required inputs: postalCode, countryCode and at (an ISO-8601 instant), all mandatory; the instant is reduced to a UTC calendar date for validFrom and validTo matching. No events are emitted and no state changes; this is a read-only projection. Returns 200 with the eligible units, empty when nothing covers the address on that date.
+     * Find Eligible Mobile Units for Address and Base Location
+     * Finds the ACTIVE mobile units based at baseLocationId whose coverage rules include a postal code at a given instant, ordered by priority ascending and then by unit id, one deterministic ranking across that location\&#39;s units (DECISION-LOCATION-027). Use this tool when dispatching a mobile service request to a customer address at a known location; use listMobileUnits instead for plain enumeration without eligibility matching. Preconditions: coverage rules must already link units to service areas containing the postal code; only rules on an active service area match, units whose status is not ACTIVE are excluded, and a unit only takes work from its own base location (DECISION-SHOPMGMT-023 rule 1). Required inputs: postalCode, countryCode, at (an ISO-8601 instant) and baseLocationId, all mandatory; validFrom/validTo are matched against at as UTC instants, validFrom inclusive and validTo exclusive. operationCodes is optional and, when sent, a unit must claim every code listed (units have no general-work default). No events are emitted and no state changes; this is a read-only projection. Returns 200 with the eligible units, empty when nothing covers the address on that instant, and 400 VALIDATION_ERROR with fieldErrors naming baseLocationId when it is missing.
      * @endpoint get /v1/mobile-units:eligible
      * @param postalCode
      * @param countryCode
      * @param at
+     * @param baseLocationId Only units based at this location; required
+     * @param operationCodes Operation codes the unit must claim every one of; optional
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public findEligibleMobileUnits(postalCode: string, countryCode: string, at: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<EligibleMobileUnitResponse>>;
-    public findEligibleMobileUnits(postalCode: string, countryCode: string, at: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<EligibleMobileUnitResponse>>>;
-    public findEligibleMobileUnits(postalCode: string, countryCode: string, at: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<EligibleMobileUnitResponse>>>;
-    public findEligibleMobileUnits(postalCode: string, countryCode: string, at: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public findEligibleMobileUnits(postalCode: string, countryCode: string, at: string, baseLocationId?: string, operationCodes?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<EligibleMobileUnitResponse>>;
+    public findEligibleMobileUnits(postalCode: string, countryCode: string, at: string, baseLocationId?: string, operationCodes?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<EligibleMobileUnitResponse>>>;
+    public findEligibleMobileUnits(postalCode: string, countryCode: string, at: string, baseLocationId?: string, operationCodes?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<EligibleMobileUnitResponse>>>;
+    public findEligibleMobileUnits(postalCode: string, countryCode: string, at: string, baseLocationId?: string, operationCodes?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (postalCode === null || postalCode === undefined) {
             throw new Error('Required parameter postalCode was null or undefined when calling findEligibleMobileUnits.');
         }
@@ -84,6 +88,24 @@ export class MobileUnitEligibilityControllerService extends BaseService {
             localVarQueryParameters,
             'at',
             <any>at,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'baseLocationId',
+            <any>baseLocationId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'operationCodes',
+            <any>operationCodes,
             QueryParamStyle.Form,
             true,
         );

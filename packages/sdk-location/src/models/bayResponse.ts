@@ -22,6 +22,14 @@ export interface BayResponse {
      */
     createdAt?: string;
     /**
+     * Sort key for bay lists and the dispatch board; null sorts last, ties broken by name.
+     */
+    displayOrder?: number;
+    /**
+     * Advisory expected return-to-service time; not used by scheduling. Null unless status is OUT_OF_SERVICE and one was given.
+     */
+    expectedReturnAt?: string;
+    /**
      * Unique identifier of the bay
      */
     id: string;
@@ -46,14 +54,29 @@ export interface BayResponse {
      */
     name: string;
     /**
+     * Free-text detail for outOfServiceReason; null unless status is OUT_OF_SERVICE.
+     */
+    outOfServiceNote?: string;
+    /**
+     * Reason the bay is OUT_OF_SERVICE; null unless status is OUT_OF_SERVICE.
+     */
+    outOfServiceReason?: string;
+    /**
      * Catalog operation codes this bay type is the only one able to perform (CAP-325 D14). Empty for a general bay, which is eligible for every operation no specialty bay claims. Values are catalog operationCodes, UPPER-DASH per ADR-0059 §3.
      */
     serviceCapabilityCodes?: Array<string>;
     /**
-     * Operational status of the bay
+     * Operational status of the bay: ACTIVE, OUT_OF_SERVICE or RETIRED (DECISION-LOCATION-026).
      */
-    status?: string;
+    status?: BayResponseStatusEnum;
 }
+export enum BayResponseStatusEnum {
+    Active = 'ACTIVE',
+    OutOfService = 'OUT_OF_SERVICE',
+    Retired = 'RETIRED'
+};
+
+
 
 function isOptionalBayResponsePropertyOfType(
     value: Record<string, unknown>,
@@ -94,8 +117,8 @@ export function instanceOfBayResponse(value: object): value is BayResponse {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBayResponsePropertyNames('id', 'locationId', 'name', );
-    const optionalStringProperties = createBayResponseOptionalProperties({ name: 'bayType', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'id', nullable: false }, { name: 'lastModifiedAt', nullable: false }, { name: 'locationId', nullable: false }, { name: 'name', nullable: false }, { name: 'status', nullable: false }, );
-    const optionalNumberProperties = createBayResponseOptionalProperties({ name: 'maxConcurrentVehicles', nullable: false }, { name: 'maxDutyClass', nullable: false }, );
+    const optionalStringProperties = createBayResponseOptionalProperties({ name: 'bayType', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'expectedReturnAt', nullable: false }, { name: 'id', nullable: false }, { name: 'lastModifiedAt', nullable: false }, { name: 'locationId', nullable: false }, { name: 'name', nullable: false }, { name: 'outOfServiceNote', nullable: false }, { name: 'outOfServiceReason', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createBayResponseOptionalProperties({ name: 'displayOrder', nullable: false }, { name: 'maxConcurrentVehicles', nullable: false }, { name: 'maxDutyClass', nullable: false }, );
     const optionalBooleanProperties = createBayResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
