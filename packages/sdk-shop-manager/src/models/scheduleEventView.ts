@@ -14,6 +14,10 @@ import { ConflictDetails } from './conflictDetails';
  * A single event displayed within a resource lane
  */
 export interface ScheduleEventView {
+    /**
+     * DECISION-SHOPMGMT-022: true when this appointment (event) is SCHEDULED, starts in the future, names a BAY or MOBILE_UNIT resource, and that resource is now missing, not ACTIVE, or (a BAY) no longer eligible for the appointment\'s services and vehicle. Derived at read time, never stored. The `affected` query parameter on this endpoint filters on this same flag.
+     */
+    affected: boolean;
     conflictDetails?: ConflictDetails;
     /**
      * Event end instant in UTC (ISO-8601)
@@ -87,10 +91,10 @@ export function instanceOfScheduleEventView(value: object): value is ScheduleEve
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createScheduleEventViewPropertyNames('endTime', 'eventId', 'eventType', 'hasConflict', 'startTime', );
+    const requiredProperties = createScheduleEventViewPropertyNames('affected', 'endTime', 'eventId', 'eventType', 'hasConflict', 'startTime', );
     const optionalStringProperties = createScheduleEventViewOptionalProperties({ name: 'endTime', nullable: false }, { name: 'eventId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'severity', nullable: false }, { name: 'startTime', nullable: false }, { name: 'subType', nullable: false }, { name: 'title', nullable: false }, );
     const optionalNumberProperties = createScheduleEventViewOptionalProperties();
-    const optionalBooleanProperties = createScheduleEventViewOptionalProperties({ name: 'hasConflict', nullable: false }, );
+    const optionalBooleanProperties = createScheduleEventViewOptionalProperties({ name: 'affected', nullable: false }, { name: 'hasConflict', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalScheduleEventViewPropertyOfType(_v, property.name, 'string', property.nullable))

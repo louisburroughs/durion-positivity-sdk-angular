@@ -23,6 +23,10 @@ export interface AppointmentResponse {
      */
     actualStartAt?: string;
     /**
+     * DECISION-SHOPMGMT-022: true when this appointment is still SCHEDULED, starts in the future, names a BAY or MOBILE_UNIT resource, and that resource is now missing, not ACTIVE (out of service or retired), or — for a BAY — no longer passes DECISION-SHOPMGMT-021 eligibility for the appointment\'s services and vehicle. Derived at read time from the resource replicas, never stored; a resource returning to service or eligibility clears it on the next read. An affected appointment is not blocked from anything — it belongs in the reschedule queue (GET /v1/schedules/view?affected=true).
+     */
+    affected: boolean;
+    /**
      * Unique appointment identifier
      */
     appointmentId: string;
@@ -126,10 +130,10 @@ export function instanceOfAppointmentResponse(value: object): value is Appointme
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAppointmentResponsePropertyNames('appointmentId', 'createdAt', 'crmCustomerId', 'crmVehicleId', 'endAt', 'locationId', 'startAt', 'status', );
+    const requiredProperties = createAppointmentResponsePropertyNames('affected', 'appointmentId', 'createdAt', 'crmCustomerId', 'crmVehicleId', 'endAt', 'locationId', 'startAt', 'status', );
     const optionalStringProperties = createAppointmentResponseOptionalProperties({ name: 'actualEndAt', nullable: false }, { name: 'actualStartAt', nullable: false }, { name: 'appointmentId', nullable: false }, { name: 'cancellationNotes', nullable: false }, { name: 'cancellationReason', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'crmCustomerId', nullable: false }, { name: 'crmVehicleId', nullable: false }, { name: 'endAt', nullable: false }, { name: 'expectedEndAt', nullable: false }, { name: 'locationId', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'startAt', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createAppointmentResponseOptionalProperties();
-    const optionalBooleanProperties = createAppointmentResponseOptionalProperties();
+    const optionalBooleanProperties = createAppointmentResponseOptionalProperties({ name: 'affected', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalAppointmentResponsePropertyOfType(_v, property.name, 'string', property.nullable))

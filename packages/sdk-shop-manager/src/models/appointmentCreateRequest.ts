@@ -34,6 +34,10 @@ export interface AppointmentCreateRequest {
      */
     resourceId?: string;
     /**
+     * Which axis resourceId names. Leave both unset to book UNASSIGNED. When resourceId is set and this is omitted, the type is inferred from the replicas (an ext_bay row -> BAY, else an ext_mobile_unit row -> MOBILE_UNIT; neither is 422 SERVICE_POSITION_INVALID) and validated exactly as if stated — omitting it is not a way to skip DECISION-SHOPMGMT-021 eligibility. BAY runs the full eligibility rule (specialty, general work, duty class); MOBILE_UNIT runs existence, location and active checks only. resourceId is required for BAY/MOBILE_UNIT (400 otherwise), and UNASSIGNED with a resourceId set is refused as contradictory (400).
+     */
+    resourceType?: AppointmentCreateRequestResourceTypeEnum;
+    /**
      * Service request identifiers included in this appointment (at least one required)
      */
     serviceRequestIds: Array<string>;
@@ -54,6 +58,11 @@ export interface AppointmentCreateRequest {
      */
     workorderLinkRef?: string;
 }
+export enum AppointmentCreateRequestResourceTypeEnum {
+    Bay = 'BAY',
+    MobileUnit = 'MOBILE_UNIT',
+    Unassigned = 'UNASSIGNED'
+};
 export enum AppointmentCreateRequestSourceTypeEnum {
     Estimate = 'ESTIMATE',
     WorkOrder = 'WORK_ORDER'
@@ -100,7 +109,7 @@ export function instanceOfAppointmentCreateRequest(value: object): value is Appo
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAppointmentCreateRequestPropertyNames('crmCustomerId', 'crmVehicleId', 'endAt', 'locationId', 'serviceRequestIds', 'startAt', );
-    const optionalStringProperties = createAppointmentCreateRequestOptionalProperties({ name: 'crmCustomerId', nullable: false }, { name: 'crmVehicleId', nullable: false }, { name: 'endAt', nullable: false }, { name: 'locationId', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'sourceId', nullable: false }, { name: 'sourceType', nullable: false }, { name: 'startAt', nullable: false }, { name: 'workorderLinkRef', nullable: false }, );
+    const optionalStringProperties = createAppointmentCreateRequestOptionalProperties({ name: 'crmCustomerId', nullable: false }, { name: 'crmVehicleId', nullable: false }, { name: 'endAt', nullable: false }, { name: 'locationId', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'resourceType', nullable: false }, { name: 'sourceId', nullable: false }, { name: 'sourceType', nullable: false }, { name: 'startAt', nullable: false }, { name: 'workorderLinkRef', nullable: false }, );
     const optionalNumberProperties = createAppointmentCreateRequestOptionalProperties();
     const optionalBooleanProperties = createAppointmentCreateRequestOptionalProperties();
 
