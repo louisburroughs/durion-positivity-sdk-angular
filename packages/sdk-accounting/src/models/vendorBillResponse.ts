@@ -34,6 +34,10 @@ export interface VendorBillResponse {
      */
     createdBy?: string;
     /**
+     * ISO 4217 currency the bill is stated in; null means the ledger currency (a bill recorded before currencies were kept). A bill in another currency is held in CURRENCY_HOLD
+     */
+    currency?: string | null;
+    /**
      * Due date
      */
     dueDate?: string;
@@ -54,7 +58,7 @@ export interface VendorBillResponse {
      */
     paymentTransactionId?: string;
     /**
-     * Rejection reason (if status = REJECTED)
+     * Rejection or exception reason (status REJECTED, MATCH_EXCEPTION or CURRENCY_HOLD)
      */
     rejectionReason?: string;
     /**
@@ -81,6 +85,7 @@ export interface VendorBillResponse {
 export enum VendorBillResponseStatusEnum {
     PendingReceiptMatch = 'PENDING_RECEIPT_MATCH',
     MatchException = 'MATCH_EXCEPTION',
+    CurrencyHold = 'CURRENCY_HOLD',
     Approved = 'APPROVED',
     Rejected = 'REJECTED',
     Paid = 'PAID',
@@ -128,7 +133,7 @@ export function instanceOfVendorBillResponse(value: object): value is VendorBill
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createVendorBillResponsePropertyNames('billNumber', 'createdAt', 'status', 'totalAmount', 'vendorBillId', 'vendorId', );
-    const optionalStringProperties = createVendorBillResponseOptionalProperties({ name: 'approvalJustification', nullable: false }, { name: 'billDate', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'journalEntryId', nullable: false }, { name: 'originEventId', nullable: false }, { name: 'originEventType', nullable: false }, { name: 'paymentTransactionId', nullable: false }, { name: 'rejectionReason', nullable: false }, { name: 'status', nullable: false }, { name: 'vendorBillId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, );
+    const optionalStringProperties = createVendorBillResponseOptionalProperties({ name: 'approvalJustification', nullable: false }, { name: 'billDate', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'currency', nullable: true }, { name: 'dueDate', nullable: false }, { name: 'journalEntryId', nullable: false }, { name: 'originEventId', nullable: false }, { name: 'originEventType', nullable: false }, { name: 'paymentTransactionId', nullable: false }, { name: 'rejectionReason', nullable: false }, { name: 'status', nullable: false }, { name: 'vendorBillId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, );
     const optionalNumberProperties = createVendorBillResponseOptionalProperties({ name: 'totalAmount', nullable: false }, );
     const optionalBooleanProperties = createVendorBillResponseOptionalProperties();
 

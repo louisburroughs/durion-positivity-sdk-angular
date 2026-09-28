@@ -30,9 +30,9 @@ export interface BillingRuleRefResponse {
      */
     creditLimit?: number;
     /**
-     * ISO 4217 currency code
+     * ISO 4217 currency code; null when the customer has no billing currency configured
      */
-    currency?: string;
+    currency?: string | null;
     /**
      * Reference to the applicable discount policy
      */
@@ -98,7 +98,7 @@ export function instanceOfBillingRuleRefResponse(value: object): value is Billin
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBillingRuleRefResponsePropertyNames('autoPayEnabled', 'creditHold', 'poRequired', 'taxExempt', );
-    const optionalStringProperties = createBillingRuleRefResponseOptionalProperties({ name: 'billingAddressId', nullable: false }, { name: 'currency', nullable: false }, { name: 'discountPolicyRef', nullable: false }, { name: 'invoiceDeliveryMethod', nullable: false }, { name: 'paymentTerms', nullable: false }, );
+    const optionalStringProperties = createBillingRuleRefResponseOptionalProperties({ name: 'billingAddressId', nullable: false }, { name: 'currency', nullable: true }, { name: 'discountPolicyRef', nullable: false }, { name: 'invoiceDeliveryMethod', nullable: false }, { name: 'paymentTerms', nullable: false }, );
     const optionalNumberProperties = createBillingRuleRefResponseOptionalProperties({ name: 'creditLimit', nullable: false }, );
     const optionalBooleanProperties = createBillingRuleRefResponseOptionalProperties({ name: 'autoPayEnabled', nullable: false }, { name: 'creditHold', nullable: false }, { name: 'poRequired', nullable: false }, { name: 'taxExempt', nullable: false }, );
 
