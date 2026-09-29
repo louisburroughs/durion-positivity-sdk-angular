@@ -17,23 +17,51 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { AdjustmentReverseRequest } from '../models/adjustmentReverseRequest';
+// @ts-ignore
 import { AdjustmentTypeResponse } from '../models/adjustmentTypeResponse';
 // @ts-ignore
 import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { BankReconciliationImportRequest } from '../models/bankReconciliationImportRequest';
+import { AutoMatchResponse } from '../models/autoMatchResponse';
+// @ts-ignore
+import { BankReconciliationAdjustmentResponse } from '../models/bankReconciliationAdjustmentResponse';
 // @ts-ignore
 import { BankReconciliationListResponse } from '../models/bankReconciliationListResponse';
 // @ts-ignore
 import { BankReconciliationResponse } from '../models/bankReconciliationResponse';
 // @ts-ignore
+import { OutstandingItemJustificationRequest } from '../models/outstandingItemJustificationRequest';
+// @ts-ignore
+import { OutstandingItemReasonRequest } from '../models/outstandingItemReasonRequest';
+// @ts-ignore
+import { OutstandingItemRegisterRequest } from '../models/outstandingItemRegisterRequest';
+// @ts-ignore
+import { OutstandingItemResponse } from '../models/outstandingItemResponse';
+// @ts-ignore
 import { ReconciliationAdjustmentRequest } from '../models/reconciliationAdjustmentRequest';
 // @ts-ignore
 import { ReconciliationAuditResponse } from '../models/reconciliationAuditResponse';
 // @ts-ignore
-import { ReconciliationMatchRequest } from '../models/reconciliationMatchRequest';
+import { ReconciliationCandidatesResponse } from '../models/reconciliationCandidatesResponse';
+// @ts-ignore
+import { ReconciliationCreateRequest } from '../models/reconciliationCreateRequest';
+// @ts-ignore
+import { ReconciliationJustificationRequest } from '../models/reconciliationJustificationRequest';
+// @ts-ignore
+import { ReconciliationMatchCreateRequest } from '../models/reconciliationMatchCreateRequest';
+// @ts-ignore
+import { ReconciliationMatchDecisionRequest } from '../models/reconciliationMatchDecisionRequest';
+// @ts-ignore
+import { ReconciliationMatchResponse } from '../models/reconciliationMatchResponse';
+// @ts-ignore
+import { ReconciliationReasonRequest } from '../models/reconciliationReasonRequest';
 // @ts-ignore
 import { ReconciliationReportResponse } from '../models/reconciliationReportResponse';
+// @ts-ignore
+import { ReconciliationReviewResponse } from '../models/reconciliationReviewResponse';
+// @ts-ignore
+import { ReconciliationTransitionRequest } from '../models/reconciliationTransitionRequest';
 // @ts-ignore
 import { ReconciliationUnmatchRequest } from '../models/reconciliationUnmatchRequest';
 
@@ -54,18 +82,93 @@ export class BankReconciliationService extends BaseService {
     }
 
     /**
-     * Record Reconciliation Adjustment
-     * Records a signed reconciliation adjustment and posts a real balanced journal entry, debiting or crediting the reconciled cash account against the type\&#39;s mapped counter account, through the accounting-period gate. Use this tool for bank-only items such as fees or interest that have no GL counterpart; do not use matchReconciliation, which links existing posted GL lines. Preconditions: the reconciliation must be IN_PROGRESS, and the amount sign must be permitted for the type (BANK_FEE and NSF_FEE negative, INTEREST_EARNED positive, OTHER any). Required inputs: reconciliationId (UUID) as a path parameter, type (BANK_FEE, NSF_FEE, INTEREST_EARNED or OTHER) and a non-zero signed amount; description (max 500 chars) is optional. Emits an ACCOUNTING_RECONCILIATION_ADJUSTMENT event and posts a journal entry that changes GL balances. Returns 404 RECONCILIATION_NOT_FOUND when the reconciliation is missing, 409 RECONCILIATION_ALREADY_FINALIZED when finalized, and 422 PERIOD_CLOSED, PERIOD_HARD_LOCKED, RECONCILIATION_ADJUSTMENT_SIGN_INVALID or GL_MAPPING_NOT_CONFIGURED (no GL counter-account mapping configured for the adjustment type) for period-gate, sign or configuration failures.
-     * @endpoint post /v1/accounting/reconciliations/{reconciliationId}/adjustments
+     * Accept Proposed Match
+     * Accepts a PROPOSED match: the match becomes ACCEPTED, its bank rows MATCHED, and any OPEN ledger-side outstanding item on its lines CLEARED. Use this tool to confirm a proposal from autoMatchReconciliation; use rejectReconciliationMatch instead to decline it. Preconditions: the reconciliation must be IN_PROGRESS (409 RECONCILIATION_ALREADY_FINALIZED when FINALIZED, RECONCILIATION_NOT_EDITABLE in any other status); the match must be PROPOSED and its members still matchable; a justification is needed when the proposal uses the tolerance or spans dates beyond the window. Required inputs: reconciliationId and matchId as path parameters; justification optional. Emits an ACCOUNTING_RECONCILIATION_MATCH_ACCEPT event and a RECONCILIATION_MATCH_ACCEPT audit row. Returns 404 RECONCILIATION_NOT_FOUND for an unknown match, 409 MATCH_STATE_INVALID when the match is not PROPOSED, 409 RECONCILIATION_LINE_INELIGIBLE when a member is no longer matchable, and 422 MATCH_REQUIRES_REVIEW when a justification is needed.
+     * @endpoint post /v1/accounting/reconciliations/{reconciliationId}/matches/{matchId}/accept
      * @param reconciliationId Reconciliation id
-     * @param reconciliationAdjustmentRequest Typed, signed adjustment that will post a balanced journal entry.
+     * @param matchId Match id
+     * @param reconciliationMatchDecisionRequest Optional justification (at least 10 characters when given).
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public addReconciliationAdjustment(reconciliationId: string, reconciliationAdjustmentRequest: ReconciliationAdjustmentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BankReconciliationResponse>;
-    public addReconciliationAdjustment(reconciliationId: string, reconciliationAdjustmentRequest: ReconciliationAdjustmentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BankReconciliationResponse>>;
-    public addReconciliationAdjustment(reconciliationId: string, reconciliationAdjustmentRequest: ReconciliationAdjustmentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BankReconciliationResponse>>;
+    public acceptReconciliationMatch(reconciliationId: string, matchId: string, reconciliationMatchDecisionRequest?: ReconciliationMatchDecisionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ReconciliationMatchResponse>;
+    public acceptReconciliationMatch(reconciliationId: string, matchId: string, reconciliationMatchDecisionRequest?: ReconciliationMatchDecisionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ReconciliationMatchResponse>>;
+    public acceptReconciliationMatch(reconciliationId: string, matchId: string, reconciliationMatchDecisionRequest?: ReconciliationMatchDecisionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ReconciliationMatchResponse>>;
+    public acceptReconciliationMatch(reconciliationId: string, matchId: string, reconciliationMatchDecisionRequest?: ReconciliationMatchDecisionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (reconciliationId === null || reconciliationId === undefined) {
+            throw new Error('Required parameter reconciliationId was null or undefined when calling acceptReconciliationMatch.');
+        }
+        if (matchId === null || matchId === undefined) {
+            throw new Error('Required parameter matchId was null or undefined when calling acceptReconciliationMatch.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/reconciliations/${this.configuration.encodeParam({name: "reconciliationId", value: reconciliationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/matches/${this.configuration.encodeParam({name: "matchId", value: matchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/accept`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ReconciliationMatchResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: reconciliationMatchDecisionRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Post Reconciliation Adjustment
+     * Posts a reconciliation adjustment as a real balanced journal entry through the accounting-period gate: positive debits the reconciled cash account against the type\&#39;s mapped counter account, negative credits it; BANK_FEE and NSF_FEE are negative, INTEREST_EARNED positive, and TRANSFER (either sign) posts against counterGlAccountId, another bank account, with no mapping. OTHER posts to the clearing account and names exactly one link: a bank transaction, settlesMatchId (a match residual; the server sets the amount to the served residual and replaces the match with an exact one) or bridgesStatementId (this statement\&#39;s acknowledged gap; the server sets the amount to the opening difference); with a bankTransactionId the entry\&#39;s cash line is matched to it as an ADJUSTMENT match, and the entry is dated at the explaining date (the bank date, the residual match\&#39;s latest bank date, or the day before the window) when its period is open, else at transactionDate. Use this tool for a bank-only movement the books lack; do not use it for a timing difference (registerReconciliationOutstandingItem), a duplicate (bank-transaction duplicate review) or a books error (a journal-entry reversal). Preconditions: the reconciliation must be IN_PROGRESS (409 RECONCILIATION_ALREADY_FINALIZED when FINALIZED, RECONCILIATION_NOT_EDITABLE in any other status); an OTHER needs a justification of at least 10 characters and, above the tenant\&#39;s BANK_REC_OTHER_APPROVAL_THRESHOLD (or while it is unset, for anything but a residual), accounting:reconciliation:approve; posting into a CLOSED period needs overrideJustification and accounting:period:override. Required inputs: reconciliationId as a path parameter; type and requestId in the body, amount unless a residual or bridge is named, and the links and justification the type needs. Emits an ACCOUNTING_RECONCILIATION_ADJUSTMENT event and a RECONCILIATION_ADJUSTMENT audit row, and posts a journal entry that changes GL balances. Returns 201 with the adjustment (200 with replayed true for a replayed requestId); 400 JUSTIFICATION_REQUIRED; 403 RECONCILIATION_ADJUSTMENT_APPROVAL_REQUIRED; 409 RECONCILIATION_LINE_INELIGIBLE, ADJUSTMENT_BRIDGE_ALREADY_POSTED, IDEMPOTENCY_CONFLICT, RECONCILIATION_ALREADY_FINALIZED or RECONCILIATION_NOT_EDITABLE; 422 RECONCILIATION_ADJUSTMENT_SIGN_INVALID, ADJUSTMENT_LINK_REQUIRED, ADJUSTMENT_LINK_NOT_ELIGIBLE, GL_ACCOUNT_NOT_ACTIVE, ACCOUNT_NOT_RECONCILABLE, PERIOD_CLOSED, PERIOD_HARD_LOCKED or GL_MAPPING_NOT_CONFIGURED when the rule named fails; an adjustment linked to a bank transaction must equal its amount exactly (no minor-unit tolerance), and any difference is ADJUSTMENT_LINK_NOT_ELIGIBLE on amount.
+     * @endpoint post /v1/accounting/reconciliations/{reconciliationId}/adjustments
+     * @param reconciliationId Reconciliation id
+     * @param reconciliationAdjustmentRequest The typed adjustment, its links and the command\&#39;s requestId.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public addReconciliationAdjustment(reconciliationId: string, reconciliationAdjustmentRequest: ReconciliationAdjustmentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BankReconciliationAdjustmentResponse>;
+    public addReconciliationAdjustment(reconciliationId: string, reconciliationAdjustmentRequest: ReconciliationAdjustmentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BankReconciliationAdjustmentResponse>>;
+    public addReconciliationAdjustment(reconciliationId: string, reconciliationAdjustmentRequest: ReconciliationAdjustmentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BankReconciliationAdjustmentResponse>>;
     public addReconciliationAdjustment(reconciliationId: string, reconciliationAdjustmentRequest: ReconciliationAdjustmentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (reconciliationId === null || reconciliationId === undefined) {
             throw new Error('Required parameter reconciliationId was null or undefined when calling addReconciliationAdjustment.');
@@ -113,7 +216,7 @@ export class BankReconciliationService extends BaseService {
 
         let localVarPath = `/v1/accounting/reconciliations/${this.configuration.encodeParam({name: "reconciliationId", value: reconciliationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/adjustments`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<BankReconciliationResponse>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<BankReconciliationAdjustmentResponse>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: reconciliationAdjustmentRequest,
@@ -128,20 +231,20 @@ export class BankReconciliationService extends BaseService {
     }
 
     /**
-     * Finalize Reconciliation
-     * Finalizes a reconciliation (IN_PROGRESS to FINALIZED), locking it against further matching, unmatching or adjustments. Use this tool once all lines are matched or adjusted; do not use it while a difference remains, which addReconciliationAdjustment or further matching must clear first. Preconditions: the statement ending balance must equal the GL ending balance plus the sum of adjustments within 0.01, matched GL lines being already reflected in the GL ending balance. Required inputs: reconciliationId (UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_RECONCILIATION_FINALIZE event; FINALIZED is terminal for the reconciliation. Returns 404 RECONCILIATION_NOT_FOUND when missing, 409 RECONCILIATION_ALREADY_FINALIZED when already finalized, and 422 RECONCILIATION_NOT_BALANCED carrying the outstanding difference as a field error when it does not balance.
-     * @endpoint post /v1/accounting/reconciliations/{reconciliationId}/finalize
+     * Propose Matches Automatically
+     * Proposes a ONE_TO_ONE RULE match, state PROPOSED, for every unexplained bank transaction whose top candidate scores at least 90 and beats the second by at least 20; closer calls propose nothing and are counted as ambiguous. The system never accepts a match. Use this tool to pre-pair the obvious rows before reviewing them with acceptReconciliationMatch or rejectReconciliationMatch; use createReconciliationMatch instead to record a pairing directly. Preconditions: the reconciliation must be IN_PROGRESS (409 RECONCILIATION_ALREADY_FINALIZED when FINALIZED, RECONCILIATION_NOT_EDITABLE in any other status). Required inputs: reconciliationId as a path parameter; the body is empty. Emits an ACCOUNTING_RECONCILIATION_AUTO_MATCH event and writes a RECONCILIATION_AUTO_MATCH audit row with the counts. Returns 404 RECONCILIATION_NOT_FOUND when the reconciliation is unknown and 409 RECONCILIATION_ALREADY_FINALIZED when it is finalized or RECONCILIATION_NOT_EDITABLE when it is not IN_PROGRESS.
+     * @endpoint post /v1/accounting/reconciliations/{reconciliationId}/auto-match
      * @param reconciliationId Reconciliation id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public finalizeReconciliation(reconciliationId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BankReconciliationResponse>;
-    public finalizeReconciliation(reconciliationId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BankReconciliationResponse>>;
-    public finalizeReconciliation(reconciliationId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BankReconciliationResponse>>;
-    public finalizeReconciliation(reconciliationId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public autoMatchReconciliation(reconciliationId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AutoMatchResponse>;
+    public autoMatchReconciliation(reconciliationId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AutoMatchResponse>>;
+    public autoMatchReconciliation(reconciliationId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AutoMatchResponse>>;
+    public autoMatchReconciliation(reconciliationId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (reconciliationId === null || reconciliationId === undefined) {
-            throw new Error('Required parameter reconciliationId was null or undefined when calling finalizeReconciliation.');
+            throw new Error('Required parameter reconciliationId was null or undefined when calling autoMatchReconciliation.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -172,9 +275,9 @@ export class BankReconciliationService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/accounting/reconciliations/${this.configuration.encodeParam({name: "reconciliationId", value: reconciliationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/finalize`;
+        let localVarPath = `/v1/accounting/reconciliations/${this.configuration.encodeParam({name: "reconciliationId", value: reconciliationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/auto-match`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<BankReconciliationResponse>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<AutoMatchResponse>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -188,8 +291,375 @@ export class BankReconciliationService extends BaseService {
     }
 
     /**
+     * Cancel Reconciliation
+     * Cancels an IN_PROGRESS or SUBMITTED reconciliation (to CANCELLED): its proposed and accepted matches become UNMATCHED with unmatchReason RECONCILIATION_CANCELLED (bank rows back to UNMATCHED), the OPEN outstanding items it registered are RELEASED, and posted adjustments stay posted — they are real journal entries, reversed explicitly if wrong. Use this tool to abandon a reconciliation; use returnReconciliation instead to send a submitted one back, and supersedeReconciliation to correct an approved one. Preconditions: the reconciliation must be IN_PROGRESS or SUBMITTED. Required inputs: reconciliationId (UUID) as a path parameter and justification (at least 10 characters) in the body; version is optional. Emits an ACCOUNTING_RECONCILIATION_CANCEL event, writes a RECONCILIATION_CANCEL audit row and queues accounting.bankreconciliation.cancelled; CANCELLED is terminal. Returns 200 with the header; 400 VALIDATION_ERROR or JUSTIFICATION_REQUIRED; 404 RECONCILIATION_NOT_FOUND; 409 RECONCILIATION_ALREADY_FINALIZED, RECONCILIATION_NOT_EDITABLE or OPTIMISTIC_LOCK.
+     * @endpoint post /v1/accounting/reconciliations/{reconciliationId}/cancel
+     * @param reconciliationId Reconciliation id
+     * @param reconciliationJustificationRequest The justification (at least 10 characters) and, optionally, the version the caller read.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public cancelReconciliation(reconciliationId: string, reconciliationJustificationRequest: ReconciliationJustificationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BankReconciliationResponse>;
+    public cancelReconciliation(reconciliationId: string, reconciliationJustificationRequest: ReconciliationJustificationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BankReconciliationResponse>>;
+    public cancelReconciliation(reconciliationId: string, reconciliationJustificationRequest: ReconciliationJustificationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BankReconciliationResponse>>;
+    public cancelReconciliation(reconciliationId: string, reconciliationJustificationRequest: ReconciliationJustificationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (reconciliationId === null || reconciliationId === undefined) {
+            throw new Error('Required parameter reconciliationId was null or undefined when calling cancelReconciliation.');
+        }
+        if (reconciliationJustificationRequest === null || reconciliationJustificationRequest === undefined) {
+            throw new Error('Required parameter reconciliationJustificationRequest was null or undefined when calling cancelReconciliation.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/reconciliations/${this.configuration.encodeParam({name: "reconciliationId", value: reconciliationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/cancel`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<BankReconciliationResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: reconciliationJustificationRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Clear Outstanding Item In Gap
+     * Closes an OPEN item registered in an earlier reconciliation whose other side appeared during the gap this reconciliation\&#39;s statement acknowledges: the item becomes CLEARED_IN_GAP with closedOn the day before the statement start and leaves this window\&#39;s opening and closing terms. Use this tool only in the reconciliation of an acknowledged statement; use createReconciliationMatch instead for an item whose other side is in a bank row, and releaseReconciliationOutstandingItem to undo a wrong registration. Preconditions: the reconciliation must be IN_PROGRESS or SUBMITTED (409 RECONCILIATION_ALREADY_FINALIZED when FINALIZED, RECONCILIATION_NOT_EDITABLE otherwise) and rest on a statement with a gap acknowledgement; the item must be OPEN, dated before the statement start and registered in an earlier reconciliation. Required inputs: reconciliationId and itemId as path parameters; justification (at least 10 characters) in the body. Emits an ACCOUNTING_RECONCILIATION_OUTSTANDING_CLEAR_IN_GAP event and a RECONCILIATION_OUTSTANDING_CLEAR_IN_GAP audit row. Returns 400 JUSTIFICATION_REQUIRED, 403 without accounting:reconciliation:approve, 404 RECONCILIATION_NOT_FOUND for an unknown item, and 422 OUTSTANDING_ITEM_NOT_ELIGIBLE when the statement has no acknowledgement or the item fails its rule.
+     * @endpoint post /v1/accounting/reconciliations/{reconciliationId}/outstanding-items/{itemId}/clear-in-gap
+     * @param reconciliationId Reconciliation id
+     * @param itemId Outstanding item id
+     * @param outstandingItemJustificationRequest Why the other side is taken to have cleared during the gap.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public clearReconciliationOutstandingItemInGap(reconciliationId: string, itemId: string, outstandingItemJustificationRequest: OutstandingItemJustificationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<OutstandingItemResponse>;
+    public clearReconciliationOutstandingItemInGap(reconciliationId: string, itemId: string, outstandingItemJustificationRequest: OutstandingItemJustificationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<OutstandingItemResponse>>;
+    public clearReconciliationOutstandingItemInGap(reconciliationId: string, itemId: string, outstandingItemJustificationRequest: OutstandingItemJustificationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<OutstandingItemResponse>>;
+    public clearReconciliationOutstandingItemInGap(reconciliationId: string, itemId: string, outstandingItemJustificationRequest: OutstandingItemJustificationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (reconciliationId === null || reconciliationId === undefined) {
+            throw new Error('Required parameter reconciliationId was null or undefined when calling clearReconciliationOutstandingItemInGap.');
+        }
+        if (itemId === null || itemId === undefined) {
+            throw new Error('Required parameter itemId was null or undefined when calling clearReconciliationOutstandingItemInGap.');
+        }
+        if (outstandingItemJustificationRequest === null || outstandingItemJustificationRequest === undefined) {
+            throw new Error('Required parameter outstandingItemJustificationRequest was null or undefined when calling clearReconciliationOutstandingItemInGap.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/reconciliations/${this.configuration.encodeParam({name: "reconciliationId", value: reconciliationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/outstanding-items/${this.configuration.encodeParam({name: "itemId", value: itemId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/clear-in-gap`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<OutstandingItemResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: outstandingItemJustificationRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Start Reconciliation From Statement
+     * Starts an IN_PROGRESS reconciliation of a COMMITTED bank statement: the window, opening and closing balances are copied from the statement, and the explicit equation (E3), the opening terms, the account baseline and the unexplained counts are computed live from the ledger. Use this tool to begin reconciling a statement committed through bank-statements or a file import; do not use createBankStatement or the bank-import commit, which commit the statement itself. Preconditions: the account must be a reconcilable BANK_CASH account; the statement must be COMMITTED on that account and have no IN_PROGRESS reconciliation and no FINALIZED one without a successor. An interim reconciliation to a date is a manual-entry statement in phase 1. Required inputs: glAccountId, requestId (UUIDv7) and statementId in the body. Emits an ACCOUNTING_RECONCILIATION_CREATE event and writes a RECONCILIATION_CREATE audit row; no journal entry is posted. Returns 201 with the header, or 200 with replayed true when the same requestId and payload are sent again; 409 RECONCILIATION_WINDOW_ALREADY_RECONCILED (fieldErrors naming the reconciliationId) when the statement is already reconciled, 409 IDEMPOTENCY_CONFLICT when the requestId was used with another payload, 404 BANK_STATEMENT_NOT_FOUND when the statement is unknown on the account, 422 ACCOUNT_NOT_RECONCILABLE when the account is not a bank account, and 422 BANK_ACCOUNT_FEED_NOT_LINKED when the body has no statementId (the statementless interim is phase 2).
+     * @endpoint post /v1/accounting/reconciliations
+     * @param reconciliationCreateRequest The statement to reconcile and the command\&#39;s requestId.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public createReconciliation(reconciliationCreateRequest: ReconciliationCreateRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BankReconciliationResponse>;
+    public createReconciliation(reconciliationCreateRequest: ReconciliationCreateRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BankReconciliationResponse>>;
+    public createReconciliation(reconciliationCreateRequest: ReconciliationCreateRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BankReconciliationResponse>>;
+    public createReconciliation(reconciliationCreateRequest: ReconciliationCreateRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (reconciliationCreateRequest === null || reconciliationCreateRequest === undefined) {
+            throw new Error('Required parameter reconciliationCreateRequest was null or undefined when calling createReconciliation.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/reconciliations`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<BankReconciliationResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: reconciliationCreateRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Match Bank Transactions To Ledger Lines
+     * Creates an ACCEPTED match of bank transactions to posted ledger lines on the reconciled account (1:1, 1:N or N:1), marks the bank rows MATCHED and clears any OPEN ledger-side outstanding item on the matched lines; the response serves toleranceUsed and the signed residual (bankTotal − ledgerTotal). Use this tool to record that bank and ledger rows describe the same cash movement; use addReconciliationAdjustment instead for a bank-only item, and registerReconciliationOutstandingItem for a timing difference. Preconditions: the reconciliation must be IN_PROGRESS (409 RECONCILIATION_ALREADY_FINALIZED when FINALIZED, RECONCILIATION_NOT_EDITABLE in any other status); bank rows UNMATCHED, settled, in no match or open item and dated on or before the window end; ledger lines POSTED, on the account, in no active match and dated on or before the window end; the sides must agree within 0.01. A justification of at least 10 characters is required for a non-1:1 match, any tolerance use, dates beyond the window, or a former possible duplicate. Required inputs: reconciliationId as a path parameter; bankTransactionIds, glLineIds and requestId in the body. Emits an ACCOUNTING_RECONCILIATION_MATCH event and a RECONCILIATION_MATCH audit row; no journal entry is posted. Returns 201 with the match (200 with replayed true for a replayed requestId); 409 RECONCILIATION_LINE_INELIGIBLE for a row not matchable (including a ledger line dated after the window end), 409 RECONCILIATION_ALREADY_FINALIZED, RECONCILIATION_NOT_EDITABLE or IDEMPOTENCY_CONFLICT; 422 MATCH_AMOUNT_MISMATCH when the sides differ by more than 0.01, 422 MATCH_CARDINALITY_NOT_ALLOWED for N:M, and 422 MATCH_REQUIRES_REVIEW listing the reasons in fieldErrors[justification] when a justification is needed.
+     * @endpoint post /v1/accounting/reconciliations/{reconciliationId}/matches
+     * @param reconciliationId Reconciliation id
+     * @param reconciliationMatchCreateRequest The members of the match and the command\&#39;s requestId.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public createReconciliationMatch(reconciliationId: string, reconciliationMatchCreateRequest: ReconciliationMatchCreateRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ReconciliationMatchResponse>;
+    public createReconciliationMatch(reconciliationId: string, reconciliationMatchCreateRequest: ReconciliationMatchCreateRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ReconciliationMatchResponse>>;
+    public createReconciliationMatch(reconciliationId: string, reconciliationMatchCreateRequest: ReconciliationMatchCreateRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ReconciliationMatchResponse>>;
+    public createReconciliationMatch(reconciliationId: string, reconciliationMatchCreateRequest: ReconciliationMatchCreateRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (reconciliationId === null || reconciliationId === undefined) {
+            throw new Error('Required parameter reconciliationId was null or undefined when calling createReconciliationMatch.');
+        }
+        if (reconciliationMatchCreateRequest === null || reconciliationMatchCreateRequest === undefined) {
+            throw new Error('Required parameter reconciliationMatchCreateRequest was null or undefined when calling createReconciliationMatch.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/reconciliations/${this.configuration.encodeParam({name: "reconciliationId", value: reconciliationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/matches`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ReconciliationMatchResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: reconciliationMatchCreateRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Approve Reconciliation
+     * Approves a SUBMITTED reconciliation (SUBMITTED to FINALIZED): the row is locked, the live ledger balance, every term of E3, the baseline and both unexplained counts are recomputed and the gate E4 is evaluated again, so nothing is approved on a stale figure. On success the approvedGlEndingBalance and baselineDate are snapshotted, the matches are sealed, and a reconciliation it corrects becomes SUPERSEDED. Use this tool as the approver once the preparer has submitted; use submitReconciliation for the preparer\&#39;s step and returnReconciliation to send it back instead. Preconditions: the reconciliation must be SUBMITTED, and the approver must not be the submitter unless the tenant\&#39;s BANK_REC_ALLOW_SELF_APPROVAL is true (every approval under that switch is audited as a self-approval). Required inputs: reconciliationId (UUID) as a path parameter; the body is optional and may carry the version the caller read. Emits an ACCOUNTING_RECONCILIATION_FINALIZE event, writes a RECONCILIATION_APPROVE audit row and queues accounting.bankreconciliation.approved (and .superseded for a corrected predecessor); FINALIZED is terminal for the reconciliation. Returns 200 with the header; 403 RECONCILIATION_SELF_APPROVAL (audited) when the submitter approves without the switch; 404 RECONCILIATION_NOT_FOUND; 409 RECONCILIATION_NOT_SUBMITTED, RECONCILIATION_ALREADY_FINALIZED or OPTIMISTIC_LOCK; 422 RECONCILIATION_NOT_BALANCED (fieldErrors[difference]) or RECONCILIATION_HAS_UNEXPLAINED_ITEMS.
+     * @endpoint post /v1/accounting/reconciliations/{reconciliationId}/finalize
+     * @param reconciliationId Reconciliation id
+     * @param reconciliationTransitionRequest Optional; the version the caller read, for optimistic locking.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public finalizeReconciliation(reconciliationId: string, reconciliationTransitionRequest?: ReconciliationTransitionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BankReconciliationResponse>;
+    public finalizeReconciliation(reconciliationId: string, reconciliationTransitionRequest?: ReconciliationTransitionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BankReconciliationResponse>>;
+    public finalizeReconciliation(reconciliationId: string, reconciliationTransitionRequest?: ReconciliationTransitionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BankReconciliationResponse>>;
+    public finalizeReconciliation(reconciliationId: string, reconciliationTransitionRequest?: ReconciliationTransitionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (reconciliationId === null || reconciliationId === undefined) {
+            throw new Error('Required parameter reconciliationId was null or undefined when calling finalizeReconciliation.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/reconciliations/${this.configuration.encodeParam({name: "reconciliationId", value: reconciliationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/finalize`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<BankReconciliationResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: reconciliationTransitionRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Get Reconciliation
-     * Returns one bank reconciliation with its imported statement lines, match state and adjustments. Use this tool when the reconciliation id is already known; use listReconciliations instead when searching by account or status, or getReconciliationReport for the balance summary view. Preconditions: the reconciliation must exist. Required inputs: reconciliationId (UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_RECONCILIATION_GET audit event; no state changes. Returns 404 RECONCILIATION_NOT_FOUND when the id is unknown.
+     * Returns one bank reconciliation header with every term of the explicit equation (E3) and the opening terms computed live from the ledger, the baseline date and the unexplained counts; statement lines are not embedded (read them from bank-transactions). Use this tool when the reconciliation id is already known; use listReconciliations instead when searching by account or status, or getReconciliationReview for the full workspace read model. Preconditions: the reconciliation must exist. Required inputs: reconciliationId (UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_RECONCILIATION_GET audit event; no state changes. Returns 404 RECONCILIATION_NOT_FOUND when the id is unknown.
      * @endpoint get /v1/accounting/reconciliations/{reconciliationId}
      * @param reconciliationId Reconciliation id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -249,20 +719,42 @@ export class BankReconciliationService extends BaseService {
 
     /**
      * Get Reconciliation Audit Trail
-     * Returns the time-ordered audit trail of a reconciliation\&#39;s actions: import, matches, unmatches, adjustments and finalize, each with the acting user. Use this tool when reviewing who did what during a reconciliation; use getReconciliationReport instead for the balance summary. Preconditions: the reconciliation must exist. Required inputs: reconciliationId (UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_RECONCILIATION_AUDIT audit event; no state changes. Returns 404 RECONCILIATION_NOT_FOUND when the id is unknown.
+     * Returns the stored audit trail, oldest first and a page at a time: every AccountingAuditLog row of the reconciliation (create, adjustments and their reversals, auto-match, submit, approve including a refused or allowed self-approval, return, cancel, supersede, invalidation), of its matches (match, accept, reject, unmatch) and of the outstanding items it registered, cleared or reaffirmed — each with operation, actor, timestamp, trace id, justification and the old and new value. Use this tool when reviewing who did what during a reconciliation; use getReconciliationReport instead for the balance summary. Preconditions: the reconciliation must exist. Required inputs: reconciliationId (UUID) as a path parameter; page (default 0) and size (default 50, at most 200) are optional; there is no request body. Emits an ACCOUNTING_RECONCILIATION_AUDIT audit event; no state changes. Returns 404 RECONCILIATION_NOT_FOUND when the id is unknown.
      * @endpoint get /v1/accounting/reconciliations/{reconciliationId}/audit
      * @param reconciliationId Reconciliation id
+     * @param page Zero-based page index
+     * @param size Page size (at most 200)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getReconciliationAudit(reconciliationId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ReconciliationAuditResponse>;
-    public getReconciliationAudit(reconciliationId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ReconciliationAuditResponse>>;
-    public getReconciliationAudit(reconciliationId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ReconciliationAuditResponse>>;
-    public getReconciliationAudit(reconciliationId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getReconciliationAudit(reconciliationId: string, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ReconciliationAuditResponse>;
+    public getReconciliationAudit(reconciliationId: string, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ReconciliationAuditResponse>>;
+    public getReconciliationAudit(reconciliationId: string, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ReconciliationAuditResponse>>;
+    public getReconciliationAudit(reconciliationId: string, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (reconciliationId === null || reconciliationId === undefined) {
             throw new Error('Required parameter reconciliationId was null or undefined when calling getReconciliationAudit.');
         }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -297,6 +789,7 @@ export class BankReconciliationService extends BaseService {
         return this.httpClient.request<ReconciliationAuditResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -309,7 +802,7 @@ export class BankReconciliationService extends BaseService {
 
     /**
      * Get Reconciliation Report
-     * Returns the reconciliation report: opening GL and closing statement balances, matched versus outstanding lines, adjustments and the outstanding difference. Use this tool to see how far a reconciliation is from balancing before finalizeReconciliation; use getReconciliation instead for the raw line-level detail. Preconditions: the reconciliation must exist. Required inputs: reconciliationId (UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_RECONCILIATION_REPORT audit event; no state changes. Returns 404 RECONCILIATION_NOT_FOUND when the id is unknown.
+     * Returns the reconciliation report: the statement lines matched versus outstanding, every term of the explicit equation E3 and the opening terms, the outstanding items with their age, the unexplained counts and sums, the adjustments and the adjustments to clearing, and the live difference. Use this tool to see how far a reconciliation is from balancing before finalizeReconciliation; use getReconciliation instead for the raw line-level detail. Preconditions: the reconciliation must exist. Required inputs: reconciliationId (UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_RECONCILIATION_REPORT audit event; no state changes. Returns 404 RECONCILIATION_NOT_FOUND when the id is unknown.
      * @endpoint get /v1/accounting/reconciliations/{reconciliationId}/report
      * @param reconciliationId Reconciliation id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -368,20 +861,20 @@ export class BankReconciliationService extends BaseService {
     }
 
     /**
-     * Import Bank Statement CSV
-     * Parses a bank statement CSV (columns: date, description, signed amount, reference) for a reconcilable GL cash account and creates an IN_PROGRESS reconciliation whose statement lines start UNMATCHED, snapshotting the GL ending balance from posted journal-entry lines as of the statement date. Use this tool to start a reconciliation cycle; do not use matchReconciliation, addReconciliationAdjustment or finalizeReconciliation, which operate on a reconciliation that already exists. Preconditions: the GL account must exist with its reconcilable flag set to true. Required inputs: glAccountId (UUID), periodStartDate, periodEndDate, statementDate, statementEndingBalance, currency (3-letter ISO code) and the csv text itself. Emits an ACCOUNTING_RECONCILIATION_IMPORT event. Returns 422 ACCOUNT_NOT_RECONCILABLE when the account\&#39;s reconcilable flag is false, and 400 when the CSV is malformed.
-     * @endpoint post /v1/accounting/reconciliations/import
-     * @param bankReconciliationImportRequest Statement metadata plus the raw CSV text to import for the cash account.
+     * Get Reconciliation Review
+     * Returns the review read model in one call, computed live, so a client never does arithmetic: the header (account, window, baseline and whether this statement set it, provenance, status, preparer, period state, version); every term of the explicit equation E3 with its drill-down, including late adjustments with their owning reconciliation; the opening terms and the OPENING_DIFFERENCE diagnostic, which never blocks; everything unresolved from the baseline on (late arrivals first, unexplained bank rows with their top ledger candidate, unexplained ledger lines with their top bank candidate, possible duplicates with their near-duplicate candidates, aged timing items awaiting reaffirmation, proposed and broken matches); the posted adjustments; the evidence (matches with their served residual, items, exclusions, the adjustments to clearing, the statement); and the readiness with its reasons. Use this tool to render or audit the reconciliation workspace; use getReconciliation instead for the header alone and getReconciliationReport for the printable report. Preconditions: the reconciliation must exist. Required inputs: reconciliationId (UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_RECONCILIATION_REVIEW event; no state changes. Returns 404 RECONCILIATION_NOT_FOUND when the id is unknown.
+     * @endpoint get /v1/accounting/reconciliations/{reconciliationId}/review
+     * @param reconciliationId Reconciliation id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public importReconciliation(bankReconciliationImportRequest: BankReconciliationImportRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BankReconciliationResponse>;
-    public importReconciliation(bankReconciliationImportRequest: BankReconciliationImportRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BankReconciliationResponse>>;
-    public importReconciliation(bankReconciliationImportRequest: BankReconciliationImportRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BankReconciliationResponse>>;
-    public importReconciliation(bankReconciliationImportRequest: BankReconciliationImportRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (bankReconciliationImportRequest === null || bankReconciliationImportRequest === undefined) {
-            throw new Error('Required parameter bankReconciliationImportRequest was null or undefined when calling importReconciliation.');
+    public getReconciliationReview(reconciliationId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ReconciliationReviewResponse>;
+    public getReconciliationReview(reconciliationId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ReconciliationReviewResponse>>;
+    public getReconciliationReview(reconciliationId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ReconciliationReviewResponse>>;
+    public getReconciliationReview(reconciliationId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (reconciliationId === null || reconciliationId === undefined) {
+            throw new Error('Required parameter reconciliationId was null or undefined when calling getReconciliationReview.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -401,15 +894,6 @@ export class BankReconciliationService extends BaseService {
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
 
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
@@ -421,12 +905,11 @@ export class BankReconciliationService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/accounting/reconciliations/import`;
+        let localVarPath = `/v1/accounting/reconciliations/${this.configuration.encodeParam({name: "reconciliationId", value: reconciliationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/review`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<BankReconciliationResponse>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<ReconciliationReviewResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: bankReconciliationImportRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -439,7 +922,7 @@ export class BankReconciliationService extends BaseService {
 
     /**
      * List Reconciliation Adjustment Types
-     * Returns the supported reconciliation adjustment types with their sign rules (BANK_FEE and NSF_FEE negative-only, INTEREST_EARNED positive-only, OTHER any), so clients never hardcode the enum. Use this tool to populate an adjustment picker before calling addReconciliationAdjustment; do not use addReconciliationAdjustment itself just to discover the types. Preconditions: none. Required inputs: none; there are no parameters and no request body. Emits an ACCOUNTING_RECONCILIATION_ADJUSTMENT_TYPES_LIST audit event; no state changes. Returns 200 with the full static type list.
+     * Returns the supported reconciliation adjustment types with their sign rules (BANK_FEE and NSF_FEE negative-only, INTEREST_EARNED positive-only, OTHER and TRANSFER any), so clients never hardcode the enum. Use this tool to populate an adjustment picker before calling addReconciliationAdjustment; do not use addReconciliationAdjustment itself just to discover the types. Preconditions: none. Required inputs: none; there are no parameters and no request body. Emits an ACCOUNTING_RECONCILIATION_ADJUSTMENT_TYPES_LIST audit event; no state changes. Returns 200 with the full static type list.
      * @endpoint get /v1/accounting/reconciliations/adjustment-types
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -494,21 +977,117 @@ export class BankReconciliationService extends BaseService {
     }
 
     /**
+     * List Match Candidates
+     * Ranks match candidates deterministically for one bank transaction (posted ledger lines on the account) or one ledger line (bank transactions), each with its score and reason codes: EXACT_AMOUNT +60, WITHIN_TOLERANCE +40, DATE_IN_WINDOW +20 × (1 − d/W), REFERENCE_MATCH +20, DESCRIPTION_SIMILAR up to +10; beyond W a widened window marks DATE_OUT_OF_WINDOW. Use this tool to find the ledger lines a bank row should be matched to before createReconciliationMatch; use autoMatchReconciliation instead to propose matches for every unexplained bank row at once. Preconditions: the reconciliation must exist; exactly one of bankTransactionId and glLineId. Required inputs: reconciliationId as a path parameter and bankTransactionId or glLineId as a query parameter; windowDays optionally widens the date window W (default 7). Emits an ACCOUNTING_RECONCILIATION_CANDIDATES event; no state changes. Returns 400 VALIDATION_ERROR when neither or both subjects are named, and 404 RECONCILIATION_NOT_FOUND or BANK_TRANSACTION_NOT_FOUND when the reconciliation or the subject is unknown.
+     * @endpoint get /v1/accounting/reconciliations/{reconciliationId}/candidates
+     * @param reconciliationId Reconciliation id
+     * @param bankTransactionId Bank transaction to find ledger candidates for
+     * @param glLineId Ledger line to find bank candidates for
+     * @param windowDays Widen the date window to this many days
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listReconciliationCandidates(reconciliationId: string, bankTransactionId?: string, glLineId?: string, windowDays?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ReconciliationCandidatesResponse>;
+    public listReconciliationCandidates(reconciliationId: string, bankTransactionId?: string, glLineId?: string, windowDays?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ReconciliationCandidatesResponse>>;
+    public listReconciliationCandidates(reconciliationId: string, bankTransactionId?: string, glLineId?: string, windowDays?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ReconciliationCandidatesResponse>>;
+    public listReconciliationCandidates(reconciliationId: string, bankTransactionId?: string, glLineId?: string, windowDays?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (reconciliationId === null || reconciliationId === undefined) {
+            throw new Error('Required parameter reconciliationId was null or undefined when calling listReconciliationCandidates.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'bankTransactionId',
+            <any>bankTransactionId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'glLineId',
+            <any>glLineId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'windowDays',
+            <any>windowDays,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/reconciliations/${this.configuration.encodeParam({name: "reconciliationId", value: reconciliationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/candidates`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ReconciliationCandidatesResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * List Reconciliations
-     * Lists bank reconciliations most recent first as a paginated projection, optionally filtered by GL account and status. Use this tool to find in-progress or finalized reconciliations; do not use getReconciliation, which fetches one reconciliation with its lines by id. Preconditions: none beyond the caller holding accounting:reconciliation:view. Required inputs: none; glAccountId and status (IN_PROGRESS, FINALIZED) are optional filters, page defaults to 0 and size to 20. Emits an ACCOUNTING_RECONCILIATION_LIST audit event; no state changes. Returns 200 with an empty page when nothing matches the filters.
+     * Lists bank reconciliation headers most recent first as a paginated projection, optionally filtered by GL account, status, attribution period (periodCode, YYYY-MM) and a from/to window on the statement end date; each row carries the terms its last mutation stored. Use this tool to find reconciliations by account, status or period; do not use getReconciliation, which fetches one reconciliation with its lines by id. Preconditions: none beyond the caller holding accounting:reconciliation:view. Required inputs: none; glAccountId, status (IN_PROGRESS, SUBMITTED, FINALIZED, INVALIDATED, SUPERSEDED, CANCELLED), periodCode, from and to are optional filters, page defaults to 0 and size to 20. Emits an ACCOUNTING_RECONCILIATION_LIST audit event; no state changes. Returns 200 with an empty page when nothing matches the filters.
      * @endpoint get /v1/accounting/reconciliations
      * @param glAccountId Filter by reconciled GL account id
      * @param status Filter by reconciliation status
+     * @param periodCode Filter by attribution period (YYYY-MM of the statement end date)
+     * @param from Statement end date on or after this date
+     * @param to Statement end date on or before this date
      * @param page Zero-based page index
      * @param size Page size
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listReconciliations(glAccountId?: string, status?: 'IN_PROGRESS' | 'FINALIZED' | 'CANCELLED', page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BankReconciliationListResponse>;
-    public listReconciliations(glAccountId?: string, status?: 'IN_PROGRESS' | 'FINALIZED' | 'CANCELLED', page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BankReconciliationListResponse>>;
-    public listReconciliations(glAccountId?: string, status?: 'IN_PROGRESS' | 'FINALIZED' | 'CANCELLED', page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BankReconciliationListResponse>>;
-    public listReconciliations(glAccountId?: string, status?: 'IN_PROGRESS' | 'FINALIZED' | 'CANCELLED', page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listReconciliations(glAccountId?: string, status?: 'IN_PROGRESS' | 'SUBMITTED' | 'FINALIZED' | 'INVALIDATED' | 'SUPERSEDED' | 'CANCELLED', periodCode?: string, from?: string, to?: string, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BankReconciliationListResponse>;
+    public listReconciliations(glAccountId?: string, status?: 'IN_PROGRESS' | 'SUBMITTED' | 'FINALIZED' | 'INVALIDATED' | 'SUPERSEDED' | 'CANCELLED', periodCode?: string, from?: string, to?: string, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BankReconciliationListResponse>>;
+    public listReconciliations(glAccountId?: string, status?: 'IN_PROGRESS' | 'SUBMITTED' | 'FINALIZED' | 'INVALIDATED' | 'SUPERSEDED' | 'CANCELLED', periodCode?: string, from?: string, to?: string, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BankReconciliationListResponse>>;
+    public listReconciliations(glAccountId?: string, status?: 'IN_PROGRESS' | 'SUBMITTED' | 'FINALIZED' | 'INVALIDATED' | 'SUPERSEDED' | 'CANCELLED', periodCode?: string, from?: string, to?: string, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -525,6 +1104,33 @@ export class BankReconciliationService extends BaseService {
             localVarQueryParameters,
             'status',
             <any>status,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'periodCode',
+            <any>periodCode,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'from',
+            <any>from,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'to',
+            <any>to,
             QueryParamStyle.Form,
             true,
         );
@@ -593,24 +1199,28 @@ export class BankReconciliationService extends BaseService {
     }
 
     /**
-     * Match Statement Lines To GL Lines
-     * Matches a set of statement lines to a set of posted GL journal-entry lines on the reconciled account (1-to-1 or N-to-1), marking the statement lines MATCHED and recording the linkage. Use this tool to pair bank activity with ledger activity; do not use unmatchReconciliation, which reverses a match, and use addReconciliationAdjustment for bank-only items like fees that have no GL counterpart yet. Preconditions: the reconciliation must be IN_PROGRESS, every statement line must be UNMATCHED, every GL line must be POSTED and not already reconciled, and the two sets must net to equal signed amounts within 0.01. Required inputs: reconciliationId (UUID) as a path parameter plus non-empty statementLineIds and glLineIds lists. Emits an ACCOUNTING_RECONCILIATION_MATCH event; no journal entries are created by matching. Returns 404 RECONCILIATION_NOT_FOUND when the reconciliation or a line is missing, 409 RECONCILIATION_ALREADY_FINALIZED or RECONCILIATION_LINE_INELIGIBLE for state conflicts, and 422 MATCH_AMOUNT_MISMATCH when the sets do not net.
-     * @endpoint post /v1/accounting/reconciliations/{reconciliationId}/match
+     * Reaffirm Aged Timing Item
+     * Reaffirms an aged OTHER_LEDGER_TIMING item in this reconciliation: an item dated more than the aging days before the window end counts as an unexplained ledger line until the preparer re-judges it here, and counts again in the next window. Use this tool when the timing explanation still holds; release the item instead, or correct the books by a journal-entry reversal, when it does not. Preconditions: the reconciliation must be IN_PROGRESS (409 RECONCILIATION_ALREADY_FINALIZED when FINALIZED, RECONCILIATION_NOT_EDITABLE in any other status); the item must be an OPEN OTHER_LEDGER_TIMING item on the account, aged at this window\&#39;s end. Required inputs: reconciliationId and itemId as path parameters; justification (at least 10 characters) in the body. Emits an ACCOUNTING_RECONCILIATION_OUTSTANDING_REAFFIRM event and a RECONCILIATION_OUTSTANDING_REAFFIRM audit row. Returns 400 JUSTIFICATION_REQUIRED for a missing or short justification, 404 RECONCILIATION_NOT_FOUND for an unknown item, and 422 OUTSTANDING_ITEM_NOT_ELIGIBLE when the item is not an aged OPEN OTHER_LEDGER_TIMING item.
+     * @endpoint post /v1/accounting/reconciliations/{reconciliationId}/outstanding-items/{itemId}/reaffirm
      * @param reconciliationId Reconciliation id
-     * @param reconciliationMatchRequest Statement-line and GL-line id sets to link; the sets must net to equal amounts.
+     * @param itemId Outstanding item id
+     * @param outstandingItemJustificationRequest Why the timing explanation still holds.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public matchReconciliation(reconciliationId: string, reconciliationMatchRequest: ReconciliationMatchRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BankReconciliationResponse>;
-    public matchReconciliation(reconciliationId: string, reconciliationMatchRequest: ReconciliationMatchRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BankReconciliationResponse>>;
-    public matchReconciliation(reconciliationId: string, reconciliationMatchRequest: ReconciliationMatchRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BankReconciliationResponse>>;
-    public matchReconciliation(reconciliationId: string, reconciliationMatchRequest: ReconciliationMatchRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public reaffirmReconciliationOutstandingItem(reconciliationId: string, itemId: string, outstandingItemJustificationRequest: OutstandingItemJustificationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<OutstandingItemResponse>;
+    public reaffirmReconciliationOutstandingItem(reconciliationId: string, itemId: string, outstandingItemJustificationRequest: OutstandingItemJustificationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<OutstandingItemResponse>>;
+    public reaffirmReconciliationOutstandingItem(reconciliationId: string, itemId: string, outstandingItemJustificationRequest: OutstandingItemJustificationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<OutstandingItemResponse>>;
+    public reaffirmReconciliationOutstandingItem(reconciliationId: string, itemId: string, outstandingItemJustificationRequest: OutstandingItemJustificationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (reconciliationId === null || reconciliationId === undefined) {
-            throw new Error('Required parameter reconciliationId was null or undefined when calling matchReconciliation.');
+            throw new Error('Required parameter reconciliationId was null or undefined when calling reaffirmReconciliationOutstandingItem.');
         }
-        if (reconciliationMatchRequest === null || reconciliationMatchRequest === undefined) {
-            throw new Error('Required parameter reconciliationMatchRequest was null or undefined when calling matchReconciliation.');
+        if (itemId === null || itemId === undefined) {
+            throw new Error('Required parameter itemId was null or undefined when calling reaffirmReconciliationOutstandingItem.');
+        }
+        if (outstandingItemJustificationRequest === null || outstandingItemJustificationRequest === undefined) {
+            throw new Error('Required parameter outstandingItemJustificationRequest was null or undefined when calling reaffirmReconciliationOutstandingItem.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -650,12 +1260,12 @@ export class BankReconciliationService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/accounting/reconciliations/${this.configuration.encodeParam({name: "reconciliationId", value: reconciliationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/match`;
+        let localVarPath = `/v1/accounting/reconciliations/${this.configuration.encodeParam({name: "reconciliationId", value: reconciliationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/outstanding-items/${this.configuration.encodeParam({name: "itemId", value: itemId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/reaffirm`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<BankReconciliationResponse>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<OutstandingItemResponse>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: reconciliationMatchRequest,
+                body: outstandingItemJustificationRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -667,24 +1277,24 @@ export class BankReconciliationService extends BaseService {
     }
 
     /**
-     * Reverse A Reconciliation Match
-     * Reverses a previously recorded match, returning the affected statement lines to UNMATCHED and releasing the linked GL lines for re-matching. Use this tool to correct a wrong pairing while the reconciliation is still IN_PROGRESS; do not use matchReconciliation, which records new matches. Preconditions: the reconciliation must not be FINALIZED, and either the matchId or the statementLineIds must resolve to exactly one match group. Required inputs: reconciliationId (UUID) as a path parameter plus matchId or statementLineIds in the body (one of the two is required). Emits an ACCOUNTING_RECONCILIATION_UNMATCH event. Returns 404 RECONCILIATION_NOT_FOUND when the reconciliation or match group is missing, 409 RECONCILIATION_ALREADY_FINALIZED when finalized, and 400 when neither identifier resolves to a single match group.
-     * @endpoint post /v1/accounting/reconciliations/{reconciliationId}/unmatch
+     * Register Outstanding Item
+     * Registers a non-posting outstanding item: a deposit in transit (a debit to cash), an outstanding check (a credit) or another ledger timing item on a posted ledger line, or a bank error the bank will correct on a bank transaction. The item enters the explicit equation\&#39;s bank side while it is open and carries forward until matched, cleared or released. Use this tool for a timing difference; do not use addReconciliationAdjustment, which posts a journal entry, and use createReconciliationMatch when the other side is already present. Preconditions: the reconciliation must be IN_PROGRESS (409 RECONCILIATION_ALREADY_FINALIZED when FINALIZED, RECONCILIATION_NOT_EDITABLE in any other status); the line or bank transaction must be on the account, dated on or before the window end, in no active match and in no OPEN item; a deposit in transit must be positive and an outstanding check negative. Required inputs: reconciliationId as a path parameter; itemKind and exactly one of glLineId or bankTransactionId in the body; justification (at least 10 characters) for OTHER_LEDGER_TIMING, BANK_ERROR_PENDING and an item older than the aging days. Emits an ACCOUNTING_RECONCILIATION_OUTSTANDING_REGISTER event and a RECONCILIATION_OUTSTANDING_REGISTER audit row; no journal entry is posted. Returns 400 JUSTIFICATION_REQUIRED when a needed justification is missing or short, 409 RECONCILIATION_ALREADY_FINALIZED, RECONCILIATION_NOT_EDITABLE or RECONCILIATION_LINE_INELIGIBLE (a concurrent registration), and 422 OUTSTANDING_ITEM_NOT_ELIGIBLE when the line, sign, window or state does not allow the item.
+     * @endpoint post /v1/accounting/reconciliations/{reconciliationId}/outstanding-items
      * @param reconciliationId Reconciliation id
-     * @param reconciliationUnmatchRequest Match group to reverse, identified by matchId or by its statement line ids.
+     * @param outstandingItemRegisterRequest The line or bank transaction and the item kind.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public unmatchReconciliation(reconciliationId: string, reconciliationUnmatchRequest: ReconciliationUnmatchRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BankReconciliationResponse>;
-    public unmatchReconciliation(reconciliationId: string, reconciliationUnmatchRequest: ReconciliationUnmatchRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BankReconciliationResponse>>;
-    public unmatchReconciliation(reconciliationId: string, reconciliationUnmatchRequest: ReconciliationUnmatchRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BankReconciliationResponse>>;
-    public unmatchReconciliation(reconciliationId: string, reconciliationUnmatchRequest: ReconciliationUnmatchRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public registerReconciliationOutstandingItem(reconciliationId: string, outstandingItemRegisterRequest: OutstandingItemRegisterRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<OutstandingItemResponse>;
+    public registerReconciliationOutstandingItem(reconciliationId: string, outstandingItemRegisterRequest: OutstandingItemRegisterRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<OutstandingItemResponse>>;
+    public registerReconciliationOutstandingItem(reconciliationId: string, outstandingItemRegisterRequest: OutstandingItemRegisterRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<OutstandingItemResponse>>;
+    public registerReconciliationOutstandingItem(reconciliationId: string, outstandingItemRegisterRequest: OutstandingItemRegisterRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (reconciliationId === null || reconciliationId === undefined) {
-            throw new Error('Required parameter reconciliationId was null or undefined when calling unmatchReconciliation.');
+            throw new Error('Required parameter reconciliationId was null or undefined when calling registerReconciliationOutstandingItem.');
         }
-        if (reconciliationUnmatchRequest === null || reconciliationUnmatchRequest === undefined) {
-            throw new Error('Required parameter reconciliationUnmatchRequest was null or undefined when calling unmatchReconciliation.');
+        if (outstandingItemRegisterRequest === null || outstandingItemRegisterRequest === undefined) {
+            throw new Error('Required parameter outstandingItemRegisterRequest was null or undefined when calling registerReconciliationOutstandingItem.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -724,9 +1334,537 @@ export class BankReconciliationService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/accounting/reconciliations/${this.configuration.encodeParam({name: "reconciliationId", value: reconciliationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/unmatch`;
+        let localVarPath = `/v1/accounting/reconciliations/${this.configuration.encodeParam({name: "reconciliationId", value: reconciliationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/outstanding-items`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<OutstandingItemResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: outstandingItemRegisterRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Reject Proposed Match
+     * Rejects a PROPOSED match: it becomes REJECTED (kept as history, never deleted) and its members are released for other matches. Use this tool to decline a proposal from autoMatchReconciliation; use acceptReconciliationMatch instead to confirm it. Preconditions: the reconciliation must be IN_PROGRESS (409 RECONCILIATION_ALREADY_FINALIZED when FINALIZED, RECONCILIATION_NOT_EDITABLE in any other status) and the match must be PROPOSED. Required inputs: reconciliationId and matchId as path parameters; justification optional. Emits an ACCOUNTING_RECONCILIATION_MATCH_REJECT event and a RECONCILIATION_MATCH_REJECT audit row. Returns 404 RECONCILIATION_NOT_FOUND for an unknown match and 409 MATCH_STATE_INVALID when the match is not PROPOSED.
+     * @endpoint post /v1/accounting/reconciliations/{reconciliationId}/matches/{matchId}/reject
+     * @param reconciliationId Reconciliation id
+     * @param matchId Match id
+     * @param reconciliationMatchDecisionRequest Optional justification (at least 10 characters when given).
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public rejectReconciliationMatch(reconciliationId: string, matchId: string, reconciliationMatchDecisionRequest?: ReconciliationMatchDecisionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ReconciliationMatchResponse>;
+    public rejectReconciliationMatch(reconciliationId: string, matchId: string, reconciliationMatchDecisionRequest?: ReconciliationMatchDecisionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ReconciliationMatchResponse>>;
+    public rejectReconciliationMatch(reconciliationId: string, matchId: string, reconciliationMatchDecisionRequest?: ReconciliationMatchDecisionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ReconciliationMatchResponse>>;
+    public rejectReconciliationMatch(reconciliationId: string, matchId: string, reconciliationMatchDecisionRequest?: ReconciliationMatchDecisionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (reconciliationId === null || reconciliationId === undefined) {
+            throw new Error('Required parameter reconciliationId was null or undefined when calling rejectReconciliationMatch.');
+        }
+        if (matchId === null || matchId === undefined) {
+            throw new Error('Required parameter matchId was null or undefined when calling rejectReconciliationMatch.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/reconciliations/${this.configuration.encodeParam({name: "reconciliationId", value: reconciliationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/matches/${this.configuration.encodeParam({name: "matchId", value: matchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/reject`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ReconciliationMatchResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: reconciliationMatchDecisionRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Release Outstanding Item
+     * Releases an OPEN outstanding item with a reason: it leaves the equation and its line or bank transaction is free again. Use this tool to undo a wrong registration; do not use it for an item whose other side has appeared, which createReconciliationMatch clears. Preconditions: the reconciliation must be IN_PROGRESS (409 RECONCILIATION_ALREADY_FINALIZED when FINALIZED, RECONCILIATION_NOT_EDITABLE in any other status); the item must be OPEN on the account and its registering reconciliation not FINALIZED. Required inputs: reconciliationId and itemId as path parameters; reason (at least 10 characters) in the body. Emits an ACCOUNTING_RECONCILIATION_OUTSTANDING_RELEASE event and a RECONCILIATION_OUTSTANDING_RELEASE audit row. Returns 400 VALIDATION_ERROR or JUSTIFICATION_REQUIRED for a missing or short reason, 404 RECONCILIATION_NOT_FOUND for an unknown item, and 422 OUTSTANDING_ITEM_NOT_ELIGIBLE when the item is not OPEN or its registering reconciliation is FINALIZED.
+     * @endpoint post /v1/accounting/reconciliations/{reconciliationId}/outstanding-items/{itemId}/release
+     * @param reconciliationId Reconciliation id
+     * @param itemId Outstanding item id
+     * @param outstandingItemReasonRequest Why the item is released.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public releaseReconciliationOutstandingItem(reconciliationId: string, itemId: string, outstandingItemReasonRequest: OutstandingItemReasonRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<OutstandingItemResponse>;
+    public releaseReconciliationOutstandingItem(reconciliationId: string, itemId: string, outstandingItemReasonRequest: OutstandingItemReasonRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<OutstandingItemResponse>>;
+    public releaseReconciliationOutstandingItem(reconciliationId: string, itemId: string, outstandingItemReasonRequest: OutstandingItemReasonRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<OutstandingItemResponse>>;
+    public releaseReconciliationOutstandingItem(reconciliationId: string, itemId: string, outstandingItemReasonRequest: OutstandingItemReasonRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (reconciliationId === null || reconciliationId === undefined) {
+            throw new Error('Required parameter reconciliationId was null or undefined when calling releaseReconciliationOutstandingItem.');
+        }
+        if (itemId === null || itemId === undefined) {
+            throw new Error('Required parameter itemId was null or undefined when calling releaseReconciliationOutstandingItem.');
+        }
+        if (outstandingItemReasonRequest === null || outstandingItemReasonRequest === undefined) {
+            throw new Error('Required parameter outstandingItemReasonRequest was null or undefined when calling releaseReconciliationOutstandingItem.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/reconciliations/${this.configuration.encodeParam({name: "reconciliationId", value: reconciliationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/outstanding-items/${this.configuration.encodeParam({name: "itemId", value: itemId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/release`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<OutstandingItemResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: outstandingItemReasonRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Return Reconciliation To Preparer
+     * Returns a SUBMITTED reconciliation to its preparer (SUBMITTED to IN_PROGRESS) with the approver\&#39;s reason, so it can change again. Use this tool when the approver will not approve as submitted; use cancelReconciliation instead to abandon it, or finalizeReconciliation to approve it. Preconditions: the reconciliation must be SUBMITTED. Required inputs: reconciliationId (UUID) as a path parameter and reason (at least 10 characters) in the body; version is optional. Emits an ACCOUNTING_RECONCILIATION_RETURN event and writes a RECONCILIATION_RETURN audit row with the reason; no fact is published. Returns 200 with the header; 400 VALIDATION_ERROR (blank reason) or JUSTIFICATION_REQUIRED (shorter than 10); 404 RECONCILIATION_NOT_FOUND; 409 RECONCILIATION_NOT_SUBMITTED or OPTIMISTIC_LOCK.
+     * @endpoint post /v1/accounting/reconciliations/{reconciliationId}/return
+     * @param reconciliationId Reconciliation id
+     * @param reconciliationReasonRequest The approver\&#39;s reason (at least 10 characters) and, optionally, the version the caller read.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public returnReconciliation(reconciliationId: string, reconciliationReasonRequest: ReconciliationReasonRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BankReconciliationResponse>;
+    public returnReconciliation(reconciliationId: string, reconciliationReasonRequest: ReconciliationReasonRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BankReconciliationResponse>>;
+    public returnReconciliation(reconciliationId: string, reconciliationReasonRequest: ReconciliationReasonRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BankReconciliationResponse>>;
+    public returnReconciliation(reconciliationId: string, reconciliationReasonRequest: ReconciliationReasonRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (reconciliationId === null || reconciliationId === undefined) {
+            throw new Error('Required parameter reconciliationId was null or undefined when calling returnReconciliation.');
+        }
+        if (reconciliationReasonRequest === null || reconciliationReasonRequest === undefined) {
+            throw new Error('Required parameter reconciliationReasonRequest was null or undefined when calling returnReconciliation.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/reconciliations/${this.configuration.encodeParam({name: "reconciliationId", value: reconciliationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/return`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<BankReconciliationResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: reconciliationReasonRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Reverse Reconciliation Adjustment
+     * Reverses a posted adjustment by posting the inverse journal entry through the period gate; the adjustment becomes REVERSED, its ADJUSTMENT match is unmatched and its bank transaction returns to UNMATCHED. The original and its reversal form a reversal pair that never counts as unexplained; a reversed gap bridge frees its statement for a new bridge. Use this tool when an adjustment was wrong or the bank reversed the item; do not use the journal-entry reversal endpoint, which leaves the reconciliation\&#39;s links in place. Preconditions: the reconciliation must be IN_PROGRESS, SUBMITTED or FINALIZED (a reversal under a FINALIZED one invalidates it; 409 RECONCILIATION_NOT_EDITABLE otherwise) and the adjustment must be POSTED. Required inputs: reconciliationId and adjustmentId as path parameters; reason (at least 10 characters) in the body; reversalDate and overrideJustification optional. Emits an ACCOUNTING_RECONCILIATION_ADJUSTMENT_REVERSE event and a RECONCILIATION_ADJUSTMENT_REVERSE audit row, and posts the reversal journal entry. Returns 400 VALIDATION_ERROR or JUSTIFICATION_REQUIRED for the reason, 404 RECONCILIATION_NOT_FOUND for an unknown adjustment, 409 ADJUSTMENT_ALREADY_REVERSED, JE_NOT_POSTED, JE_ALREADY_REVERSED or RECONCILIATION_NOT_EDITABLE, and 422 PERIOD_CLOSED or PERIOD_HARD_LOCKED when the reversal date is not open.
+     * @endpoint post /v1/accounting/reconciliations/{reconciliationId}/adjustments/{adjustmentId}/reverse
+     * @param reconciliationId Reconciliation id
+     * @param adjustmentId Adjustment id
+     * @param adjustmentReverseRequest Why the adjustment is reversed.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public reverseReconciliationAdjustment(reconciliationId: string, adjustmentId: string, adjustmentReverseRequest: AdjustmentReverseRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BankReconciliationAdjustmentResponse>;
+    public reverseReconciliationAdjustment(reconciliationId: string, adjustmentId: string, adjustmentReverseRequest: AdjustmentReverseRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BankReconciliationAdjustmentResponse>>;
+    public reverseReconciliationAdjustment(reconciliationId: string, adjustmentId: string, adjustmentReverseRequest: AdjustmentReverseRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BankReconciliationAdjustmentResponse>>;
+    public reverseReconciliationAdjustment(reconciliationId: string, adjustmentId: string, adjustmentReverseRequest: AdjustmentReverseRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (reconciliationId === null || reconciliationId === undefined) {
+            throw new Error('Required parameter reconciliationId was null or undefined when calling reverseReconciliationAdjustment.');
+        }
+        if (adjustmentId === null || adjustmentId === undefined) {
+            throw new Error('Required parameter adjustmentId was null or undefined when calling reverseReconciliationAdjustment.');
+        }
+        if (adjustmentReverseRequest === null || adjustmentReverseRequest === undefined) {
+            throw new Error('Required parameter adjustmentReverseRequest was null or undefined when calling reverseReconciliationAdjustment.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/reconciliations/${this.configuration.encodeParam({name: "reconciliationId", value: reconciliationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/adjustments/${this.configuration.encodeParam({name: "adjustmentId", value: adjustmentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/reverse`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<BankReconciliationAdjustmentResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: adjustmentReverseRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Submit Reconciliation For Approval
+     * Submits an IN_PROGRESS reconciliation for approval (IN_PROGRESS to SUBMITTED) after the approval gate E4 holds on the live figures: the difference within 0.01, then no unexplained bank transaction and no unexplained ledger line from the window\&#39;s baseline to its end. The opening difference is never a condition. Use this tool when the preparer has explained every item; do not use it for the approver\&#39;s step (use finalizeReconciliation instead), and use getReconciliationReview to see what still blocks (readiness.canSubmit). Preconditions: the reconciliation must be IN_PROGRESS; while SUBMITTED it no longer changes until the approver returns it. Required inputs: reconciliationId (UUID) as a path parameter; the body is optional and may carry the version the caller read. Emits an ACCOUNTING_RECONCILIATION_SUBMIT event, writes a RECONCILIATION_SUBMIT audit row and queues the accounting.bankreconciliation.submitted fact; no journal entry is posted. Returns 200 with the header; 404 RECONCILIATION_NOT_FOUND; 409 RECONCILIATION_ALREADY_FINALIZED, RECONCILIATION_NOT_EDITABLE (SUBMITTED, INVALIDATED, SUPERSEDED, CANCELLED) or OPTIMISTIC_LOCK; 422 RECONCILIATION_NOT_BALANCED (fieldErrors[difference]) or, when it balances, RECONCILIATION_HAS_UNEXPLAINED_ITEMS (fieldErrors countUnexplainedBank, countUnexplainedLedger and the first 50 ids per side).
+     * @endpoint post /v1/accounting/reconciliations/{reconciliationId}/submit
+     * @param reconciliationId Reconciliation id
+     * @param reconciliationTransitionRequest Optional; the version the caller read, for optimistic locking.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public submitReconciliation(reconciliationId: string, reconciliationTransitionRequest?: ReconciliationTransitionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BankReconciliationResponse>;
+    public submitReconciliation(reconciliationId: string, reconciliationTransitionRequest?: ReconciliationTransitionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BankReconciliationResponse>>;
+    public submitReconciliation(reconciliationId: string, reconciliationTransitionRequest?: ReconciliationTransitionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BankReconciliationResponse>>;
+    public submitReconciliation(reconciliationId: string, reconciliationTransitionRequest?: ReconciliationTransitionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (reconciliationId === null || reconciliationId === undefined) {
+            throw new Error('Required parameter reconciliationId was null or undefined when calling submitReconciliation.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/reconciliations/${this.configuration.encodeParam({name: "reconciliationId", value: reconciliationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/submit`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<BankReconciliationResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: reconciliationTransitionRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Supersede Reconciliation
+     * Starts a new IN_PROGRESS reconciliation of the same statement that supersedes a FINALIZED or INVALIDATED one: the predecessor\&#39;s match members are released (its matches keep their state as sealed history) and re-proposed in the successor as PROPOSED matches for the preparer to re-confirm; OPEN outstanding items carry over unchanged. The successor uses the baseline that governed the window. When the successor is approved the predecessor becomes SUPERSEDED. Use this tool to correct an approved window (there is no reopen); use createReconciliation instead for a statement never reconciled, and a corrected re-import (supersedesStatementId) when the bank\&#39;s statement itself was wrong. Preconditions: the reconciliation must be FINALIZED or INVALIDATED, not already superseded, and its statement still COMMITTED. Required inputs: reconciliationId (UUID) as a path parameter and justification (at least 10 characters) in the body; requestId (UUIDv7) makes a retry return the same successor; version is optional. Emits an ACCOUNTING_RECONCILIATION_SUPERSEDE event and writes a RECONCILIATION_SUPERSEDE audit row on the predecessor and a RECONCILIATION_CREATE row on the successor. Returns 201 with the successor\&#39;s header (200 with replayed true on a replay); 400 VALIDATION_ERROR or JUSTIFICATION_REQUIRED; 404 RECONCILIATION_NOT_FOUND; 409 RECONCILIATION_WINDOW_ALREADY_RECONCILED (it is IN_PROGRESS or SUBMITTED, or the statement has another active one), RECONCILIATION_NOT_EDITABLE (SUPERSEDED, CANCELLED, already superseded, or its statement superseded), IDEMPOTENCY_CONFLICT or OPTIMISTIC_LOCK.
+     * @endpoint post /v1/accounting/reconciliations/{reconciliationId}/supersede
+     * @param reconciliationId Reconciliation id
+     * @param reconciliationJustificationRequest The justification (at least 10 characters), a requestId (UUIDv7) so a retry returns the same successor, and optionally the version the caller read.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public supersedeReconciliation(reconciliationId: string, reconciliationJustificationRequest: ReconciliationJustificationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BankReconciliationResponse>;
+    public supersedeReconciliation(reconciliationId: string, reconciliationJustificationRequest: ReconciliationJustificationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BankReconciliationResponse>>;
+    public supersedeReconciliation(reconciliationId: string, reconciliationJustificationRequest: ReconciliationJustificationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BankReconciliationResponse>>;
+    public supersedeReconciliation(reconciliationId: string, reconciliationJustificationRequest: ReconciliationJustificationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (reconciliationId === null || reconciliationId === undefined) {
+            throw new Error('Required parameter reconciliationId was null or undefined when calling supersedeReconciliation.');
+        }
+        if (reconciliationJustificationRequest === null || reconciliationJustificationRequest === undefined) {
+            throw new Error('Required parameter reconciliationJustificationRequest was null or undefined when calling supersedeReconciliation.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/reconciliations/${this.configuration.encodeParam({name: "reconciliationId", value: reconciliationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/supersede`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<BankReconciliationResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: reconciliationJustificationRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Unmatch Accepted Match
+     * Undoes an ACCEPTED match: it becomes UNMATCHED with the reason (never deleted), its bank rows return to UNMATCHED, its lines are released for re-matching, and the outstanding items it had cleared re-open. Use this tool to correct a wrong pairing; do not use rejectReconciliationMatch, which declines a proposal that was never accepted. Preconditions: the reconciliation must be IN_PROGRESS (409 RECONCILIATION_ALREADY_FINALIZED when FINALIZED, RECONCILIATION_NOT_EDITABLE in any other status) and the match must be ACCEPTED. Required inputs: reconciliationId and matchId as path parameters; reason (at least 10 characters) in the body. Emits an ACCOUNTING_RECONCILIATION_UNMATCH event and a RECONCILIATION_UNMATCH audit row with the actor and reason. Returns 400 VALIDATION_ERROR without a reason or JUSTIFICATION_REQUIRED for a short one, 404 RECONCILIATION_NOT_FOUND for an unknown match, and 409 MATCH_STATE_INVALID when the match is not ACCEPTED.
+     * @endpoint post /v1/accounting/reconciliations/{reconciliationId}/matches/{matchId}/unmatch
+     * @param reconciliationId Reconciliation id
+     * @param matchId Match id
+     * @param reconciliationUnmatchRequest Why the match is undone.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public unmatchReconciliationMatch(reconciliationId: string, matchId: string, reconciliationUnmatchRequest: ReconciliationUnmatchRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ReconciliationMatchResponse>;
+    public unmatchReconciliationMatch(reconciliationId: string, matchId: string, reconciliationUnmatchRequest: ReconciliationUnmatchRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ReconciliationMatchResponse>>;
+    public unmatchReconciliationMatch(reconciliationId: string, matchId: string, reconciliationUnmatchRequest: ReconciliationUnmatchRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ReconciliationMatchResponse>>;
+    public unmatchReconciliationMatch(reconciliationId: string, matchId: string, reconciliationUnmatchRequest: ReconciliationUnmatchRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (reconciliationId === null || reconciliationId === undefined) {
+            throw new Error('Required parameter reconciliationId was null or undefined when calling unmatchReconciliationMatch.');
+        }
+        if (matchId === null || matchId === undefined) {
+            throw new Error('Required parameter matchId was null or undefined when calling unmatchReconciliationMatch.');
+        }
+        if (reconciliationUnmatchRequest === null || reconciliationUnmatchRequest === undefined) {
+            throw new Error('Required parameter reconciliationUnmatchRequest was null or undefined when calling unmatchReconciliationMatch.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/reconciliations/${this.configuration.encodeParam({name: "reconciliationId", value: reconciliationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/matches/${this.configuration.encodeParam({name: "matchId", value: matchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/unmatch`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ReconciliationMatchResponse>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: reconciliationUnmatchRequest,

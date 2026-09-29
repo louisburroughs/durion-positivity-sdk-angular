@@ -23,9 +23,17 @@ import { AccountingPeriodResponse } from '../models/accountingPeriodResponse';
 // @ts-ignore
 import { ApiError } from '../models/apiError';
 // @ts-ignore
+import { BankReconciliationPolicyRequest } from '../models/bankReconciliationPolicyRequest';
+// @ts-ignore
+import { BankReconciliationPolicyResponse } from '../models/bankReconciliationPolicyResponse';
+// @ts-ignore
+import { CloseReadinessResponse } from '../models/closeReadinessResponse';
+// @ts-ignore
 import { HardLockDateResponse } from '../models/hardLockDateResponse';
 // @ts-ignore
 import { HardLockDateUpdateRequest } from '../models/hardLockDateUpdateRequest';
+// @ts-ignore
+import { PeriodCloseRequest } from '../models/periodCloseRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -45,17 +53,18 @@ export class AccountingPeriodsService extends BaseService {
 
     /**
      * Close Accounting Period
-     * Closes an OPEN accounting period (OPEN to CLOSED), after which posting paths reject entries dated inside it with PERIOD_CLOSED unless a permissioned override is supplied. Use this tool during month-end close after all journal entries for the month are posted; do not use reopenAccountingPeriod, which reverses this transition for late adjustments. Preconditions: the period must not already be CLOSED, and no DRAFT journal entries may be dated inside the period; a valid YYYY-MM code with no row whose month has already started is auto-provisioned and then closed. Required inputs: periodCode (YYYY-MM) as a path parameter; there is no request body. Emits an ACCOUNTING_PERIOD_CLOSE event and audit-logs the close with the acting user. Returns 409 PERIOD_ALREADY_CLOSED when the period is already closed, 404 PERIOD_NOT_FOUND when no row exists and the month has not started, and 422 PERIOD_HAS_DRAFT_ENTRIES listing the blocking draftJournalEntryIds in fieldErrors; post or delete those entries before retrying.
+     * Closes an OPEN accounting period (OPEN to CLOSED), after which posting paths reject entries dated inside it with PERIOD_CLOSED unless a permissioned override is supplied. Use this tool during month-end close after all journal entries for the month are posted and getAccountingPeriodCloseReadiness shows the bank accounts reconciled; do not use reopenAccountingPeriod, which reverses this transition for late adjustments. Preconditions: the period must not already be CLOSED, and no DRAFT journal entries may be dated inside the period; a valid YYYY-MM code with no row whose month has already started is auto-provisioned and then closed; bank reconciliation readiness is then evaluated under the tenant\&#39;s close policy: under REQUIRED or REQUIRED_WITH_EXCEPTION any BLOCKING check refuses the close; ADVISORY never refuses. Required inputs: periodCode (YYYY-MM) as a path parameter; the body is optional: bankReconciliationException.justification (at least 10 characters) closes despite BLOCKING checks under REQUIRED_WITH_EXCEPTION when the caller also holds accounting:period:override. Emits an ACCOUNTING_PERIOD_CLOSE event and audit-logs the close (with a readiness summary) with the acting user; a granted exception adds a PERIOD_CLOSE_BANKREC_EXCEPTION audit row holding the readiness snapshot, and the response carries bankReconciliationReady and bankReconciliationException. Returns 409 PERIOD_ALREADY_CLOSED when the period is already closed, 404 PERIOD_NOT_FOUND when no row exists and the month has not started, 422 PERIOD_HAS_DRAFT_ENTRIES listing the blocking draftJournalEntryIds in fieldErrors, 422 PERIOD_BANK_RECONCILIATION_INCOMPLETE listing unreconciledGlAccountIds in fieldErrors, 403 PERIOD_CLOSE_EXCEPTION_NOT_PERMITTED for an exception without the override authority, and 400 JUSTIFICATION_REQUIRED for a justification shorter than 10 characters.
      * @endpoint post /v1/accounting/periods/{periodCode}/close
      * @param periodCode Period code in YYYY-MM format
+     * @param periodCloseRequest Optional: a bank reconciliation exception with its justification.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public closeAccountingPeriod(periodCode: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AccountingPeriodResponse>;
-    public closeAccountingPeriod(periodCode: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AccountingPeriodResponse>>;
-    public closeAccountingPeriod(periodCode: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AccountingPeriodResponse>>;
-    public closeAccountingPeriod(periodCode: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public closeAccountingPeriod(periodCode: string, periodCloseRequest?: PeriodCloseRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AccountingPeriodResponse>;
+    public closeAccountingPeriod(periodCode: string, periodCloseRequest?: PeriodCloseRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AccountingPeriodResponse>>;
+    public closeAccountingPeriod(periodCode: string, periodCloseRequest?: PeriodCloseRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AccountingPeriodResponse>>;
+    public closeAccountingPeriod(periodCode: string, periodCloseRequest?: PeriodCloseRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (periodCode === null || periodCode === undefined) {
             throw new Error('Required parameter periodCode was null or undefined when calling closeAccountingPeriod.');
         }
@@ -77,6 +86,15 @@ export class AccountingPeriodsService extends BaseService {
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
 
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
@@ -93,6 +111,7 @@ export class AccountingPeriodsService extends BaseService {
         return this.httpClient.request<AccountingPeriodResponse>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: periodCloseRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -147,6 +166,122 @@ export class AccountingPeriodsService extends BaseService {
         let localVarPath = `/v1/accounting/periods/hard-lock`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<HardLockDateResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get Accounting Period Close Readiness
+     * Reads the bank reconciliation close readiness of a period: per in-scope bank account the baseline that applies at the period end, the coverage and reconciled frontiers, the OPEN outstanding items with their sum, and the checks that fired (STATEMENT_COVERAGE, RECONCILIATION_APPROVED, RECONCILIATION_IN_FLIGHT, RECONCILIATION_INVALIDATED, BALANCE_AGREEMENT, UNEXPLAINED_BANK_TRANSACTIONS, UNEXPLAINED_LEDGER_LINES, UNPOSTED_ADJUSTMENTS, COVERAGE_LAG_APPLIED, INCOMPLETE_IMPORTS, OUTSTANDING_ITEMS_AGING, LATE_BANK_TRANSACTIONS, RECONCILED_AFTER_CLOSE), plus tenant-wide checks (DRAFT_JOURNAL_ENTRIES, CLEARING_BALANCE_AGING) in the top-level checks list. Use this tool before closeAccountingPeriod to see whether the close will pass and what blocks it; do not use listAccountingPeriods, which only reports OPEN or CLOSED. Preconditions: none; a month with no period row is evaluated as OPEN without creating it. Required inputs: periodCode (YYYY-MM) as a path parameter; there is no request body. Emits an ACCOUNTING_PERIOD_CLOSE_READINESS audit event; nothing is created or changed. Returns 200 with ready &#x3D; true when no BLOCKING check remains under the tenant\&#39;s close policy (under ADVISORY only DRAFT journal entries count), and 400 VALIDATION_ERROR for a malformed periodCode.
+     * @endpoint get /v1/accounting/periods/{periodCode}/close-readiness
+     * @param periodCode Period code in YYYY-MM format
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getAccountingPeriodCloseReadiness(periodCode: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CloseReadinessResponse>;
+    public getAccountingPeriodCloseReadiness(periodCode: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CloseReadinessResponse>>;
+    public getAccountingPeriodCloseReadiness(periodCode: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CloseReadinessResponse>>;
+    public getAccountingPeriodCloseReadiness(periodCode: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (periodCode === null || periodCode === undefined) {
+            throw new Error('Required parameter periodCode was null or undefined when calling getAccountingPeriodCloseReadiness.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/periods/${this.configuration.encodeParam({name: "periodCode", value: periodCode, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/close-readiness`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<CloseReadinessResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get Bank Reconciliation Policy
+     * Returns the tenant\&#39;s effective bank reconciliation policy: closePolicy, closeScope, closeCoverageLagDays, allowSelfApproval and otherApprovalThreshold (null while unset), with the functional currency of the threshold and who changed a setting last. Use this tool to see how period close treats unreconciled bank accounts; use setBankReconciliationPolicy instead to change it. Preconditions: none; a setting never written reads as its default (REQUIRED_WITH_EXCEPTION, BANK_CASH_SUBTYPE, 0, false, unset). Required inputs: none; there are no parameters and no request body. Emits an ACCOUNTING_PERIOD_BANK_REC_POLICY_VIEW audit event; nothing is changed. Returns 200 with the five effective values; updatedAt and updatedBy are null until the policy is first changed.
+     * @endpoint get /v1/accounting/periods/bank-reconciliation-policy
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getBankReconciliationPolicy(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BankReconciliationPolicyResponse>;
+    public getBankReconciliationPolicy(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BankReconciliationPolicyResponse>>;
+    public getBankReconciliationPolicy(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BankReconciliationPolicyResponse>>;
+    public getBankReconciliationPolicy(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/periods/bank-reconciliation-policy`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<BankReconciliationPolicyResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -349,6 +484,76 @@ export class AccountingPeriodsService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: hardLockDateUpdateRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Set Bank Reconciliation Policy
+     * Replaces the tenant\&#39;s bank reconciliation policy: closePolicy (ADVISORY, REQUIRED_WITH_EXCEPTION or REQUIRED), closeScope (BANK_CASH_SUBTYPE or ALL_RECONCILABLE), closeCoverageLagDays (integer &gt;&#x3D; 0), allowSelfApproval (boolean) and otherApprovalThreshold (amount &gt;&#x3D; 0 in the functional currency, or null to unset it). Use this tool when Finance changes how period close treats unreconciled bank accounts, whether preparers may approve their own reconciliations, or the OTHER adjustment approval threshold; do not use it just to read the current values (use getBankReconciliationPolicy instead). Preconditions: the caller holds accounting:period:hard_lock, the governance level of the hard lock. Required inputs: all six body fields, including otherApprovalThreshold (null clears it) and a justification of at least 10 characters. Emits an ACCOUNTING_PERIOD_BANK_REC_POLICY_SET event and writes one BANK_REC_POLICY_SET audit row per setting whose value changes (old and new value, justification); an unchanged setting writes nothing. Returns 400 VALIDATION_ERROR for a missing field, an unknown value, a negative number or a blank justification, 400 JUSTIFICATION_REQUIRED for a justification of 1 to 9 characters, and 422 AMOUNT_PRECISION_EXCEEDS_CURRENCY when otherApprovalThreshold has more decimal places than the functional currency\&#39;s minor unit (it is refused, never rounded).
+     * @endpoint put /v1/accounting/periods/bank-reconciliation-policy
+     * @param bankReconciliationPolicyRequest The five settings with the audit justification.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public setBankReconciliationPolicy(bankReconciliationPolicyRequest: BankReconciliationPolicyRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BankReconciliationPolicyResponse>;
+    public setBankReconciliationPolicy(bankReconciliationPolicyRequest: BankReconciliationPolicyRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BankReconciliationPolicyResponse>>;
+    public setBankReconciliationPolicy(bankReconciliationPolicyRequest: BankReconciliationPolicyRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BankReconciliationPolicyResponse>>;
+    public setBankReconciliationPolicy(bankReconciliationPolicyRequest: BankReconciliationPolicyRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (bankReconciliationPolicyRequest === null || bankReconciliationPolicyRequest === undefined) {
+            throw new Error('Required parameter bankReconciliationPolicyRequest was null or undefined when calling setBankReconciliationPolicy.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/periods/bank-reconciliation-policy`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<BankReconciliationPolicyResponse>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: bankReconciliationPolicyRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

@@ -10,7 +10,7 @@
 
 
 /**
- * Reconciliation adjustment with its posted journal entry
+ * Reconciliation adjustment with its posted journal entry, link and reversal state
  */
 export interface BankReconciliationAdjustmentResponse {
     /**
@@ -21,6 +21,18 @@ export interface BankReconciliationAdjustmentResponse {
      * Signed adjustment amount
      */
     amount?: number;
+    /**
+     * The bank transaction the adjustment explains
+     */
+    bankTransactionId?: string;
+    /**
+     * The statement whose acknowledged gap the adjustment bridges
+     */
+    bridgesStatementId?: string;
+    /**
+     * TRANSFER counter bank account
+     */
+    counterGlAccountId?: string;
     /**
      * When the adjustment was recorded
      */
@@ -34,19 +46,72 @@ export interface BankReconciliationAdjustmentResponse {
      */
     description?: string;
     /**
-     * Id of the real balanced journal entry this adjustment posted
+     * Posted entry number
+     */
+    entryNumber?: string;
+    /**
+     * Id of the balanced journal entry this adjustment posted
      */
     journalEntryId?: string;
     /**
-     * Adjustment type (decision D-6)
+     * Justification recorded for the adjustment
+     */
+    justification?: string;
+    /**
+     * The ADJUSTMENT match of a linked bank transaction, or a residual\'s replacement match
+     */
+    matchId?: string;
+    /**
+     * Justification of a posting into a CLOSED period
+     */
+    overrideJustification?: string;
+    /**
+     * Whether the posting used the period override
+     */
+    periodOverride?: boolean;
+    /**
+     * YearMonth of the posting date
+     */
+    postedPeriodCode?: string;
+    /**
+     * The reconciliation that owns the adjustment
+     */
+    reconciliationId?: string;
+    /**
+     * True when this answers a replayed command (same requestId and payload)
+     */
+    replayed?: boolean;
+    reversalJournalEntryId?: string;
+    reversalReason?: string;
+    reversedAt?: string;
+    reversedBy?: string;
+    /**
+     * The match whose residual the adjustment settled
+     */
+    settlesMatchId?: string;
+    /**
+     * POSTED or REVERSED
+     */
+    status?: BankReconciliationAdjustmentResponseStatusEnum;
+    /**
+     * The date the entry posted at (D7)
+     */
+    transactionDate?: string;
+    /**
+     * Adjustment type
      */
     type?: BankReconciliationAdjustmentResponseTypeEnum;
 }
+export enum BankReconciliationAdjustmentResponseStatusEnum {
+    Posted = 'POSTED',
+    Reversed = 'REVERSED'
+};
 export enum BankReconciliationAdjustmentResponseTypeEnum {
     BankFee = 'BANK_FEE',
     NsfFee = 'NSF_FEE',
     InterestEarned = 'INTEREST_EARNED',
-    Other = 'OTHER'
+    Other = 'OTHER',
+    Transfer = 'TRANSFER'
 };
 
 
@@ -90,9 +155,9 @@ export function instanceOfBankReconciliationAdjustmentResponse(value: object): v
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBankReconciliationAdjustmentResponsePropertyNames();
-    const optionalStringProperties = createBankReconciliationAdjustmentResponseOptionalProperties({ name: 'adjustmentId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'description', nullable: false }, { name: 'journalEntryId', nullable: false }, { name: 'type', nullable: false }, );
+    const optionalStringProperties = createBankReconciliationAdjustmentResponseOptionalProperties({ name: 'adjustmentId', nullable: false }, { name: 'bankTransactionId', nullable: false }, { name: 'bridgesStatementId', nullable: false }, { name: 'counterGlAccountId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'description', nullable: false }, { name: 'entryNumber', nullable: false }, { name: 'journalEntryId', nullable: false }, { name: 'justification', nullable: false }, { name: 'matchId', nullable: false }, { name: 'overrideJustification', nullable: false }, { name: 'postedPeriodCode', nullable: false }, { name: 'reconciliationId', nullable: false }, { name: 'reversalJournalEntryId', nullable: false }, { name: 'reversalReason', nullable: false }, { name: 'reversedAt', nullable: false }, { name: 'reversedBy', nullable: false }, { name: 'settlesMatchId', nullable: false }, { name: 'status', nullable: false }, { name: 'transactionDate', nullable: false }, { name: 'type', nullable: false }, );
     const optionalNumberProperties = createBankReconciliationAdjustmentResponseOptionalProperties({ name: 'amount', nullable: false }, );
-    const optionalBooleanProperties = createBankReconciliationAdjustmentResponseOptionalProperties();
+    const optionalBooleanProperties = createBankReconciliationAdjustmentResponseOptionalProperties({ name: 'periodOverride', nullable: false }, { name: 'replayed', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalBankReconciliationAdjustmentResponsePropertyOfType(_v, property.name, 'string', property.nullable))

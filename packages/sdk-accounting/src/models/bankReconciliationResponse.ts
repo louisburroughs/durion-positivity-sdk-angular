@@ -7,12 +7,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { BankReconciliationAdjustmentResponse } from './bankReconciliationAdjustmentResponse';
-import { BankReconciliationLineResponse } from './bankReconciliationLineResponse';
 
 
 /**
- * Bank reconciliation with its statement lines and adjustments
+ * Bank reconciliation header with the live equation (E3), opening terms and unexplained counts
  */
 export interface BankReconciliationResponse {
     /**
@@ -24,31 +22,67 @@ export interface BankReconciliationResponse {
      */
     accountName?: string;
     /**
-     * Recorded adjustments
+     * YearMonth of the statement end date, for attribution only (never a window constraint)
      */
-    adjustments?: Array<BankReconciliationAdjustmentResponse>;
+    accountingPeriodCode?: string;
+    /**
+     * statementClosingBalance + sumOutstandingLedgerItems − sumOutstandingBankItems
+     */
+    adjustedBankBalance?: number;
+    /**
+     * glEndingBalance + sumLateAdjustments
+     */
+    adjustedBookBalance?: number;
+    /**
+     * The ledger balance as-of the statement end date that the approver saw, snapshotted at approval; compare with glEndingBalance (live) to see whether the ledger changed since
+     */
+    approvedGlEndingBalance?: number;
+    /**
+     * Start date of the latest acknowledged statement on or before the window start: nothing dated before it counts as unexplained; null when the account has no acknowledged statement
+     */
+    baselineDate?: string;
+    /**
+     * Why it was cancelled
+     */
+    cancelReason?: string;
+    /**
+     * When the reconciliation was cancelled
+     */
+    cancelledAt?: string;
+    /**
+     * Who cancelled it (the approver)
+     */
+    cancelledBy?: string;
+    /**
+     * Unexplained bank transactions from the baseline to the window end (exact count)
+     */
+    countUnexplainedBank?: number;
+    /**
+     * Unexplained ledger lines from the baseline to the window end, aged OTHER_LEDGER_TIMING items not reaffirmed here included (exact count)
+     */
+    countUnexplainedLedger?: number;
     /**
      * When the reconciliation was created
      */
     createdAt?: string;
     /**
-     * Who created the reconciliation
+     * Who created the reconciliation (the preparer)
      */
     createdBy?: string;
     /**
-     * Reconciliation currency
+     * Reconciliation currency (the ledger currency)
      */
     currency?: string;
     /**
-     * statementEndingBalance − (glEndingBalance + Σ adjustments); 0 when balanced
+     * adjustedBankBalance − adjustedBookBalance; balanced within ±0.01
      */
     difference?: number;
     /**
-     * When the reconciliation was finalized; null while IN_PROGRESS
+     * When the reconciliation was approved (finalized); null until then
      */
     finalizedAt?: string;
     /**
-     * Who finalized the reconciliation
+     * Who approved (finalized) the reconciliation
      */
     finalizedBy?: string;
     /**
@@ -56,41 +90,112 @@ export interface BankReconciliationResponse {
      */
     glAccountId?: string;
     /**
-     * GL ending balance snapshotted at import as-of the statement date
+     * Live ledger balance at the end of the statement end date, entries POSTED or REVERSED at their own dates
      */
     glEndingBalance?: number;
     /**
-     * Statement period end date
+     * Live ledger balance at the end of the day before the window start
      */
-    periodEndDate?: string;
+    glOpeningBalance?: number;
     /**
-     * Statement period start date
+     * When an approved reconciliation was invalidated
      */
-    periodStartDate?: string;
+    invalidatedAt?: string;
+    /**
+     * The journal entry whose posting or reversal invalidated it
+     */
+    invalidatedByJournalEntryId?: string;
+    /**
+     * Why it was invalidated: LEDGER_LINE_REVERSED, LEDGER_LINE_POSTED, SOURCE_REMOVED or STATEMENT_SUPERSEDED
+     */
+    invalidationReason?: string;
+    /**
+     * Diagnostic only, never blocking: statementOpeningBalance + ledger items − bank items open at the day before the start − (glOpeningBalance + sumOpeningAdjustments)
+     */
+    openingDifference?: number;
     /**
      * Reconciliation id
      */
     reconciliationId?: string;
     /**
-     * Statement date
+     * True when this answers a replayed create command (same requestId and payload)
      */
-    statementDate?: string;
+    replayed?: boolean;
     /**
-     * Statement ending balance
+     * Statement closing balance
      */
-    statementEndingBalance?: number;
+    statementClosingBalance?: number;
     /**
-     * Imported statement lines
+     * Statement window end date; the as-of date of every closing term
      */
-    statementLines?: Array<BankReconciliationLineResponse>;
+    statementEndDate?: string;
+    /**
+     * The bank statement this reconciliation rests on
+     */
+    statementId?: string;
+    /**
+     * Statement opening balance
+     */
+    statementOpeningBalance?: number;
+    /**
+     * Statement window start date
+     */
+    statementStartDate?: string;
     /**
      * Reconciliation status
      */
     status?: BankReconciliationResponseStatusEnum;
+    /**
+     * When the preparer submitted it for approval; null while it is not submitted
+     */
+    submittedAt?: string;
+    /**
+     * Who submitted it for approval (the preparer)
+     */
+    submittedBy?: string;
+    /**
+     * Adjustment postings of this or an earlier reconciliation on the account dated after the statement end date
+     */
+    sumLateAdjustments?: number;
+    /**
+     * Adjustment postings of earlier windows, and this statement\'s gap bridges, dated on or after the window start
+     */
+    sumOpeningAdjustments?: number;
+    /**
+     * Σ bank-side outstanding items open at the end of the window (bank errors)
+     */
+    sumOutstandingBankItems?: number;
+    /**
+     * Σ ledger-side outstanding items open at the end of the window (deposits +, checks −)
+     */
+    sumOutstandingLedgerItems?: number;
+    /**
+     * Σ signed amounts of the unexplained bank transactions
+     */
+    sumUnexplainedBank?: number;
+    /**
+     * Σ signed amounts of the unexplained ledger lines
+     */
+    sumUnexplainedLedger?: number;
+    /**
+     * The approved reconciliation that superseded this one
+     */
+    supersededByReconciliationId?: string;
+    /**
+     * The reconciliation this one supersedes (a correction of an approved window)
+     */
+    supersedesReconciliationId?: string;
+    /**
+     * Optimistic-lock version of the row
+     */
+    version?: number;
 }
 export enum BankReconciliationResponseStatusEnum {
     InProgress = 'IN_PROGRESS',
+    Submitted = 'SUBMITTED',
     Finalized = 'FINALIZED',
+    Invalidated = 'INVALIDATED',
+    Superseded = 'SUPERSEDED',
     Cancelled = 'CANCELLED'
 };
 
@@ -135,9 +240,9 @@ export function instanceOfBankReconciliationResponse(value: object): value is Ba
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBankReconciliationResponsePropertyNames();
-    const optionalStringProperties = createBankReconciliationResponseOptionalProperties({ name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'currency', nullable: false }, { name: 'finalizedAt', nullable: false }, { name: 'finalizedBy', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'periodEndDate', nullable: false }, { name: 'periodStartDate', nullable: false }, { name: 'reconciliationId', nullable: false }, { name: 'statementDate', nullable: false }, { name: 'status', nullable: false }, );
-    const optionalNumberProperties = createBankReconciliationResponseOptionalProperties({ name: 'difference', nullable: false }, { name: 'glEndingBalance', nullable: false }, { name: 'statementEndingBalance', nullable: false }, );
-    const optionalBooleanProperties = createBankReconciliationResponseOptionalProperties();
+    const optionalStringProperties = createBankReconciliationResponseOptionalProperties({ name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'accountingPeriodCode', nullable: false }, { name: 'baselineDate', nullable: false }, { name: 'cancelReason', nullable: false }, { name: 'cancelledAt', nullable: false }, { name: 'cancelledBy', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'currency', nullable: false }, { name: 'finalizedAt', nullable: false }, { name: 'finalizedBy', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'invalidatedAt', nullable: false }, { name: 'invalidatedByJournalEntryId', nullable: false }, { name: 'invalidationReason', nullable: false }, { name: 'reconciliationId', nullable: false }, { name: 'statementEndDate', nullable: false }, { name: 'statementId', nullable: false }, { name: 'statementStartDate', nullable: false }, { name: 'status', nullable: false }, { name: 'submittedAt', nullable: false }, { name: 'submittedBy', nullable: false }, { name: 'supersededByReconciliationId', nullable: false }, { name: 'supersedesReconciliationId', nullable: false }, );
+    const optionalNumberProperties = createBankReconciliationResponseOptionalProperties({ name: 'adjustedBankBalance', nullable: false }, { name: 'adjustedBookBalance', nullable: false }, { name: 'approvedGlEndingBalance', nullable: false }, { name: 'countUnexplainedBank', nullable: false }, { name: 'countUnexplainedLedger', nullable: false }, { name: 'difference', nullable: false }, { name: 'glEndingBalance', nullable: false }, { name: 'glOpeningBalance', nullable: false }, { name: 'openingDifference', nullable: false }, { name: 'statementClosingBalance', nullable: false }, { name: 'statementOpeningBalance', nullable: false }, { name: 'sumLateAdjustments', nullable: false }, { name: 'sumOpeningAdjustments', nullable: false }, { name: 'sumOutstandingBankItems', nullable: false }, { name: 'sumOutstandingLedgerItems', nullable: false }, { name: 'sumUnexplainedBank', nullable: false }, { name: 'sumUnexplainedLedger', nullable: false }, { name: 'version', nullable: false }, );
+    const optionalBooleanProperties = createBankReconciliationResponseOptionalProperties({ name: 'replayed', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalBankReconciliationResponsePropertyOfType(_v, property.name, 'string', property.nullable))

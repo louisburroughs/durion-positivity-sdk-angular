@@ -14,6 +14,14 @@
  */
 export interface AccountingPeriodResponse {
     /**
+     * Close response only: whether the period closed on a bank reconciliation exception (null on other responses)
+     */
+    bankReconciliationException?: boolean | null;
+    /**
+     * Close response only: whether no BLOCKING bank reconciliation check remained at close (null on other responses)
+     */
+    bankReconciliationReady?: boolean | null;
+    /**
      * When the period was closed (null while OPEN)
      */
     closedAt?: string;
@@ -102,7 +110,7 @@ export function instanceOfAccountingPeriodResponse(value: object): value is Acco
     const requiredProperties = createAccountingPeriodResponsePropertyNames();
     const optionalStringProperties = createAccountingPeriodResponseOptionalProperties({ name: 'closedAt', nullable: false }, { name: 'closedBy', nullable: false }, { name: 'endDate', nullable: false }, { name: 'periodCode', nullable: false }, { name: 'periodId', nullable: false }, { name: 'reopenJustification', nullable: false }, { name: 'reopenedAt', nullable: false }, { name: 'reopenedBy', nullable: false }, { name: 'startDate', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createAccountingPeriodResponseOptionalProperties();
-    const optionalBooleanProperties = createAccountingPeriodResponseOptionalProperties();
+    const optionalBooleanProperties = createAccountingPeriodResponseOptionalProperties({ name: 'bankReconciliationException', nullable: true }, { name: 'bankReconciliationReady', nullable: true }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalAccountingPeriodResponsePropertyOfType(_v, property.name, 'string', property.nullable))

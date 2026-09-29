@@ -7,21 +7,37 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Entry } from './entry';
+import { ReconciliationAuditEntry } from './reconciliationAuditEntry';
 
 
 /**
- * Audit trail of a reconciliation\'s actions
+ * Stored audit trail of a reconciliation, its matches and its outstanding items
  */
 export interface ReconciliationAuditResponse {
     /**
-     * Audit entries ordered by time
+     * Audit rows of this page, oldest first
      */
-    entries?: Array<Entry>;
+    entries?: Array<ReconciliationAuditEntry>;
+    /**
+     * Zero-based page index
+     */
+    pageNumber?: number;
+    /**
+     * Page size
+     */
+    pageSize?: number;
     /**
      * Reconciliation id
      */
     reconciliationId?: string;
+    /**
+     * Rows across every page
+     */
+    totalElements?: number;
+    /**
+     * Number of pages
+     */
+    totalPages?: number;
 }
 
 function isOptionalReconciliationAuditResponsePropertyOfType(
@@ -64,7 +80,7 @@ export function instanceOfReconciliationAuditResponse(value: object): value is R
 
     const requiredProperties = createReconciliationAuditResponsePropertyNames();
     const optionalStringProperties = createReconciliationAuditResponseOptionalProperties({ name: 'reconciliationId', nullable: false }, );
-    const optionalNumberProperties = createReconciliationAuditResponseOptionalProperties();
+    const optionalNumberProperties = createReconciliationAuditResponseOptionalProperties({ name: 'pageNumber', nullable: false }, { name: 'pageSize', nullable: false }, { name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, );
     const optionalBooleanProperties = createReconciliationAuditResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

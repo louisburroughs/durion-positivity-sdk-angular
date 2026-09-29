@@ -10,17 +10,13 @@
 
 
 /**
- * Request to reverse a match by matchId or by statement line ids
+ * Unmatch an ACCEPTED match; the reason is recorded on the match and in the audit trail
  */
 export interface ReconciliationUnmatchRequest {
     /**
-     * Match group id to reverse
+     * Why the match is undone (at least 10 characters)
      */
-    matchId?: string;
-    /**
-     * Statement line ids whose match group should be reversed
-     */
-    statementLineIds?: Array<string>;
+    reason: string;
 }
 
 function isOptionalReconciliationUnmatchRequestPropertyOfType(
@@ -61,8 +57,8 @@ export function instanceOfReconciliationUnmatchRequest(value: object): value is 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReconciliationUnmatchRequestPropertyNames();
-    const optionalStringProperties = createReconciliationUnmatchRequestOptionalProperties({ name: 'matchId', nullable: false }, );
+    const requiredProperties = createReconciliationUnmatchRequestPropertyNames('reason', );
+    const optionalStringProperties = createReconciliationUnmatchRequestOptionalProperties({ name: 'reason', nullable: false }, );
     const optionalNumberProperties = createReconciliationUnmatchRequestOptionalProperties();
     const optionalBooleanProperties = createReconciliationUnmatchRequestOptionalProperties();
 
