@@ -8,6 +8,10 @@
  * Do not edit the class manually.
  */
 import { BankReconciliationAdjustmentResponse } from './bankReconciliationAdjustmentResponse';
+import { OutstandingItemResponse } from './outstandingItemResponse';
+import { Diagnostics } from './diagnostics';
+import { ClearingAdjustment } from './clearingAdjustment';
+import { Equation } from './equation';
 import { BankReconciliationLineResponse } from './bankReconciliationLineResponse';
 
 
@@ -28,21 +32,39 @@ export interface ReconciliationReportResponse {
      */
     adjustments?: Array<BankReconciliationAdjustmentResponse>;
     /**
+     * Adjustments to clearing: every OTHER adjustment with link, justification, poster and age
+     */
+    adjustmentsToClearing?: Array<ClearingAdjustment>;
+    /**
+     * Unexplained bank transactions from the baseline to the window end
+     */
+    countUnexplainedBank?: number;
+    /**
+     * Unexplained ledger lines from the baseline to the window end
+     */
+    countUnexplainedLedger?: number;
+    /**
      * Reconciliation currency
      */
     currency?: string;
     /**
-     * statementEndingBalance − (glEndingBalance + totalAdjustments); matched lines are already reflected in glEndingBalance
+     * The live difference of E3: adjustedBankBalance − adjustedBookBalance
      */
     difference?: number;
+    equation?: Equation;
     /**
-     * GL ending balance snapshotted at import (opening basis)
+     * Live GL balance at the end of the statement end date
      */
     glEndingBalance?: number;
     /**
      * Number of MATCHED statement lines
      */
     matchedLineCount?: number;
+    openingTerms?: Diagnostics;
+    /**
+     * Outstanding items open at the window end, with their age
+     */
+    outstandingItems?: Array<OutstandingItemResponse>;
     /**
      * Number of UNMATCHED statement lines
      */
@@ -63,6 +85,8 @@ export interface ReconciliationReportResponse {
      * Statement ending balance (closing basis)
      */
     statementEndingBalance?: number;
+    sumUnexplainedBank?: number;
+    sumUnexplainedLedger?: number;
     /**
      * Sum of signed adjustment amounts
      */
@@ -117,7 +141,7 @@ export function instanceOfReconciliationReportResponse(value: object): value is 
 
     const requiredProperties = createReconciliationReportResponsePropertyNames();
     const optionalStringProperties = createReconciliationReportResponseOptionalProperties({ name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'currency', nullable: false }, { name: 'reconciliationId', nullable: false }, { name: 'statementDate', nullable: false }, );
-    const optionalNumberProperties = createReconciliationReportResponseOptionalProperties({ name: 'difference', nullable: false }, { name: 'glEndingBalance', nullable: false }, { name: 'matchedLineCount', nullable: false }, { name: 'outstandingLineCount', nullable: false }, { name: 'statementEndingBalance', nullable: false }, { name: 'totalAdjustments', nullable: false }, { name: 'totalMatched', nullable: false }, { name: 'totalOutstanding', nullable: false }, );
+    const optionalNumberProperties = createReconciliationReportResponseOptionalProperties({ name: 'countUnexplainedBank', nullable: false }, { name: 'countUnexplainedLedger', nullable: false }, { name: 'difference', nullable: false }, { name: 'glEndingBalance', nullable: false }, { name: 'matchedLineCount', nullable: false }, { name: 'outstandingLineCount', nullable: false }, { name: 'statementEndingBalance', nullable: false }, { name: 'sumUnexplainedBank', nullable: false }, { name: 'sumUnexplainedLedger', nullable: false }, { name: 'totalAdjustments', nullable: false }, { name: 'totalMatched', nullable: false }, { name: 'totalOutstanding', nullable: false }, );
     const optionalBooleanProperties = createReconciliationReportResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

@@ -6,6 +6,7 @@ export * from './accountingGL.service';
 export * from './accountingPeriods.service';
 export * from './auditTrail.service';
 export * from './bankAccounts.service';
+export * from './bankImports.service';
 export * from './bankReconciliation.service';
 export * from './bankStatements.service';
 export * from './bankTransactions.service';

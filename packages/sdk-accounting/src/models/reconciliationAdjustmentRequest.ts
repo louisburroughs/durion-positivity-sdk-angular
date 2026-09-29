@@ -10,19 +10,51 @@
 
 
 /**
- * Request to record a reconciliation adjustment (posts a real JE)
+ * Post a reconciliation adjustment (a real journal entry)
  */
 export interface ReconciliationAdjustmentRequest {
     /**
-     * Signed adjustment amount; positive increases the reconciled cash account
+     * Signed amount; positive increases the reconciled cash. Required unless settlesMatchId or bridgesStatementId is set, when the server computes it and a sent value must equal it
      */
-    amount: number;
+    amount?: number;
     /**
-     * Optional description recorded on the adjustment
+     * The UNMATCHED bank transaction this adjustment explains; its cash line is matched to it
+     */
+    bankTransactionId?: string;
+    /**
+     * OTHER only: this reconciliation\'s statement, whose acknowledged gap this bridges
+     */
+    bridgesStatementId?: string;
+    /**
+     * TRANSFER only: the counter bank account (a reconcilable BANK_CASH account)
+     */
+    counterGlAccountId?: string;
+    /**
+     * Description recorded on the adjustment
      */
     description?: string;
     /**
-     * Adjustment type (decision D-6)
+     * Required for OTHER (at least 10 characters)
+     */
+    justification?: string;
+    /**
+     * Post into a CLOSED period; needs accounting:period:override (never a hard-locked one)
+     */
+    overrideJustification?: string;
+    /**
+     * Caller-generated UUIDv7; a replay returns the original with replayed true
+     */
+    requestId: string;
+    /**
+     * OTHER only: the ACCEPTED match whose residual this settles
+     */
+    settlesMatchId?: string;
+    /**
+     * The date to post at when the explaining date\'s period is closed; it must be in an OPEN period
+     */
+    transactionDate?: string;
+    /**
+     * Adjustment type
      */
     type: ReconciliationAdjustmentRequestTypeEnum;
 }
@@ -30,7 +62,8 @@ export enum ReconciliationAdjustmentRequestTypeEnum {
     BankFee = 'BANK_FEE',
     NsfFee = 'NSF_FEE',
     InterestEarned = 'INTEREST_EARNED',
-    Other = 'OTHER'
+    Other = 'OTHER',
+    Transfer = 'TRANSFER'
 };
 
 
@@ -73,8 +106,8 @@ export function instanceOfReconciliationAdjustmentRequest(value: object): value 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReconciliationAdjustmentRequestPropertyNames('amount', 'type', );
-    const optionalStringProperties = createReconciliationAdjustmentRequestOptionalProperties({ name: 'description', nullable: false }, { name: 'type', nullable: false }, );
+    const requiredProperties = createReconciliationAdjustmentRequestPropertyNames('requestId', 'type', );
+    const optionalStringProperties = createReconciliationAdjustmentRequestOptionalProperties({ name: 'bankTransactionId', nullable: false }, { name: 'bridgesStatementId', nullable: false }, { name: 'counterGlAccountId', nullable: false }, { name: 'description', nullable: false }, { name: 'justification', nullable: false }, { name: 'overrideJustification', nullable: false }, { name: 'requestId', nullable: false }, { name: 'settlesMatchId', nullable: false }, { name: 'transactionDate', nullable: false }, { name: 'type', nullable: false }, );
     const optionalNumberProperties = createReconciliationAdjustmentRequestOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createReconciliationAdjustmentRequestOptionalProperties();
 

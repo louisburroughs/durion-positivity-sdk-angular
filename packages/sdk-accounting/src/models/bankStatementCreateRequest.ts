@@ -31,7 +31,19 @@ export interface BankStatementCreateRequest {
      * Caller-generated UUIDv7; a replay with the same payload returns the original statement
      */
     requestId: string;
+    /**
+     * Start an IN_PROGRESS reconciliation of the committed statement in the same transaction; it appears in reconciliations (story S4)
+     */
+    startReconciliation?: boolean;
     statement: BankStatementHeaderRequest;
+    /**
+     * A COMMITTED statement of the same account this corrected statement supersedes (§4.9 path 3): it becomes SUPERSEDED, its rows EXCLUDED (STATEMENT_SUPERSEDED), and a FINALIZED reconciliation of it INVALIDATED; refused while it has an IN_PROGRESS or SUBMITTED reconciliation
+     */
+    supersedesStatementId?: string;
+    /**
+     * Why the statement is superseded (at least 10 characters); required with supersedesStatementId and refused without it
+     */
+    supersessionJustification?: string;
     /**
      * Transactions of the statement, in the order the bank lists them
      */
@@ -77,9 +89,9 @@ export function instanceOfBankStatementCreateRequest(value: object): value is Ba
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBankStatementCreateRequestPropertyNames('glAccountId', 'requestId', 'statement', 'transactions', );
-    const optionalStringProperties = createBankStatementCreateRequestOptionalProperties({ name: 'currency', nullable: false }, { name: 'gapAcknowledgement', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'requestId', nullable: false }, );
+    const optionalStringProperties = createBankStatementCreateRequestOptionalProperties({ name: 'currency', nullable: false }, { name: 'gapAcknowledgement', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'requestId', nullable: false }, { name: 'supersedesStatementId', nullable: false }, { name: 'supersessionJustification', nullable: false }, );
     const optionalNumberProperties = createBankStatementCreateRequestOptionalProperties();
-    const optionalBooleanProperties = createBankStatementCreateRequestOptionalProperties();
+    const optionalBooleanProperties = createBankStatementCreateRequestOptionalProperties({ name: 'startReconciliation', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalBankStatementCreateRequestPropertyOfType(_v, property.name, 'string', property.nullable))
