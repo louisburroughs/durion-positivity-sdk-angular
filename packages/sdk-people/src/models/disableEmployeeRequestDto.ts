@@ -14,7 +14,7 @@
  */
 export interface DisableEmployeeRequestDto {
     /**
-     * End date to apply to assignments when the policy is GRACE_PERIOD
+     * Date the staffing assignments run to when the policy is GRACE_PERIOD; required then, today or later, and ignored for IMMEDIATE
      */
     assignmentEndDate?: string;
     /**
