@@ -14,9 +14,13 @@
  */
 export interface AssignedMechanicInfo {
     /**
-     * Mechanic identifier
+     * The mechanic\'s People-domain person id (ADR-0015 §7 I7) - the same value the request carries as mechanicPersonId. Use this to identify the mechanic across services.
      */
-    mechanicId: string;
+    mechanicPersonId: string;
+    /**
+     * Internal shop-manager mechanic record id (a local surrogate key). Not a person id and not a stable cross-service identifier; do not send it to other services.
+     */
+    mechanicRecordId: string;
     /**
      * Role of the mechanic in the assignment
      */
@@ -67,8 +71,8 @@ export function instanceOfAssignedMechanicInfo(value: object): value is Assigned
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAssignedMechanicInfoPropertyNames('mechanicId', 'role', );
-    const optionalStringProperties = createAssignedMechanicInfoOptionalProperties({ name: 'mechanicId', nullable: false }, { name: 'role', nullable: false }, );
+    const requiredProperties = createAssignedMechanicInfoPropertyNames('mechanicPersonId', 'mechanicRecordId', 'role', );
+    const optionalStringProperties = createAssignedMechanicInfoOptionalProperties({ name: 'mechanicPersonId', nullable: false }, { name: 'mechanicRecordId', nullable: false }, { name: 'role', nullable: false }, );
     const optionalNumberProperties = createAssignedMechanicInfoOptionalProperties();
     const optionalBooleanProperties = createAssignedMechanicInfoOptionalProperties();
 

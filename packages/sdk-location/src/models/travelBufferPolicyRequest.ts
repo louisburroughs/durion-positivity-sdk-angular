@@ -22,11 +22,11 @@ export interface TravelBufferPolicyRequest {
      */
     bufferValue?: number;
     /**
-     * Display name of the travel buffer policy
+     * Display name of the travel buffer policy; unique per tenant, at most 255 characters
      */
     name: string;
     /**
-     * Free-text notes about the policy
+     * Free-text notes about the policy; at most 255 characters
      */
     notes?: string;
 }
