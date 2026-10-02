@@ -20,8 +20,14 @@ export interface LocationTechnicianRosterEntryResponse {
     lastName?: string;
     lastSyncedAt?: string;
     locationId?: string;
-    mechanicId?: string;
-    personId?: string;
+    /**
+     * The mechanic\'s People-domain person id (ADR-0015 §7 I7) - the value createAssignment takes as mechanicPersonId. Use this to identify the mechanic across services.
+     */
+    mechanicPersonId: string;
+    /**
+     * Internal shop-manager mechanic record id (a local surrogate key). Not a person id and not a stable cross-service identifier; do not send it to other services.
+     */
+    mechanicRecordId: string;
     /**
      * PLACEHOLDER: end of the technician\'s shift window on the roster date, as a UTC instant. Derived from the shop location\'s operating hours (its close time in the location\'s timezone), not from the person\'s own schedule, so every technician at the location carries the same value. Null when shiftStatus is CLOSED or UNKNOWN.
      */
@@ -99,8 +105,8 @@ export function instanceOfLocationTechnicianRosterEntryResponse(value: object): 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLocationTechnicianRosterEntryResponsePropertyNames('shiftSource', 'shiftStatus', );
-    const optionalStringProperties = createLocationTechnicianRosterEntryResponseOptionalProperties({ name: 'firstName', nullable: false }, { name: 'hireDate', nullable: false }, { name: 'lastName', nullable: false }, { name: 'lastSyncedAt', nullable: false }, { name: 'locationId', nullable: false }, { name: 'mechanicId', nullable: false }, { name: 'personId', nullable: false }, { name: 'shiftEnd', nullable: false }, { name: 'shiftSource', nullable: false }, { name: 'shiftStart', nullable: false }, { name: 'shiftStatus', nullable: false }, { name: 'status', nullable: false }, { name: 'terminationDate', nullable: false }, );
+    const requiredProperties = createLocationTechnicianRosterEntryResponsePropertyNames('mechanicPersonId', 'mechanicRecordId', 'shiftSource', 'shiftStatus', );
+    const optionalStringProperties = createLocationTechnicianRosterEntryResponseOptionalProperties({ name: 'firstName', nullable: false }, { name: 'hireDate', nullable: false }, { name: 'lastName', nullable: false }, { name: 'lastSyncedAt', nullable: false }, { name: 'locationId', nullable: false }, { name: 'mechanicPersonId', nullable: false }, { name: 'mechanicRecordId', nullable: false }, { name: 'shiftEnd', nullable: false }, { name: 'shiftSource', nullable: false }, { name: 'shiftStart', nullable: false }, { name: 'shiftStatus', nullable: false }, { name: 'status', nullable: false }, { name: 'terminationDate', nullable: false }, );
     const optionalNumberProperties = createLocationTechnicianRosterEntryResponseOptionalProperties({ name: 'shiftMinutes', nullable: false }, );
     const optionalBooleanProperties = createLocationTechnicianRosterEntryResponseOptionalProperties();
 
