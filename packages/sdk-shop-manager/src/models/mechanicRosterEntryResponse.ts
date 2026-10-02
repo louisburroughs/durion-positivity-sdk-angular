@@ -19,8 +19,14 @@ export interface MechanicRosterEntryResponse {
     hireDate?: string;
     lastName?: string;
     lastSyncedAt?: string;
-    mechanicId?: string;
-    personId?: string;
+    /**
+     * The mechanic\'s People-domain person id (ADR-0015 §7 I7) - the value createAssignment takes as mechanicPersonId. Use this to identify the mechanic across services.
+     */
+    mechanicPersonId: string;
+    /**
+     * Internal shop-manager mechanic record id (a local surrogate key). Not a person id and not a stable cross-service identifier; do not send it to other services.
+     */
+    mechanicRecordId: string;
     status?: MechanicRosterEntryResponseStatusEnum;
     terminationDate?: string;
 }
@@ -70,8 +76,8 @@ export function instanceOfMechanicRosterEntryResponse(value: object): value is M
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createMechanicRosterEntryResponsePropertyNames();
-    const optionalStringProperties = createMechanicRosterEntryResponseOptionalProperties({ name: 'firstName', nullable: false }, { name: 'hireDate', nullable: false }, { name: 'lastName', nullable: false }, { name: 'lastSyncedAt', nullable: false }, { name: 'mechanicId', nullable: false }, { name: 'personId', nullable: false }, { name: 'status', nullable: false }, { name: 'terminationDate', nullable: false }, );
+    const requiredProperties = createMechanicRosterEntryResponsePropertyNames('mechanicPersonId', 'mechanicRecordId', );
+    const optionalStringProperties = createMechanicRosterEntryResponseOptionalProperties({ name: 'firstName', nullable: false }, { name: 'hireDate', nullable: false }, { name: 'lastName', nullable: false }, { name: 'lastSyncedAt', nullable: false }, { name: 'mechanicPersonId', nullable: false }, { name: 'mechanicRecordId', nullable: false }, { name: 'status', nullable: false }, { name: 'terminationDate', nullable: false }, );
     const optionalNumberProperties = createMechanicRosterEntryResponseOptionalProperties();
     const optionalBooleanProperties = createMechanicRosterEntryResponseOptionalProperties();
 
