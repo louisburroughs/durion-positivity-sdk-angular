@@ -8,20 +8,29 @@
  * Do not edit the class manually.
  */
 import { IdempotencyOutcomeDescriptor } from './idempotencyOutcomeDescriptor';
+import { FactPostingKeyDescriptor } from './factPostingKeyDescriptor';
 
 
 /**
- * Idempotency mechanism for Kafka-consumed inventory posting facts
+ * Idempotency for Kafka-consumed posting facts: envelope deduplication by eventId, then per-listener posting deduplication by business key
  */
 export interface FactConsumptionIdempotency {
     /**
-     * Dedup mechanism: a re-delivery is matched by its deterministic sourceEventId
+     * Envelope deduplication: a redelivered envelope (same eventId) is short-circuited by processed_events before any work, and writes NO accounting_event row and no outcome
+     */
+    envelopeDeduplication: string;
+    /**
+     * Posting-deduplication mechanism of the journal-entry-posting facts (pos-inventory, pos-invoice, pos-order): a re-emitted fact is matched by its deterministic sourceEventId. Sources that post no journal entry key differently; postingDeduplication lists every key
      */
     mechanism: string;
     /**
      * Every outcome this path can record, derived from IdempotencyOutcome.values() so it cannot drift from the code
      */
     outcomes: Array<IdempotencyOutcomeDescriptor>;
+    /**
+     * Posting deduplication, per listener: the business key a re-emitted fact (new envelope eventId, same business fact) is matched on, and what its row then records
+     */
+    postingDeduplication: Array<FactPostingKeyDescriptor>;
 }
 
 function isOptionalFactConsumptionIdempotencyPropertyOfType(
@@ -62,8 +71,8 @@ export function instanceOfFactConsumptionIdempotency(value: object): value is Fa
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createFactConsumptionIdempotencyPropertyNames('mechanism', 'outcomes', );
-    const optionalStringProperties = createFactConsumptionIdempotencyOptionalProperties({ name: 'mechanism', nullable: false }, );
+    const requiredProperties = createFactConsumptionIdempotencyPropertyNames('envelopeDeduplication', 'mechanism', 'outcomes', 'postingDeduplication', );
+    const optionalStringProperties = createFactConsumptionIdempotencyOptionalProperties({ name: 'envelopeDeduplication', nullable: false }, { name: 'mechanism', nullable: false }, );
     const optionalNumberProperties = createFactConsumptionIdempotencyOptionalProperties();
     const optionalBooleanProperties = createFactConsumptionIdempotencyOptionalProperties();
 
