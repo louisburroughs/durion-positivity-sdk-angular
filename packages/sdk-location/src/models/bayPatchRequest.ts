@@ -50,7 +50,7 @@ export interface BayPatchRequest {
     /**
      * Catalog operation codes this bay type is the only one able to perform (CAP-325 D14). Null leaves the codes unchanged unless bayType actually changes in the same request, in which case they reset to the new type\'s default specialty codes; codes sent alongside a bayType change win, and resending the same bayType does not reset them. An empty list clears the bay to general. No flag records whether the current codes are the type\'s defaults or customised, so a retype always replaces unsent codes. Each value must be an active catalog operationCode; unknown or retired codes are rejected 422.
      */
-    serviceCapabilityCodes?: Array<string>;
+    serviceCapabilityCodes?: Array<string> | null;
     /**
      * Operational status of the bay: ACTIVE, OUT_OF_SERVICE or RETIRED. Going OUT_OF_SERVICE requires outOfServiceReason in this same request or already on the bay; returning to ACTIVE clears outOfServiceReason, outOfServiceNote and expectedReturnAt. DELETE is the usual way to RETIRE a bay; RETIRED here is reversible the same as OUT_OF_SERVICE.
      */
