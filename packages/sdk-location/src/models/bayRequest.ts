@@ -50,7 +50,7 @@ export interface BayRequest {
     /**
      * Catalog operation codes this bay type is the only one able to perform (CAP-325 D14). Omit or send null to apply the bay type\'s default specialty codes; send an empty list for a general bay with no specialty claim. Each value must be an active catalog operationCode (UPPER-DASH, ADR-0059 §3); unknown or retired codes are rejected 422.
      */
-    serviceCapabilityCodes?: Array<string>;
+    serviceCapabilityCodes?: Array<string> | null;
     /**
      * Operational status of the bay: ACTIVE, OUT_OF_SERVICE or RETIRED; defaults to ACTIVE.
      */

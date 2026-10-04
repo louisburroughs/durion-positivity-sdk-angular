@@ -16,7 +16,7 @@ export interface BayTypeDefaultService {
     /**
      * Catalog service name as replicated from pos-catalog; null when the catalog service carries no name
      */
-    name?: string;
+    name?: string | null;
     /**
      * Catalog operation code (UPPER-DASH, ADR-0059)
      */
@@ -62,7 +62,7 @@ export function instanceOfBayTypeDefaultService(value: object): value is BayType
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBayTypeDefaultServicePropertyNames('operationCode', );
-    const optionalStringProperties = createBayTypeDefaultServiceOptionalProperties({ name: 'name', nullable: false }, { name: 'operationCode', nullable: false }, );
+    const optionalStringProperties = createBayTypeDefaultServiceOptionalProperties({ name: 'name', nullable: true }, { name: 'operationCode', nullable: false }, );
     const optionalNumberProperties = createBayTypeDefaultServiceOptionalProperties();
     const optionalBooleanProperties = createBayTypeDefaultServiceOptionalProperties();
 
