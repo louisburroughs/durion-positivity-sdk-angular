@@ -1,5 +1,6 @@
 export * from './bayAPI.service';
 export * from './bayBulkIngestAPI.service';
+export * from './bayTypeAPI.service';
 export * from './locationAPI.service';
 export * from './locationBulkIngestAPI.service';
 export * from './mobileUnitAPI.service';

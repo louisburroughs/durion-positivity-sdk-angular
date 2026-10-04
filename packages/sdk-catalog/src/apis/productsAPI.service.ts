@@ -56,6 +56,8 @@ import { ProductUpdateRequestDto } from '../models/productUpdateRequestDto';
 import { ReplacementOption } from '../models/replacementOption';
 // @ts-ignore
 import { ServiceDto } from '../models/serviceDto';
+// @ts-ignore
+import { ServiceDtoPage } from '../models/serviceDtoPage';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -876,6 +878,105 @@ export class ProductsAPIService extends BaseService {
         return this.httpClient.request<ServiceDto>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List Services Claimable as Capabilities
+     * Returns a page of every catalog service that carries an operation code, ordered by name with id as the tiebreak, each with its id, name, operationCode and operationCategory. Use this tool to fill a capability picker for a bay\&#39;s or mobile unit\&#39;s serviceCapabilityCodes, or to browse which services exist; use searchCatalogServices instead for typeahead by partial name, and getServiceById when the id is known. Preconditions: none. Services without an operation code are omitted because they cannot be claimed; a service has no status, so every service that still exists and has a code is active. pos-location validates capability codes against an eventually consistent replica of this list, so a service created moments ago may still be refused there with 422 until its fact arrives. Required inputs: none; operationCategory narrows to one category, q matches a case-insensitive substring of the name or the operation code, and page and size are optional with size defaulting to 50 and capped at 200. The order is fixed and there is no sort parameter. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty content array when nothing matches, so an empty result is not an error condition, and 400 when operationCategory is not one of the listed values or page or size is out of range.
+     * @endpoint get /v1/products/services
+     * @param operationCategory Only services of this operation category.
+     * @param q Case-insensitive substring of the service name or operation code.
+     * @param page Zero-based page index.
+     * @param size Page size, 1-200.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listClaimableServices(operationCategory?: 'REPAIR' | 'DIAGNOSTIC' | 'MAINTENANCE' | 'TIRE_SERVICE', q?: string, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ServiceDtoPage>;
+    public listClaimableServices(operationCategory?: 'REPAIR' | 'DIAGNOSTIC' | 'MAINTENANCE' | 'TIRE_SERVICE', q?: string, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ServiceDtoPage>>;
+    public listClaimableServices(operationCategory?: 'REPAIR' | 'DIAGNOSTIC' | 'MAINTENANCE' | 'TIRE_SERVICE', q?: string, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ServiceDtoPage>>;
+    public listClaimableServices(operationCategory?: 'REPAIR' | 'DIAGNOSTIC' | 'MAINTENANCE' | 'TIRE_SERVICE', q?: string, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'operationCategory',
+            <any>operationCategory,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'q',
+            <any>q,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/products/services`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ServiceDtoPage>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
