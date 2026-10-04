@@ -4,6 +4,8 @@ export * from './bayCapacityRequest';
 export * from './bayPatchRequest';
 export * from './bayRequest';
 export * from './bayResponse';
+export * from './bayTypeDefaultService';
+export * from './bayTypeResponse';
 export * from './bulkIngestRequestBayBulkIngestRecord';
 export * from './bulkIngestRequestLocationBulkIngestRecord';
 export * from './bulkIngestRequestMobileUnitBulkIngestRecord';

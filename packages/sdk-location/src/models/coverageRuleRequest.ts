@@ -14,13 +14,16 @@ import { DistanceDto } from './distanceDto';
  * Request payload defining a coverage rule for a mobile unit
  */
 export interface CoverageRuleRequest {
+    /**
+     * Maximum service distance covered by the rule, an explicit {value, unit} object (KM or MI); converted at the edge and stored as kilometres (DECISION-LOCATION-028). A bare number is refused. Not yet evaluated by eligibility, since geocoding does not exist.
+     */
     maxDistance?: DistanceDto;
     /**
      * Evaluation priority of the rule (lower is evaluated first)
      */
     priority?: number;
     /**
-     * Type of coverage rule, matched case-insensitively. SERVICE_AREA covers the whole service area; DISTANCE_TIER covers it up to maxDistance, and a unit\'s DISTANCE_TIER rules must be strictly ascending by maxDistance and end with one rule whose maxDistance is null.
+     * Type of coverage rule, matched case-insensitively. SERVICE_AREA covers the whole service area; DISTANCE_TIER covers it up to maxDistance, and a unit\'s DISTANCE_TIER rules must be strictly ascending by maxDistance and end with one rule whose maxDistance is null. Recorded and validated, but ruleType itself is not yet evaluated by eligibility: a DISTANCE_TIER rule matches the same addresses a SERVICE_AREA rule would.
      */
     ruleType: CoverageRuleRequestRuleTypeEnum;
     /**
