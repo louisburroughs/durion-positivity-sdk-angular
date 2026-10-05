@@ -10,21 +10,17 @@
 
 
 /**
- * Request to reprocess a suspended accounting event
+ * Request to reprocess a suspended accounting event. The triggering user is the authenticated caller and is never taken from the body.
  */
 export interface ReprocessEventRequest {
     /**
-     * Specific mapping version to use; defaults to latest when omitted
+     * Specific mapping version (UUID) to use; defaults to latest when omitted
      */
     mappingVersionToUse?: string;
     /**
      * Optional notes about why reprocessing is being triggered
      */
     reprocessingNotes?: string;
-    /**
-     * Identifier of the user triggering the reprocessing (required for audit trail)
-     */
-    triggeredByUserId: string;
 }
 
 function isOptionalReprocessEventRequestPropertyOfType(
@@ -65,8 +61,8 @@ export function instanceOfReprocessEventRequest(value: object): value is Reproce
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReprocessEventRequestPropertyNames('triggeredByUserId', );
-    const optionalStringProperties = createReprocessEventRequestOptionalProperties({ name: 'mappingVersionToUse', nullable: false }, { name: 'reprocessingNotes', nullable: false }, { name: 'triggeredByUserId', nullable: false }, );
+    const requiredProperties = createReprocessEventRequestPropertyNames();
+    const optionalStringProperties = createReprocessEventRequestOptionalProperties({ name: 'mappingVersionToUse', nullable: false }, { name: 'reprocessingNotes', nullable: false }, );
     const optionalNumberProperties = createReprocessEventRequestOptionalProperties();
     const optionalBooleanProperties = createReprocessEventRequestOptionalProperties();
 
