@@ -26,6 +26,10 @@ export interface CustomerDTO {
      */
     firstName?: string;
     /**
+     * House-account kind when this customer is a system house account (CASH_SALE is the tenant\'s walk-in CASH account, which no request can change); null for every ordinary customer. Read-only: a value sent on create or update is ignored.
+     */
+    readonly houseAccount?: CustomerDTOHouseAccountEnum | null;
+    /**
      * Unique identifier of the customer
      */
     id?: string;
@@ -47,6 +51,11 @@ export interface CustomerDTO {
      */
     vehicleVins?: Array<string>;
 }
+export enum CustomerDTOHouseAccountEnum {
+    CashSale = 'CASH_SALE'
+};
+
+
 
 function isOptionalCustomerDTOPropertyOfType(
     value: Record<string, unknown>,
@@ -87,7 +96,7 @@ export function instanceOfCustomerDTO(value: object): value is CustomerDTO {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCustomerDTOPropertyNames();
-    const optionalStringProperties = createCustomerDTOOptionalProperties({ name: 'customerNumber', nullable: false }, { name: 'customerType', nullable: false }, { name: 'firstName', nullable: false }, { name: 'id', nullable: false }, { name: 'lastName', nullable: false }, { name: 'partyId', nullable: false }, { name: 'primaryAddress', nullable: false }, );
+    const optionalStringProperties = createCustomerDTOOptionalProperties({ name: 'customerNumber', nullable: false }, { name: 'customerType', nullable: false }, { name: 'firstName', nullable: false }, { name: 'houseAccount', nullable: true }, { name: 'id', nullable: false }, { name: 'lastName', nullable: false }, { name: 'partyId', nullable: false }, { name: 'primaryAddress', nullable: false }, );
     const optionalNumberProperties = createCustomerDTOOptionalProperties();
     const optionalBooleanProperties = createCustomerDTOOptionalProperties();
 

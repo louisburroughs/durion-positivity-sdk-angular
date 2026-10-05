@@ -47,7 +47,7 @@ export class CRMSegmentsService extends BaseService {
 
     /**
      * Pin Segment Members
-     * Pins parties onto a STATIC segment\&#39;s member list, recording who added them and when; parties already in the segment are silently skipped. Use this tool when curating a hand-picked audience; do not use it on a DYNAMIC segment, whose membership is computed from its predicate by resolveSegment. Preconditions: the segment must exist and be STATIC. Required inputs: segmentId (UUID) as a path parameter and partyIds, a non-empty list of up to 5000 UUIDs; duplicates in the list are collapsed. Emits a CRM_SEGMENT_MEMBERS_ADD event; only new membership rows are written. Returns 404 when the segment does not exist, and 422 when the segment is DYNAMIC.
+     * Pins parties onto a STATIC segment\&#39;s member list, recording who added them and when; parties already in the segment are silently skipped. Use this tool when curating a hand-picked audience; do not use it on a DYNAMIC segment, whose membership is computed from its predicate by resolveSegment. Preconditions: the segment must exist and be STATIC. Required inputs: segmentId (UUID) as a path parameter and partyIds, a non-empty list of up to 5000 UUIDs; duplicates in the list are collapsed. Emits a CRM_SEGMENT_MEMBERS_ADD event; only new membership rows are written. Returns 404 when the segment does not exist, and 422 when the segment is DYNAMIC. Returns 409 HOUSE_ACCOUNT_IMMUTABLE when the target party is the tenant\&#39;s system house account (the CASH walk-in account), which no request can change.
      * @endpoint post /v1/crm/segments/{segmentId}/members
      * @param segmentId
      * @param segmentMembersRequest The party ids to pin onto the static segment\&#39;s member list.
@@ -436,7 +436,7 @@ export class CRMSegmentsService extends BaseService {
 
     /**
      * Unpin Segment Member
-     * Removes one party from a static segment\&#39;s pinned member list. Use this tool when a hand-picked party should leave the audience; do not use deleteSegment, which removes the whole segment and every member with it. Preconditions: none are enforced; removing a party that is not a member, or naming an unknown segment, is a silent no-op. Required inputs: segmentId and partyId (UUIDs) as path parameters; there is no request body. Emits a CRM_SEGMENT_MEMBER_REMOVE event; at most one membership row is deleted. Returns 204 in every authorized call, including when nothing was actually removed.
+     * Removes one party from a static segment\&#39;s pinned member list. Use this tool when a hand-picked party should leave the audience; do not use deleteSegment, which removes the whole segment and every member with it. Preconditions: none are enforced; removing a party that is not a member, or naming an unknown segment, is a silent no-op. Required inputs: segmentId and partyId (UUIDs) as path parameters; there is no request body. Emits a CRM_SEGMENT_MEMBER_REMOVE event; at most one membership row is deleted. Returns 204 in every other authorized call, including when nothing was actually removed. Returns 409 HOUSE_ACCOUNT_IMMUTABLE when the target party is the tenant\&#39;s system house account (the CASH walk-in account), which no request can change.
      * @endpoint delete /v1/crm/segments/{segmentId}/members/{partyId}
      * @param segmentId
      * @param partyId

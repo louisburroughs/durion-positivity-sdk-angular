@@ -27,6 +27,10 @@ export interface PartySummary {
      */
     displayName?: string;
     /**
+     * House-account kind when this party is a system house account (CASH_SALE is the tenant\'s walk-in CASH account, which no request can change); null for every ordinary party. Recognise a house account from this value only, never from a name or customer number.
+     */
+    houseAccount?: PartySummaryHouseAccountEnum | null;
+    /**
      * Legal name of the party
      */
     legalName?: string;
@@ -48,6 +52,11 @@ export interface PartySummary {
      */
     vehicleCount?: number;
 }
+export enum PartySummaryHouseAccountEnum {
+    CashSale = 'CASH_SALE'
+};
+
+
 
 function isOptionalPartySummaryPropertyOfType(
     value: Record<string, unknown>,
@@ -88,7 +97,7 @@ export function instanceOfPartySummary(value: object): value is PartySummary {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPartySummaryPropertyNames('partyId', );
-    const optionalStringProperties = createPartySummaryOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'customerNumber', nullable: false }, { name: 'displayName', nullable: false }, { name: 'legalName', nullable: false }, { name: 'partyId', nullable: false }, { name: 'partyType', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createPartySummaryOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'customerNumber', nullable: false }, { name: 'displayName', nullable: false }, { name: 'houseAccount', nullable: true }, { name: 'legalName', nullable: false }, { name: 'partyId', nullable: false }, { name: 'partyType', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createPartySummaryOptionalProperties({ name: 'vehicleCount', nullable: false }, );
     const optionalBooleanProperties = createPartySummaryOptionalProperties();
 
