@@ -26,6 +26,10 @@ export interface GetPartyResponse {
      */
     displayName?: string;
     /**
+     * House-account kind when this party is a system house account (CASH_SALE is the tenant\'s walk-in CASH account, which no request can change); null or absent for every ordinary party. Recognise a house account from this value only, never from a name or customer number.
+     */
+    houseAccount?: GetPartyResponseHouseAccountEnum | null;
+    /**
      * Legal name of the party
      */
     legalName: string;
@@ -54,6 +58,11 @@ export interface GetPartyResponse {
      */
     taxId?: string;
 }
+export enum GetPartyResponseHouseAccountEnum {
+    CashSale = 'CASH_SALE'
+};
+
+
 
 function isOptionalGetPartyResponsePropertyOfType(
     value: Record<string, unknown>,
@@ -94,7 +103,7 @@ export function instanceOfGetPartyResponse(value: object): value is GetPartyResp
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createGetPartyResponsePropertyNames('createdAt', 'legalName', 'partyId', 'partyType', 'status', );
-    const optionalStringProperties = createGetPartyResponseOptionalProperties({ name: 'billingTermsId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'displayName', nullable: false }, { name: 'legalName', nullable: false }, { name: 'modifiedAt', nullable: false }, { name: 'partyId', nullable: false }, { name: 'partyType', nullable: false }, { name: 'personId', nullable: false }, { name: 'status', nullable: false }, { name: 'taxId', nullable: false }, );
+    const optionalStringProperties = createGetPartyResponseOptionalProperties({ name: 'billingTermsId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'displayName', nullable: false }, { name: 'houseAccount', nullable: true }, { name: 'legalName', nullable: false }, { name: 'modifiedAt', nullable: false }, { name: 'partyId', nullable: false }, { name: 'partyType', nullable: false }, { name: 'personId', nullable: false }, { name: 'status', nullable: false }, { name: 'taxId', nullable: false }, );
     const optionalNumberProperties = createGetPartyResponseOptionalProperties();
     const optionalBooleanProperties = createGetPartyResponseOptionalProperties();
 

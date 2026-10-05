@@ -45,7 +45,7 @@ export class CRMTagsService extends BaseService {
 
     /**
      * Assign Tag To Party
-     * Attaches a catalog tag to a party, recording the assigning user, timestamp, and source. Use this tool when labeling a party; do not use createTag, which adds a new tag to the catalog without attaching it to anyone. Preconditions: the tag must exist and, for a new assignment, be active; the call is idempotent, and re-assigning an already-attached tag returns the existing assignment even when the tag has since been retired. Required inputs: partyId (UUID) as a path parameter and tagId (UUID) in the body; source defaults to MANUAL and accepts MANUAL, CAMPAIGN, IMPORT, or RULE. Emits a CRM_PARTY_TAG_ASSIGN event and publishes a party-tag-changed fact when a new assignment is created. Returns 404 when the tag does not exist, and 422 when the tag is inactive and not already assigned.
+     * Attaches a catalog tag to a party, recording the assigning user, timestamp, and source. Use this tool when labeling a party; do not use createTag, which adds a new tag to the catalog without attaching it to anyone. Preconditions: the tag must exist and, for a new assignment, be active; the call is idempotent, and re-assigning an already-attached tag returns the existing assignment even when the tag has since been retired. Required inputs: partyId (UUID) as a path parameter and tagId (UUID) in the body; source defaults to MANUAL and accepts MANUAL, CAMPAIGN, IMPORT, or RULE. Emits a CRM_PARTY_TAG_ASSIGN event and publishes a party-tag-changed fact when a new assignment is created. Returns 404 when the tag does not exist, and 422 when the tag is inactive and not already assigned. Returns 409 HOUSE_ACCOUNT_IMMUTABLE when the target party is the tenant\&#39;s system house account (the CASH walk-in account), which no request can change.
      * @endpoint post /v1/crm/parties/{partyId}/tags
      * @param partyId
      * @param assignPartyTagRequest The catalog tag to attach to the party and how the assignment originated.
@@ -438,7 +438,7 @@ export class CRMTagsService extends BaseService {
 
     /**
      * Remove Tag From Party
-     * Detaches a tag from a party while leaving the tag itself in the catalog. Use this tool when a label no longer applies to a party; use deleteTag instead to remove the tag from the catalog and every party at once. Preconditions: none; removing a tag that is not assigned is an idempotent no-op. Required inputs: partyId and tagId (UUIDs) as path parameters; there is no request body. Emits a CRM_PARTY_TAG_REMOVE event and publishes a party-tag-changed fact when an assignment was actually removed. Returns 204 in every authorized call, including when nothing was assigned.
+     * Detaches a tag from a party while leaving the tag itself in the catalog. Use this tool when a label no longer applies to a party; use deleteTag instead to remove the tag from the catalog and every party at once. Preconditions: none; removing a tag that is not assigned is an idempotent no-op. Required inputs: partyId and tagId (UUIDs) as path parameters; there is no request body. Emits a CRM_PARTY_TAG_REMOVE event and publishes a party-tag-changed fact when an assignment was actually removed. Returns 204 in every other authorized call, including when nothing was assigned. Returns 409 HOUSE_ACCOUNT_IMMUTABLE when the target party is the tenant\&#39;s system house account (the CASH walk-in account), which no request can change.
      * @endpoint delete /v1/crm/parties/{partyId}/tags/{tagId}
      * @param partyId
      * @param tagId
