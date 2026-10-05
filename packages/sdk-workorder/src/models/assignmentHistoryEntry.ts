@@ -34,9 +34,9 @@ export interface AssignmentHistoryEntry {
      */
     technicianId?: string;
     /**
-     * Technician display name
+     * Technician display name (first and last name only); null when the name has not replicated yet
      */
-    technicianName?: string;
+    technicianName?: string | null;
     /**
      * When the technician was unassigned (null for current assignment)
      */
@@ -82,7 +82,7 @@ export function instanceOfAssignmentHistoryEntry(value: object): value is Assign
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAssignmentHistoryEntryPropertyNames();
-    const optionalStringProperties = createAssignmentHistoryEntryOptionalProperties({ name: 'assignedAt', nullable: false }, { name: 'assignedBy', nullable: false }, { name: 'notes', nullable: false }, { name: 'reason', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'technicianName', nullable: false }, { name: 'unassignedAt', nullable: false }, );
+    const optionalStringProperties = createAssignmentHistoryEntryOptionalProperties({ name: 'assignedAt', nullable: false }, { name: 'assignedBy', nullable: false }, { name: 'notes', nullable: false }, { name: 'reason', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'technicianName', nullable: true }, { name: 'unassignedAt', nullable: false }, );
     const optionalNumberProperties = createAssignmentHistoryEntryOptionalProperties();
     const optionalBooleanProperties = createAssignmentHistoryEntryOptionalProperties();
 
