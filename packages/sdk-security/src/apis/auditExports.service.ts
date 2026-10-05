@@ -40,8 +40,58 @@ export class AuditExportsService extends BaseService {
     }
 
     /**
+     * Download a Completed Audit Export
+     * Downloads the file a COMPLETED audit export job produced, as an attachment in the job\&#39;s format (text/csv or application/json). Use this tool after getAuditExportJob reports COMPLETED; the job\&#39;s downloadUrl is this endpoint\&#39;s gateway path. Preconditions: the caller must hold security:audit:export and the job must belong to the caller\&#39;s tenant. Required inputs: jobId (UUID) as a path parameter. Emits a SECURITY_AUDIT_EXPORT_DOWNLOAD event and changes no state; CSV cells that begin with a formula character are prefixed with a single quote so spreadsheets do not evaluate them. Returns 409 AUDIT_EXPORT_NOT_READY while the job is PENDING, IN_PROGRESS or FAILED, and 404 when the job id is unknown to the caller\&#39;s tenant or the job was purged after the retention period.
+     * @endpoint get /v1/audit/exports/{jobId}/download
+     * @param jobId Export job UUID
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public downloadAuditExport(jobId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/csv', context?: HttpContext, transferCache?: boolean}): Observable<Blob>;
+    public downloadAuditExport(jobId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/csv', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Blob>>;
+    public downloadAuditExport(jobId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/csv', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Blob>>;
+    public downloadAuditExport(jobId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'text/csv', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (jobId === null || jobId === undefined) {
+            throw new Error('Required parameter jobId was null or undefined when calling downloadAuditExport.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json',
+            'text/csv'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let localVarPath = `/v1/audit/exports/${this.configuration.encodeParam({name: "jobId", value: jobId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/download`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: "blob",
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Get Audit Export Job Status
-     * Returns the current status of a previously submitted audit export job, including completion time, download URL, and error message when present. Use this tool to poll a job created by requestAuditExport; do not resubmit the export while a job is still PENDING. Preconditions: the caller must hold security:audit:export and the job must exist in the in-memory store, which is cleared on service restart. Required inputs: jobId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only status projection. Returns 404 when the job id is unknown or the store was cleared by a restart.
+     * Returns the current status of an audit export job of the caller\&#39;s tenant (PENDING, IN_PROGRESS, COMPLETED or FAILED) with its completion time, row count, download URL and error message when present. Use this tool to poll a job created by requestAuditExport; do not resubmit the export while the job is still PENDING or IN_PROGRESS. Preconditions: the caller must hold security:audit:export, and the job must belong to the caller\&#39;s tenant, since another tenant\&#39;s job id answers 404. Required inputs: jobId (UUID) as a path parameter. This is a read-only status projection that emits no events; a job interrupted by a service restart is moved to FAILED by a scheduled sweep once the configured timeout passes, so a poll never waits forever. Returns 404 when the job id is unknown to the caller\&#39;s tenant or the job was purged after the configured retention period (seven days by default).
      * @endpoint get /v1/audit/exports/{jobId}
      * @param jobId Export job UUID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -101,7 +151,7 @@ export class AuditExportsService extends BaseService {
 
     /**
      * Request an Asynchronous Audit Export
-     * Submits an asynchronous audit export job and answers 202 Accepted with the job id and an initial PENDING status. Use this tool for bulk extraction of audit data as a file; use searchAuditEvents instead for interactive paged queries. Preconditions: the caller must hold security:audit:export; jobs are currently held in an in-memory store, so they do not survive a service restart. Required inputs: format (CSV or JSON) and deliveryMode (DOWNLOAD or WEBHOOK); filters is optional and scopes the export with the same criteria as searchAuditEvents. Emits a SECURITY_AUDIT_EXPORT_REQUEST event; execution is deferred, so callers must poll getAuditExportJob for status and the eventual download URL. Returns 400 when format or deliveryMode is missing or not a valid enum value.
+     * Submits an asynchronous audit export job for the caller\&#39;s tenant and answers 202 Accepted with the job id and an initial PENDING status. Use this tool for bulk extraction of audit data as a file; use searchAuditEvents instead for interactive paged queries. Preconditions: the caller must hold security:audit:export; jobs are persisted per tenant, run in the background once the request commits, and are deleted with their file after the configured retention period. Required inputs: format (CSV or JSON) and deliveryMode, which must be DOWNLOAD; filters is optional and scopes the export with the same criteria as searchAuditEvents. Emits a SECURITY_AUDIT_EXPORT_REQUEST event; poll getAuditExportJob until the job is COMPLETED, then fetch its downloadUrl with downloadAuditExport, or FAILED, where errorMessage says why (for example more matching events than the configured row limit). Returns 400 when format or deliveryMode is missing or invalid or fromDate is not before toDate, and 400 AUDIT_EXPORT_WEBHOOK_UNSUPPORTED for WEBHOOK delivery, which has no configured destination yet.
      * @endpoint post /v1/audit/exports
      * @param auditExportRequest Format, delivery mode, and optional filter scope of the export job.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

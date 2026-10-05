@@ -18,13 +18,17 @@ export interface AuditExportJobResponse {
      */
     completedAt?: string;
     /**
-     * Pre-signed download URL (null until COMPLETED)
+     * Gateway-relative path that downloads the export file with the same security:audit:export authority (null until COMPLETED)
      */
     downloadUrl?: string;
     /**
      * Error message when status is FAILED
      */
     errorMessage?: string;
+    /**
+     * Output format of the export file
+     */
+    format: AuditExportJobResponseFormatEnum;
     /**
      * Export job UUID
      */
@@ -34,10 +38,18 @@ export interface AuditExportJobResponse {
      */
     requestedAt: string;
     /**
-     * Current status of the export job
+     * Number of audit events in the export file (null until COMPLETED)
+     */
+    rowCount?: number;
+    /**
+     * Current status of the export job: PENDING (queued), IN_PROGRESS (running), COMPLETED (file ready to download) or FAILED (see errorMessage)
      */
     status: AuditExportJobResponseStatusEnum;
 }
+export enum AuditExportJobResponseFormatEnum {
+    Csv = 'CSV',
+    Json = 'JSON'
+};
 export enum AuditExportJobResponseStatusEnum {
     Pending = 'PENDING',
     InProgress = 'IN_PROGRESS',
@@ -85,9 +97,9 @@ export function instanceOfAuditExportJobResponse(value: object): value is AuditE
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAuditExportJobResponsePropertyNames('jobId', 'requestedAt', 'status', );
-    const optionalStringProperties = createAuditExportJobResponseOptionalProperties({ name: 'completedAt', nullable: false }, { name: 'downloadUrl', nullable: false }, { name: 'errorMessage', nullable: false }, { name: 'jobId', nullable: false }, { name: 'requestedAt', nullable: false }, { name: 'status', nullable: false }, );
-    const optionalNumberProperties = createAuditExportJobResponseOptionalProperties();
+    const requiredProperties = createAuditExportJobResponsePropertyNames('format', 'jobId', 'requestedAt', 'status', );
+    const optionalStringProperties = createAuditExportJobResponseOptionalProperties({ name: 'completedAt', nullable: false }, { name: 'downloadUrl', nullable: false }, { name: 'errorMessage', nullable: false }, { name: 'format', nullable: false }, { name: 'jobId', nullable: false }, { name: 'requestedAt', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createAuditExportJobResponseOptionalProperties({ name: 'rowCount', nullable: false }, );
     const optionalBooleanProperties = createAuditExportJobResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

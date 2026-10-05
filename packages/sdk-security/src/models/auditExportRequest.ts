@@ -15,7 +15,7 @@ import { AuditEventSearchFilter } from './auditEventSearchFilter';
  */
 export interface AuditExportRequest {
     /**
-     * Delivery mode for the exported file
+     * Delivery mode for the exported file; only DOWNLOAD is accepted, WEBHOOK answers 400 AUDIT_EXPORT_WEBHOOK_UNSUPPORTED until a per-tenant webhook destination exists
      */
     deliveryMode: AuditExportRequestDeliveryModeEnum;
     filters?: AuditEventSearchFilter;
