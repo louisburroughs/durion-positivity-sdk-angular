@@ -27,7 +27,7 @@ export interface WorkorderDetailResponse {
     /**
      * Display name of the assigned technician (first and last name only, no contact details), resolved from the people replica so TECHNICIAN and SERVICE_ADVISOR callers can show it without a people permission. Null when nobody is assigned or the name has not replicated yet.
      */
-    assignedTechnicianName?: string;
+    assignedTechnicianName?: string | null;
     capabilities: WorkorderCapabilities;
     /**
      * Creation timestamp
@@ -171,7 +171,7 @@ export function instanceOfWorkorderDetailResponse(value: object): value is Worko
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkorderDetailResponsePropertyNames('capabilities', 'createdAt', 'createdBy', 'customerId', 'status', 'vehicleId', 'workorderId', );
-    const optionalStringProperties = createWorkorderDetailResponseOptionalProperties({ name: 'assignedTechnicianId', nullable: false }, { name: 'assignedTechnicianName', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'customerId', nullable: false }, { name: 'customerName', nullable: true }, { name: 'isCompleted', nullable: false }, { name: 'isInProgress', nullable: false }, { name: 'isStarted', nullable: false }, { name: 'startedAt', nullable: false }, { name: 'status', nullable: false }, { name: 'vehicleDescription', nullable: true }, { name: 'vehicleId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderNumber', nullable: false }, );
+    const optionalStringProperties = createWorkorderDetailResponseOptionalProperties({ name: 'assignedTechnicianId', nullable: false }, { name: 'assignedTechnicianName', nullable: true }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'customerId', nullable: false }, { name: 'customerName', nullable: true }, { name: 'isCompleted', nullable: false }, { name: 'isInProgress', nullable: false }, { name: 'isStarted', nullable: false }, { name: 'startedAt', nullable: false }, { name: 'status', nullable: false }, { name: 'vehicleDescription', nullable: true }, { name: 'vehicleId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderNumber', nullable: false }, );
     const optionalNumberProperties = createWorkorderDetailResponseOptionalProperties({ name: 'actualLaborHours', nullable: false }, { name: 'estimatedLaborHours', nullable: false }, { name: 'estimatedTotal', nullable: false }, { name: 'laborTotal', nullable: false }, { name: 'laborVarianceHours', nullable: false }, { name: 'laborVariancePct', nullable: false }, { name: 'partsTotal', nullable: false }, { name: 'taxTotal', nullable: false }, );
     const optionalBooleanProperties = createWorkorderDetailResponseOptionalProperties();
 

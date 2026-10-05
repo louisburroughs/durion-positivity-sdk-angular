@@ -43,9 +43,9 @@ export interface TechnicianAssignmentResponse {
      */
     previousTechnicianId?: string;
     /**
-     * Previous technician name if this was a reassignment
+     * Previous technician name if this was a reassignment; null otherwise or when the name has not replicated yet
      */
-    previousTechnicianName?: string;
+    previousTechnicianName?: string | null;
     /**
      * When technician was reassigned
      */
@@ -71,9 +71,9 @@ export interface TechnicianAssignmentResponse {
      */
     technicianId?: string;
     /**
-     * Technician display name
+     * Technician display name (first and last name only); null when the name has not replicated yet
      */
-    technicianName?: string;
+    technicianName?: string | null;
     /**
      * Work order ID
      */
@@ -119,7 +119,7 @@ export function instanceOfTechnicianAssignmentResponse(value: object): value is 
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTechnicianAssignmentResponsePropertyNames();
-    const optionalStringProperties = createTechnicianAssignmentResponseOptionalProperties({ name: 'assignedAt', nullable: false }, { name: 'assignedBy', nullable: false }, { name: 'currentStatus', nullable: false }, { name: 'message', nullable: false }, { name: 'notes', nullable: false }, { name: 'previousTechnicianId', nullable: false }, { name: 'previousTechnicianName', nullable: false }, { name: 'reassignedAt', nullable: false }, { name: 'reassignedBy', nullable: false }, { name: 'reassignmentReason', nullable: false }, { name: 'status', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'technicianName', nullable: false }, { name: 'workorderId', nullable: false }, );
+    const optionalStringProperties = createTechnicianAssignmentResponseOptionalProperties({ name: 'assignedAt', nullable: false }, { name: 'assignedBy', nullable: false }, { name: 'currentStatus', nullable: false }, { name: 'message', nullable: false }, { name: 'notes', nullable: false }, { name: 'previousTechnicianId', nullable: false }, { name: 'previousTechnicianName', nullable: true }, { name: 'reassignedAt', nullable: false }, { name: 'reassignedBy', nullable: false }, { name: 'reassignmentReason', nullable: false }, { name: 'status', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'technicianName', nullable: true }, { name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createTechnicianAssignmentResponseOptionalProperties();
     const optionalBooleanProperties = createTechnicianAssignmentResponseOptionalProperties();
 
