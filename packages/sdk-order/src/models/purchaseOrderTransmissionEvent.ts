@@ -22,7 +22,7 @@ export interface PurchaseOrderTransmissionEvent {
      */
     estimatedDeliveryDate?: string;
     /**
-     * CONFIRMED, REJECTED, STATUS_CHANGED or REVIEW_REQUIRED. The last records that the transmission stopped and needs a person, not a vendor answer.
+     * CONFIRMED, REJECTED, STATUS_CHANGED, REVIEW_REQUIRED or NOT_DISPATCHED. REVIEW_REQUIRED records that the transmission stopped and needs a person, not a vendor answer. NOT_DISPATCHED records that the vendor is not set up for electronic ordering and has not received the order.
      */
     eventType?: string;
     /**
@@ -34,7 +34,7 @@ export interface PurchaseOrderTransmissionEvent {
      */
     recordedAt?: string;
     /**
-     * The vendor-reported status on a status change, or the rejection reason code on a rejection; null on a confirmation or review escalation.
+     * The vendor-reported status on a status change, or the rejection reason code on a rejection or SUPPLIER_NOT_CONFIGURED on a not-dispatched notice; null on a confirmation or review escalation.
      */
     status?: string;
     /**
