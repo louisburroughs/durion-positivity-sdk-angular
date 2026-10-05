@@ -582,23 +582,20 @@ export class AccountingEventsService extends BaseService {
 
     /**
      * Reprocess Suspended Event
-     * Reprocesses a SUSPENDED accounting event after a mapping or rule correction, recording an audited reprocessing attempt with the triggering user. Use this tool once the underlying mapping gap is fixed; do not use retryAccountingEvent, which is the unaudited retry for transient failures. Preconditions: the event must exist and be SUSPENDED; an event already PROCESSED is rejected to preserve idempotency. A fact held for its currency (failureReasonCode CURRENCY_NOT_SUPPORTED, ADR-0067 PC-9) is released here too; while its currency is still not the ledger\&#39;s it stays SUSPENDED with that reason and nothing is posted. Required inputs: eventId (UUID) as a path parameter and triggeredByUserId in the body; mappingVersionToUse and reprocessingNotes are optional. Emits an ACCOUNTING_EVENT_REPROCESS event; a successful synchronous outcome returns 200 with status PROCESSED while 202 means processing continues. Returns 404 EVENT_NOT_FOUND when the event does not exist, 409 when it is already PROCESSED, and 400 when the request is invalid.
+     * Reprocesses a SUSPENDED accounting event after a mapping or rule correction, recording an audited reprocessing attempt with the authenticated caller as the triggering user. Use this tool once the underlying mapping gap is fixed; do not use retryAccountingEvent, which is the unaudited retry for transient failures. Preconditions: the event must exist and be SUSPENDED; an event already PROCESSED is rejected to preserve idempotency. A fact held for its currency (failureReasonCode CURRENCY_NOT_SUPPORTED, ADR-0067 PC-9) is released here too; while its currency is still not the ledger\&#39;s it stays SUSPENDED with that reason and nothing is posted. Required inputs: eventId (UUID) as a path parameter; the body is optional and may carry mappingVersionToUse (a UUID) and reprocessingNotes. The triggering user is the authenticated caller; any user field in the body is ignored. Emits an ACCOUNTING_EVENT_REPROCESS event; a successful synchronous outcome returns 200 with status PROCESSED while 202 means processing continues. Returns 404 EVENT_NOT_FOUND when the event does not exist, 409 when it is already PROCESSED, and 400 when the request is invalid.
      * @endpoint post /v1/accounting/events/{eventId}/reprocess
      * @param eventId Event identifier
-     * @param reprocessEventRequest Audited reprocessing trigger with optional mapping version pin and notes.
+     * @param reprocessEventRequest Audited reprocessing trigger with optional mapping version pin and notes. May be omitted.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public reprocessSuspendedEvent(eventId: string, reprocessEventRequest: ReprocessEventRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AccountingEventResponse>;
-    public reprocessSuspendedEvent(eventId: string, reprocessEventRequest: ReprocessEventRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AccountingEventResponse>>;
-    public reprocessSuspendedEvent(eventId: string, reprocessEventRequest: ReprocessEventRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AccountingEventResponse>>;
-    public reprocessSuspendedEvent(eventId: string, reprocessEventRequest: ReprocessEventRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public reprocessSuspendedEvent(eventId: string, reprocessEventRequest?: ReprocessEventRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AccountingEventResponse>;
+    public reprocessSuspendedEvent(eventId: string, reprocessEventRequest?: ReprocessEventRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AccountingEventResponse>>;
+    public reprocessSuspendedEvent(eventId: string, reprocessEventRequest?: ReprocessEventRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AccountingEventResponse>>;
+    public reprocessSuspendedEvent(eventId: string, reprocessEventRequest?: ReprocessEventRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (eventId === null || eventId === undefined) {
             throw new Error('Required parameter eventId was null or undefined when calling reprocessSuspendedEvent.');
-        }
-        if (reprocessEventRequest === null || reprocessEventRequest === undefined) {
-            throw new Error('Required parameter reprocessEventRequest was null or undefined when calling reprocessSuspendedEvent.');
         }
 
         let localVarHeaders = this.defaultHeaders;

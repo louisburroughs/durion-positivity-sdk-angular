@@ -14,6 +14,10 @@
  */
 export interface CrossDockRequest {
     /**
+     * Optional idempotency key, the body fallback for the Idempotency-Key header (the header wins; both present and different is a 400). A retry with the same key and the same payload posts nothing and returns the original response; the same key with a different payload is a 409 IDEMPOTENCY_CONFLICT. Generated server-side when absent, in which case a retry is not recognised
+     */
+    idempotencyKey?: string;
+    /**
      * Lot or batch number of the cross-docked stock. Required (422 LOT_NUMBER_REQUIRED) when the product is LOT-tracked (falls back to the lot number already keyed on the receiving line); the lot is found-or-created like any receipt and stamped on BOTH paired ledger entries. Ignored for untracked products
      */
     lotNumber?: string;
@@ -74,7 +78,7 @@ export function instanceOfCrossDockRequest(value: object): value is CrossDockReq
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCrossDockRequestPropertyNames('quantity', 'workorderId', 'workorderLineId', );
-    const optionalStringProperties = createCrossDockRequestOptionalProperties({ name: 'lotNumber', nullable: false }, { name: 'notes', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderLineId', nullable: false }, );
+    const optionalStringProperties = createCrossDockRequestOptionalProperties({ name: 'idempotencyKey', nullable: false }, { name: 'lotNumber', nullable: false }, { name: 'notes', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderLineId', nullable: false }, );
     const optionalNumberProperties = createCrossDockRequestOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createCrossDockRequestOptionalProperties();
 

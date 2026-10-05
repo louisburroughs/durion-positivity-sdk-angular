@@ -18,9 +18,9 @@ export interface MakeResponse {
      */
     id: string;
     /**
-     * Manufacturer identifier for this make
+     * Identifiers of every manufacturer this make is linked to, sorted. A make is a brand and one vPIC make can be built by several manufacturers, so it appears under each of them with this same id.
      */
-    manufacturerId?: string;
+    manufacturerIds: Array<string>;
     /**
      * Make name
      */
@@ -65,8 +65,8 @@ export function instanceOfMakeResponse(value: object): value is MakeResponse {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createMakeResponsePropertyNames('id', 'name', );
-    const optionalStringProperties = createMakeResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'manufacturerId', nullable: false }, { name: 'name', nullable: false }, );
+    const requiredProperties = createMakeResponsePropertyNames('id', 'manufacturerIds', 'name', );
+    const optionalStringProperties = createMakeResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: false }, );
     const optionalNumberProperties = createMakeResponseOptionalProperties();
     const optionalBooleanProperties = createMakeResponseOptionalProperties();
 
