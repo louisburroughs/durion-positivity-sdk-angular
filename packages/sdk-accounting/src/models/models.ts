@@ -18,6 +18,8 @@ export * from './apiError';
 export * from './applicationDetail';
 export * from './auditTrailResponse';
 export * from './autoMatchResponse';
+export * from './automaticPaymentApplicationRow';
+export * from './automaticPaymentApplicationsPage';
 export * from './balanceSheetReport';
 export * from './bankAccountListResponse';
 export * from './bankAccountProfileRequest';

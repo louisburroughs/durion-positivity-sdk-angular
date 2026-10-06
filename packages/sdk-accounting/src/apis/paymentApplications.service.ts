@@ -19,6 +19,8 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 // @ts-ignore
 import { ApiError } from '../models/apiError';
 // @ts-ignore
+import { AutomaticPaymentApplicationsPage } from '../models/automaticPaymentApplicationsPage';
+// @ts-ignore
 import { CustomerOpenInvoicesPage } from '../models/customerOpenInvoicesPage';
 // @ts-ignore
 import { PagePaymentApplicationListRow } from '../models/pagePaymentApplicationListRow';
@@ -189,6 +191,98 @@ export class PaymentApplicationsService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: remainderCreditRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List Payment Applications Made Automatically
+     * Lists the payment applications made automatically since an instant, newest first: a settled payment applied to the invoice it was taken against, or an INVOICE_PAYMENT event applied to its invoice, each with the invoice number, the customer\&#39;s name and any credit kept. Use this tool to review what was matched without a person and to undo one with reversePaymentApplication; use listUnappliedPayments instead for payments still waiting to be matched. Preconditions: the caller needs accounting:payment:apply authority; UNDO is offered only to holders of accounting:payment:reverse and only while the application is not reversed. Required inputs: since (ISO-8601 instant, at most 31 days back); page (0 or more) and size (1 to 100, default 50) are optional query parameters. Emits an ACCOUNTING_PAYMENT_APPLICATION_AUTOMATIC_LIST_VIEW event and changes no state; totalElements counts every automatic application since the instant, reversed ones included. Returns 400 VALIDATION_ERROR when since is missing, unparsable or more than 31 days back or size is outside 1 to 100, and 403 when the caller lacks the authority.
+     * @endpoint get /v1/accounting/payment-applications/automatic
+     * @param since Only applications made at or after this instant (ISO-8601), at most 31 days back
+     * @param page Page index (0-based)
+     * @param size Page size, 1 to 100
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listAutomaticPaymentApplications(since: string, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AutomaticPaymentApplicationsPage>;
+    public listAutomaticPaymentApplications(since: string, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AutomaticPaymentApplicationsPage>>;
+    public listAutomaticPaymentApplications(since: string, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AutomaticPaymentApplicationsPage>>;
+    public listAutomaticPaymentApplications(since: string, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (since === null || since === undefined) {
+            throw new Error('Required parameter since was null or undefined when calling listAutomaticPaymentApplications.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'since',
+            <any>since,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/payment-applications/automatic`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<AutomaticPaymentApplicationsPage>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
