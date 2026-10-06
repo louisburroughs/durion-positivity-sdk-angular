@@ -14,9 +14,9 @@
  */
 export interface AgingSummary {
     /**
-     * Total outstanding 0-30 days past due (includes not-yet-due items)
+     * Total outstanding 1-30 days past due
      */
-    current: number;
+    days1To30: number;
     /**
      * Total outstanding 31-60 days past due
      */
@@ -30,7 +30,15 @@ export interface AgingSummary {
      */
     days90Plus: number;
     /**
-     * Grand total outstanding across all buckets
+     * Total outstanding not yet due: due today or later (due today is not overdue)
+     */
+    notYetDue: number;
+    /**
+     * Total overdue: the sum of days1To30, days31To60, days61To90 and days90Plus
+     */
+    overdue: number;
+    /**
+     * Grand total outstanding: notYetDue + overdue
      */
     totalOutstanding: number;
 }
@@ -73,9 +81,9 @@ export function instanceOfAgingSummary(value: object): value is AgingSummary {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAgingSummaryPropertyNames('current', 'days31To60', 'days61To90', 'days90Plus', 'totalOutstanding', );
+    const requiredProperties = createAgingSummaryPropertyNames('days1To30', 'days31To60', 'days61To90', 'days90Plus', 'notYetDue', 'overdue', 'totalOutstanding', );
     const optionalStringProperties = createAgingSummaryOptionalProperties();
-    const optionalNumberProperties = createAgingSummaryOptionalProperties({ name: 'current', nullable: false }, { name: 'days31To60', nullable: false }, { name: 'days61To90', nullable: false }, { name: 'days90Plus', nullable: false }, { name: 'totalOutstanding', nullable: false }, );
+    const optionalNumberProperties = createAgingSummaryOptionalProperties({ name: 'days1To30', nullable: false }, { name: 'days31To60', nullable: false }, { name: 'days61To90', nullable: false }, { name: 'days90Plus', nullable: false }, { name: 'notYetDue', nullable: false }, { name: 'overdue', nullable: false }, { name: 'totalOutstanding', nullable: false }, );
     const optionalBooleanProperties = createAgingSummaryOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

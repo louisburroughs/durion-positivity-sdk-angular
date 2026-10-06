@@ -26,6 +26,10 @@ import { PaymentApplicationRequest } from '../models/paymentApplicationRequest';
 import { PaymentApplicationResponse } from '../models/paymentApplicationResponse';
 // @ts-ignore
 import { PaymentApplicationReversalRequest } from '../models/paymentApplicationReversalRequest';
+// @ts-ignore
+import { RemainderCreditRequest } from '../models/remainderCreditRequest';
+// @ts-ignore
+import { RemainderCreditResponse } from '../models/remainderCreditResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -107,6 +111,80 @@ export class PaymentApplicationsService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: paymentApplicationRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Keep Payment Remainder As Customer Credit
+     * Converts the whole unapplied remainder of a receivable payment into a customer credit in one transaction: the credit is created, the Dr Undeposited Funds / Cr Customer Credit Liability issuance is enqueued, and the payment becomes FULLY_APPLIED. Use this tool after applyPayment when the customer keeps the leftover on account, or when the credit will be refunded next with refundCustomerCredit; do not use applyCustomerCredit, which draws down a credit that already exists. Preconditions: the payment must be AVAILABLE, in the ledger currency, and still carry exactly expectedAmount unapplied; a replay with the same requestId returns the credit it issued and writes nothing. Required inputs: paymentId (UUID) as a path parameter, requestId (max 100 chars, the idempotency key) and expectedAmount (the unapplied amount the caller read, min 0.01). Emits an ACCOUNTING_PAYMENT_REMAINDER_CREDIT event; the credit\&#39;s creator and the issuance entry\&#39;s actor come from the security context. Returns 201 with the credit, 404 PAYMENT_NOT_FOUND when the payment does not exist, 409 PAYMENT_NOT_AVAILABLE when it is already fully applied, 409 IDEMPOTENCY_CONFLICT when the requestId was used on another payment, 409 OPTIMISTIC_LOCK after a second concurrent update, 422 PAYMENT_REMAINDER_CHANGED when expectedAmount no longer matches (re-read the payment), and 422 CURRENCY_NOT_SUPPORTED for a payment in another currency.
+     * @endpoint post /v1/accounting/payments/{paymentId}/remainder-credit
+     * @param paymentId Payment identifier
+     * @param remainderCreditRequest Idempotency key and the unapplied amount the caller expects to credit.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public creditPaymentRemainder(paymentId: string, remainderCreditRequest: RemainderCreditRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RemainderCreditResponse>;
+    public creditPaymentRemainder(paymentId: string, remainderCreditRequest: RemainderCreditRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RemainderCreditResponse>>;
+    public creditPaymentRemainder(paymentId: string, remainderCreditRequest: RemainderCreditRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RemainderCreditResponse>>;
+    public creditPaymentRemainder(paymentId: string, remainderCreditRequest: RemainderCreditRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (paymentId === null || paymentId === undefined) {
+            throw new Error('Required parameter paymentId was null or undefined when calling creditPaymentRemainder.');
+        }
+        if (remainderCreditRequest === null || remainderCreditRequest === undefined) {
+            throw new Error('Required parameter remainderCreditRequest was null or undefined when calling creditPaymentRemainder.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/payments/${this.configuration.encodeParam({name: "paymentId", value: paymentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/remainder-credit`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<RemainderCreditResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: remainderCreditRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

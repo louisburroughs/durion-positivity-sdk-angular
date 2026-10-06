@@ -30,10 +30,6 @@ export interface ReportExportRequest {
      */
     format: ReportExportRequestFormatEnum;
     /**
-     * Organization UUID to scope the export
-     */
-    organizationId: string;
-    /**
      * Report type key. Renderable types: TAX_LIABILITY, INCOME_STATEMENT, BALANCE_SHEET, TRIAL_BALANCE, GENERAL_LEDGER, AGED_RECEIVABLES, AGED_PAYABLES.
      */
     reportType: string;
@@ -89,8 +85,8 @@ export function instanceOfReportExportRequest(value: object): value is ReportExp
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReportExportRequestPropertyNames('endDate', 'format', 'organizationId', 'reportType', 'startDate', );
-    const optionalStringProperties = createReportExportRequestOptionalProperties({ name: 'accountId', nullable: false }, { name: 'endDate', nullable: false }, { name: 'filename', nullable: false }, { name: 'format', nullable: false }, { name: 'organizationId', nullable: false }, { name: 'reportType', nullable: false }, { name: 'startDate', nullable: false }, );
+    const requiredProperties = createReportExportRequestPropertyNames('endDate', 'format', 'reportType', 'startDate', );
+    const optionalStringProperties = createReportExportRequestOptionalProperties({ name: 'accountId', nullable: false }, { name: 'endDate', nullable: false }, { name: 'filename', nullable: false }, { name: 'format', nullable: false }, { name: 'reportType', nullable: false }, { name: 'startDate', nullable: false }, );
     const optionalNumberProperties = createReportExportRequestOptionalProperties();
     const optionalBooleanProperties = createReportExportRequestOptionalProperties();
 

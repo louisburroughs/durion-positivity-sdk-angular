@@ -22,18 +22,43 @@ export interface GLAccountBalanceResponse {
      */
     accountName?: string;
     /**
+     * Type of the GL account
+     */
+    accountType: GLAccountBalanceResponseAccountTypeEnum;
+    /**
      * Point in time the balance is computed as of (ISO 8601)
      */
     asOfDate: string;
     /**
-     * Balance of the account
+     * Balance of the account, debits minus credits
      */
     balance: number;
     /**
      * Unique identifier of the GL account
      */
     glAccountId: string;
+    /**
+     * Balance on the account\'s normal side (positive when the account holds its usual balance)
+     */
+    normalBalance: number;
+    /**
+     * Normal side of the account: DEBIT for assets and expenses, CREDIT for liabilities, equity and revenue
+     */
+    normalSide: GLAccountBalanceResponseNormalSideEnum;
 }
+export enum GLAccountBalanceResponseAccountTypeEnum {
+    Asset = 'ASSET',
+    Liability = 'LIABILITY',
+    Equity = 'EQUITY',
+    Revenue = 'REVENUE',
+    Expense = 'EXPENSE'
+};
+export enum GLAccountBalanceResponseNormalSideEnum {
+    Debit = 'DEBIT',
+    Credit = 'CREDIT'
+};
+
+
 
 function isOptionalGLAccountBalanceResponsePropertyOfType(
     value: Record<string, unknown>,
@@ -73,9 +98,9 @@ export function instanceOfGLAccountBalanceResponse(value: object): value is GLAc
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createGLAccountBalanceResponsePropertyNames('asOfDate', 'balance', 'glAccountId', );
-    const optionalStringProperties = createGLAccountBalanceResponseOptionalProperties({ name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'asOfDate', nullable: false }, { name: 'glAccountId', nullable: false }, );
-    const optionalNumberProperties = createGLAccountBalanceResponseOptionalProperties({ name: 'balance', nullable: false }, );
+    const requiredProperties = createGLAccountBalanceResponsePropertyNames('accountType', 'asOfDate', 'balance', 'glAccountId', 'normalBalance', 'normalSide', );
+    const optionalStringProperties = createGLAccountBalanceResponseOptionalProperties({ name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'accountType', nullable: false }, { name: 'asOfDate', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'normalSide', nullable: false }, );
+    const optionalNumberProperties = createGLAccountBalanceResponseOptionalProperties({ name: 'balance', nullable: false }, { name: 'normalBalance', nullable: false }, );
     const optionalBooleanProperties = createGLAccountBalanceResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
