@@ -14,6 +14,10 @@
  */
 export interface AccountDrilldownResponse {
     /**
+     * Chart-of-accounts code of the GL account
+     */
+    accountCode: string;
+    /**
      * Identifier of the GL account
      */
     accountId: string;
@@ -22,7 +26,11 @@ export interface AccountDrilldownResponse {
      */
     accountName: string;
     /**
-     * Account balance for the period (sum of POSTED journal lines within the date range)
+     * Type of the GL account
+     */
+    accountType?: AccountDrilldownResponseAccountTypeEnum;
+    /**
+     * The amount this account contributes to the line (as-of balance at endDate for a balance-sheet line, period movement for an income-statement line); rows add up to the line
      */
     balance: number;
     /**
@@ -30,6 +38,15 @@ export interface AccountDrilldownResponse {
      */
     statementLineCode: string;
 }
+export enum AccountDrilldownResponseAccountTypeEnum {
+    Asset = 'ASSET',
+    Liability = 'LIABILITY',
+    Equity = 'EQUITY',
+    Revenue = 'REVENUE',
+    Expense = 'EXPENSE'
+};
+
+
 
 function isOptionalAccountDrilldownResponsePropertyOfType(
     value: Record<string, unknown>,
@@ -69,8 +86,8 @@ export function instanceOfAccountDrilldownResponse(value: object): value is Acco
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAccountDrilldownResponsePropertyNames('accountId', 'accountName', 'balance', 'statementLineCode', );
-    const optionalStringProperties = createAccountDrilldownResponseOptionalProperties({ name: 'accountId', nullable: false }, { name: 'accountName', nullable: false }, { name: 'statementLineCode', nullable: false }, );
+    const requiredProperties = createAccountDrilldownResponsePropertyNames('accountCode', 'accountId', 'accountName', 'balance', 'statementLineCode', );
+    const optionalStringProperties = createAccountDrilldownResponseOptionalProperties({ name: 'accountCode', nullable: false }, { name: 'accountId', nullable: false }, { name: 'accountName', nullable: false }, { name: 'accountType', nullable: false }, { name: 'statementLineCode', nullable: false }, );
     const optionalNumberProperties = createAccountDrilldownResponseOptionalProperties({ name: 'balance', nullable: false }, );
     const optionalBooleanProperties = createAccountDrilldownResponseOptionalProperties();
 

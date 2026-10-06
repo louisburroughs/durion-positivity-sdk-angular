@@ -27,7 +27,19 @@ export interface AgedPayablesReport {
      * Per-vendor aging rows ordered by vendor name; empty when no open payables exist
      */
     rows: Array<AgedPayablesRow>;
+    /**
+     * totals.totalOutstanding + unapproved
+     */
+    totalIncludingUnapproved: number;
     totals: AgingSummary;
+    /**
+     * Open amount on bills not yet approved (PENDING_RECEIPT_MATCH, MATCH_EXCEPTION) across all vendors; never aged
+     */
+    unapproved: number;
+    /**
+     * Number of open bills not yet approved across all vendors
+     */
+    unapprovedBillCount: number;
 }
 
 function isOptionalAgedPayablesReportPropertyOfType(
@@ -68,9 +80,9 @@ export function instanceOfAgedPayablesReport(value: object): value is AgedPayabl
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAgedPayablesReportPropertyNames('asOfDate', 'generatedAt', 'rows', 'totals', );
+    const requiredProperties = createAgedPayablesReportPropertyNames('asOfDate', 'generatedAt', 'rows', 'totalIncludingUnapproved', 'totals', 'unapproved', 'unapprovedBillCount', );
     const optionalStringProperties = createAgedPayablesReportOptionalProperties({ name: 'asOfDate', nullable: false }, { name: 'generatedAt', nullable: false }, );
-    const optionalNumberProperties = createAgedPayablesReportOptionalProperties();
+    const optionalNumberProperties = createAgedPayablesReportOptionalProperties({ name: 'totalIncludingUnapproved', nullable: false }, { name: 'unapproved', nullable: false }, { name: 'unapprovedBillCount', nullable: false }, );
     const optionalBooleanProperties = createAgedPayablesReportOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

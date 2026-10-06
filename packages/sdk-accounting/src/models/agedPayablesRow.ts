@@ -10,13 +10,13 @@
 
 
 /**
- * Per-vendor aged payables row with bucketed open vendor-bill balances. Age is measured from the bill due date, falling back to the bill date when no due date is recorded; not-yet-due bills are reported in the current bucket.
+ * Per-vendor aged payables row with bucketed open vendor-bill balances. Age is measured from the bill due date, falling back to the bill date when no due date is recorded; only APPROVED bills are aged, unapproved bills are reported separately and unaged.
  */
 export interface AgedPayablesRow {
     /**
-     * Outstanding 0-30 days past due (includes not-yet-due)
+     * Approved bills outstanding 1-30 days past due
      */
-    current: number;
+    days1To30: number;
     /**
      * Outstanding 31-60 days past due
      */
@@ -30,9 +30,29 @@ export interface AgedPayablesRow {
      */
     days90Plus: number;
     /**
-     * Total outstanding for the vendor across all buckets
+     * Approved bills outstanding not yet due: due today or later (due today is not overdue)
+     */
+    notYetDue: number;
+    /**
+     * Overdue: the sum of days1To30, days31To60, days61To90 and days90Plus
+     */
+    overdue: number;
+    /**
+     * totalOutstanding + unapproved
+     */
+    totalIncludingUnapproved: number;
+    /**
+     * Total outstanding on approved bills: notYetDue + overdue
      */
     totalOutstanding: number;
+    /**
+     * Open amount on bills not yet approved (PENDING_RECEIPT_MATCH, MATCH_EXCEPTION); never aged
+     */
+    unapproved: number;
+    /**
+     * Number of open bills not yet approved
+     */
+    unapprovedBillCount: number;
     /**
      * Vendor UUID
      */
@@ -81,9 +101,9 @@ export function instanceOfAgedPayablesRow(value: object): value is AgedPayablesR
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAgedPayablesRowPropertyNames('current', 'days31To60', 'days61To90', 'days90Plus', 'totalOutstanding', 'vendorId', );
+    const requiredProperties = createAgedPayablesRowPropertyNames('days1To30', 'days31To60', 'days61To90', 'days90Plus', 'notYetDue', 'overdue', 'totalIncludingUnapproved', 'totalOutstanding', 'unapproved', 'unapprovedBillCount', 'vendorId', );
     const optionalStringProperties = createAgedPayablesRowOptionalProperties({ name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, );
-    const optionalNumberProperties = createAgedPayablesRowOptionalProperties({ name: 'current', nullable: false }, { name: 'days31To60', nullable: false }, { name: 'days61To90', nullable: false }, { name: 'days90Plus', nullable: false }, { name: 'totalOutstanding', nullable: false }, );
+    const optionalNumberProperties = createAgedPayablesRowOptionalProperties({ name: 'days1To30', nullable: false }, { name: 'days31To60', nullable: false }, { name: 'days61To90', nullable: false }, { name: 'days90Plus', nullable: false }, { name: 'notYetDue', nullable: false }, { name: 'overdue', nullable: false }, { name: 'totalIncludingUnapproved', nullable: false }, { name: 'totalOutstanding', nullable: false }, { name: 'unapproved', nullable: false }, { name: 'unapprovedBillCount', nullable: false }, );
     const optionalBooleanProperties = createAgedPayablesRowOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

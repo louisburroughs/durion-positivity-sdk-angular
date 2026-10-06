@@ -1,6 +1,6 @@
 {
   "name": "@durion-sdk/internal",
-  "version": "0.98.0-alpha",
+  "version": "0.99.0-alpha",
   "description": "OpenAPI client for @durion-sdk/internal",
   "author": "OpenAPI-Generator Contributors",
   "repository": {

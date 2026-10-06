@@ -10,21 +10,25 @@
 
 
 /**
- * Per-customer aged receivables row with bucketed open invoice balances. Age is measured from the invoice due date, falling back to the invoice date when no due date is recorded; not-yet-due invoices are reported in the current bucket.
+ * Per-customer aged receivables row with bucketed open invoice balances. Age is measured from the invoice due date, falling back to the invoice date when no due date is recorded; invoices due today or later are notYetDue, the four late buckets are overdue money.
  */
 export interface AgedReceivablesRow {
-    /**
-     * Outstanding 0-30 days past due (includes not-yet-due)
-     */
-    current: number;
     /**
      * Customer (party) UUID
      */
     customerId: string;
     /**
-     * Customer display name. Always null on this report — no directory lookup is performed; resolve the name from the customer directory using customerId.
+     * Customer display name from the customer replica; null when the party is not yet known
      */
     customerName?: string;
+    /**
+     * Customer number from the customer replica; null when the party is not yet known
+     */
+    customerReference?: string;
+    /**
+     * Outstanding 1-30 days past due
+     */
+    days1To30: number;
     /**
      * Outstanding 31-60 days past due
      */
@@ -38,7 +42,15 @@ export interface AgedReceivablesRow {
      */
     days90Plus: number;
     /**
-     * Total outstanding for the customer across all buckets
+     * Outstanding not yet due: due today or later (due today is not overdue)
+     */
+    notYetDue: number;
+    /**
+     * Overdue: the sum of days1To30, days31To60, days61To90 and days90Plus
+     */
+    overdue: number;
+    /**
+     * Total outstanding for the customer: notYetDue + overdue
      */
     totalOutstanding: number;
 }
@@ -81,9 +93,9 @@ export function instanceOfAgedReceivablesRow(value: object): value is AgedReceiv
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAgedReceivablesRowPropertyNames('current', 'customerId', 'days31To60', 'days61To90', 'days90Plus', 'totalOutstanding', );
-    const optionalStringProperties = createAgedReceivablesRowOptionalProperties({ name: 'customerId', nullable: false }, { name: 'customerName', nullable: false }, );
-    const optionalNumberProperties = createAgedReceivablesRowOptionalProperties({ name: 'current', nullable: false }, { name: 'days31To60', nullable: false }, { name: 'days61To90', nullable: false }, { name: 'days90Plus', nullable: false }, { name: 'totalOutstanding', nullable: false }, );
+    const requiredProperties = createAgedReceivablesRowPropertyNames('customerId', 'days1To30', 'days31To60', 'days61To90', 'days90Plus', 'notYetDue', 'overdue', 'totalOutstanding', );
+    const optionalStringProperties = createAgedReceivablesRowOptionalProperties({ name: 'customerId', nullable: false }, { name: 'customerName', nullable: false }, { name: 'customerReference', nullable: false }, );
+    const optionalNumberProperties = createAgedReceivablesRowOptionalProperties({ name: 'days1To30', nullable: false }, { name: 'days31To60', nullable: false }, { name: 'days61To90', nullable: false }, { name: 'days90Plus', nullable: false }, { name: 'notYetDue', nullable: false }, { name: 'overdue', nullable: false }, { name: 'totalOutstanding', nullable: false }, );
     const optionalBooleanProperties = createAgedReceivablesRowOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
