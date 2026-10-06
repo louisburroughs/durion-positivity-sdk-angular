@@ -8,6 +8,7 @@
  * Do not edit the class manually.
  */
 import { BayCapacityView } from './bayCapacityView';
+import { TechnicianCapacityView } from './technicianCapacityView';
 
 
 /**
@@ -38,6 +39,10 @@ export interface DayCapacityView {
      * Assembly outcome for this date
      */
     status: DayCapacityViewStatusEnum;
+    /**
+     * Every person with an ACTIVE technician-role staffing assignment at the location covering this date, including those with nothing assigned (assignedMinutes 0), ordered by mechanicPersonId (#2527). Empty unless status is OK and staffingStatus is AVAILABLE. Publishes who is on duty and who is busy, not who is competent for a given job: certification stays with the client (technician roster credentials) and with GET /v1/schedules/openings.
+     */
+    technicians?: Array<TechnicianCapacityView>;
 }
 export enum DayCapacityViewStatusEnum {
     Ok = 'OK',

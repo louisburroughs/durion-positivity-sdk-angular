@@ -27,6 +27,10 @@ export interface ScheduleCapacityResponse {
      */
     locationId: string;
     /**
+     * Whether the staffing-assignment replica holds any ACTIVE assignment at this location (#2527). AVAILABLE: each OK day\'s technicians list is that date\'s real roster, and an empty list means nobody in a technician role is rostered. UNAVAILABLE: rostering is unknown, every technicians list is empty, and that must not be read as nobody on duty. Always present; optional in the schema only so the addition stays non-breaking for existing typed clients.
+     */
+    staffingStatus?: ScheduleCapacityResponseStaffingStatusEnum;
+    /**
      * IANA timezone id the day windows were computed in, from the location replica. Null when the location\'s timezone is unknown — never silently UTC (AC11).
      */
     timezone?: string;
@@ -39,6 +43,12 @@ export interface ScheduleCapacityResponse {
      */
     viewGeneratedAt: string;
 }
+export enum ScheduleCapacityResponseStaffingStatusEnum {
+    Available = 'AVAILABLE',
+    Unavailable = 'UNAVAILABLE'
+};
+
+
 
 function isOptionalScheduleCapacityResponsePropertyOfType(
     value: Record<string, unknown>,
@@ -79,7 +89,7 @@ export function instanceOfScheduleCapacityResponse(value: object): value is Sche
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createScheduleCapacityResponsePropertyNames('days', 'from', 'locationId', 'to', 'viewGeneratedAt', );
-    const optionalStringProperties = createScheduleCapacityResponseOptionalProperties({ name: 'from', nullable: false }, { name: 'locationId', nullable: false }, { name: 'timezone', nullable: false }, { name: 'to', nullable: false }, { name: 'viewGeneratedAt', nullable: false }, );
+    const optionalStringProperties = createScheduleCapacityResponseOptionalProperties({ name: 'from', nullable: false }, { name: 'locationId', nullable: false }, { name: 'staffingStatus', nullable: false }, { name: 'timezone', nullable: false }, { name: 'to', nullable: false }, { name: 'viewGeneratedAt', nullable: false }, );
     const optionalNumberProperties = createScheduleCapacityResponseOptionalProperties();
     const optionalBooleanProperties = createScheduleCapacityResponseOptionalProperties();
 
