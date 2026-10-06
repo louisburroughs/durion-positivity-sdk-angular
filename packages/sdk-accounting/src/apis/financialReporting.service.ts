@@ -48,6 +48,8 @@ import { TaxLiabilitySnapshotSummary } from '../models/taxLiabilitySnapshotSumma
 import { TaxLiabilitySnapshotVerification } from '../models/taxLiabilitySnapshotVerification';
 // @ts-ignore
 import { TrialBalanceReport } from '../models/trialBalanceReport';
+// @ts-ignore
+import { UnpaidWalkInSalesResponse } from '../models/unpaidWalkInSalesResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -449,7 +451,7 @@ export class FinancialReportingService extends BaseService {
 
     /**
      * Generate Aged Receivables
-     * Generates the Aged Receivables report as of a date: per-customer open invoice balances bucketed by days past due (0-30, 31-60, 61-90, 90+) with grand totals. Buckets are days past the invoice\&#39;s DUE date, falling back to the invoice date when an invoice carries no due date — the same rule generateAgedPayables uses — and not-yet-due balances are INCLUDED in the 0-30 bucket, which therefore means \&quot;not yet due, or up to 30 days past due\&quot;. Use this tool to review customer collection exposure; do not use generateAgedPayables, which is the vendor-side mirror of this report. Preconditions: none; rows are empty when no open receivables exist. Required inputs: asOfDate (ISO date) as a query parameter. Emits a REPORT_AGED_RECEIVABLES_GENERATE audit event; no state changes. Returns 400 when the asOfDate is missing or malformed.
+     * Generates the Aged Receivables report as of a date: per-customer open invoice balances bucketed by days past due (0-30, 31-60, 61-90, 90+) with grand totals, leaving out the CASH walk-in house account, whose open sales getUnpaidWalkInSales reports. Buckets are days past the invoice\&#39;s DUE date, falling back to the invoice date when an invoice carries no due date — the same rule generateAgedPayables uses — and not-yet-due balances are INCLUDED in the 0-30 bucket, which therefore means \&quot;not yet due, or up to 30 days past due\&quot;. Use this tool to review customer collection exposure; do not use generateAgedPayables, which is the vendor-side mirror of this report. Preconditions: none; rows are empty when no open receivables exist. Required inputs: asOfDate (ISO date) as a query parameter. Emits a REPORT_AGED_RECEIVABLES_GENERATE audit event; no state changes. Returns 400 when the asOfDate is missing or malformed.
      * @endpoint get /v1/accounting/reports/financial/aged-receivables
      * @param asOfDate As-of date (YYYY-MM-DD)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -1036,6 +1038,62 @@ export class FinancialReportingService extends BaseService {
         let localVarPath = `/v1/accounting/reports/financial/tax-liability/snapshots/${this.configuration.encodeParam({name: "snapshotId", value: snapshotId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<TaxLiabilitySnapshotResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get Unpaid Walk-in Sales
+     * Reads what is still owed on the CASH walk-in house account: the balance, its open invoices oldest sale first, the invoices whose business day has ended at their location (needsAttention), and walk-in payments with money left unapplied. Use this tool to check that the CASH receivable nets to zero each day and to find walk-in sales to collect or credit; do not use aged receivables for this, because it leaves the CASH account out. Preconditions: the caller needs reporting:view:financial-statements authority; a business day ends at local midnight in the location\&#39;s time zone, or in UTC when the location has none (timezoneFallback). Required inputs: none. Emits an ACCOUNTING_UNPAID_WALK_IN_SALES_VIEW event and changes no state; each open invoice offers COLLECT and CREDIT_MEMO, while reassignment awaits a decision. Returns 200 with houseAccountKnown false and zero amounts when accounting has not yet received the CASH account, and 403 when the caller lacks the authority.
+     * @endpoint get /v1/accounting/unpaid-walk-in-sales
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getUnpaidWalkInSales(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<UnpaidWalkInSalesResponse>;
+    public getUnpaidWalkInSales(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UnpaidWalkInSalesResponse>>;
+    public getUnpaidWalkInSales(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UnpaidWalkInSalesResponse>>;
+    public getUnpaidWalkInSales(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/unpaid-walk-in-sales`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<UnpaidWalkInSalesResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
