@@ -49,6 +49,10 @@ export interface VendorProfileRequest {
      * Unique human-readable profile alias (ADR-0050 §1). Never blank. Identifies the configuration, and is never used as an identifier across a contract boundary.
      */
     supplierRef?: string;
+    /**
+     * The vendor this connection belongs to (UUIDv7). Required; must be a vendor of the caller\'s tenant, and ACTIVE when creating a profile.
+     */
+    vendorId?: string;
 }
 export enum VendorProfileRequestRetryBackoffEnum {
     Fixed = 'FIXED',
@@ -96,7 +100,7 @@ export function instanceOfVendorProfileRequest(value: object): value is VendorPr
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createVendorProfileRequestPropertyNames();
-    const optionalStringProperties = createVendorProfileRequestOptionalProperties({ name: 'displayName', nullable: false }, { name: 'retryBackoff', nullable: false }, { name: 'sandboxBaseUrlOverride', nullable: false }, { name: 'supplierRef', nullable: false }, );
+    const optionalStringProperties = createVendorProfileRequestOptionalProperties({ name: 'displayName', nullable: false }, { name: 'retryBackoff', nullable: false }, { name: 'sandboxBaseUrlOverride', nullable: false }, { name: 'supplierRef', nullable: false }, { name: 'vendorId', nullable: false }, );
     const optionalNumberProperties = createVendorProfileRequestOptionalProperties({ name: 'connectTimeoutMillis', nullable: false }, { name: 'maxRetries', nullable: false }, { name: 'readTimeoutMillis', nullable: false }, );
     const optionalBooleanProperties = createVendorProfileRequestOptionalProperties({ name: 'enabled', nullable: false }, { name: 'sandbox', nullable: false }, );
 
