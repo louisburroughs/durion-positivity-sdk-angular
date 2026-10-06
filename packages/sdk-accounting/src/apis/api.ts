@@ -4,6 +4,7 @@ export * from './accountingEvents.service';
 export * from './accountingExports.service';
 export * from './accountingGL.service';
 export * from './accountingPeriods.service';
+export * from './accountingTenantTemplate.service';
 export * from './auditTrail.service';
 export * from './bankAccounts.service';
 export * from './bankImports.service';
