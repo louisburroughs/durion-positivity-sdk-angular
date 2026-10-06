@@ -10,23 +10,23 @@
 
 
 /**
- * One earlier-starting appointment\'s contribution to this bay\'s capacity on this date — the minutes it holds here because its work began before this date, however those minutes reached the day (issues #2021 AC4/AC5/AC6, #2050)
+ * One earlier-starting job\'s contribution to this bay\'s capacity on this date — the minutes it holds here because its work began before this date, however those minutes reached the day (issues #2021 AC4/AC5/AC6, #2050). At least one of appointmentId and workorderId is set: an appointment is named with its linked workorder when it has one, a walk-in by its workorder alone (#2530).
  */
 export interface CarryOverView {
     /**
-     * The identifier of the appointment holding the bay
+     * The identifier of the appointment holding the bay; absent for a walk-in workorder with no appointment (#2530)
      */
-    appointmentId: string;
+    appointmentId?: string;
     /**
-     * Bay-hours of this date that this appointment accounts for, in tenths of an hour, whichever of two ways they reached it: either its real-clock overlap with this day\'s window, or the minutes re-anchored onto this day from a prior open day\'s overrun. The two sources are disjoint by construction — re-anchoring only ever targets days after the last day the appointment directly overlapped — so exactly one of them produced this number (#2050)
+     * Bay-hours of this date that this job accounts for, in tenths of an hour, whichever of two ways they reached it: either its real-clock overlap with this day\'s window, or the minutes re-anchored onto this day from a prior open day\'s overrun. The two sources are disjoint by construction — re-anchoring only ever targets days after the last day the job directly overlapped — so exactly one of them produced this number (#2050)
      */
     bayHours: number;
     /**
-     * The local date this appointment\'s effective window began — the linked workorder\'s actual start when known, else the appointment\'s planned start. It names when the work started, which is what lets a board say what is still holding the bay; it is not necessarily the date of an overrun, nor necessarily an open day (#2050).
+     * The local date this job\'s window began — when its workorder first took a bay, else the linked workorder\'s actual start when known, else the appointment\'s planned start. It names when the work started, which is what lets a board say what is still holding the bay; it is not necessarily the date of an overrun, nor necessarily an open day (#2050).
      */
     fromDate: string;
     /**
-     * The linked workorder identifier this contribution\'s effective window came from, when known
+     * The workorder holding the bay — the appointment\'s linked workorder when known, or the walk-in itself; absent only for an appointment with no workorder yet
      */
     workorderId?: string;
 }
@@ -69,7 +69,7 @@ export function instanceOfCarryOverView(value: object): value is CarryOverView {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCarryOverViewPropertyNames('appointmentId', 'bayHours', 'fromDate', );
+    const requiredProperties = createCarryOverViewPropertyNames('bayHours', 'fromDate', );
     const optionalStringProperties = createCarryOverViewOptionalProperties({ name: 'appointmentId', nullable: false }, { name: 'fromDate', nullable: false }, { name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createCarryOverViewOptionalProperties({ name: 'bayHours', nullable: false }, );
     const optionalBooleanProperties = createCarryOverViewOptionalProperties();
