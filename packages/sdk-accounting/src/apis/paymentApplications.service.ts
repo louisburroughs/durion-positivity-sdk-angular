@@ -19,6 +19,8 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 // @ts-ignore
 import { ApiError } from '../models/apiError';
 // @ts-ignore
+import { CustomerOpenInvoicesPage } from '../models/customerOpenInvoicesPage';
+// @ts-ignore
 import { PagePaymentApplicationListRow } from '../models/pagePaymentApplicationListRow';
 // @ts-ignore
 import { PaymentApplicationRequest } from '../models/paymentApplicationRequest';
@@ -30,6 +32,8 @@ import { PaymentApplicationReversalRequest } from '../models/paymentApplicationR
 import { RemainderCreditRequest } from '../models/remainderCreditRequest';
 // @ts-ignore
 import { RemainderCreditResponse } from '../models/remainderCreditResponse';
+// @ts-ignore
+import { UnappliedPaymentsPage } from '../models/unappliedPaymentsPage';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -196,6 +200,89 @@ export class PaymentApplicationsService extends BaseService {
     }
 
     /**
+     * List a Customer\&#39;s Open Invoices
+     * Lists a customer\&#39;s open invoices oldest first, each with the balance still due after payment applications, customer credits, posted credit memos and deposits, and whether it is overdue. Use this tool to choose the invoices a payment of this customer pays; do not use pos-invoice search for this, because it does not net credits, credit memos or deposits. Preconditions: the caller needs accounting:payment:apply authority; an invoice is open when it is FINALIZED or POSTED and its balance due is above zero. Required inputs: customerId (UUID) as a path parameter; page (0 or more) and size (1 to 200, default 100) are optional query parameters. Emits an ACCOUNTING_CUSTOMER_OPEN_INVOICES_VIEW event and changes no state; a customer with nothing open, or unknown to accounting, gets 200 with no rows. Returns 400 VALIDATION_ERROR when customerId is malformed or size is outside 1 to 200, and 403 when the caller lacks the authority.
+     * @endpoint get /v1/accounting/customers/{customerId}/open-invoices
+     * @param customerId Customer identifier
+     * @param page Page index (0-based)
+     * @param size Page size, 1 to 200
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listCustomerOpenInvoices(customerId: string, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CustomerOpenInvoicesPage>;
+    public listCustomerOpenInvoices(customerId: string, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CustomerOpenInvoicesPage>>;
+    public listCustomerOpenInvoices(customerId: string, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CustomerOpenInvoicesPage>>;
+    public listCustomerOpenInvoices(customerId: string, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (customerId === null || customerId === undefined) {
+            throw new Error('Required parameter customerId was null or undefined when calling listCustomerOpenInvoices.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/customers/${this.configuration.encodeParam({name: "customerId", value: customerId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/open-invoices`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<CustomerOpenInvoicesPage>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * List Payment Applications By Applied Date
      * Lists pos-accounting cash applications of customer payments to invoices whose applied date falls in [appliedFrom, appliedTo], ordered by appliedAt ascending. Use this tool to review A/R cash application activity in a period; do not use getPaymentLagCohorts or getCollectionsAnalytics for this, which are aggregate reports rather than a row-level application list, and note this endpoint is SCOPED TO pos-accounting cash applications only — it does not include pos-invoice deposit-credit draw-downs (DepositCreditApplication) or refunds (RefundRecord); see issue #1605 for that open cross-module question. Preconditions: none beyond the caller holding accounting:analytics:view. Required inputs: appliedFrom and appliedTo (ISO dates, appliedTo on or after appliedFrom); the window cannot exceed 366 days, to bound the scan. includeReversed is optional and defaults to false, in which case applications later reversed via PaymentApplicationReversal are EXCLUDED from the list entirely (not merely flagged); pass includeReversed&#x3D;true to include them, with each row\&#39;s reversed field then reporting whether that application was reversed. That exclusion default is a DELIBERATELY DIFFERENT basis from getCollectionsAnalytics, which nets reversals on a movement basis (reducing the window a reversal was recorded in rather than the window its application landed in) because it measures movement in a window while this endpoint answers the point-in-time question of which applications are currently live; do not unify the two. page/size/sort are standard, though the appliedAt-ascending sort is server-controlled and any caller-supplied sort is ignored. Emits an ACCOUNTING_PAYMENT_APPLICATION_LIST_VIEW audit event; no state changes. Returns 400 when appliedTo is before appliedFrom or the window exceeds 366 days.
      * @endpoint get /v1/accounting/payment-applications
@@ -307,6 +394,105 @@ export class PaymentApplicationsService extends BaseService {
         let localVarPath = `/v1/accounting/payment-applications`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<PagePaymentApplicationListRow>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List Unapplied Customer Payments
+     * Lists the customer payments still waiting to be matched, oldest cleared first, each with the open invoices it most likely pays, the reasons, and what would be left over as credit. Use this tool to choose a payment to match; then apply it with applyPaymentToInvoices, and do not treat a suggestion as applied, because the list is advisory and the apply command validates again. Preconditions: the caller needs accounting:payment:apply authority; only payments with an unapplied amount (status AVAILABLE) are listed. Required inputs: none; status (only AVAILABLE), customerId (UUID), page (0 or more) and size (1 to 100, default 25) are optional query parameters. Emits an ACCOUNTING_RECEIVABLE_PAYMENT_LIST_VIEW event and changes no state; the summary totals cover every payment matching the filter, not only the page. Returns 400 VALIDATION_ERROR when status is not AVAILABLE, customerId is malformed or size is outside 1 to 100, and 403 when the caller lacks the authority.
+     * @endpoint get /v1/accounting/receivable-payments
+     * @param status Payment status; only AVAILABLE is supported
+     * @param customerId Only this customer\&#39;s payments
+     * @param page Page index (0-based)
+     * @param size Page size, 1 to 100
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listUnappliedPayments(status?: string, customerId?: string, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<UnappliedPaymentsPage>;
+    public listUnappliedPayments(status?: string, customerId?: string, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UnappliedPaymentsPage>>;
+    public listUnappliedPayments(status?: string, customerId?: string, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UnappliedPaymentsPage>>;
+    public listUnappliedPayments(status?: string, customerId?: string, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'status',
+            <any>status,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'customerId',
+            <any>customerId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/receivable-payments`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<UnappliedPaymentsPage>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),
