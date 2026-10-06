@@ -17,6 +17,10 @@ export interface CheckoutRequest {
      * Tender intent: DEFAULT (asynchronous settlement via payments) or ON_ACCOUNT (charge a validated commercial customer\'s account; requires order:order:charge_on_account and the order completes with the balance carried by the AR invoice)
      */
     tenderType?: string;
+    /**
+     * Total of cash and card the cashier is taking now. Required for a walk-in cart (the customer is the business\'s Walk-in customer), where it must cover the final grand total computed at checkout; ignored for any other cart. Never negative
+     */
+    tenderedAmount?: number;
 }
 
 function isOptionalCheckoutRequestPropertyOfType(
@@ -59,7 +63,7 @@ export function instanceOfCheckoutRequest(value: object): value is CheckoutReque
 
     const requiredProperties = createCheckoutRequestPropertyNames();
     const optionalStringProperties = createCheckoutRequestOptionalProperties({ name: 'tenderType', nullable: false }, );
-    const optionalNumberProperties = createCheckoutRequestOptionalProperties();
+    const optionalNumberProperties = createCheckoutRequestOptionalProperties({ name: 'tenderedAmount', nullable: false }, );
     const optionalBooleanProperties = createCheckoutRequestOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

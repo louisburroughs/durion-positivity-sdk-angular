@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ClerkWalkInShare } from './clerkWalkInShare';
 import { TenderTotal } from './tenderTotal';
 import { CashMovementResponse } from './cashMovementResponse';
 
@@ -31,6 +32,10 @@ export interface SessionReportResponse {
     tenderTotals?: Array<TenderTotal>;
     terminalId?: string;
     theoreticalCash?: number;
+    /**
+     * Walk-in share per cashier over the session\'s orders that left DRAFT
+     */
+    walkInByClerk?: Array<ClerkWalkInShare>;
 }
 
 function isOptionalSessionReportResponsePropertyOfType(
