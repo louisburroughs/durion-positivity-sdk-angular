@@ -35,6 +35,10 @@ export interface SalesOrderResponse {
      */
     createdBy?: string;
     /**
+     * Display name of the order\'s customer; null when the order has no customer or the customer is not known yet
+     */
+    customerDisplayName?: string;
+    /**
      * Identifier of the customer associated with the order
      */
     customerId?: string;
@@ -130,6 +134,10 @@ export interface SalesOrderResponse {
      * Identifier of the vehicle associated with the order
      */
     vehicleId?: string;
+    /**
+     * True when the order\'s customer is the business\'s Walk-in customer (the CASH house account): the sale must be paid in full at checkout
+     */
+    walkIn?: boolean;
 }
 
 function isOptionalSalesOrderResponsePropertyOfType(
@@ -171,9 +179,9 @@ export function instanceOfSalesOrderResponse(value: object): value is SalesOrder
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createSalesOrderResponsePropertyNames('orderId', 'status', );
-    const optionalStringProperties = createSalesOrderResponseOptionalProperties({ name: 'clerkId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'customerId', nullable: false }, { name: 'customerValidationStatus', nullable: false }, { name: 'generalNote', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'invoiceNumber', nullable: false }, { name: 'label', nullable: false }, { name: 'locationId', nullable: false }, { name: 'orderDiscountReasonCode', nullable: false }, { name: 'orderDiscountType', nullable: false }, { name: 'orderId', nullable: false }, { name: 'orderNumber', nullable: false }, { name: 'quoteExpiresAt', nullable: false }, { name: 'status', nullable: false }, { name: 'terminalId', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'updatedBy', nullable: false }, { name: 'vehicleId', nullable: false }, );
+    const optionalStringProperties = createSalesOrderResponseOptionalProperties({ name: 'clerkId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'customerDisplayName', nullable: false }, { name: 'customerId', nullable: false }, { name: 'customerValidationStatus', nullable: false }, { name: 'generalNote', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'invoiceNumber', nullable: false }, { name: 'label', nullable: false }, { name: 'locationId', nullable: false }, { name: 'orderDiscountReasonCode', nullable: false }, { name: 'orderDiscountType', nullable: false }, { name: 'orderId', nullable: false }, { name: 'orderNumber', nullable: false }, { name: 'quoteExpiresAt', nullable: false }, { name: 'status', nullable: false }, { name: 'terminalId', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'updatedBy', nullable: false }, { name: 'vehicleId', nullable: false }, );
     const optionalNumberProperties = createSalesOrderResponseOptionalProperties({ name: 'amountPaid', nullable: false }, { name: 'balanceDue', nullable: false }, { name: 'discountTotal', nullable: false }, { name: 'grandTotal', nullable: false }, { name: 'orderDiscountValue', nullable: false }, { name: 'subtotal', nullable: false }, { name: 'taxTotal', nullable: false }, );
-    const optionalBooleanProperties = createSalesOrderResponseOptionalProperties({ name: 'taxStale', nullable: false }, );
+    const optionalBooleanProperties = createSalesOrderResponseOptionalProperties({ name: 'taxStale', nullable: false }, { name: 'walkIn', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalSalesOrderResponsePropertyOfType(_v, property.name, 'string', property.nullable))
