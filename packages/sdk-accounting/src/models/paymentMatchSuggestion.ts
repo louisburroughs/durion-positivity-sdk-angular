@@ -19,9 +19,9 @@ export interface PaymentMatchSuggestion {
      */
     invoices: Array<SuggestedInvoice>;
     /**
-     * Unapplied amount minus the suggested total: what would become a customer credit (AD-003)
+     * Unapplied amount minus the suggested total: what would become a customer credit (AD-003); null for a payment of the CASH walk-in account, which never keeps a credit: its excess is refunded (#2508)
      */
-    leftOver: number;
+    leftOver?: number | null;
     /**
      * Why these invoices are suggested. Served values: REMITTANCE_REFERENCE (the payment was taken against this invoice), SAME_CUSTOMER (the invoices belong to the payment\'s customer), EXACT_TOTAL (the suggested balances add up exactly to the unapplied amount). A client renders an unknown value as Unknown. Empty when the customer has no open invoice.
      */
@@ -70,9 +70,9 @@ export function instanceOfPaymentMatchSuggestion(value: object): value is Paymen
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPaymentMatchSuggestionPropertyNames('invoices', 'leftOver', 'reasons', 'suggestedTotal', );
+    const requiredProperties = createPaymentMatchSuggestionPropertyNames('invoices', 'reasons', 'suggestedTotal', );
     const optionalStringProperties = createPaymentMatchSuggestionOptionalProperties();
-    const optionalNumberProperties = createPaymentMatchSuggestionOptionalProperties({ name: 'leftOver', nullable: false }, { name: 'suggestedTotal', nullable: false }, );
+    const optionalNumberProperties = createPaymentMatchSuggestionOptionalProperties({ name: 'leftOver', nullable: true }, { name: 'suggestedTotal', nullable: false }, );
     const optionalBooleanProperties = createPaymentMatchSuggestionOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
