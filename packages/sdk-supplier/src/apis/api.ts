@@ -11,3 +11,4 @@ export * from './supplierStockAvailability.service';
 export * from './supplierStockInquiry.service';
 export * from './supplierStockSnapshots.service';
 export * from './supplierVendorProfiles.service';
+export * from './supplierVendors.service';

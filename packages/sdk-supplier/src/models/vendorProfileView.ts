@@ -54,6 +54,18 @@ export interface VendorProfileView {
      */
     supplierRef?: string;
     /**
+     * That vendor\'s display name.
+     */
+    vendorDisplayName?: string;
+    /**
+     * The vendor this connection belongs to (UUIDv7).
+     */
+    vendorId?: string;
+    /**
+     * That vendor\'s number, the reference people quote.
+     */
+    vendorNumber?: string;
+    /**
      * Platform identity of the profile (UUIDv7, ADR-0050 §1).
      */
     vendorProfileId?: string;
@@ -108,7 +120,7 @@ export function instanceOfVendorProfileView(value: object): value is VendorProfi
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createVendorProfileViewPropertyNames();
-    const optionalStringProperties = createVendorProfileViewOptionalProperties({ name: 'displayName', nullable: false }, { name: 'retryBackoff', nullable: false }, { name: 'sandboxBaseUrlOverride', nullable: false }, { name: 'sourceOfTruth', nullable: false }, { name: 'supplierRef', nullable: false }, { name: 'vendorProfileId', nullable: false }, );
+    const optionalStringProperties = createVendorProfileViewOptionalProperties({ name: 'displayName', nullable: false }, { name: 'retryBackoff', nullable: false }, { name: 'sandboxBaseUrlOverride', nullable: false }, { name: 'sourceOfTruth', nullable: false }, { name: 'supplierRef', nullable: false }, { name: 'vendorDisplayName', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorNumber', nullable: false }, { name: 'vendorProfileId', nullable: false }, );
     const optionalNumberProperties = createVendorProfileViewOptionalProperties({ name: 'connectTimeoutMillis', nullable: false }, { name: 'maxRetries', nullable: false }, { name: 'readTimeoutMillis', nullable: false }, );
     const optionalBooleanProperties = createVendorProfileViewOptionalProperties({ name: 'enabled', nullable: false }, { name: 'sandbox', nullable: false }, );
 
