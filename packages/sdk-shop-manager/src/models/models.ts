@@ -39,4 +39,5 @@ export * from './shopResponse';
 export * from './shopUpsertRequest';
 export * from './staffingAdvisory';
 export * from './suggestedAlternative';
+export * from './technicianCapacityView';
 export * from './technicianCredentialResponse';
