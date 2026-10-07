@@ -215,6 +215,7 @@ export * from './refundRequest';
 export * from './regenerateInvoiceFromWorkorderRequest';
 export * from './registerFloatChangeRequest';
 export * from './registerFloatGoLiveRequest';
+export * from './registerFloatRelocationRequest';
 export * from './registerFloatResponse';
 export * from './remainderCreditRequest';
 export * from './remainderCreditResponse';

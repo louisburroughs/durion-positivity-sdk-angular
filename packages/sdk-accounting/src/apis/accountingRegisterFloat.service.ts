@@ -23,6 +23,8 @@ import { RegisterFloatChangeRequest } from '../models/registerFloatChangeRequest
 // @ts-ignore
 import { RegisterFloatGoLiveRequest } from '../models/registerFloatGoLiveRequest';
 // @ts-ignore
+import { RegisterFloatRelocationRequest } from '../models/registerFloatRelocationRequest';
+// @ts-ignore
 import { RegisterFloatResponse } from '../models/registerFloatResponse';
 
 // @ts-ignore
@@ -179,6 +181,80 @@ export class AccountingRegisterFloatService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: registerFloatGoLiveRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Move a Register and Its Float to Another Location
+     * Moves a register and its change float from fromLocationId to toLocationId, posting Dr 1080 Register Float at the destination / Cr 1080 at the origin for the current float on the effective date. The float is unchanged, there is no bank or 3900 line, and a zero float moves without an entry (journalEntryId null), which fixes a go-live made under a mistyped location. Use this tool for a register set up under the wrong location (ENTERED_IN_ERROR) or a drawer that moved (MOVED); do not use changeRegisterFloat, which changes the amount, and never reverse the relocation entry (409 FLOAT_RELOCATION_NOT_REVERSIBLE): move again instead. Preconditions: the caller holds accounting:float:manage with both locations in scope (403 LOCATION_SCOPE_DENIED), and the float is held at fromLocationId (404 FLOAT_REGISTER_NOT_FOUND, 422 FLOAT_REGISTER_LOCATION_MISMATCH) and moves elsewhere (422 FLOAT_RELOCATION_SAME_LOCATION). The register has no open pos-order session (422 FLOAT_REGISTER_SESSION_OPEN, referenceId names it) and its float is not negative (422 FLOAT_AMOUNT_NEGATIVE). The effective date is not after today nor before the register\&#39;s latest float entry (422 FLOAT_RELOCATION_DATE_INVALID), and passes the period gate (a CLOSED period needs accounting:period:override and overrideJustification). Required inputs: registerId (path), fromLocationId, toLocationId, reason, justification (10 or more characters) and requestId, on which the command is idempotent (a replay returns the first result with 200, another body is 409 IDEMPOTENCY_CONFLICT); effectiveDate defaults to today in the accounting time zone. Emits ACCOUNTING_REGISTER_FLOAT_RELOCATE, queues accounting.float.changed with kind RELOCATION, writes an audit row naming both locations and the reason, and returns 201.
+     * @endpoint post /v1/accounting/registers/{registerId}/float/relocation
+     * @param registerId The register: pos-order\&#39;s terminalId
+     * @param registerFloatRelocationRequest Where the register moves from and to, and why
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public relocateRegisterFloat(registerId: string, registerFloatRelocationRequest: RegisterFloatRelocationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RegisterFloatResponse>;
+    public relocateRegisterFloat(registerId: string, registerFloatRelocationRequest: RegisterFloatRelocationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RegisterFloatResponse>>;
+    public relocateRegisterFloat(registerId: string, registerFloatRelocationRequest: RegisterFloatRelocationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RegisterFloatResponse>>;
+    public relocateRegisterFloat(registerId: string, registerFloatRelocationRequest: RegisterFloatRelocationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (registerId === null || registerId === undefined) {
+            throw new Error('Required parameter registerId was null or undefined when calling relocateRegisterFloat.');
+        }
+        if (registerFloatRelocationRequest === null || registerFloatRelocationRequest === undefined) {
+            throw new Error('Required parameter registerFloatRelocationRequest was null or undefined when calling relocateRegisterFloat.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/registers/${this.configuration.encodeParam({name: "registerId", value: registerId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/float/relocation`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<RegisterFloatResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: registerFloatRelocationRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
