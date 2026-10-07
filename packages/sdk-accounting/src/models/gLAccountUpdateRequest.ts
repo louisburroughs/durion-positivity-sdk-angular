@@ -42,7 +42,8 @@ export enum GLAccountUpdateRequestAccountSubtypeEnum {
     Sales = 'SALES',
     CostOfSales = 'COST_OF_SALES',
     OperatingExpense = 'OPERATING_EXPENSE',
-    Other = 'OTHER'
+    Other = 'OTHER',
+    CashOnHand = 'CASH_ON_HAND'
 };
 
 
