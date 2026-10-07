@@ -18,6 +18,10 @@ export interface RegisterFloatGoLiveRequest {
      */
     amount: number;
     /**
+     * The ISO 4217 code of amount (ADR-0067); it must be the tenant\'s functional currency, else 422 CURRENCY_NOT_SUPPORTED
+     */
+    currencyCode: string;
+    /**
      * The go-live date the entry is dated on; it must fall in an open period
      */
     goLiveDate: string;
@@ -73,8 +77,8 @@ export function instanceOfRegisterFloatGoLiveRequest(value: object): value is Re
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRegisterFloatGoLiveRequestPropertyNames('amount', 'goLiveDate', 'justification', 'locationId', 'requestId', );
-    const optionalStringProperties = createRegisterFloatGoLiveRequestOptionalProperties({ name: 'goLiveDate', nullable: false }, { name: 'justification', nullable: false }, { name: 'locationId', nullable: false }, { name: 'requestId', nullable: false }, );
+    const requiredProperties = createRegisterFloatGoLiveRequestPropertyNames('amount', 'currencyCode', 'goLiveDate', 'justification', 'locationId', 'requestId', );
+    const optionalStringProperties = createRegisterFloatGoLiveRequestOptionalProperties({ name: 'currencyCode', nullable: false }, { name: 'goLiveDate', nullable: false }, { name: 'justification', nullable: false }, { name: 'locationId', nullable: false }, { name: 'requestId', nullable: false }, );
     const optionalNumberProperties = createRegisterFloatGoLiveRequestOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createRegisterFloatGoLiveRequestOptionalProperties();
 

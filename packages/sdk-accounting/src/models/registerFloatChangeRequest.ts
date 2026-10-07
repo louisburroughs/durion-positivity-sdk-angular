@@ -22,6 +22,10 @@ export interface RegisterFloatChangeRequest {
      */
     bankGlAccountId: string;
     /**
+     * The ISO 4217 code of amount (ADR-0067); it must be the tenant\'s functional currency, else 422 CURRENCY_NOT_SUPPORTED
+     */
+    currencyCode: string;
+    /**
      * The date the change is posted on; today in the tenant\'s accounting time zone when omitted
      */
     effectiveDate?: string;
@@ -81,8 +85,8 @@ export function instanceOfRegisterFloatChangeRequest(value: object): value is Re
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRegisterFloatChangeRequestPropertyNames('amount', 'bankGlAccountId', 'justification', 'locationId', 'requestId', );
-    const optionalStringProperties = createRegisterFloatChangeRequestOptionalProperties({ name: 'bankGlAccountId', nullable: false }, { name: 'effectiveDate', nullable: false }, { name: 'justification', nullable: false }, { name: 'locationId', nullable: false }, { name: 'overrideJustification', nullable: false }, { name: 'requestId', nullable: false }, );
+    const requiredProperties = createRegisterFloatChangeRequestPropertyNames('amount', 'bankGlAccountId', 'currencyCode', 'justification', 'locationId', 'requestId', );
+    const optionalStringProperties = createRegisterFloatChangeRequestOptionalProperties({ name: 'bankGlAccountId', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'effectiveDate', nullable: false }, { name: 'justification', nullable: false }, { name: 'locationId', nullable: false }, { name: 'overrideJustification', nullable: false }, { name: 'requestId', nullable: false }, );
     const optionalNumberProperties = createRegisterFloatChangeRequestOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createRegisterFloatChangeRequestOptionalProperties();
 
