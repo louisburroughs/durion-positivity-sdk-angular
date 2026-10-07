@@ -1,5 +1,6 @@
 export * from './aPPayments.service';
 export * from './accountingAnalytics.service';
+export * from './accountingConfiguration.service';
 export * from './accountingEvents.service';
 export * from './accountingExports.service';
 export * from './accountingGL.service';
