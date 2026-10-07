@@ -5,6 +5,8 @@ export * from './accountingEventSubmitRequest';
 export * from './accountingEventTypeResponse';
 export * from './accountingPeriodReopenRequest';
 export * from './accountingPeriodResponse';
+export * from './accountingTimeZoneResponse';
+export * from './accountingTimeZoneUpdateRequest';
 export * from './adjustmentReverseRequest';
 export * from './adjustmentTypeResponse';
 export * from './agedPayablesReport';
