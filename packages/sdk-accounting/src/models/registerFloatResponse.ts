@@ -18,6 +18,10 @@ export interface RegisterFloatResponse {
      */
     amount: number;
     /**
+     * The ISO 4217 code of previousAmount and amount: the currency the register\'s float is held in, the tenant\'s functional currency (ADR-0067)
+     */
+    currencyCode: string;
+    /**
      * The date the entry is dated on
      */
     effectiveDate: string;
@@ -97,8 +101,8 @@ export function instanceOfRegisterFloatResponse(value: object): value is Registe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRegisterFloatResponsePropertyNames('amount', 'effectiveDate', 'kind', 'locationId', 'previousAmount', 'registerId', );
-    const optionalStringProperties = createRegisterFloatResponseOptionalProperties({ name: 'effectiveDate', nullable: false }, { name: 'journalEntryId', nullable: true }, { name: 'journalEntryNumber', nullable: false }, { name: 'kind', nullable: false }, { name: 'locationId', nullable: false }, { name: 'registerId', nullable: false }, );
+    const requiredProperties = createRegisterFloatResponsePropertyNames('amount', 'currencyCode', 'effectiveDate', 'kind', 'locationId', 'previousAmount', 'registerId', );
+    const optionalStringProperties = createRegisterFloatResponseOptionalProperties({ name: 'currencyCode', nullable: false }, { name: 'effectiveDate', nullable: false }, { name: 'journalEntryId', nullable: true }, { name: 'journalEntryNumber', nullable: false }, { name: 'kind', nullable: false }, { name: 'locationId', nullable: false }, { name: 'registerId', nullable: false }, );
     const optionalNumberProperties = createRegisterFloatResponseOptionalProperties({ name: 'amount', nullable: false }, { name: 'previousAmount', nullable: false }, );
     const optionalBooleanProperties = createRegisterFloatResponseOptionalProperties({ name: 'replayed', nullable: false }, );
 
