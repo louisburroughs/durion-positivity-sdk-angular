@@ -18,14 +18,6 @@ export interface OpenSessionRequest {
      */
     locationId?: string;
     /**
-     * Clerk opening the session
-     */
-    openedByClerkId: string;
-    /**
-     * Starting drawer cash; defaults to the terminal\'s previous counted close when omitted
-     */
-    openingFloat?: number;
-    /**
      * Terminal the drawer belongs to; one open session per terminal
      */
     terminalId: string;
@@ -69,9 +61,9 @@ export function instanceOfOpenSessionRequest(value: object): value is OpenSessio
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createOpenSessionRequestPropertyNames('openedByClerkId', 'terminalId', );
-    const optionalStringProperties = createOpenSessionRequestOptionalProperties({ name: 'locationId', nullable: false }, { name: 'openedByClerkId', nullable: false }, { name: 'terminalId', nullable: false }, );
-    const optionalNumberProperties = createOpenSessionRequestOptionalProperties({ name: 'openingFloat', nullable: false }, );
+    const requiredProperties = createOpenSessionRequestPropertyNames('terminalId', );
+    const optionalStringProperties = createOpenSessionRequestOptionalProperties({ name: 'locationId', nullable: false }, { name: 'terminalId', nullable: false }, );
+    const optionalNumberProperties = createOpenSessionRequestOptionalProperties();
     const optionalBooleanProperties = createOpenSessionRequestOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

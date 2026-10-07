@@ -21,6 +21,12 @@ import { ApiError } from '../models/apiError';
 // @ts-ignore
 import { BeginCloseRequest } from '../models/beginCloseRequest';
 // @ts-ignore
+import { CashMovementApprovalRequest } from '../models/cashMovementApprovalRequest';
+// @ts-ignore
+import { CashMovementApprovalResponse } from '../models/cashMovementApprovalResponse';
+// @ts-ignore
+import { CashMovementOptionsResponse } from '../models/cashMovementOptionsResponse';
+// @ts-ignore
 import { CashMovementRequest } from '../models/cashMovementRequest';
 // @ts-ignore
 import { CashMovementResponse } from '../models/cashMovementResponse';
@@ -29,7 +35,11 @@ import { OpenSessionRequest } from '../models/openSessionRequest';
 // @ts-ignore
 import { RegisterSessionResponse } from '../models/registerSessionResponse';
 // @ts-ignore
+import { SessionPolicyResponse } from '../models/sessionPolicyResponse';
+// @ts-ignore
 import { SessionReportResponse } from '../models/sessionReportResponse';
+// @ts-ignore
+import { UpdateSessionPolicyRequest } from '../models/updateSessionPolicyRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -123,7 +133,7 @@ export class RegisterSessionsService extends BaseService {
 
     /**
      * Confirm a Register Session Close
-     * Finalizes a CLOSING register session: snapshots theoretical cash (opening float plus net CASH settlements plus signed cash movements), computes the over/short against the counted drawer, and moves the session to CLOSED. Use this tool to finish the close after the count; do not use beginSessionClose, which records the count and must run first. Preconditions: the session must be in CLOSING, and no order on the session may have re-entered PENDING_PAYMENT since the count began. Required inputs: sessionId (UUID) as a path parameter; there is no request body — an over/short beyond the authorized difference limit (default 5.00, configurable via pos.order.session.authorized-difference-limit) additionally requires the order:session:approve_variance permission. Emits an ORDER_SESSION_CONFIRM_CLOSE event and publishes a register-session-closed fact carrying per-tender totals and the reconciliation figures. Returns 200 with the CLOSED session, 403 when the variance exceeds the limit without the approval permission, 404 when the session does not exist, and 409 when the session is not in CLOSING or an order is still awaiting payment.
+     * Finalizes a CLOSING register session: snapshots theoretical cash (opening float plus net CASH settlements plus signed cash movements), computes the over/short against the counted drawer, and moves the session to CLOSED. Use this tool to finish the close after the count; do not use beginSessionClose, which records the count and must run first. Preconditions: the session must be in CLOSING, and no order on the session may have re-entered PENDING_PAYMENT since the count began. Required inputs: sessionId (UUID) as a path parameter; there is no request body — an over/short beyond the tenant\&#39;s over/short tolerance (drawer policy, default 5.00) additionally requires the order:session:approve_variance permission. Emits an ORDER_SESSION_CONFIRM_CLOSE event and publishes a register-session-closed fact (schema version 2) carrying per-tender totals, the reconciliation figures and every cash movement with its reason, amount, details, cashier and approver. Returns 200 with the CLOSED session, 403 when the variance exceeds the tolerance without the approval permission, 404 when the session does not exist, and 409 when the session is not in CLOSING or an order is still awaiting payment.
      * @endpoint post /v1/orders/sessions/{sessionId}/confirm-close
      * @param sessionId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -169,6 +179,66 @@ export class RegisterSessionsService extends BaseService {
         let localVarPath = `/v1/orders/sessions/${this.configuration.encodeParam({name: "sessionId", value: sessionId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/confirm-close`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<RegisterSessionResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Cash Movement Options for a Session
+     * Returns what the register may offer the cashier for a session: per fixed reason whether it is allowed now, its cashier limit, the session\&#39;s running total, whether a manager is always needed and the fields it requires; and the ACTIVE petty-expense categories (code, label, examples). Use this tool to build the drawer cash in/out screen; use getSessionPolicy instead to read or manage the tenant\&#39;s policy. Amounts are in the functional currency, stated as currencyCode. Preconditions: the session must exist, within the caller\&#39;s location scope (ADR-0061). Required inputs: sessionId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no register session exists for the supplied id, and 403 LOCATION_SCOPE_DENIED when its location is outside the caller\&#39;s scope.
+     * @endpoint get /v1/orders/sessions/{sessionId}/cash-movement-options
+     * @param sessionId
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getCashMovementOptions(sessionId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CashMovementOptionsResponse>;
+    public getCashMovementOptions(sessionId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CashMovementOptionsResponse>>;
+    public getCashMovementOptions(sessionId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CashMovementOptionsResponse>>;
+    public getCashMovementOptions(sessionId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (sessionId === null || sessionId === undefined) {
+            throw new Error('Required parameter sessionId was null or undefined when calling getCashMovementOptions.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/orders/sessions/${this.configuration.encodeParam({name: "sessionId", value: sessionId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/cash-movement-options`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<CashMovementOptionsResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -314,8 +384,64 @@ export class RegisterSessionsService extends BaseService {
     }
 
     /**
+     * Get the Drawer Policy
+     * Returns the tenant\&#39;s drawer policy and its change history: per movement type (petty expenses, vendor cash on delivery, bank drop, float change) whether cashiers may record it, the cashier limit on a session\&#39;s running total and whether a manager is always needed; the over/short tolerance above which a close needs order:session:approve_variance; and every change, newest first. Bank drop and float change are read-only rows. Use this tool to read the policy before changing it; use getCashMovementOptions instead for what one register session may record now. Preconditions: none — a tenant that never changed the policy gets the defaults (petty expenses on at 50.00, vendor cash on delivery off, tolerance 5.00). Required inputs: none; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with the policy.
+     * @endpoint get /v1/orders/session-policy
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getSessionPolicy(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SessionPolicyResponse>;
+    public getSessionPolicy(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SessionPolicyResponse>>;
+    public getSessionPolicy(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SessionPolicyResponse>>;
+    public getSessionPolicy(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/orders/session-policy`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<SessionPolicyResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * X-Report for a Register Session
-     * Returns an interim X-report for a register session: opening float, per-tender totals, cash settlements, cash movements, theoretical cash, and over/short when a count has been recorded. Use this tool for mid-shift figures while the session is open; use getSessionZReport instead for the end-of-session close summary. Preconditions: the session must exist; figures are computed live from the session\&#39;s current ledger. Required inputs: sessionId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only report projection. Returns 404 when no register session exists for the supplied id.
+     * Returns an interim X-report for a register session: opening float, per-tender totals, cash settlements, cash movements with their reason and details, theoretical cash, and over/short when a count has been recorded. Use this tool for mid-shift figures while the session is open; use getSessionZReport instead for the end-of-session close summary. Preconditions: the session must exist; figures are computed live from the session\&#39;s current ledger. Required inputs: sessionId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only report projection. Returns 404 when no register session exists for the supplied id.
      * @endpoint get /v1/orders/sessions/{sessionId}/x-report
      * @param sessionId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -495,9 +621,9 @@ export class RegisterSessionsService extends BaseService {
 
     /**
      * Open a Register Session
-     * Opens an OPEN register (drawer) session on a terminal; sales orders created on the terminal while it is open bind to it, and it supplies their location by default. Use this tool at the start of a drawer shift; do not use recordCashMovement, which requires a session that is already open. Preconditions: the terminal must have no session in OPEN or CLOSING — one drawer per terminal. A caller whose order:session:open grant is location-scoped must have the resolved location within reach (ADR-0061); for such a caller a session that resolves to no location is denied. Required inputs: terminalId and openedByClerkId; openingFloat defaults to the terminal\&#39;s previous counted close (else zero) when omitted, and locationId defaults from the terminal\&#39;s previous session. Emits an ORDER_SESSION_OPEN event. Returns 201 with the new session, 403 LOCATION_SCOPE_DENIED when the caller\&#39;s location scope does not cover the resolved location, and 409 when the terminal already has an active session.
+     * Opens an OPEN register (drawer) session on a terminal; sales orders created on the terminal while it is open bind to it, and it supplies their location by default. Use this tool at the start of a drawer shift; do not use recordCashMovement, which requires a session that is already open. Preconditions: the terminal must have no session in OPEN or CLOSING — one drawer per terminal. A caller whose order:session:open grant is location-scoped must have the resolved location within reach (ADR-0061); a register whose configured float is held at another location than the resolved one does not open there. Required inputs: terminalId; locationId defaults to the register\&#39;s float location, else the terminal\&#39;s previous session\&#39;s; the opening float is the configured float (zero when none or negative) and the opener is the caller, so an openingFloat or openedByClerkId is ignored. Emits an ORDER_SESSION_OPEN event. Returns 201 with the new session, 403 LOCATION_SCOPE_DENIED when the caller\&#39;s location scope does not cover the resolved location, 409 when the terminal already has an active session, and 422 REGISTER_FLOAT_LOCATION_MISMATCH when the float is held elsewhere.
      * @endpoint post /v1/orders/sessions
-     * @param openSessionRequest The terminal, clerk, and optional opening-float context for the shift.
+     * @param openSessionRequest The terminal and optional location of the shift.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -565,10 +691,10 @@ export class RegisterSessionsService extends BaseService {
 
     /**
      * Record a Drawer Cash Movement
-     * Records a PAID_IN or PAID_OUT cash movement against an OPEN register session; movements feed the theoretical-cash calculation at close. Use this tool for non-sale drawer cash such as petty cash or bank drops; do not use beginSessionClose, which records the final counted drawer instead. Preconditions: the session must exist and be OPEN — movements are rejected once closing has begun. Required inputs: movementType (PAID_IN or PAID_OUT), a positive amount, reason, and clerkId. Emits an ORDER_SESSION_CASH_MOVEMENT event. Returns 201 with the recorded movement, 400 when the amount is not positive or the movement type is unknown, 404 when the session does not exist, and 409 when the session is not OPEN.
+     * Records a drawer cash movement with one of the fixed reasons against an OPEN register session: PETTY_EXPENSE (out), VENDOR_COD (out), BANK_DROP (out), FLOAT_INCREASE (in) or FLOAT_DECREASE (out); the direction follows the reason and movements feed the theoretical cash at close. Use this tool for non-sale drawer cash such as a petty expense or the bank drop; use requestCashMovementApproval first when a manager must approve, and do not use beginSessionClose, which records the final counted drawer instead. Preconditions: the session must exist and be OPEN; the reason\&#39;s type must be allowed by the tenant\&#39;s drawer policy; a petty expense needs an ACTIVE category; a float movement must match the difference between the register\&#39;s configured float and the drawer\&#39;s float. Above the cashier limit on the session\&#39;s running total of the reason, and for every float change, the request must carry a manager\&#39;s approvalToken whose approver is not the caller; a caller whose grant is location-scoped must have the session\&#39;s location within reach (ADR-0061). Required inputs: requestId (UUIDv7, the idempotency key), reason, a positive amount and its currencyCode (ISO 4217, the functional currency); categoryCode, receiptReference and note for PETTY_EXPENSE; vendorId for VENDOR_COD; bagNumber for BANK_DROP. The cashier is the caller; a clerkId in the body is ignored. Emits an ORDER_SESSION_CASH_MOVEMENT event. Returns 201 with the recorded movement and 200 with the first result when the requestId was already recorded with the same payload; 400 REGISTER_SESSION_INVALID_ARGUMENT for a missing or malformed field (VALIDATION_ERROR for a non-ISO currencyCode), 403 for the approval rules or LOCATION_SCOPE_DENIED, 404 when the session does not exist, 409 REGISTER_SESSION_CONFLICT when the session is not OPEN or IDEMPOTENCY_CONFLICT when the requestId was used for another movement, and 422 for a drawer rule or CURRENCY_NOT_SUPPORTED for a currency other than the functional currency.
      * @endpoint post /v1/orders/sessions/{sessionId}/cash-movements
      * @param sessionId
-     * @param cashMovementRequest The cash movement: direction, positive amount, reason, and clerk.
+     * @param cashMovementRequest The movement: requestId, reason, positive amount, the reason\&#39;s fields and, when a manager must approve, the approval token.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -627,6 +753,150 @@ export class RegisterSessionsService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: cashMovementRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Approve a Drawer Cash Movement (Manager Step-Up)
+     * Verifies a manager\&#39;s own credentials, entered once at the shared register under the cashier\&#39;s sign-in, and returns a single-use approval token for one cash movement. pos-security-service checks the credentials in the caller\&#39;s tenant under the sign-in lockout policy; no token is issued to the manager, no session is opened, and the cashier\&#39;s session is untouched. Use this tool when recordCashMovement needs a manager (above the cashier limit, or a float change), then send the token as the movement\&#39;s approvalToken before it expires; do not use it to sign the manager in — it issues no sign-in token and opens no session. Preconditions: the session must exist and be OPEN, within the caller\&#39;s location scope; the verified person must hold order:session:approve_cash_movement with a location scope that reaches the session\&#39;s location, and must not be the caller; after five failed approvals on one session the step-up refuses without checking. Required inputs: managerUsername, managerPassword, reason, the movement\&#39;s exact amount and its currencyCode (the functional currency), plus its categoryCode or vendorId when it has one; the token is bound to the session, reason, amount, currency and category or vendor, expires after five minutes and is used once. Emits an ORDER_SESSION_CASH_MOVEMENT_APPROVE event; the password is never stored or logged. Returns 201 with the token and its expiry; 400 for a missing field; 403 CASH_MOVEMENT_APPROVAL_DENIED for any failed check (wrong or unknown credentials, a locked or inactive account, or a person without the permission — the same body for every reason, never 401), CASH_MOVEMENT_SELF_APPROVAL for the caller\&#39;s own credentials, CASH_MOVEMENT_CALLER_UNIDENTIFIED when the caller\&#39;s sign-in carries no user id, or LOCATION_SCOPE_DENIED; 404 when the session does not exist; 409 when it is not OPEN; 422 CURRENCY_NOT_SUPPORTED for a currency other than the functional currency; 503 when the credentials could not be checked.
+     * @endpoint post /v1/orders/sessions/{sessionId}/cash-movement-approvals
+     * @param sessionId
+     * @param cashMovementApprovalRequest The manager\&#39;s credentials and the movement the approval is for.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public requestCashMovementApproval(sessionId: string, cashMovementApprovalRequest: CashMovementApprovalRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CashMovementApprovalResponse>;
+    public requestCashMovementApproval(sessionId: string, cashMovementApprovalRequest: CashMovementApprovalRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CashMovementApprovalResponse>>;
+    public requestCashMovementApproval(sessionId: string, cashMovementApprovalRequest: CashMovementApprovalRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CashMovementApprovalResponse>>;
+    public requestCashMovementApproval(sessionId: string, cashMovementApprovalRequest: CashMovementApprovalRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (sessionId === null || sessionId === undefined) {
+            throw new Error('Required parameter sessionId was null or undefined when calling requestCashMovementApproval.');
+        }
+        if (cashMovementApprovalRequest === null || cashMovementApprovalRequest === undefined) {
+            throw new Error('Required parameter cashMovementApprovalRequest was null or undefined when calling requestCashMovementApproval.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/orders/sessions/${this.configuration.encodeParam({name: "sessionId", value: sessionId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/cash-movement-approvals`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<CashMovementApprovalResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: cashMovementApprovalRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Replace the Drawer Policy
+     * Replaces the two configurable movement types (petty expenses and vendor cash on delivery: allowed and cashier limit) and the over/short tolerance, with a justification. Each changed setting writes one history row (old and new value, actor, justification); a request that changes nothing writes nothing. Switching a type off is never retroactive: recorded movements stand and are carried on the close fact. Use this tool to change the drawer limits after reading them with getSessionPolicy; do not use it to see what one register session may record now — use getCashMovementOptions instead. Preconditions: an allowed type needs a cashier limit; vendor cash on delivery stays off until pos-order holds the vendor list. Required inputs: the version read (null only while the defaults apply), currencyCode (the functional currency, ISO 4217), pettyExpense and vendorCod (allowed, cashierLimit), overShortTolerance and a justification of at least 10 characters; limits and the tolerance must not be negative. Emits an ORDER_SESSION_POLICY_UPDATE event when a setting changes, and nothing otherwise. Returns 200 with the policy and its history, 400 VALIDATION_ERROR for a field rule or a missing or non-ISO currencyCode, 409 SESSION_POLICY_CONFLICT when the version read is not the current one or another change won a race (read again and retry), and 422 CURRENCY_NOT_SUPPORTED for a currency other than the functional currency.
+     * @endpoint put /v1/orders/session-policy
+     * @param updateSessionPolicyRequest The configurable types, the tolerance and why.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public updateSessionPolicy(updateSessionPolicyRequest: UpdateSessionPolicyRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SessionPolicyResponse>;
+    public updateSessionPolicy(updateSessionPolicyRequest: UpdateSessionPolicyRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SessionPolicyResponse>>;
+    public updateSessionPolicy(updateSessionPolicyRequest: UpdateSessionPolicyRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SessionPolicyResponse>>;
+    public updateSessionPolicy(updateSessionPolicyRequest: UpdateSessionPolicyRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (updateSessionPolicyRequest === null || updateSessionPolicyRequest === undefined) {
+            throw new Error('Required parameter updateSessionPolicyRequest was null or undefined when calling updateSessionPolicy.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/orders/session-policy`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<SessionPolicyResponse>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: updateSessionPolicyRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
