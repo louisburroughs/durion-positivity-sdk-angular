@@ -13,14 +13,84 @@
  * A drawer cash movement
  */
 export interface CashMovementResponse {
+    /**
+     * Positive amount moved
+     */
     amount?: number;
+    /**
+     * User id of the approving manager, or null
+     */
+    approvedBy?: string;
+    /**
+     * Deposit bag, for BANK_DROP
+     */
+    bagNumber?: string;
+    /**
+     * Petty-expense category, for PETTY_EXPENSE
+     */
+    categoryCode?: string;
+    /**
+     * Cashier who recorded it, from the security context (sign-in name)
+     */
     clerkId?: string;
+    /**
+     * The cashier\'s user id, when the sign-in carried one
+     */
+    clerkUserId?: string;
+    /**
+     * ISO 4217 code of the amount (the functional currency)
+     */
+    currencyCode?: string;
+    /**
+     * Movement id
+     */
     movementId?: string;
-    movementType?: string;
+    /**
+     * Direction, derived from the reason
+     */
+    movementType?: CashMovementResponseMovementTypeEnum;
+    /**
+     * Free-text note (the whole free-text reason of an older movement)
+     */
+    note?: string;
+    /**
+     * When the movement was recorded
+     */
     occurredAt?: string;
-    reason?: string;
+    /**
+     * The fixed reason; null on a movement recorded before the fixed reasons
+     */
+    reason?: CashMovementResponseReasonEnum;
+    /**
+     * Receipt, for PETTY_EXPENSE
+     */
+    receiptReference?: string;
+    /**
+     * The register\'s idempotency key; null on a movement recorded before the fixed reasons
+     */
+    requestId?: string;
+    /**
+     * Session the movement belongs to
+     */
     sessionId?: string;
+    /**
+     * Vendor paid, for VENDOR_COD
+     */
+    vendorId?: string;
 }
+export enum CashMovementResponseMovementTypeEnum {
+    PaidIn = 'PAID_IN',
+    PaidOut = 'PAID_OUT'
+};
+export enum CashMovementResponseReasonEnum {
+    PettyExpense = 'PETTY_EXPENSE',
+    VendorCod = 'VENDOR_COD',
+    BankDrop = 'BANK_DROP',
+    FloatIncrease = 'FLOAT_INCREASE',
+    FloatDecrease = 'FLOAT_DECREASE'
+};
+
+
 
 function isOptionalCashMovementResponsePropertyOfType(
     value: Record<string, unknown>,
@@ -61,7 +131,7 @@ export function instanceOfCashMovementResponse(value: object): value is CashMove
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCashMovementResponsePropertyNames();
-    const optionalStringProperties = createCashMovementResponseOptionalProperties({ name: 'clerkId', nullable: false }, { name: 'movementId', nullable: false }, { name: 'movementType', nullable: false }, { name: 'occurredAt', nullable: false }, { name: 'reason', nullable: false }, { name: 'sessionId', nullable: false }, );
+    const optionalStringProperties = createCashMovementResponseOptionalProperties({ name: 'approvedBy', nullable: false }, { name: 'bagNumber', nullable: false }, { name: 'categoryCode', nullable: false }, { name: 'clerkId', nullable: false }, { name: 'clerkUserId', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'movementId', nullable: false }, { name: 'movementType', nullable: false }, { name: 'note', nullable: false }, { name: 'occurredAt', nullable: false }, { name: 'reason', nullable: false }, { name: 'receiptReference', nullable: false }, { name: 'requestId', nullable: false }, { name: 'sessionId', nullable: false }, { name: 'vendorId', nullable: false }, );
     const optionalNumberProperties = createCashMovementResponseOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createCashMovementResponseOptionalProperties();
 

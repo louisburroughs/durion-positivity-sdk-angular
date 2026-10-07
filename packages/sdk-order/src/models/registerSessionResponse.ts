@@ -17,6 +17,10 @@ export interface RegisterSessionResponse {
     closedByClerkId?: string;
     closingStartedAt?: string;
     countedCash?: number;
+    /**
+     * ISO 4217 code of every amount on the drawer, stamped from the functional currency when it opened (ADR-0067); a configuration change applies only to drawers opened later
+     */
+    currencyCode?: string;
     locationId?: string;
     openedAt?: string;
     openedByClerkId?: string;
@@ -68,7 +72,7 @@ export function instanceOfRegisterSessionResponse(value: object): value is Regis
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createRegisterSessionResponsePropertyNames();
-    const optionalStringProperties = createRegisterSessionResponseOptionalProperties({ name: 'closedAt', nullable: false }, { name: 'closedByClerkId', nullable: false }, { name: 'closingStartedAt', nullable: false }, { name: 'locationId', nullable: false }, { name: 'openedAt', nullable: false }, { name: 'openedByClerkId', nullable: false }, { name: 'sessionId', nullable: false }, { name: 'status', nullable: false }, { name: 'terminalId', nullable: false }, );
+    const optionalStringProperties = createRegisterSessionResponseOptionalProperties({ name: 'closedAt', nullable: false }, { name: 'closedByClerkId', nullable: false }, { name: 'closingStartedAt', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'locationId', nullable: false }, { name: 'openedAt', nullable: false }, { name: 'openedByClerkId', nullable: false }, { name: 'sessionId', nullable: false }, { name: 'status', nullable: false }, { name: 'terminalId', nullable: false }, );
     const optionalNumberProperties = createRegisterSessionResponseOptionalProperties({ name: 'countedCash', nullable: false }, { name: 'openingFloat', nullable: false }, { name: 'overShort', nullable: false }, { name: 'theoreticalCash', nullable: false }, );
     const optionalBooleanProperties = createRegisterSessionResponseOptionalProperties({ name: 'varianceApproved', nullable: false }, );
 

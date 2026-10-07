@@ -10,7 +10,7 @@
 
 
 /**
- * Request payload for recording a drawer cash movement
+ * Request payload for recording a drawer cash movement with one of the fixed reasons
  */
 export interface CashMovementRequest {
     /**
@@ -18,21 +18,48 @@ export interface CashMovementRequest {
      */
     amount: number;
     /**
-     * Clerk recording the movement
+     * A manager\'s single-use approval token from the cash-movement-approvals step-up; required above the cashier limit and for every float change
      */
-    clerkId: string;
+    approvalToken?: string;
     /**
-     * Movement direction
+     * Deposit bag number; required for BANK_DROP
      */
-    movementType: CashMovementRequestMovementTypeEnum;
+    bagNumber?: string;
     /**
-     * Reason for the movement
+     * ACTIVE petty-expense category code; required for PETTY_EXPENSE
      */
-    reason: string;
+    categoryCode?: string;
+    /**
+     * ISO 4217 code of the amount; must be the functional currency (ADR-0067)
+     */
+    currencyCode: string;
+    /**
+     * Free-text note; required for PETTY_EXPENSE, optional otherwise
+     */
+    note?: string;
+    /**
+     * The fixed reason; it decides the direction and the required fields
+     */
+    reason: CashMovementRequestReasonEnum;
+    /**
+     * Receipt reference; required for PETTY_EXPENSE
+     */
+    receiptReference?: string;
+    /**
+     * The register\'s idempotency key (UUIDv7): a retry with the same id returns the first result
+     */
+    requestId: string;
+    /**
+     * The vendor paid; required for VENDOR_COD
+     */
+    vendorId?: string;
 }
-export enum CashMovementRequestMovementTypeEnum {
-    PaidIn = 'PAID_IN',
-    PaidOut = 'PAID_OUT'
+export enum CashMovementRequestReasonEnum {
+    PettyExpense = 'PETTY_EXPENSE',
+    VendorCod = 'VENDOR_COD',
+    BankDrop = 'BANK_DROP',
+    FloatIncrease = 'FLOAT_INCREASE',
+    FloatDecrease = 'FLOAT_DECREASE'
 };
 
 
@@ -75,8 +102,8 @@ export function instanceOfCashMovementRequest(value: object): value is CashMovem
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCashMovementRequestPropertyNames('amount', 'clerkId', 'movementType', 'reason', );
-    const optionalStringProperties = createCashMovementRequestOptionalProperties({ name: 'clerkId', nullable: false }, { name: 'movementType', nullable: false }, { name: 'reason', nullable: false }, );
+    const requiredProperties = createCashMovementRequestPropertyNames('amount', 'currencyCode', 'reason', 'requestId', );
+    const optionalStringProperties = createCashMovementRequestOptionalProperties({ name: 'approvalToken', nullable: false }, { name: 'bagNumber', nullable: false }, { name: 'categoryCode', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'note', nullable: false }, { name: 'reason', nullable: false }, { name: 'receiptReference', nullable: false }, { name: 'requestId', nullable: false }, { name: 'vendorId', nullable: false }, );
     const optionalNumberProperties = createCashMovementRequestOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createCashMovementRequestOptionalProperties();
 
