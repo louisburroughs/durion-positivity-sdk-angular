@@ -28,6 +28,8 @@ import { TaxCalculationResponse } from '../models/taxCalculationResponse';
 import { TaxProviderTransactionResult } from '../models/taxProviderTransactionResult';
 // @ts-ignore
 import { TaxRateLookupResponse } from '../models/taxRateLookupResponse';
+// @ts-ignore
+import { TaxTypesResponse } from '../models/taxTypesResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -47,7 +49,7 @@ export class TaxService extends BaseService {
 
     /**
      * Calculate tax
-     * Calculates tax for the supplied line items against the destination address and returns the per-line and total tax amounts. Use this tool whenever a quote, estimate or invoice needs tax figures; do not use it to make a calculation permanent, which is commitTaxDocument. Preconditions: none beyond an authenticated caller; when an exemption is claimed the referenced certificate must already exist in the registry and be ACTIVE for the destination state on the transaction date, otherwise tax is calculated as taxable. Required inputs: lineItems (at least one) and destinationAddress with countryCode and postalCode; currencyCode defaults to USD, calculationType defaults to SALE, and referenceId should carry the source document id so the result can later be committed. Emits a TAX_CALCULATE event and, in production mode, calls the configured external tax provider; no provider document is created until commitTaxDocument is called. Returns 400 when line items or the destination address are missing or malformed, and 500 when the provider is unreachable in production mode.
+     * Calculates tax for the supplied line items against the destination address and returns the per-line and total tax amounts. Use this tool whenever a quote, estimate or invoice needs tax figures; do not use it to make a calculation permanent, which is commitTaxDocument. Preconditions: none beyond an authenticated caller; when an exemption is claimed the referenced certificate must already exist in the registry and be ACTIVE for the destination state on the transaction date, otherwise tax is calculated as taxable. Required inputs: lineItems (at least one) and destinationAddress with countryCode and postalCode; currencyCode defaults to USD, calculationType defaults to SALE, and referenceId should carry the source document id so the result can later be committed. Emits a TAX_CALCULATE event and, in production mode, calls the configured external tax provider; no provider document is created until commitTaxDocument is called. A destination whose country the per-country default routes to a plug-in is priced by that plug-in in every provider mode, one typed jurisdiction row per tax type, and taxType and inputTaxRecoverable are null on every other country\&#39;s rows. Returns 400 when line items or the destination address are missing or malformed, 422 TAX_JURISDICTION_NOT_CONFIGURED when such a country has no rate row for the region on the transaction date or CURRENCY_NOT_SUPPORTED when currencyCode is not that country\&#39;s configured currency, and 500 when the provider is unreachable in production mode.
      * @endpoint post /v1/tax/calculate
      * @param taxCalculationRequest International tax calculation request
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -190,7 +192,7 @@ export class TaxService extends BaseService {
 
     /**
      * Look up jurisdiction tax rates
-     * Resolves the per-jurisdiction tax rates applicable to a destination address, without calculating tax for any line items. Use this tool to preview or display the rate breakdown for an address; do not use it to compute tax on a cart or invoice, which is calculateTax. Preconditions: this endpoint is internal-only (ADR-0021/ADR-0014) — it has no gateway route and is reached only by direct in-cluster calls, never through pos-api-gateway. Required inputs: countryCode (ISO 3166-1 alpha-2) and postalCode; regionCode and city narrow the match further, and asOf (ISO-8601 date) defaults to today. No events are emitted and no state changes; components are per-jurisdiction rates as decimal fractions (not a blended estimate), and SPECIAL/DISTRICT jurisdiction types appear only when a configured rule produces them — today\&#39;s test-mode rules emit STATE/COUNTY/CITY. Returns 400 when countryCode or postalCode are missing or malformed, and 501 when the configured tax provider does not support rate-only lookup (every production provider today; AvaTax rate-by-address is a documented follow-up, not yet implemented).
+     * Resolves the per-jurisdiction tax rates applicable to a destination address, without calculating tax for any line items. Use this tool to preview or display the rate breakdown for an address; do not use it to compute tax on a cart or invoice, which is calculateTax. Preconditions: this endpoint is internal-only (ADR-0021/ADR-0014) — it has no gateway route and is reached only by direct in-cluster calls, never through pos-api-gateway. Required inputs: countryCode (ISO 3166-1 alpha-2) and postalCode; regionCode and city narrow the match further, and asOf (ISO-8601 date) defaults to today. No events are emitted and no state changes; components are per-jurisdiction rates as decimal fractions (not a blended estimate), and SPECIAL/DISTRICT jurisdiction types appear only when a configured rule produces them — today\&#39;s test-mode rules emit STATE/COUNTY/CITY. For a country whose per-country default routes it to a plug-in, the plug-in answers in every provider mode with one typed component per tax type in effect (taxType, inputTaxRecoverable, source STUB), and taxType and inputTaxRecoverable are null for every other country. Returns 400 when countryCode or postalCode are missing or malformed, 422 TAX_JURISDICTION_NOT_CONFIGURED when such a country has no rate row for the region on asOf, and 501 when the configured tax provider does not support rate-only lookup (every production provider today; AvaTax rate-by-address is a documented follow-up, not yet implemented).
      * @endpoint get /v1/tax/rates
      * @param countryCode
      * @param postalCode
@@ -349,6 +351,78 @@ export class TaxService extends BaseService {
         return this.httpClient.request<ModeResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List a country\&#39;s configured tax types
+     * Returns the tax types a country\&#39;s configured profile declares, with the regime each is registered and recovered under, the jurisdiction level it is levied at, its placeholder recoverability, the country\&#39;s regimes and its currency. Use this tool when a service must know a country\&#39;s tax types without naming any of them in its own code; do not use it to price an address, which is getTaxRates or calculateTax instead. Preconditions: this endpoint is internal-only (ADR-0021/ADR-0014), reached by direct in-cluster calls from pos-order, pos-invoice and pos-accounting with the service authority, never through pos-api-gateway. Required inputs: countryCode, two upper-case letters; there is no request body. No events are emitted and no state changes; every value is configuration held for expert advice, so source is always STUB. Returns 200 with empty lists and a null currency for a country without a profile, and 400 VALIDATION_ERROR when countryCode is missing or malformed.
+     * @endpoint get /v1/tax/tax-types
+     * @param countryCode
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getTaxTypes(countryCode: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxTypesResponse>;
+    public getTaxTypes(countryCode: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxTypesResponse>>;
+    public getTaxTypes(countryCode: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxTypesResponse>>;
+    public getTaxTypes(countryCode: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (countryCode === null || countryCode === undefined) {
+            throw new Error('Required parameter countryCode was null or undefined when calling getTaxTypes.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'countryCode',
+            <any>countryCode,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/tax/tax-types`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<TaxTypesResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
