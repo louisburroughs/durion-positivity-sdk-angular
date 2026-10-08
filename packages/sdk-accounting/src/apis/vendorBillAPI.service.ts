@@ -19,17 +19,27 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 // @ts-ignore
 import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { CandidateSelectionRequest } from '../models/candidateSelectionRequest';
-// @ts-ignore
-import { ExceptionResolutionRequest } from '../models/exceptionResolutionRequest';
-// @ts-ignore
 import { GoodsReceivedEvent } from '../models/goodsReceivedEvent';
 // @ts-ignore
 import { PageVendorBillListRow } from '../models/pageVendorBillListRow';
 // @ts-ignore
+import { PageVendorBillStageRow } from '../models/pageVendorBillStageRow';
+// @ts-ignore
+import { VendorBillApproveRequest } from '../models/vendorBillApproveRequest';
+// @ts-ignore
+import { VendorBillExceptionResolutionRequest } from '../models/vendorBillExceptionResolutionRequest';
+// @ts-ignore
 import { VendorBillMatchCandidateResponse } from '../models/vendorBillMatchCandidateResponse';
 // @ts-ignore
+import { VendorBillRejectRequest } from '../models/vendorBillRejectRequest';
+// @ts-ignore
 import { VendorBillResponse } from '../models/vendorBillResponse';
+// @ts-ignore
+import { VendorBillStageCounts } from '../models/vendorBillStageCounts';
+// @ts-ignore
+import { VendorBillSubmitRequest } from '../models/vendorBillSubmitRequest';
+// @ts-ignore
+import { VendorBillVoidRequest } from '../models/vendorBillVoidRequest';
 // @ts-ignore
 import { VendorInvoiceReceivedEvent } from '../models/vendorInvoiceReceivedEvent';
 
@@ -50,8 +60,82 @@ export class VendorBillAPIService extends BaseService {
     }
 
     /**
+     * Approve Vendor Bill
+     * Approves a vendor bill in AWAITING_APPROVAL and posts it in the same transaction, so a bill is approved if and only if it posted (AW37): accounts payable is credited the billed gross and the debits follow the VENDOR_BILL posting category by class (receipt-matched lines 2100 at the received price with the difference in 5050, unmatched goods 2100 at the stated net with the tax in 5050, expenses the chosen EXPENSE_&lt;CODE&gt; key with the tax). The vendor\&#39;s gross - (net + tax) within 0.01 per stated line, at most 0.05, goes on the largest debit as roundingAdjustment and a larger one where difference says (FREIGHT 5060, GOODS 2100, EXPENSE its key, PRICE_DIFFERENCE 5050); the entry is dated on the bill date when that is on or before today and its period is open, otherwise today. Use this tool for the approver\&#39;s decision on a bill sent for approval; do not use submitVendorBillForApproval, which only sends it, or resolveVendorBillMatchException with ACCEPT, which approves a bill still in MATCH_EXCEPTION. Preconditions: the bill is AWAITING_APPROVAL (CURRENCY_HOLD bills never are), a goods-receipt bill has its invoice matched, and until approval limits exist every bill needs accounting:ap:approve_over_limit. Required inputs: billId (UUID) as a path parameter; justification (at least 10 characters), classification {debitClass GOODS|EXPENSE, expenseMappingKey} (each field given wins over the one proposed at submission), difference (as submitVendorBillForApproval takes it) and overrideJustification (with accounting:period:override, to post into a CLOSED period) are optional. Emits ACCOUNTING_VENDOR_BILL_APPROVE and writes a VENDOR_BILL_APPROVE audit row; a refused posting writes one VENDOR_BILL_APPROVE_REFUSED row and changes nothing else, and a replayed approve finds the bill APPROVED and is answered 409 AP_BILL_NOT_APPROVABLE. Returns 200 with the bill read, its posting included; 400 JUSTIFICATION_REQUIRED, VALIDATION_ERROR or ARGUMENT_NOT_VALID; 401 without a valid token; 403 FORBIDDEN; 404 VENDOR_BILL_NOT_FOUND; 409 AP_BILL_NOT_APPROVABLE or AP_BILL_AWAITING_INVOICE; 422 AP_BILL_UNCLASSIFIED, AP_BILL_TOTALS_UNRECONCILED, AP_BILL_ZERO_TOTAL, PERIOD_CLOSED, PERIOD_HARD_LOCKED or GL_MAPPING_NOT_CONFIGURED (guided: referenceId CATEGORY/KEY and nextAction), each leaving the bill as it was.
+     * @endpoint post /v1/accounting/vendor-bills/{billId}/approve
+     * @param billId Vendor bill identifier
+     * @param vendorBillApproveRequest The approver\&#39;s optional justification, the classification the bill posts under, and an optional override justification for a CLOSED period.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public approveVendorBill(billId: string, vendorBillApproveRequest: VendorBillApproveRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VendorBillResponse>;
+    public approveVendorBill(billId: string, vendorBillApproveRequest: VendorBillApproveRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VendorBillResponse>>;
+    public approveVendorBill(billId: string, vendorBillApproveRequest: VendorBillApproveRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VendorBillResponse>>;
+    public approveVendorBill(billId: string, vendorBillApproveRequest: VendorBillApproveRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (billId === null || billId === undefined) {
+            throw new Error('Required parameter billId was null or undefined when calling approveVendorBill.');
+        }
+        if (vendorBillApproveRequest === null || vendorBillApproveRequest === undefined) {
+            throw new Error('Required parameter vendorBillApproveRequest was null or undefined when calling approveVendorBill.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/vendor-bills/${this.configuration.encodeParam({name: "billId", value: billId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/approve`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<VendorBillResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: vendorBillApproveRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Create Vendor Bill From Goods Received
-     * Creates a vendor bill in PENDING_RECEIPT_MATCH status from a goods-received event, totaling the received line items and syncing the vendor into the AP vendor directory. Use this tool when goods arrive against a purchase order; do not use matchVendorInvoice, which is the later step that matches the vendor\&#39;s invoice against this pending bill. Preconditions: none; a duplicate eventId is ignored and the existing bill is returned instead of creating a second one. Required inputs: eventId, organizationId, purchaseOrderId and vendorId (UUIDs), receivedDate, and lineItems each with productId, description, quantity and unitPrice; vendorName and dimensions are optional. Emits an ACCOUNTING_VENDOR_BILL_CREATE event; a vendor-directory sync failure is logged and never fails bill creation. Returns 201 with the created (or already-existing) bill, and 400 when the payload fails validation. Returns 409 AP_BILL_DUPLICATE when a live bill (any status except VOIDED or REJECTED) already holds the same vendor, bill date and bill number, compared ignoring case, spacing, punctuation and leading zeros; referenceId is the existing bill\&#39;s vendorBillId and nothing is created. A replayed eventId is never a duplicate.
+     * Creates a vendor bill in PENDING_RECEIPT_MATCH status from a goods-received event, totaling the received line items and syncing the vendor into the AP vendor directory. Use this tool when goods arrive against a purchase order; do not use matchVendorInvoice, which is the later step that matches the vendor\&#39;s invoice against this pending bill. Preconditions: none; a duplicate eventId is ignored and the existing bill is returned instead of creating a second one. Required inputs: eventId, organizationId, purchaseOrderId and vendorId (UUIDs), receivedDate, and lineItems each with productId, description, quantity and unitPrice; vendorName and dimensions are optional. Emits an ACCOUNTING_VENDOR_BILL_CREATE event and posts nothing (a bill posts once, at approval); a vendor-directory sync failure is logged and never fails bill creation. Returns 201 with the created (or already-existing) bill, and 400 when the payload fails validation. Returns 409 AP_BILL_DUPLICATE when a live bill (any status except VOIDED or REJECTED) already holds the same vendor, bill date and bill number, compared ignoring case, spacing, punctuation and leading zeros; referenceId is the existing bill\&#39;s vendorBillId and nothing is created. A replayed eventId is never a duplicate.
      * @endpoint post /v1/accounting/vendor-bills
      * @param goodsReceivedEvent Goods-received event payload that seeds a pending vendor bill.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -121,7 +205,7 @@ export class VendorBillAPIService extends BaseService {
 
     /**
      * Get Vendor Bill By Id
-     * Returns one vendor bill with its status, amounts, match metadata and approval history. Use this tool when the bill id is already known; use getVendorBillByOriginEventId instead when only the goods-received event id is available, or listApBills to browse APPROVED bills. Preconditions: the vendor bill must exist. Required inputs: billId (UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_VENDOR_BILL_GET audit event; no state changes. Returns 404 when no vendor bill exists for the supplied id.
+     * Returns one vendor bill as the review screen reads it: status, amounts (with the vendor\&#39;s net and tax) and open amount, channel, the submission and (once approved) the approval, the rejection, the status explanation, the latest match evidence, the open candidates of an ambiguous match (each with candidateId and invoiceEventId), re-issues held against it, the received lines with what was billed, the checks (MATCHED_TO_DELIVERY, WITHIN_PRICE_TOLERANCE, TOTALS_ADD_UP and, on an EDI bill classified GOODS, OPEN_DELIVERIES_FROM_VENDOR), the decisions the caller may take now (availableActions) and the posting (journalEntryReference, postingDate, postingDateRule, roundingAdjustment, difference, reversalReference). Use this tool when the bill id is already known; use getVendorBillByOriginEventId instead when only the goods-received event id is available, or listVendorBillsByStage to browse a stage. Preconditions: the vendor bill must exist. Required inputs: billId (UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_VENDOR_BILL_GET audit event; no state changes. Returns 404 VENDOR_BILL_NOT_FOUND when no vendor bill exists for the supplied id, 401 without a valid token, and 403 FORBIDDEN without accounting:ap:view.
      * @endpoint get /v1/accounting/vendor-bills/{billId}
      * @param billId Vendor bill identifier
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -240,6 +324,62 @@ export class VendorBillAPIService extends BaseService {
     }
 
     /**
+     * Get Vendor Bill Stage Counts
+     * Counts the vendor bills in each stage of Bills to pay, as of now: CHECK (PENDING_RECEIPT_MATCH, MATCH_EXCEPTION, CURRENCY_HOLD), APPROVE (AWAITING_APPROVAL), PAY (APPROVED with an open amount above 0) and DONE (APPROVED, paid in full, the last payment dated in the current month). There is no due-date window, so bills without a due date count. Use this tool for the live counts of the review; do not use listVendorBillsByStage, which lists the bills of one stage, or listVendorBills, which needs a due-date window. Preconditions: none beyond the caller holding accounting:ap:view. Required inputs: none. Emits an ACCOUNTING_VENDOR_BILL_STAGES_VIEW audit event; no state changes. Returns 200 with the four counts and asOf, 401 without a valid token, and 403 FORBIDDEN without accounting:ap:view.
+     * @endpoint get /v1/accounting/vendor-bills/stages
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getVendorBillStageCounts(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VendorBillStageCounts>;
+    public getVendorBillStageCounts(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VendorBillStageCounts>>;
+    public getVendorBillStageCounts(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VendorBillStageCounts>>;
+    public getVendorBillStageCounts(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/vendor-bills/stages`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<VendorBillStageCounts>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * List Vendor Bill Match Candidates
      * Lists the unresolved, scored candidate bills persisted when an invoice match came back AMBIGUOUS, ordered by score descending. Use this tool to review the choices before calling selectVendorBillMatchCandidate; do not use resolveVendorBillMatchException, which handles single-bill discrepancies rather than ambiguity. Preconditions: a matchVendorInvoice call for this invoice event must have produced an AMBIGUOUS outcome. Required inputs: invoiceEventId (UUID of the triggering invoice event) as a path parameter; there is no request body. Emits an ACCOUNTING_VENDOR_BILL_MATCH_CANDIDATES_LIST audit event; no state changes. Returns 200 with an empty list when no unresolved candidates exist for the event.
      * @endpoint get /v1/accounting/vendor-bills/match-candidates/{invoiceEventId}
@@ -313,10 +453,10 @@ export class VendorBillAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listVendorBills(dueFrom: string, dueTo: string, status?: 'PENDING_RECEIPT_MATCH' | 'MATCH_EXCEPTION' | 'CURRENCY_HOLD' | 'APPROVED' | 'REJECTED' | 'PAID' | 'VOIDED', page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageVendorBillListRow>;
-    public listVendorBills(dueFrom: string, dueTo: string, status?: 'PENDING_RECEIPT_MATCH' | 'MATCH_EXCEPTION' | 'CURRENCY_HOLD' | 'APPROVED' | 'REJECTED' | 'PAID' | 'VOIDED', page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageVendorBillListRow>>;
-    public listVendorBills(dueFrom: string, dueTo: string, status?: 'PENDING_RECEIPT_MATCH' | 'MATCH_EXCEPTION' | 'CURRENCY_HOLD' | 'APPROVED' | 'REJECTED' | 'PAID' | 'VOIDED', page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageVendorBillListRow>>;
-    public listVendorBills(dueFrom: string, dueTo: string, status?: 'PENDING_RECEIPT_MATCH' | 'MATCH_EXCEPTION' | 'CURRENCY_HOLD' | 'APPROVED' | 'REJECTED' | 'PAID' | 'VOIDED', page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listVendorBills(dueFrom: string, dueTo: string, status?: 'PENDING_RECEIPT_MATCH' | 'MATCH_EXCEPTION' | 'CURRENCY_HOLD' | 'AWAITING_APPROVAL' | 'APPROVED' | 'REJECTED' | 'PAID' | 'VOIDED', page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageVendorBillListRow>;
+    public listVendorBills(dueFrom: string, dueTo: string, status?: 'PENDING_RECEIPT_MATCH' | 'MATCH_EXCEPTION' | 'CURRENCY_HOLD' | 'AWAITING_APPROVAL' | 'APPROVED' | 'REJECTED' | 'PAID' | 'VOIDED', page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageVendorBillListRow>>;
+    public listVendorBills(dueFrom: string, dueTo: string, status?: 'PENDING_RECEIPT_MATCH' | 'MATCH_EXCEPTION' | 'CURRENCY_HOLD' | 'AWAITING_APPROVAL' | 'APPROVED' | 'REJECTED' | 'PAID' | 'VOIDED', page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageVendorBillListRow>>;
+    public listVendorBills(dueFrom: string, dueTo: string, status?: 'PENDING_RECEIPT_MATCH' | 'MATCH_EXCEPTION' | 'CURRENCY_HOLD' | 'AWAITING_APPROVAL' | 'APPROVED' | 'REJECTED' | 'PAID' | 'VOIDED', page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (dueFrom === null || dueFrom === undefined) {
             throw new Error('Required parameter dueFrom was null or undefined when calling listVendorBills.');
         }
@@ -425,8 +565,100 @@ export class VendorBillAPIService extends BaseService {
     }
 
     /**
+     * List Vendor Bills By Stage
+     * Lists the vendor bills of one stage of Bills to pay, each with its bill number, vendor name, total, currency, bill and due dates, status, channel, submittedAt and open amount. The server sets the order: CHECK and APPROVE oldest first, PAY by due date with bills without one last, DONE newest paid first. There is no due-date window. Use this tool for the bills behind one count of getVendorBillStageCounts; use getVendorBillById instead for one bill\&#39;s full review read. Preconditions: none beyond the caller holding accounting:ap:view. Required inputs: stage (CHECK, APPROVE, PAY or DONE); page (from 0) and size (capped at 100) are optional. Emits an ACCOUNTING_VENDOR_BILL_STAGE_LIST audit event; no state changes. Returns 200 with a page of rows, 400 VALIDATION_ERROR for an unknown stage, 401 without a valid token, and 403 FORBIDDEN without accounting:ap:view.
+     * @endpoint get /v1/accounting/vendor-bills/by-stage
+     * @param stage Stage
+     * @param page Page number, from 0
+     * @param size Page size, capped at 100
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listVendorBillsByStage(stage: 'CHECK' | 'APPROVE' | 'PAY' | 'DONE', page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageVendorBillStageRow>;
+    public listVendorBillsByStage(stage: 'CHECK' | 'APPROVE' | 'PAY' | 'DONE', page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageVendorBillStageRow>>;
+    public listVendorBillsByStage(stage: 'CHECK' | 'APPROVE' | 'PAY' | 'DONE', page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageVendorBillStageRow>>;
+    public listVendorBillsByStage(stage: 'CHECK' | 'APPROVE' | 'PAY' | 'DONE', page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (stage === null || stage === undefined) {
+            throw new Error('Required parameter stage was null or undefined when calling listVendorBillsByStage.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'stage',
+            <any>stage,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/vendor-bills/by-stage`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PageVendorBillStageRow>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Match Vendor Invoice
-     * Runs the three-way match of a received vendor invoice against pending goods-received bills: a HIGH_CONFIDENCE match with consistent quantities and prices auto-approves the bill, while a discrepancy, a MEDIUM confidence score or an AMBIGUOUS match parks it in MATCH_EXCEPTION. Use this tool when a vendor invoice arrives; do not use createVendorBillFromGoodsReceived, which records the receipt, and use resolveVendorBillMatchException or selectVendorBillMatchCandidate to clear exceptions. Preconditions: a bill in PENDING_RECEIPT_MATCH must exist for the vendor; an ambiguous outcome persists scored candidates for later operator selection. Required inputs: eventId, organizationId and vendorId (UUIDs), invoiceReference, invoiceDate and lineItems; dueDate is optional. Emits an ACCOUNTING_VENDOR_BILL_MATCH event; the returned bill\&#39;s status conveys the outcome (APPROVED or MATCH_EXCEPTION), so callers must inspect it rather than assume approval. Returns 400 when no pending receipt matches the invoice or the payload fails validation. Returns 409 AP_BILL_DUPLICATE when the matched bill would take an invoiceReference that another live bill (any status except VOIDED or REJECTED) of the same vendor already holds on the same bill date, compared ignoring case, spacing, punctuation and leading zeros; referenceId is that bill\&#39;s vendorBillId and the match changes nothing. A match that loses a concurrent race for the same number between that check and its commit answers the generic 409 DUPLICATE_RESOURCE instead, with no referenceId; the match is rolled back and no second bill holds the number.
+     * Runs the three-way match of a received vendor invoice against pending goods-received bills (never an EDI bill): a HIGH match (score 70 or more) within tolerance sends the bill to AWAITING_APPROVAL with submittedBy SYSTEM and never approves it, a MEDIUM score or a discrepancy parks it in MATCH_EXCEPTION, and an AMBIGUOUS match keeps the scored candidates for a person to select one; nothing is posted. Every routed single match takes the invoice\&#39;s number and its invoiceDate as the bill date (AW46) and keeps what the vendor billed (the billed total and each line\&#39;s billed quantity and price) and an append-only evidence record with the receipt date, the score, the points per criterion (amount 40 against the received total, products 30, date 20, purchase order 5) and the line comparison. Use this tool when a vendor invoice arrives; do not use createVendorBillFromGoodsReceived, which records the receipt, and use resolveVendorBillMatchException or selectVendorBillMatchCandidate to clear exceptions. Preconditions: a bill in PENDING_RECEIPT_MATCH must exist for the vendor. Required inputs: eventId, organizationId and vendorId (UUIDs), invoiceReference, invoiceDate and lineItems; dueDate is optional. Emits an ACCOUNTING_VENDOR_BILL_MATCH event and writes a VENDOR_BILL_MATCH_ROUTED audit row; the returned bill\&#39;s status conveys the outcome. Returns 400 when no pending receipt matches the invoice or the payload fails validation (a missing invoiceDate included), 409 AP_BILL_DUPLICATE when another live bill (any status except VOIDED or REJECTED) of the vendor already holds the invoiceReference on the invoiceDate, compared ignoring case, spacing, punctuation and leading zeros (referenceId names it, and the receipt bill is left untouched), the generic 409 DUPLICATE_RESOURCE when a concurrent writer takes the number between the check and the commit, and 409 OPTIMISTIC_LOCK when the matched bill was decided meanwhile (send the invoice again).
      * @endpoint post /v1/accounting/vendor-bills/match
      * @param vendorInvoiceReceivedEvent Vendor invoice payload to three-way match against pending receipt bills.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -495,24 +727,98 @@ export class VendorBillAPIService extends BaseService {
     }
 
     /**
-     * Resolve Vendor Bill Match Exception
-     * Resolves a vendor bill parked in MATCH_EXCEPTION with an operator decision: ACCEPT approves the bill despite the discrepancy, VOID rejects it, and CORRECT sends it back for correction. Use this tool for quantity, price or medium-confidence exceptions on one identified bill; do not use selectVendorBillMatchCandidate, which resolves an ambiguous match by picking among several candidate bills. Preconditions: the bill must exist and be in MATCH_EXCEPTION status. Required inputs: billId (UUID) as a path parameter, resolutionAction (ACCEPT, VOID or CORRECT), reason and operatorId, all recorded for audit. Emits an ACCOUNTING_VENDOR_BILL_MATCH_EXCEPTION_RESOLVE event. Returns 400 when the bill is not found, is not in MATCH_EXCEPTION status, or the action is not one of ACCEPT, VOID or CORRECT.
-     * @endpoint post /v1/accounting/vendor-bills/{billId}/resolve-exception
+     * Reject Vendor Bill
+     * Rejects a vendor bill in AWAITING_APPROVAL: it moves to REJECTED, terminal, with the caller as rejectedBy and the reason recorded. Nothing was posted, so nothing is reversed. Use this tool when the approver refuses a bill; do not use voidVendorBill, which voids a bill already approved or a receipt placeholder, or resolveVendorBillMatchException with VOID, which voids a bill still in MATCH_EXCEPTION. Preconditions: the bill is AWAITING_APPROVAL. Required inputs: billId (UUID) as a path parameter and reason (at least 10 characters). Emits ACCOUNTING_VENDOR_BILL_REJECT and writes a VENDOR_BILL_REJECT audit row; a replay finds the bill REJECTED and is answered 409 AP_BILL_NOT_APPROVABLE. Returns 200 with the bill read, 400 JUSTIFICATION_REQUIRED for a missing or short reason or ARGUMENT_NOT_VALID for one over 1000 characters, 401 without a valid token, 403 FORBIDDEN without accounting:ap:reject, 404 VENDOR_BILL_NOT_FOUND, and 409 AP_BILL_NOT_APPROVABLE naming the bill\&#39;s status.
+     * @endpoint post /v1/accounting/vendor-bills/{billId}/reject
      * @param billId Vendor bill identifier
-     * @param exceptionResolutionRequest Operator decision (ACCEPT, VOID or CORRECT) with the audit reason.
+     * @param vendorBillRejectRequest The reason the bill is rejected, at least 10 characters.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public resolveVendorBillMatchException(billId: string, exceptionResolutionRequest: ExceptionResolutionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VendorBillResponse>;
-    public resolveVendorBillMatchException(billId: string, exceptionResolutionRequest: ExceptionResolutionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VendorBillResponse>>;
-    public resolveVendorBillMatchException(billId: string, exceptionResolutionRequest: ExceptionResolutionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VendorBillResponse>>;
-    public resolveVendorBillMatchException(billId: string, exceptionResolutionRequest: ExceptionResolutionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public rejectVendorBill(billId: string, vendorBillRejectRequest: VendorBillRejectRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VendorBillResponse>;
+    public rejectVendorBill(billId: string, vendorBillRejectRequest: VendorBillRejectRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VendorBillResponse>>;
+    public rejectVendorBill(billId: string, vendorBillRejectRequest: VendorBillRejectRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VendorBillResponse>>;
+    public rejectVendorBill(billId: string, vendorBillRejectRequest: VendorBillRejectRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (billId === null || billId === undefined) {
+            throw new Error('Required parameter billId was null or undefined when calling rejectVendorBill.');
+        }
+        if (vendorBillRejectRequest === null || vendorBillRejectRequest === undefined) {
+            throw new Error('Required parameter vendorBillRejectRequest was null or undefined when calling rejectVendorBill.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/vendor-bills/${this.configuration.encodeParam({name: "billId", value: billId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/reject`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<VendorBillResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: vendorBillRejectRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Resolve Vendor Bill Match Exception
+     * Resolves a vendor bill in MATCH_EXCEPTION: ACCEPT is an approval and posts the bill exactly as approveVendorBill does, CORRECT sends it back to PENDING_RECEIPT_MATCH as received (the billed lines and total undone, the bill date the receipt date again, anything proposed cleared) writing no approval or rejection field, and VOID voids it with the caller as rejectedBy (nothing was posted, so nothing is reversed). Use this tool for a quantity, price, medium-confidence or totals exception on one bill; do not use selectVendorBillMatchCandidate, which resolves an ambiguous match among several bills, or submitVendorBillForApproval, which sends the bill to another person\&#39;s approval. Preconditions: the bill is MATCH_EXCEPTION, and each action needs its own permission: ACCEPT accounting:ap:approve_over_limit, CORRECT accounting:ap:approve or accounting:ap:approve_over_limit, VOID accounting:ap:reject; ACCEPT also needs what approveVendorBill needs (no open ambiguous match, a matched invoice for a goods-receipt bill, the vendor\&#39;s totals reconciled or a difference). Required inputs: billId (UUID) as a path parameter, resolutionAction (ACCEPT, CORRECT or VOID) and reason (at least 10 characters); ACCEPT also takes classification, difference and overrideJustification as approveVendorBill does, and an operatorId in the body is ignored because the actor is the caller. Emits ACCOUNTING_VENDOR_BILL_MATCH_EXCEPTION_RESOLVE and writes a VENDOR_BILL_MATCH_EXCEPTION_RESOLVE audit row; a replay finds the bill moved on and is answered 409 AP_BILL_NOT_APPROVABLE. Returns 200 with the bill read; 400 VALIDATION_ERROR for an unknown action, JUSTIFICATION_REQUIRED for a missing or short reason, or ARGUMENT_NOT_VALID; 401 without a valid token; 403 FORBIDDEN without the action\&#39;s permission; 404 VENDOR_BILL_NOT_FOUND; 409 AP_BILL_NOT_APPROVABLE or, for ACCEPT, AP_BILL_AWAITING_INVOICE; for ACCEPT, 422 AP_BILL_UNCLASSIFIED, AP_BILL_TOTALS_UNRECONCILED, AP_BILL_ZERO_TOTAL, PERIOD_CLOSED, PERIOD_HARD_LOCKED or GL_MAPPING_NOT_CONFIGURED, leaving the bill as it was.
+     * @endpoint post /v1/accounting/vendor-bills/{billId}/resolve-exception
+     * @param billId Vendor bill identifier
+     * @param vendorBillExceptionResolutionRequest The resolution action (ACCEPT, CORRECT or VOID) and its reason; ACCEPT may add a classification and an override justification.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public resolveVendorBillMatchException(billId: string, vendorBillExceptionResolutionRequest: VendorBillExceptionResolutionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VendorBillResponse>;
+    public resolveVendorBillMatchException(billId: string, vendorBillExceptionResolutionRequest: VendorBillExceptionResolutionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VendorBillResponse>>;
+    public resolveVendorBillMatchException(billId: string, vendorBillExceptionResolutionRequest: VendorBillExceptionResolutionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VendorBillResponse>>;
+    public resolveVendorBillMatchException(billId: string, vendorBillExceptionResolutionRequest: VendorBillExceptionResolutionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (billId === null || billId === undefined) {
             throw new Error('Required parameter billId was null or undefined when calling resolveVendorBillMatchException.');
         }
-        if (exceptionResolutionRequest === null || exceptionResolutionRequest === undefined) {
-            throw new Error('Required parameter exceptionResolutionRequest was null or undefined when calling resolveVendorBillMatchException.');
+        if (vendorBillExceptionResolutionRequest === null || vendorBillExceptionResolutionRequest === undefined) {
+            throw new Error('Required parameter vendorBillExceptionResolutionRequest was null or undefined when calling resolveVendorBillMatchException.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -557,7 +863,7 @@ export class VendorBillAPIService extends BaseService {
         return this.httpClient.request<VendorBillResponse>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: exceptionResolutionRequest,
+                body: vendorBillExceptionResolutionRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -570,23 +876,83 @@ export class VendorBillAPIService extends BaseService {
 
     /**
      * Select Vendor Bill Match Candidate
-     * Selects one candidate from an ambiguous invoice match, approving the corresponding vendor bill and marking the candidate set resolved. Use this tool after reviewing listVendorBillMatchCandidates; do not use resolveVendorBillMatchException, which handles discrepancy exceptions on a single bill. Preconditions: the candidate must exist and must not already be resolved. Required inputs: candidateId (UUID) as a path parameter and operatorId in the body, recorded as the approver. Emits an ACCOUNTING_VENDOR_BILL_MATCH_CANDIDATE_SELECT event. Returns 400 when the candidate is missing or already resolved (mapped as VALIDATION_ERROR, not 404).
+     * Picks one candidate bill of an ambiguous invoice match and resolves the candidate set. Selection is matching only: the chosen bill keeps what the vendor billed (lines, total, the invoice number, the invoice date as its bill date and the due date, AW46), gets its match evidence with the receipt date and moves to AWAITING_APPROVAL with the caller as submittedBy, while a bill the match had held in MATCH_EXCEPTION for this invoice returns to PENDING_RECEIPT_MATCH; nothing approves it and nothing is posted. Use this tool after reviewing listVendorBillMatchCandidates or a bill read\&#39;s openCandidates; do not use resolveVendorBillMatchException, which handles discrepancy exceptions on a single bill. Preconditions: the candidate exists and its set is unresolved, the chosen bill is PENDING_RECEIPT_MATCH or MATCH_EXCEPTION, and the candidate kept its invoice (one scored before #2509 is refused; match the invoice again instead). Required inputs: candidateId (UUID) as a path parameter; there is no request body. Emits ACCOUNTING_VENDOR_BILL_MATCH_CANDIDATE_SELECT and writes a VENDOR_BILL_MATCH_CANDIDATE_SELECT audit row, plus a VENDOR_BILL_MATCH_CANDIDATE_RELEASE row for a bill released; a replay is answered 409 AP_MATCH_CANDIDATE_ALREADY_RESOLVED. Returns 200 with the bill read, 401 without a valid token, 403 FORBIDDEN without accounting:ap:approve or accounting:ap:approve_over_limit, 404 AP_MATCH_CANDIDATE_NOT_FOUND, 409 AP_MATCH_CANDIDATE_ALREADY_RESOLVED when someone else resolved the set, 409 AP_BILL_NOT_APPROVABLE naming the chosen bill\&#39;s status, 409 AP_BILL_AWAITING_INVOICE for a candidate that kept no invoice, and 409 AP_BILL_DUPLICATE when another live bill already holds the invoice number on the invoice date.
      * @endpoint post /v1/accounting/vendor-bills/match-candidates/{candidateId}/select
      * @param candidateId Match candidate identifier
-     * @param candidateSelectionRequest Operator making the candidate selection, recorded as the approver.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public selectVendorBillMatchCandidate(candidateId: string, candidateSelectionRequest: CandidateSelectionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VendorBillResponse>;
-    public selectVendorBillMatchCandidate(candidateId: string, candidateSelectionRequest: CandidateSelectionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VendorBillResponse>>;
-    public selectVendorBillMatchCandidate(candidateId: string, candidateSelectionRequest: CandidateSelectionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VendorBillResponse>>;
-    public selectVendorBillMatchCandidate(candidateId: string, candidateSelectionRequest: CandidateSelectionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public selectVendorBillMatchCandidate(candidateId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VendorBillResponse>;
+    public selectVendorBillMatchCandidate(candidateId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VendorBillResponse>>;
+    public selectVendorBillMatchCandidate(candidateId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VendorBillResponse>>;
+    public selectVendorBillMatchCandidate(candidateId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (candidateId === null || candidateId === undefined) {
             throw new Error('Required parameter candidateId was null or undefined when calling selectVendorBillMatchCandidate.');
         }
-        if (candidateSelectionRequest === null || candidateSelectionRequest === undefined) {
-            throw new Error('Required parameter candidateSelectionRequest was null or undefined when calling selectVendorBillMatchCandidate.');
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/vendor-bills/match-candidates/${this.configuration.encodeParam({name: "candidateId", value: candidateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/select`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<VendorBillResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Submit Vendor Bill For Approval
+     * Sends a vendor bill in PENDING_RECEIPT_MATCH or MATCH_EXCEPTION for approval: it moves to AWAITING_APPROVAL with the caller as submittedBy, and nothing is posted. From PENDING_RECEIPT_MATCH this is \&quot;send without a delivery match\&quot;, for EDI bills only (a goods-receipt bill needs its vendor invoice matched first, AW45); from MATCH_EXCEPTION it resolves the exception for a person to approve. Use this tool when a clerk has checked a bill and wants it approved; do not use approveVendorBill, which is the approver\&#39;s decision, or resolveVendorBillMatchException, which accepts, corrects or voids an exception directly. Preconditions: the bill is PENDING_RECEIPT_MATCH or MATCH_EXCEPTION (never CURRENCY_HOLD), no ambiguous match naming it is open, a goods-receipt bill has its invoice matched, its total is not 0.00, and the vendor\&#39;s gross equals net + tax within 0.01 per stated line (at most 0.05) unless a difference is given (AW47). Required inputs: billId (UUID) as a path parameter and justification (at least 10 characters); classification {debitClass, expenseMappingKey} is an optional proposal the approver may keep, and difference {class FREIGHT|GOODS|EXPENSE|PRICE_DIFFERENCE, expenseMappingKey, justification} says where an unreconciled gap posts. Emits ACCOUNTING_VENDOR_BILL_SUBMIT and writes a VENDOR_BILL_SUBMIT audit row; the command takes no idempotency key, so a replay finds the bill AWAITING_APPROVAL and is answered 409 AP_BILL_NOT_APPROVABLE. Returns 200 with the bill read; 400 JUSTIFICATION_REQUIRED, VALIDATION_ERROR or ARGUMENT_NOT_VALID; 401 without a valid token; 403 FORBIDDEN without accounting:ap:approve or accounting:ap:approve_over_limit; 404 VENDOR_BILL_NOT_FOUND; 409 AP_BILL_NOT_APPROVABLE naming the status or an open ambiguous match, or AP_BILL_AWAITING_INVOICE; 422 AP_BILL_ZERO_TOTAL or AP_BILL_TOTALS_UNRECONCILED, writing nothing.
+     * @endpoint post /v1/accounting/vendor-bills/{billId}/submit-for-approval
+     * @param billId Vendor bill identifier
+     * @param vendorBillSubmitRequest The justification (at least 10 characters) and an optional classification proposed to the approver.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public submitVendorBillForApproval(billId: string, vendorBillSubmitRequest: VendorBillSubmitRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VendorBillResponse>;
+    public submitVendorBillForApproval(billId: string, vendorBillSubmitRequest: VendorBillSubmitRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VendorBillResponse>>;
+    public submitVendorBillForApproval(billId: string, vendorBillSubmitRequest: VendorBillSubmitRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VendorBillResponse>>;
+    public submitVendorBillForApproval(billId: string, vendorBillSubmitRequest: VendorBillSubmitRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (billId === null || billId === undefined) {
+            throw new Error('Required parameter billId was null or undefined when calling submitVendorBillForApproval.');
+        }
+        if (vendorBillSubmitRequest === null || vendorBillSubmitRequest === undefined) {
+            throw new Error('Required parameter vendorBillSubmitRequest was null or undefined when calling submitVendorBillForApproval.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -626,12 +992,86 @@ export class VendorBillAPIService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/accounting/vendor-bills/match-candidates/${this.configuration.encodeParam({name: "candidateId", value: candidateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/select`;
+        let localVarPath = `/v1/accounting/vendor-bills/${this.configuration.encodeParam({name: "billId", value: billId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/submit-for-approval`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<VendorBillResponse>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: candidateSelectionRequest,
+                body: vendorBillSubmitRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Void Vendor Bill
+     * Voids a vendor bill: an APPROVED bill with nothing allocated moves to VOIDED and its entry is reversed through the journal-entry reversal (linked both ways), dated today in today\&#39;s period and never back in the original period (AW42), so 2100 is accrued again; a goods-receipt bill in PENDING_RECEIPT_MATCH that no vendor invoice will match moves to VOIDED and nothing is posted (AW45), its receipt accrual staying in 2100 until the vendor\&#39;s EDI bill classified GOODS clears it. Use this tool to undo an approval that should not stand or to close a receipt placeholder; do not use rejectVendorBill, which refuses a bill not yet approved, or resolveVendorBillMatchException with VOID, which voids a bill still in MATCH_EXCEPTION, and correct a bill with payments allocated with a vendor credit note instead. Preconditions: every void needs accounting:ap:reject and an approved bill\&#39;s also the approval tier, accounting:ap:approve_over_limit until approval limits exist; only this void reverses a bill\&#39;s entry (the journal-entry reversal refuses one with 409 AP_BILL_ENTRY_NOT_REVERSIBLE). Required inputs: billId (UUID) as a path parameter and reason (at least 10 characters); overrideJustification (at least 10 characters) reverses an approved bill into a CLOSED period with accounting:period:override. Emits ACCOUNTING_VENDOR_BILL_VOID and writes a VENDOR_BILL_VOID audit row naming the action (VOID_APPROVED or VOID_UNMATCHED); a replay finds the bill VOIDED and is answered 409 AP_BILL_NOT_VOIDABLE. Returns 200 with the bill read, an approved bill\&#39;s posting with its reversalReference; 400 JUSTIFICATION_REQUIRED or ARGUMENT_NOT_VALID; 401 without a valid token; 403 FORBIDDEN without accounting:ap:reject, or without the approval tier for an approved bill; 404 VENDOR_BILL_NOT_FOUND; 409 AP_BILL_NOT_VOIDABLE for any other status or an allocated bill; 422 PERIOD_CLOSED or PERIOD_HARD_LOCKED for today\&#39;s period, leaving the bill as it was.
+     * @endpoint post /v1/accounting/vendor-bills/{billId}/void
+     * @param billId Vendor bill identifier
+     * @param vendorBillVoidRequest The reason the bill is voided (at least 10 characters) and, for an approved bill, an optional override justification for a CLOSED period.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public voidVendorBill(billId: string, vendorBillVoidRequest: VendorBillVoidRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VendorBillResponse>;
+    public voidVendorBill(billId: string, vendorBillVoidRequest: VendorBillVoidRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VendorBillResponse>>;
+    public voidVendorBill(billId: string, vendorBillVoidRequest: VendorBillVoidRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VendorBillResponse>>;
+    public voidVendorBill(billId: string, vendorBillVoidRequest: VendorBillVoidRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (billId === null || billId === undefined) {
+            throw new Error('Required parameter billId was null or undefined when calling voidVendorBill.');
+        }
+        if (vendorBillVoidRequest === null || vendorBillVoidRequest === undefined) {
+            throw new Error('Required parameter vendorBillVoidRequest was null or undefined when calling voidVendorBill.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/vendor-bills/${this.configuration.encodeParam({name: "billId", value: billId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/void`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<VendorBillResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: vendorBillVoidRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
