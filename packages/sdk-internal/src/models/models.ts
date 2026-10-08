@@ -16,3 +16,6 @@ export * from './taxLineItem';
 export * from './taxProviderTransactionResult';
 export * from './taxRateComponent';
 export * from './taxRateLookupResponse';
+export * from './taxRegimeEntry';
+export * from './taxTypeEntry';
+export * from './taxTypesResponse';

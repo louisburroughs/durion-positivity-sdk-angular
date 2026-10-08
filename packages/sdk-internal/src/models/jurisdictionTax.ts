@@ -30,6 +30,10 @@ export interface JurisdictionTax {
      */
     exemptionReasonCode?: JurisdictionTaxExemptionReasonCodeEnum;
     /**
+     * Configured placeholder recoverability of this row\'s tax type (held for expert advice); null for a country without a tax-type profile
+     */
+    inputTaxRecoverable?: boolean | null;
+    /**
      * Jurisdiction type (e.g. STATE, COUNTY, CITY, DISTRICT)
      */
     jurisdictionType: JurisdictionTaxJurisdictionTypeEnum;
@@ -37,6 +41,10 @@ export interface JurisdictionTax {
      * Tax rate applied for this jurisdiction, expressed as a decimal fraction (e.g. 0.0725 for 7.25%)
      */
     rate: number;
+    /**
+     * Tax-type code of this row as the country profile configures it (1-32 upper-case letters, digits or underscores); null for a country without a tax-type profile
+     */
+    taxType?: string | null;
 }
 export enum JurisdictionTaxExemptionReasonCodeEnum {
     Resale = 'RESALE',
@@ -96,9 +104,9 @@ export function instanceOfJurisdictionTax(value: object): value is JurisdictionT
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createJurisdictionTaxPropertyNames('amount', 'code', 'jurisdictionType', 'rate', );
-    const optionalStringProperties = createJurisdictionTaxOptionalProperties({ name: 'code', nullable: false }, { name: 'exemptionReasonCode', nullable: false }, { name: 'jurisdictionType', nullable: false }, );
+    const optionalStringProperties = createJurisdictionTaxOptionalProperties({ name: 'code', nullable: false }, { name: 'exemptionReasonCode', nullable: false }, { name: 'jurisdictionType', nullable: false }, { name: 'taxType', nullable: true }, );
     const optionalNumberProperties = createJurisdictionTaxOptionalProperties({ name: 'amount', nullable: false }, { name: 'rate', nullable: false }, );
-    const optionalBooleanProperties = createJurisdictionTaxOptionalProperties({ name: 'exempt', nullable: false }, );
+    const optionalBooleanProperties = createJurisdictionTaxOptionalProperties({ name: 'exempt', nullable: false }, { name: 'inputTaxRecoverable', nullable: true }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalJurisdictionTaxPropertyOfType(_v, property.name, 'string', property.nullable))

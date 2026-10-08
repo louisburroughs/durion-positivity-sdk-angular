@@ -14,6 +14,10 @@
  */
 export interface TaxRateComponent {
     /**
+     * Configured placeholder recoverability of this tax type (held for expert advice); null for a country without a tax-type profile
+     */
+    inputTaxRecoverable?: boolean | null;
+    /**
      * Jurisdiction level the rate applies at
      */
     jurisdictionType: TaxRateComponentJurisdictionTypeEnum;
@@ -21,6 +25,10 @@ export interface TaxRateComponent {
      * Tax rate as a decimal fraction (e.g. 0.0725 for 7.25%), not a percentage
      */
     rate: number;
+    /**
+     * Tax-type code of this component as the country profile configures it (1-32 upper-case letters, digits or underscores); null for a country without a tax-type profile
+     */
+    taxType?: string | null;
 }
 export enum TaxRateComponentJurisdictionTypeEnum {
     Country = 'COUNTRY',
@@ -73,9 +81,9 @@ export function instanceOfTaxRateComponent(value: object): value is TaxRateCompo
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTaxRateComponentPropertyNames('jurisdictionType', 'rate', );
-    const optionalStringProperties = createTaxRateComponentOptionalProperties({ name: 'jurisdictionType', nullable: false }, );
+    const optionalStringProperties = createTaxRateComponentOptionalProperties({ name: 'jurisdictionType', nullable: false }, { name: 'taxType', nullable: true }, );
     const optionalNumberProperties = createTaxRateComponentOptionalProperties({ name: 'rate', nullable: false }, );
-    const optionalBooleanProperties = createTaxRateComponentOptionalProperties();
+    const optionalBooleanProperties = createTaxRateComponentOptionalProperties({ name: 'inputTaxRecoverable', nullable: true }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalTaxRateComponentPropertyOfType(_v, property.name, 'string', property.nullable))
