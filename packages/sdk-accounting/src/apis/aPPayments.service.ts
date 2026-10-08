@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { APPaymentGLPostingRetryRequest } from '../models/aPPaymentGLPostingRetryRequest';
+// @ts-ignore
 import { APPaymentResponse } from '../models/aPPaymentResponse';
 // @ts-ignore
 import { ApiError } from '../models/apiError';
@@ -43,7 +45,7 @@ export class APPaymentsService extends BaseService {
 
     /**
      * Execute Vendor Payment
-     * Executes an AP vendor payment through the payment gateway, optionally allocating it across approved vendor bills, and posts the corresponding GL entries. Use this tool to pay a vendor; do not use applyPayment, which is the AR-side application of customer payments to invoices, and use listApBills first to find APPROVED bills to allocate against. Preconditions: every allocated bill must exist, be APPROVED and belong to the vendor, the allocation total must not exceed the gross amount, and the payer must not be the person who approved any bill the payment allocates to, explicit or oldest due first (separation of duties, unless the tenant\&#39;s AP approval policy allows it; a system approval never blocks). Required inputs: vendorId (UUID), grossAmount (min 0.01), currency (3-char ISO code), paymentRef (max 100 chars, the idempotency key) and paymentMethod (e.g. ACH, CHECK); feeAmount, netAmount, paymentSource, memo and explicit allocations are optional. Emits an AP_PAYMENT_EXECUTE event; the call is idempotent on paymentRef, replaying the same ref with the same payload as a 200 instead of paying twice. Returns 200 on an idempotent replay, 409 IDEMPOTENCY_CONFLICT when the paymentRef exists with a different payload, 400 when a bill is missing, unapproved or over-allocated (allocation is refused before the gateway; nothing is charged), 403 AP_PAYMENT_SELF_APPROVED_BILL (fieldErrors name the bills by number) before any payment row is saved or the gateway is called, and 500 PAYMENT_GATEWAY_FAILURE when the gateway cannot be reached.
+     * Executes an AP vendor payment through the payment gateway from a functional-currency BANK_CASH account, optionally allocating it across approved vendor bills; the outbox then posts Dr 2000 the gross, Dr 6030 the fee and Cr the bank account on the payment\&#39;s business date (AP_PAYMENT category). Use this tool to pay a vendor; do not use applyPayment, which is the AR-side application of customer payments to invoices, and use listApBills first to find APPROVED bills to allocate against. Preconditions: checked in this order before the gateway is called, charging nothing, the method is ACH, CHECK or WIRE, the currency is the functional currency, the bank account is eligible (active from the start of the business date, not deactivated before the payment, not in a foreign currency), every allocated bill exists, is APPROVED, belongs to the vendor and fits the gross amount, the payer approved none of the bills paid (unless the AP approval policy allows it), the business date is not hard-locked, its period is open or overridden, and the AP_PAYMENT mappings ACCOUNTS_PAYABLE (and PAYMENT_FEES when a fee is charged) are set up. Required inputs: vendorId (UUID), grossAmount (min 0.01), currency (ISO 4217), paymentRef (max 100 chars, the idempotency key) and paymentMethod; bankAccountId may be omitted only when exactly one eligible account exists, and feeAmount, overrideJustification (10-1000 chars, honoured with accounting:period:override), paymentSource, memo and explicit allocations are optional. Emits an AP_PAYMENT_EXECUTE event; the call is idempotent on paymentRef, replaying the same ref with the same payload (the bank account compared as resolved) as a 200 instead of paying twice, and a gateway failure or timeout leaves no payment behind, so the same paymentRef is simply sent again. Returns 400 VALIDATION_ERROR for a malformed body, an unknown currency code, a refused allocation or fieldErrors[bankAccountId], 403 AP_PAYMENT_SELF_APPROVED_BILL, 409 IDEMPOTENCY_CONFLICT or LOCK_TIMEOUT, 422 AP_PAYMENT_METHOD_NOT_SUPPORTED, CURRENCY_NOT_SUPPORTED, ACCOUNTING_TIME_ZONE_UNSET, PERIOD_HARD_LOCKED, PERIOD_CLOSED or GL_MAPPING_NOT_CONFIGURED, and 500 PAYMENT_GATEWAY_FAILURE when the gateway fails or times out.
      * @endpoint post /v1/accounting/ap/payments
      * @param executeAPPaymentRequest Vendor payment instruction with idempotency key and optional bill allocations.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -320,6 +322,77 @@ export class APPaymentsService extends BaseService {
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Retry AP Payment GL Posting
+     * Posts again the ledger entry of an executed AP payment whose posting was refused, on the payment\&#39;s own stored date: Dr 2000 the gross, Dr 6030 the fee, Cr the bank account it was paid from. Use this tool once the reason in glPostError is fixed (a GL mapping set up, a period reopened, or with an override); do not use executeApPayment again, which would pay the vendor twice, and do not use the journal-entry endpoints instead, which would post the payment outside its own record. Preconditions: the payment exists and is GL_POST_FAILED; the payment row is locked for the retry, and the entry is never re-dated, so a payment whose date is now hard-locked stays GL_POST_FAILED. Required inputs: paymentId (UUID) as a path parameter and an optional body with overrideJustification (10-1000 chars, honoured with the caller\&#39;s accounting:period:override and audited under the caller); a retry never reuses the override the payer gave on the pay command. Emits ACCOUNTING_AP_PAYMENT_GL_POSTING_RETRY; on success the payment is GL_POSTED with its journal entry id, and a refused retry leaves it GL_POST_FAILED with the new reason in glPostError. Returns 404 NOT_FOUND when no such payment exists, 409 AP_PAYMENT_NOT_RETRYABLE when it is not GL_POST_FAILED (already posted, pending, or a gateway state), 409 LOCK_TIMEOUT when another request holds it, and 422 GL_MAPPING_NOT_CONFIGURED, GL_ACCOUNT_NOT_ACTIVE, PERIOD_CLOSED, PERIOD_HARD_LOCKED or ACCOUNTING_TIME_ZONE_UNSET when the posting is still refused.
+     * @endpoint post /v1/accounting/ap/payments/{paymentId}/gl-posting-retry
+     * @param paymentId Payment UUID
+     * @param aPPaymentGLPostingRetryRequest Optional closed-period override of the caller; may be omitted.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public retryApPaymentGlPosting(paymentId: string, aPPaymentGLPostingRetryRequest?: APPaymentGLPostingRetryRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<APPaymentResponse>;
+    public retryApPaymentGlPosting(paymentId: string, aPPaymentGLPostingRetryRequest?: APPaymentGLPostingRetryRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<APPaymentResponse>>;
+    public retryApPaymentGlPosting(paymentId: string, aPPaymentGLPostingRetryRequest?: APPaymentGLPostingRetryRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<APPaymentResponse>>;
+    public retryApPaymentGlPosting(paymentId: string, aPPaymentGLPostingRetryRequest?: APPaymentGLPostingRetryRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (paymentId === null || paymentId === undefined) {
+            throw new Error('Required parameter paymentId was null or undefined when calling retryApPaymentGlPosting.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/ap/payments/${this.configuration.encodeParam({name: "paymentId", value: paymentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/gl-posting-retry`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<APPaymentResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: aPPaymentGLPostingRetryRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
