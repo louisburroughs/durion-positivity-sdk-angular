@@ -19,6 +19,8 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 // @ts-ignore
 import { ApiError } from '../models/apiError';
 // @ts-ignore
+import { PagedResponseTaxIdRevealRecordView } from '../models/pagedResponseTaxIdRevealRecordView';
+// @ts-ignore
 import { PagedResponseVendorView } from '../models/pagedResponseVendorView';
 // @ts-ignore
 import { RemitApprovalRequest } from '../models/remitApprovalRequest';
@@ -28,6 +30,10 @@ import { RemitChangeRequest } from '../models/remitChangeRequest';
 import { RemitChangeView } from '../models/remitChangeView';
 // @ts-ignore
 import { RemitRejectionRequest } from '../models/remitRejectionRequest';
+// @ts-ignore
+import { TaxIdRevealRequest } from '../models/taxIdRevealRequest';
+// @ts-ignore
+import { TaxIdRevealView } from '../models/taxIdRevealView';
 // @ts-ignore
 import { VendorCreateRequest } from '../models/vendorCreateRequest';
 // @ts-ignore
@@ -135,7 +141,7 @@ export class SupplierVendorsService extends BaseService {
 
     /**
      * Create vendor
-     * Creates an ACTIVE vendor, with or without a supplier connection, and publishes supplier.vendor.updated. Use this tool to add a party the shop buys from or pays; do not use it to change a vendor, which is updateSupplierVendor, or to connect a supplier, which is a vendor profile naming this vendor. Preconditions: a vendorNumber, when given, must not be used by another vendor of the tenant. Required inputs: legalName, displayName, defaultPaymentTerms (DUE_ON_RECEIPT or NET1 to NET120) and defaultCurrency (ISO 4217); vendorNumber is optional and allocated as V-000001, V-000002 and so on when omitted, and never changes afterwards; taxRegistrations and remitTo are optional. Emits a SUPPLIER_VENDOR_CREATE audit event and queues one supplier.vendor.updated fact in the same transaction; a remitTo given here is stored as version 1 without approval. Returns 201 with the vendor, 400 VALIDATION_ERROR when a field is missing or malformed, and 409 SUPPLIER_VENDOR_NUMBER_TAKEN when the number is in use.
+     * Creates an ACTIVE vendor, with or without a supplier connection, and publishes supplier.vendor.updated. Use this tool to add a party the shop buys from or pays; do not use it to change a vendor, which is updateSupplierVendor, or to connect a supplier, which is a vendor profile naming this vendor. Preconditions: a vendorNumber, when given, must not be used by another vendor of the tenant. Required inputs: legalName, displayName, defaultPaymentTerms (DUE_ON_RECEIPT or NET1 to NET120) and defaultCurrency (ISO 4217); vendorNumber is optional and allocated as V-000001, V-000002 and so on when omitted, and never changes afterwards; taxRegistrations and remitTo are optional, and each new registration needs its number, which is encrypted at once and never returned (the response shows last4). Emits a SUPPLIER_VENDOR_CREATE audit event and queues one supplier.vendor.updated fact in the same transaction; a remitTo given here is stored as version 1 without approval. Returns 201 with the vendor, 400 VALIDATION_ERROR when a field is missing or malformed, and 409 SUPPLIER_VENDOR_NUMBER_TAKEN when the number is in use.
      * @endpoint post /v1/supplier/vendors
      * @param vendorCreateRequest Vendor to create.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -279,7 +285,7 @@ export class SupplierVendorsService extends BaseService {
 
     /**
      * Get vendor
-     * Returns one vendor with its tax registrations, approved remit-to and version, default terms and currency, and status. Use this tool when the vendorId is known, for example from a bill, a purchase order or a profile; use listSupplierVendors instead to search by number or name. Preconditions: the vendor must exist in the caller\&#39;s tenant. Required inputs: vendorId (UUIDv7) path parameter; there is no request body. Emits a SUPPLIER_VENDOR_GET audit event; nothing is changed. A remit-to change waiting for approval is not shown here; read it with listSupplierVendorRemitChanges. Returns 404 SUPPLIER_VENDOR_NOT_FOUND when the tenant has no vendor with that id.
+     * Returns one vendor with its masked tax registrations (registrationId, scheme, region and last4, never the number), approved remit-to and version, default terms and currency, and status. Use this tool when the vendorId is known, for example from a bill, a purchase order or a profile; use listSupplierVendors instead to search by number or name. Preconditions: the vendor must exist in the caller\&#39;s tenant. Required inputs: vendorId (UUIDv7) path parameter; there is no request body. Emits a SUPPLIER_VENDOR_GET audit event; nothing is changed. A remit-to change waiting for approval is not shown here; read it with listSupplierVendorRemitChanges. Returns 404 SUPPLIER_VENDOR_NOT_FOUND when the tenant has no vendor with that id.
      * @endpoint get /v1/supplier/vendors/{vendorId}
      * @param vendorId Vendor identifier (UUIDv7). Must reference a vendor of the caller\&#39;s tenant.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -411,8 +417,91 @@ export class SupplierVendorsService extends BaseService {
     }
 
     /**
+     * List a vendor\&#39;s tax-registration reveals
+     * Returns one page of a vendor\&#39;s tax-registration reveals, newest first: who revealed which registration, their roles, the reason, the correlation id, when, and whether it was REVEALED, UNREADABLE or REASON_REJECTED. Use this tool to review who saw a vendor\&#39;s full numbers; do not use it to read a number, which only revealSupplierVendorTaxRegistration returns, and use getSupplierVendor instead for the masked registrations. Preconditions: the vendor must exist in the caller\&#39;s tenant; only that tenant\&#39;s reveals are visible. Required inputs: vendorId (UUIDv7) path parameter; page is zero-based and size is 1 to 200 (default 20). Emits a SUPPLIER_VENDOR_TAX_ID_REVEAL_LIST audit event; nothing is changed, and no row carries the number or last4. Returns 200 with an empty page when nothing was revealed, 400 when page or size is out of range, and 404 SUPPLIER_VENDOR_NOT_FOUND.
+     * @endpoint get /v1/supplier/vendors/{vendorId}/tax-id-reveals
+     * @param vendorId Vendor identifier (UUIDv7). Must reference a vendor of the caller\&#39;s tenant.
+     * @param page Zero-based page index.
+     * @param size Page size, 1 to 200.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listSupplierVendorTaxIdReveals(vendorId: string, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponseTaxIdRevealRecordView>;
+    public listSupplierVendorTaxIdReveals(vendorId: string, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponseTaxIdRevealRecordView>>;
+    public listSupplierVendorTaxIdReveals(vendorId: string, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponseTaxIdRevealRecordView>>;
+    public listSupplierVendorTaxIdReveals(vendorId: string, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (vendorId === null || vendorId === undefined) {
+            throw new Error('Required parameter vendorId was null or undefined when calling listSupplierVendorTaxIdReveals.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/supplier/vendors/${this.configuration.encodeParam({name: "vendorId", value: vendorId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/tax-id-reveals`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PagedResponseTaxIdRevealRecordView>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * List vendors
-     * Returns one page of the tenant\&#39;s vendors ordered by vendorNumber, each with its approved remit-to, default terms and status. Use this tool to find a vendor by number or name, or to list active or inactive vendors; use getSupplierVendor instead when the vendorId is already known. Preconditions: none; only the caller\&#39;s tenant\&#39;s vendors are visible. Required inputs: none. q matches vendorNumber, displayName or legalName (case-insensitive, contains); status narrows to ACTIVE or INACTIVE; page is zero-based and size is 1 to 200 (default 50). Emits a SUPPLIER_VENDOR_LIST audit event; nothing is changed. Returns 200 with an empty page when nothing matches, and 400 when page or size is out of range.
+     * Returns one page of the tenant\&#39;s vendors ordered by vendorNumber, each with its approved remit-to, default terms, status and masked tax registrations (scheme, region, last4). Use this tool to find a vendor by number or name, or to list active or inactive vendors; use getSupplierVendor instead when the vendorId is already known. Preconditions: none; only the caller\&#39;s tenant\&#39;s vendors are visible. Required inputs: none. q matches vendorNumber, displayName or legalName (case-insensitive, contains); status narrows to ACTIVE or INACTIVE; page is zero-based and size is 1 to 200 (default 50). Emits a SUPPLIER_VENDOR_LIST audit event; nothing is changed. Returns 200 with an empty page when nothing matches, and 400 when page or size is out of range.
      * @endpoint get /v1/supplier/vendors
      * @param q Text matched against vendorNumber, displayName and legalName.
      * @param status Only vendors in this status.
@@ -815,8 +904,86 @@ export class SupplierVendorsService extends BaseService {
     }
 
     /**
+     * Reveal a vendor tax-registration number
+     * Returns one tax registration\&#39;s full number, after recording who revealed it, their roles, the reason and the correlation id in an append-only audit row in the same transaction. Use this tool only when a person must see the full number, for example to check a W-9 or a payee statement; do not use it to show a registration, and use getSupplierVendor instead, which returns the masked last4. Preconditions: the vendor and the registration must exist in the caller\&#39;s tenant, and the caller must hold supplier:vendor_tax_id:reveal (ADMIN and CONTROLLER only). Required inputs: vendorId and registrationId (UUIDv7) path parameters, and a reason of 10 to 500 characters once trimmed. Emits a SUPPLIER_VENDOR_TAX_ID_REVEAL audit event and writes one reveal audit row; no row, no number. The response carries Cache-Control: no-store and must never be cached, logged or put in a URL. Returns 200 with the number, 400 JUSTIFICATION_REQUIRED, or VALIDATION_ERROR for an over-long reason or one that contains the number itself (recorded as REASON_REJECTED, nothing revealed), 404 SUPPLIER_VENDOR_NOT_FOUND or SUPPLIER_VENDOR_TAX_REGISTRATION_NOT_FOUND, and 500 SUPPLIER_VENDOR_TAX_ID_UNREADABLE when the stored number cannot be decrypted, which is still recorded.
+     * @endpoint post /v1/supplier/vendors/{vendorId}/tax-registrations/{registrationId}/reveal
+     * @param vendorId Vendor identifier (UUIDv7). Must reference a vendor of the caller\&#39;s tenant.
+     * @param registrationId Tax registration identifier (UUIDv7). Must reference a registration of the addressed vendor.
+     * @param taxIdRevealRequest Why the full number is needed.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public revealSupplierVendorTaxRegistration(vendorId: string, registrationId: string, taxIdRevealRequest: TaxIdRevealRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxIdRevealView>;
+    public revealSupplierVendorTaxRegistration(vendorId: string, registrationId: string, taxIdRevealRequest: TaxIdRevealRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxIdRevealView>>;
+    public revealSupplierVendorTaxRegistration(vendorId: string, registrationId: string, taxIdRevealRequest: TaxIdRevealRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxIdRevealView>>;
+    public revealSupplierVendorTaxRegistration(vendorId: string, registrationId: string, taxIdRevealRequest: TaxIdRevealRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (vendorId === null || vendorId === undefined) {
+            throw new Error('Required parameter vendorId was null or undefined when calling revealSupplierVendorTaxRegistration.');
+        }
+        if (registrationId === null || registrationId === undefined) {
+            throw new Error('Required parameter registrationId was null or undefined when calling revealSupplierVendorTaxRegistration.');
+        }
+        if (taxIdRevealRequest === null || taxIdRevealRequest === undefined) {
+            throw new Error('Required parameter taxIdRevealRequest was null or undefined when calling revealSupplierVendorTaxRegistration.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/supplier/vendors/${this.configuration.encodeParam({name: "vendorId", value: vendorId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/tax-registrations/${this.configuration.encodeParam({name: "registrationId", value: registrationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/reveal`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<TaxIdRevealView>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: taxIdRevealRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Update vendor
-     * Replaces a vendor\&#39;s legal and display names, tax registrations, default payment terms and default currency, and publishes supplier.vendor.updated. Use this tool to correct or complete a vendor; do not use it for the remit-to, which needs a remit-to change a second person approves, or for the status, which is deactivation and reactivation. The vendorNumber never changes. Preconditions: the vendor must exist, and version must be the version the caller read. Required inputs: vendorId (UUIDv7) path parameter plus the full body, because every field is replaced; omitting taxRegistrations clears them. Emits a SUPPLIER_VENDOR_UPDATE audit event and queues one supplier.vendor.updated fact in the same transaction. Returns 200 with the vendor, 400 VALIDATION_ERROR for a malformed field, 404 SUPPLIER_VENDOR_NOT_FOUND, and 409 CONFLICT when version is stale.
+     * Replaces a vendor\&#39;s legal and display names, tax registrations, default payment terms and default currency, and publishes supplier.vendor.updated. Use this tool to correct or complete a vendor; do not use it for the remit-to, which needs a remit-to change a second person approves, or for the status, which is deactivation and reactivation. The vendorNumber never changes. Preconditions: the vendor must exist, and version must be the version the caller read. Required inputs: vendorId (UUIDv7) path parameter plus the full body, because every field is replaced; omitting taxRegistrations clears them. Send a stored registration\&#39;s registrationId without number to keep it (its scheme and region must be unchanged), with number to replace the number, and send a new registration without registrationId and with its number. Emits a SUPPLIER_VENDOR_UPDATE audit event and queues one supplier.vendor.updated fact in the same transaction. Returns 200 with the vendor, 400 VALIDATION_ERROR for a malformed field or a refused registration (fieldErrors names taxRegistrations[i].number, .registrationId, .scheme or .region), 404 SUPPLIER_VENDOR_NOT_FOUND, and 409 CONFLICT when version is stale.
      * @endpoint put /v1/supplier/vendors/{vendorId}
      * @param vendorId Vendor identifier (UUIDv7). Must reference a vendor of the caller\&#39;s tenant.
      * @param vendorUpdateRequest Replacement values and the version the caller read.
