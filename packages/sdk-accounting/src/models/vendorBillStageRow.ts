@@ -38,6 +38,10 @@ export interface VendorBillStageRow {
      */
     openAmount: number;
     /**
+     * The tier an approval needs, from the current clerk limit; null outside PENDING_RECEIPT_MATCH, MATCH_EXCEPTION and AWAITING_APPROVAL
+     */
+    requiredTier?: VendorBillStageRowRequiredTierEnum;
+    /**
      * Status
      */
     status: VendorBillStageRowStatusEnum;
@@ -61,6 +65,10 @@ export interface VendorBillStageRow {
 export enum VendorBillStageRowChannelEnum {
     GoodsReceipt = 'GOODS_RECEIPT',
     SupplierConnection = 'SUPPLIER_CONNECTION'
+};
+export enum VendorBillStageRowRequiredTierEnum {
+    Clerk = 'CLERK',
+    OverLimit = 'OVER_LIMIT'
 };
 export enum VendorBillStageRowStatusEnum {
     PendingReceiptMatch = 'PENDING_RECEIPT_MATCH',
@@ -114,7 +122,7 @@ export function instanceOfVendorBillStageRow(value: object): value is VendorBill
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createVendorBillStageRowPropertyNames('billDate', 'billNumber', 'currencyCode', 'openAmount', 'status', 'totalAmount', 'vendorBillId', );
-    const optionalStringProperties = createVendorBillStageRowOptionalProperties({ name: 'billDate', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'channel', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'status', nullable: false }, { name: 'submittedAt', nullable: false }, { name: 'vendorBillId', nullable: false }, { name: 'vendorName', nullable: false }, );
+    const optionalStringProperties = createVendorBillStageRowOptionalProperties({ name: 'billDate', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'channel', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'requiredTier', nullable: false }, { name: 'status', nullable: false }, { name: 'submittedAt', nullable: false }, { name: 'vendorBillId', nullable: false }, { name: 'vendorName', nullable: false }, );
     const optionalNumberProperties = createVendorBillStageRowOptionalProperties({ name: 'openAmount', nullable: false }, { name: 'totalAmount', nullable: false }, );
     const optionalBooleanProperties = createVendorBillStageRowOptionalProperties();
 

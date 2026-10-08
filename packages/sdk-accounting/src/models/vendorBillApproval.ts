@@ -27,10 +27,22 @@ export interface VendorBillApproval {
      * Who approved it; only on an approved bill
      */
     approvedBy?: string;
+    /**
+     * PERSON or SYSTEM (automatic approval of a HIGH match); only on an approved bill
+     */
+    approvedByKind?: VendorBillApprovalApprovedByKindEnum;
+    /**
+     * The clerk approval limit in force now, in the functional currency; 0.00 means no clerk approves
+     */
+    clerkLimit: number;
+    /**
+     * ISO 4217 code of clerkLimit
+     */
+    currencyCode: string;
     proposedClassification?: VendorBillClassification;
     proposedDifference?: VendorBillDifference;
     /**
-     * The tier the approval needs
+     * The tier the approval needs, from the current clerk limit (never stored)
      */
     requiredTier: VendorBillApprovalRequiredTierEnum;
     /**
@@ -46,6 +58,10 @@ export interface VendorBillApproval {
      */
     submittedBy?: string;
 }
+export enum VendorBillApprovalApprovedByKindEnum {
+    Person = 'PERSON',
+    System = 'SYSTEM'
+};
 export enum VendorBillApprovalRequiredTierEnum {
     Clerk = 'CLERK',
     OverLimit = 'OVER_LIMIT'
@@ -91,9 +107,9 @@ export function instanceOfVendorBillApproval(value: object): value is VendorBill
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createVendorBillApprovalPropertyNames('requiredTier', );
-    const optionalStringProperties = createVendorBillApprovalOptionalProperties({ name: 'approvalJustification', nullable: false }, { name: 'approvedAt', nullable: false }, { name: 'approvedBy', nullable: false }, { name: 'requiredTier', nullable: false }, { name: 'submissionJustification', nullable: false }, { name: 'submittedAt', nullable: false }, { name: 'submittedBy', nullable: false }, );
-    const optionalNumberProperties = createVendorBillApprovalOptionalProperties();
+    const requiredProperties = createVendorBillApprovalPropertyNames('clerkLimit', 'currencyCode', 'requiredTier', );
+    const optionalStringProperties = createVendorBillApprovalOptionalProperties({ name: 'approvalJustification', nullable: false }, { name: 'approvedAt', nullable: false }, { name: 'approvedBy', nullable: false }, { name: 'approvedByKind', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'requiredTier', nullable: false }, { name: 'submissionJustification', nullable: false }, { name: 'submittedAt', nullable: false }, { name: 'submittedBy', nullable: false }, );
+    const optionalNumberProperties = createVendorBillApprovalOptionalProperties({ name: 'clerkLimit', nullable: false }, );
     const optionalBooleanProperties = createVendorBillApprovalOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
