@@ -7,16 +7,26 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { VendorBillMatchCandidateSummary } from './vendorBillMatchCandidateSummary';
+import { VendorBillApproval } from './vendorBillApproval';
+import { VendorBillRejection } from './vendorBillRejection';
+import { VendorBillMatch } from './vendorBillMatch';
+import { VendorBillAvailableAction } from './vendorBillAvailableAction';
+import { VendorBillCheck } from './vendorBillCheck';
+import { VendorBillReissue } from './vendorBillReissue';
+import { VendorBillPosting } from './vendorBillPosting';
+import { VendorBillLine } from './vendorBillLine';
 
 
 /**
  * Vendor bill details
  */
 export interface VendorBillResponse {
+    approval?: VendorBillApproval;
     /**
-     * Approval justification (if status = APPROVED)
+     * The decisions valid for the bill\'s status that the caller holds a permission for (P5)
      */
-    approvalJustification?: string;
+    availableActions: Array<VendorBillAvailableAction>;
     /**
      * Bill date
      */
@@ -25,6 +35,14 @@ export interface VendorBillResponse {
      * Bill number
      */
     billNumber: string;
+    /**
+     * Where the bill came from
+     */
+    channel?: VendorBillResponseChannelEnum;
+    /**
+     * MATCHED_TO_DELIVERY, WITHIN_PRICE_TOLERANCE, TOTALS_ADD_UP and, on an EDI bill classified GOODS, OPEN_DELIVERIES_FROM_VENDOR
+     */
+    checks: Array<VendorBillCheck>;
     /**
      * Created timestamp
      */
@@ -46,6 +64,23 @@ export interface VendorBillResponse {
      */
     journalEntryId?: string;
     /**
+     * Received lines with what the vendor billed; empty for a bill without lines
+     */
+    lines: Array<VendorBillLine>;
+    match?: VendorBillMatch;
+    /**
+     * The net the vendor\'s document states (AW47); null on a bill without header totals
+     */
+    netAmount?: number;
+    /**
+     * Total less allocated payments
+     */
+    openAmount: number;
+    /**
+     * Unresolved candidates of every ambiguous match naming this bill, each with its invoiceEventId; pick one with the select command before sending or accepting the bill
+     */
+    openCandidates: Array<VendorBillMatchCandidateSummary>;
+    /**
      * Origin event ID (for traceability)
      */
     originEventId?: string;
@@ -57,14 +92,24 @@ export interface VendorBillResponse {
      * Payment transaction ID (if paid)
      */
     paymentTransactionId?: string;
+    posting?: VendorBillPosting;
     /**
-     * Rejection or exception reason (status REJECTED, MATCH_EXCEPTION or CURRENCY_HOLD)
+     * Re-issues of this approved bill under its number, held as exception items
      */
-    rejectionReason?: string;
+    reissues: Array<VendorBillReissue>;
+    rejection?: VendorBillRejection;
     /**
      * Bill status
      */
     status: VendorBillResponseStatusEnum;
+    /**
+     * Why the bill is held: the MATCH_EXCEPTION or CURRENCY_HOLD explanation; null in any other status
+     */
+    statusExplanation?: string;
+    /**
+     * The tax the vendor\'s document states, never recalculated (AW39, AW47)
+     */
+    taxAmount?: number;
     /**
      * Total bill amount
      */
@@ -82,10 +127,15 @@ export interface VendorBillResponse {
      */
     vendorName?: string;
 }
+export enum VendorBillResponseChannelEnum {
+    GoodsReceipt = 'GOODS_RECEIPT',
+    SupplierConnection = 'SUPPLIER_CONNECTION'
+};
 export enum VendorBillResponseStatusEnum {
     PendingReceiptMatch = 'PENDING_RECEIPT_MATCH',
     MatchException = 'MATCH_EXCEPTION',
     CurrencyHold = 'CURRENCY_HOLD',
+    AwaitingApproval = 'AWAITING_APPROVAL',
     Approved = 'APPROVED',
     Rejected = 'REJECTED',
     Paid = 'PAID',
@@ -132,9 +182,9 @@ export function instanceOfVendorBillResponse(value: object): value is VendorBill
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createVendorBillResponsePropertyNames('billNumber', 'createdAt', 'status', 'totalAmount', 'vendorBillId', 'vendorId', );
-    const optionalStringProperties = createVendorBillResponseOptionalProperties({ name: 'approvalJustification', nullable: false }, { name: 'billDate', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'currency', nullable: true }, { name: 'dueDate', nullable: false }, { name: 'journalEntryId', nullable: false }, { name: 'originEventId', nullable: false }, { name: 'originEventType', nullable: false }, { name: 'paymentTransactionId', nullable: false }, { name: 'rejectionReason', nullable: false }, { name: 'status', nullable: false }, { name: 'vendorBillId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, );
-    const optionalNumberProperties = createVendorBillResponseOptionalProperties({ name: 'totalAmount', nullable: false }, );
+    const requiredProperties = createVendorBillResponsePropertyNames('availableActions', 'billNumber', 'checks', 'createdAt', 'lines', 'openAmount', 'openCandidates', 'reissues', 'status', 'totalAmount', 'vendorBillId', 'vendorId', );
+    const optionalStringProperties = createVendorBillResponseOptionalProperties({ name: 'billDate', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'channel', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'currency', nullable: true }, { name: 'dueDate', nullable: false }, { name: 'journalEntryId', nullable: false }, { name: 'originEventId', nullable: false }, { name: 'originEventType', nullable: false }, { name: 'paymentTransactionId', nullable: false }, { name: 'status', nullable: false }, { name: 'statusExplanation', nullable: false }, { name: 'vendorBillId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, );
+    const optionalNumberProperties = createVendorBillResponseOptionalProperties({ name: 'netAmount', nullable: false }, { name: 'openAmount', nullable: false }, { name: 'taxAmount', nullable: false }, { name: 'totalAmount', nullable: false }, );
     const optionalBooleanProperties = createVendorBillResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
