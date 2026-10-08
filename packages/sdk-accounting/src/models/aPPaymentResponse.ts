@@ -19,6 +19,10 @@ export interface APPaymentResponse {
      */
     allocations?: Array<AllocationLineResponse>;
     /**
+     * GL account id of the BANK_CASH account the payment was made from (CAP:550 S42)
+     */
+    bankAccountId?: string;
+    /**
      * Payment created timestamp
      */
     createdAt?: string;
@@ -47,7 +51,7 @@ export interface APPaymentResponse {
      */
     glJournalEntryId?: string;
     /**
-     * GL posting error message (if failed)
+     * Why the posting was refused, as its code (GL_MAPPING_NOT_CONFIGURED, PERIOD_CLOSED, PERIOD_HARD_LOCKED, ACCOUNTING_TIME_ZONE_UNSET, GL_ACCOUNT_NOT_ACTIVE) or GL_POST_RETRIES_EXHAUSTED (the outbox gave up on a transient failure) while the payment is GL_POST_FAILED; in every case gl-posting-retry is the remedy once the cause is fixed
      */
     glPostError?: string;
     /**
@@ -63,9 +67,9 @@ export interface APPaymentResponse {
      */
     memo?: string;
     /**
-     * Net amount
+     * The tenant business date the payment executed on; its entry posts on this date (CAP:550 S42)
      */
-    netAmount?: number;
+    paymentDate?: string;
     /**
      * Payment UUID
      */
@@ -142,8 +146,8 @@ export function instanceOfAPPaymentResponse(value: object): value is APPaymentRe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAPPaymentResponsePropertyNames();
-    const optionalStringProperties = createAPPaymentResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'currency', nullable: false }, { name: 'gatewayTimestamp', nullable: false }, { name: 'gatewayTransactionId', nullable: false }, { name: 'glJournalEntryId', nullable: false }, { name: 'glPostError', nullable: false }, { name: 'glPostedAt', nullable: false }, { name: 'memo', nullable: false }, { name: 'paymentId', nullable: false }, { name: 'paymentRef', nullable: false }, { name: 'status', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, );
-    const optionalNumberProperties = createAPPaymentResponseOptionalProperties({ name: 'feeAmount', nullable: false }, { name: 'grossAmount', nullable: false }, { name: 'netAmount', nullable: false }, { name: 'unappliedAmount', nullable: false }, );
+    const optionalStringProperties = createAPPaymentResponseOptionalProperties({ name: 'bankAccountId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'currency', nullable: false }, { name: 'gatewayTimestamp', nullable: false }, { name: 'gatewayTransactionId', nullable: false }, { name: 'glJournalEntryId', nullable: false }, { name: 'glPostError', nullable: false }, { name: 'glPostedAt', nullable: false }, { name: 'memo', nullable: false }, { name: 'paymentDate', nullable: false }, { name: 'paymentId', nullable: false }, { name: 'paymentRef', nullable: false }, { name: 'status', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, );
+    const optionalNumberProperties = createAPPaymentResponseOptionalProperties({ name: 'feeAmount', nullable: false }, { name: 'grossAmount', nullable: false }, { name: 'unappliedAmount', nullable: false }, );
     const optionalBooleanProperties = createAPPaymentResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

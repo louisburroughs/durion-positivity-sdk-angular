@@ -19,7 +19,11 @@ export interface ExecuteAPPaymentRequest {
      */
     allocations?: Array<AllocationLineRequest>;
     /**
-     * ISO 4217 currency code
+     * GL account id of the BANK_CASH account the payment is made from: active at the start of the execution date, not deactivated before the payment, and in the functional currency. May be omitted only when exactly one such account exists, which is then used (CAP:550 S42, AW41)
+     */
+    bankAccountId?: string;
+    /**
+     * ISO 4217 currency code; must be the tenant\'s functional currency (else 422 CURRENCY_NOT_SUPPORTED, ADR-0067 PC-9)
      */
     currency: string;
     /**
@@ -35,9 +39,9 @@ export interface ExecuteAPPaymentRequest {
      */
     memo?: string;
     /**
-     * Net amount deposited (if applicable)
+     * Justification for paying while the execution date\'s period is CLOSED; honoured only with accounting:period:override. The override is stored with the payment and applied to its posting, whose audit row names the payer (CAP:550 S42)
      */
-    netAmount?: number;
+    overrideJustification?: string;
     /**
      * Payment method (ACH, CHECK, WIRE, CREDIT_CARD, OTHER)
      */
@@ -104,8 +108,8 @@ export function instanceOfExecuteAPPaymentRequest(value: object): value is Execu
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createExecuteAPPaymentRequestPropertyNames('currency', 'grossAmount', 'paymentMethod', 'paymentRef', 'vendorId', );
-    const optionalStringProperties = createExecuteAPPaymentRequestOptionalProperties({ name: 'currency', nullable: false }, { name: 'memo', nullable: false }, { name: 'paymentMethod', nullable: false }, { name: 'paymentRef', nullable: false }, { name: 'paymentSource', nullable: false }, { name: 'vendorId', nullable: false }, );
-    const optionalNumberProperties = createExecuteAPPaymentRequestOptionalProperties({ name: 'feeAmount', nullable: false }, { name: 'grossAmount', nullable: false }, { name: 'netAmount', nullable: false }, );
+    const optionalStringProperties = createExecuteAPPaymentRequestOptionalProperties({ name: 'bankAccountId', nullable: false }, { name: 'currency', nullable: false }, { name: 'memo', nullable: false }, { name: 'overrideJustification', nullable: false }, { name: 'paymentMethod', nullable: false }, { name: 'paymentRef', nullable: false }, { name: 'paymentSource', nullable: false }, { name: 'vendorId', nullable: false }, );
+    const optionalNumberProperties = createExecuteAPPaymentRequestOptionalProperties({ name: 'feeAmount', nullable: false }, { name: 'grossAmount', nullable: false }, );
     const optionalBooleanProperties = createExecuteAPPaymentRequestOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
