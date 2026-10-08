@@ -10,6 +10,7 @@ export * from './accountingRegisterFloat.service';
 export * from './accountingTenantTemplate.service';
 export * from './auditTrail.service';
 export * from './bankAccounts.service';
+export * from './bankDeposits.service';
 export * from './bankImports.service';
 export * from './bankReconciliation.service';
 export * from './bankStatements.service';
