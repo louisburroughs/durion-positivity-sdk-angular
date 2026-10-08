@@ -7,8 +7,8 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { TaxRegistrationView } from './taxRegistrationView';
 import { RemitToDto } from './remitToDto';
-import { TaxRegistrationDto } from './taxRegistrationDto';
 
 
 /**
@@ -69,9 +69,9 @@ export interface VendorView {
      */
     statusReason?: string;
     /**
-     * Tax registrations.
+     * Tax registrations, masked: never a number.
      */
-    taxRegistrations?: Array<TaxRegistrationDto>;
+    taxRegistrations?: Array<TaxRegistrationView>;
     /**
      * Last change time.
      */

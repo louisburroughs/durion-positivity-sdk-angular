@@ -10,17 +10,21 @@
 
 
 /**
- * One tax registration of a vendor.
+ * One tax registration of a vendor, as a create or update sends it. Reads never return the number: send registrationId without number to keep a stored registration.
  */
 export interface TaxRegistrationDto {
     /**
-     * Registration number as issued. Never blank.
+     * Registration number as issued, 1 to 64 characters. Required for a new registration; omit it to keep the stored number of registrationId. Never returned by a read.
      */
     number?: string;
     /**
      * Issuing region, where the scheme is regional.
      */
     region?: string;
+    /**
+     * A stored registration of this vendor, to keep or re-key it. Omit for a new registration.
+     */
+    registrationId?: string;
     /**
      * Registration scheme. Never blank.
      */
@@ -66,7 +70,7 @@ export function instanceOfTaxRegistrationDto(value: object): value is TaxRegistr
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTaxRegistrationDtoPropertyNames();
-    const optionalStringProperties = createTaxRegistrationDtoOptionalProperties({ name: 'number', nullable: false }, { name: 'region', nullable: false }, { name: 'scheme', nullable: false }, );
+    const optionalStringProperties = createTaxRegistrationDtoOptionalProperties({ name: 'number', nullable: false }, { name: 'region', nullable: false }, { name: 'registrationId', nullable: false }, { name: 'scheme', nullable: false }, );
     const optionalNumberProperties = createTaxRegistrationDtoOptionalProperties();
     const optionalBooleanProperties = createTaxRegistrationDtoOptionalProperties();
 
