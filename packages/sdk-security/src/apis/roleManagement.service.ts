@@ -21,6 +21,8 @@ import { ApiError } from '../models/apiError';
 // @ts-ignore
 import { PermissionDto } from '../models/permissionDto';
 // @ts-ignore
+import { PermissionHoldersResponse } from '../models/permissionHoldersResponse';
+// @ts-ignore
 import { RoleAssignmentDto } from '../models/roleAssignmentDto';
 // @ts-ignore
 import { RoleAssignmentRequest } from '../models/roleAssignmentRequest';
@@ -679,6 +681,78 @@ export class RoleManagementService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: rolePermissionGrantRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List the Roles That Hold Given Permissions
+     * Returns, for each requested permission code, the roles of the caller\&#39;s tenant that currently hold it, each with its name, its templateKey (null for a custom role) and its locationScope; roles are sorted by name, and a code no role holds is answered with an empty roles list. Use this tool to state a tenant\&#39;s real separation of duties, as the Approval limits page does; do not use listRoles or getRoleDefaultPermissions, which return every grant of every role or one role at a time, and do not use it to find users, because it returns no user ids, names or counts. Preconditions: the caller must hold security:role:view, which may ask about any registered code, or accounting:ap_approval_policy:manage, which may ask only about accounting:ap:approve, accounting:ap:approve_over_limit, accounting:ap:reject, accounting:ap:pay and accounting:ap_approval_policy:manage. Required inputs: permission, repeated once per code, 1 to 20 distinct domain:resource:action codes; codes are trimmed, matched case-insensitively and answered in the catalog\&#39;s spelling, and duplicates are answered once in first-seen order. No events are emitted and no state changes; the grants are read live for the caller\&#39;s tenant with no cache, so a token issued before a grant change keeps its old permissions until it is reissued. Returns 400 VALIDATION_ERROR when permission is missing, names more than 20 distinct codes or holds a malformed code, with fieldErrors on permission naming the bad values. Returns 403 when the caller holds neither permission, and 403 PERMISSION_HOLDER_SCOPE_DENIED, naming the codes, before anything is read when a scoped caller asks about a code outside its scope. Returns 422 PERMISSION_NOT_REGISTERED, with fieldErrors on permission, when a well-formed code is not in the permission catalog, rather than answering that nobody holds it.
+     * @endpoint get /v1/roles/permission-holders
+     * @param permission A permission code (domain:resource:action) to report the holders of; repeat the parameter once per code, at least one and at most 20 distinct codes. Matched case-insensitively and answered in the catalog\&#39;s spelling.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listPermissionHolders(permission: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PermissionHoldersResponse>;
+    public listPermissionHolders(permission: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PermissionHoldersResponse>>;
+    public listPermissionHolders(permission: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PermissionHoldersResponse>>;
+    public listPermissionHolders(permission: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (permission === null || permission === undefined) {
+            throw new Error('Required parameter permission was null or undefined when calling listPermissionHolders.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'permission',
+            <any>permission,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/roles/permission-holders`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PermissionHoldersResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
