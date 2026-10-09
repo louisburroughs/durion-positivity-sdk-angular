@@ -92,6 +92,17 @@ constructor({ accessToken, apiKeys, basePath, credentials, encodeParam, encoder,
         this.encodeParam = encodeParam ?? (param => this.defaultEncodeParam(param));
         this.credentials = credentials ?? {};
 
+        // init default accountingFrontDoorSecret credential
+        if (!this.credentials['accountingFrontDoorSecret']) {
+            this.credentials['accountingFrontDoorSecret'] = () => {
+                if (this.apiKeys === null || this.apiKeys === undefined) {
+                    return undefined;
+                } else {
+                    return this.apiKeys['accountingFrontDoorSecret'] || this.apiKeys['X-Pos-Tax-Front-Door-Secret'];
+                }
+            };
+        }
+
         // init default bearerAuth credential
         if (!this.credentials['bearerAuth']) {
             this.credentials['bearerAuth'] = () => {
