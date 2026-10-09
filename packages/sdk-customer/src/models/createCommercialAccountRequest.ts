@@ -18,21 +18,9 @@ export interface CreateCommercialAccountRequest {
      */
     billingTermsId?: string;
     /**
-     * Primary contact first name
-     */
-    contactFirstName?: string;
-    /**
-     * Primary contact last name
-     */
-    contactLastName?: string;
-    /**
      * Display/trading name
      */
     displayName?: string;
-    /**
-     * Contact email
-     */
-    email?: string;
     /**
      * External identifiers (system-specific IDs from upstream systems)
      */
@@ -42,13 +30,9 @@ export interface CreateCommercialAccountRequest {
      */
     legalName: string;
     /**
-     * Party type (ORGANIZATION|INDIVIDUAL; default ORGANIZATION for commercial accounts)
+     * Party type; COMMERCIAL, the default, is the only accepted value. Create individual customers with createCrmPerson.
      */
     partyType?: string;
-    /**
-     * Contact phone
-     */
-    phone?: string;
     /**
      * Tax identification number (required for certain jurisdictions)
      */
@@ -94,7 +78,7 @@ export function instanceOfCreateCommercialAccountRequest(value: object): value i
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCreateCommercialAccountRequestPropertyNames('legalName', );
-    const optionalStringProperties = createCreateCommercialAccountRequestOptionalProperties({ name: 'billingTermsId', nullable: false }, { name: 'contactFirstName', nullable: false }, { name: 'contactLastName', nullable: false }, { name: 'displayName', nullable: false }, { name: 'email', nullable: false }, { name: 'legalName', nullable: false }, { name: 'partyType', nullable: false }, { name: 'phone', nullable: false }, { name: 'taxId', nullable: false }, );
+    const optionalStringProperties = createCreateCommercialAccountRequestOptionalProperties({ name: 'billingTermsId', nullable: false }, { name: 'displayName', nullable: false }, { name: 'legalName', nullable: false }, { name: 'partyType', nullable: false }, { name: 'taxId', nullable: false }, );
     const optionalNumberProperties = createCreateCommercialAccountRequestOptionalProperties();
     const optionalBooleanProperties = createCreateCommercialAccountRequestOptionalProperties();
 

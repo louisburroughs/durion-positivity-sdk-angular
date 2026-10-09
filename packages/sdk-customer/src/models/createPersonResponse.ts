@@ -30,6 +30,10 @@ export interface CreatePersonResponse {
      */
     lastName: string;
     /**
+     * Party id of the individual customer: the id getParty, vehicles, estimates and appointments key on (personId is the pos-people identity, not the party)
+     */
+    partyId: string;
+    /**
      * Unique identifier of the created person
      */
     personId: string;
@@ -85,8 +89,8 @@ export function instanceOfCreatePersonResponse(value: object): value is CreatePe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreatePersonResponsePropertyNames('contactPointsCreated', 'createdAt', 'firstName', 'lastName', 'personId', 'preferredContactMethod', );
-    const optionalStringProperties = createCreatePersonResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'personId', nullable: false }, { name: 'preferredContactMethod', nullable: false }, );
+    const requiredProperties = createCreatePersonResponsePropertyNames('contactPointsCreated', 'createdAt', 'firstName', 'lastName', 'partyId', 'personId', 'preferredContactMethod', );
+    const optionalStringProperties = createCreatePersonResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'partyId', nullable: false }, { name: 'personId', nullable: false }, { name: 'preferredContactMethod', nullable: false }, );
     const optionalNumberProperties = createCreatePersonResponseOptionalProperties({ name: 'contactPointsCreated', nullable: false }, );
     const optionalBooleanProperties = createCreatePersonResponseOptionalProperties();
 
