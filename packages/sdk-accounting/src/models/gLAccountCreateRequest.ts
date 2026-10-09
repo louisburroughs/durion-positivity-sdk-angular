@@ -59,7 +59,8 @@ export enum GLAccountCreateRequestAccountSubtypeEnum {
     CostOfSales = 'COST_OF_SALES',
     OperatingExpense = 'OPERATING_EXPENSE',
     Other = 'OTHER',
-    CashOnHand = 'CASH_ON_HAND'
+    CashOnHand = 'CASH_ON_HAND',
+    TaxRecoverable = 'TAX_RECOVERABLE'
 };
 export enum GLAccountCreateRequestAccountTypeEnum {
     Asset = 'ASSET',

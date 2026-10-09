@@ -29,6 +29,10 @@ import { PettyExpenseCategoryRemapRequest } from '../models/pettyExpenseCategory
 // @ts-ignore
 import { PettyExpenseCategoryResponse } from '../models/pettyExpenseCategoryResponse';
 // @ts-ignore
+import { PettyExpenseCategoryTaxRecoveryRequest } from '../models/pettyExpenseCategoryTaxRecoveryRequest';
+// @ts-ignore
+import { PettyExpenseCategoryTaxRecoveryResponse } from '../models/pettyExpenseCategoryTaxRecoveryResponse';
+// @ts-ignore
 import { PettyExpenseCategoryUpdateRequest } from '../models/pettyExpenseCategoryUpdateRequest';
 
 // @ts-ignore
@@ -311,6 +315,80 @@ export class AccountingPettyExpenseCategoriesService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: pettyExpenseCategoryRemapRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Set Petty-Expense Category Tax Recovery
+     * Sets whether the tax stated on a petty-expense category\&#39;s receipts is recovered, and which share, from now on; a movement already recorded keeps the share in force when it was recorded. Use this tool when the accountant decides how much of a category\&#39;s stated tax may be claimed; do not use updatePettyExpenseCategory, which changes only the label and examples. Preconditions: caller holds accounting:mapping-key:edit; the category exists (404); recovery under at least one regime is on today (422 INPUT_TAX_RECOVERY_NOT_ENABLED); version is the one last read, 0 for a category never set (409 OPTIMISTIC_LOCK); the tax service answers whether a regime\&#39;s recovery is on (503 SERVICE_UNAVAILABLE with Retry-After when it cannot). Required inputs: code (path), taxRecoverable, recoverablePercent in (0, 100] when recoverable and absent otherwise, version, justification (at least 10 characters) and requestId (a replay returns the first result with 200; the same requestId with another body is 409 IDEMPOTENCY_CONFLICT). Emits an ACCOUNTING_PETTY_CATEGORY_TAX_RECOVERY_UPDATE event, writes a history row naming the caller and role, queues accounting.petty-expense-category.changed with the new values, and returns 200 with the setting.
+     * @endpoint put /v1/accounting/petty-expense-categories/{code}/tax-recovery
+     * @param code Permanent category code
+     * @param pettyExpenseCategoryTaxRecoveryRequest Whether the category\&#39;s stated tax is recovered, which share, and why
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public setPettyExpenseCategoryTaxRecovery(code: string, pettyExpenseCategoryTaxRecoveryRequest: PettyExpenseCategoryTaxRecoveryRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PettyExpenseCategoryTaxRecoveryResponse>;
+    public setPettyExpenseCategoryTaxRecovery(code: string, pettyExpenseCategoryTaxRecoveryRequest: PettyExpenseCategoryTaxRecoveryRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PettyExpenseCategoryTaxRecoveryResponse>>;
+    public setPettyExpenseCategoryTaxRecovery(code: string, pettyExpenseCategoryTaxRecoveryRequest: PettyExpenseCategoryTaxRecoveryRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PettyExpenseCategoryTaxRecoveryResponse>>;
+    public setPettyExpenseCategoryTaxRecovery(code: string, pettyExpenseCategoryTaxRecoveryRequest: PettyExpenseCategoryTaxRecoveryRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (code === null || code === undefined) {
+            throw new Error('Required parameter code was null or undefined when calling setPettyExpenseCategoryTaxRecovery.');
+        }
+        if (pettyExpenseCategoryTaxRecoveryRequest === null || pettyExpenseCategoryTaxRecoveryRequest === undefined) {
+            throw new Error('Required parameter pettyExpenseCategoryTaxRecoveryRequest was null or undefined when calling setPettyExpenseCategoryTaxRecovery.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/petty-expense-categories/${this.configuration.encodeParam({name: "code", value: code, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/tax-recovery`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PettyExpenseCategoryTaxRecoveryResponse>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: pettyExpenseCategoryTaxRecoveryRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

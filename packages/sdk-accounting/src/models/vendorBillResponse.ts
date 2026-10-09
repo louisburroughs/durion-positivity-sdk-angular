@@ -10,10 +10,12 @@
 import { VendorBillMatchCandidateSummary } from './vendorBillMatchCandidateSummary';
 import { VendorBillApproval } from './vendorBillApproval';
 import { VendorBillRejection } from './vendorBillRejection';
+import { VendorBillTaxByType } from './vendorBillTaxByType';
 import { VendorBillMatch } from './vendorBillMatch';
 import { VendorBillAvailableAction } from './vendorBillAvailableAction';
 import { VendorBillCheck } from './vendorBillCheck';
 import { VendorBillReissue } from './vendorBillReissue';
+import { VendorBillInputTaxRecovery } from './vendorBillInputTaxRecovery';
 import { VendorBillPosting } from './vendorBillPosting';
 import { VendorBillLine } from './vendorBillLine';
 
@@ -59,6 +61,10 @@ export interface VendorBillResponse {
      * Due date
      */
     dueDate?: string;
+    /**
+     * What the posting did with each stated tax amount for a tenant that recovers input tax: the amount recovered and its account, or why nothing was (CAP:550 S32d); null before the posting and for a tenant without recovery, whose bill books the gross
+     */
+    inputTaxRecovery?: Array<VendorBillInputTaxRecovery>;
     /**
      * Journal entry ID (if GL posted)
      */
@@ -110,6 +116,10 @@ export interface VendorBillResponse {
      * The tax the vendor\'s document states, never recalculated (AW39, AW47)
      */
     taxAmount?: number;
+    /**
+     * The tax the vendor\'s document states, by tax type (CAP:550 S32d); empty when it states none by type
+     */
+    taxByType: Array<VendorBillTaxByType>;
     /**
      * Total bill amount
      */
@@ -182,7 +192,7 @@ export function instanceOfVendorBillResponse(value: object): value is VendorBill
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createVendorBillResponsePropertyNames('availableActions', 'billNumber', 'checks', 'createdAt', 'lines', 'openAmount', 'openCandidates', 'reissues', 'status', 'totalAmount', 'vendorBillId', 'vendorId', );
+    const requiredProperties = createVendorBillResponsePropertyNames('availableActions', 'billNumber', 'checks', 'createdAt', 'lines', 'openAmount', 'openCandidates', 'reissues', 'status', 'taxByType', 'totalAmount', 'vendorBillId', 'vendorId', );
     const optionalStringProperties = createVendorBillResponseOptionalProperties({ name: 'billDate', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'channel', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'currency', nullable: true }, { name: 'dueDate', nullable: false }, { name: 'journalEntryId', nullable: false }, { name: 'originEventId', nullable: false }, { name: 'originEventType', nullable: false }, { name: 'paymentTransactionId', nullable: false }, { name: 'status', nullable: false }, { name: 'statusExplanation', nullable: false }, { name: 'vendorBillId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, );
     const optionalNumberProperties = createVendorBillResponseOptionalProperties({ name: 'netAmount', nullable: false }, { name: 'openAmount', nullable: false }, { name: 'taxAmount', nullable: false }, { name: 'totalAmount', nullable: false }, );
     const optionalBooleanProperties = createVendorBillResponseOptionalProperties();

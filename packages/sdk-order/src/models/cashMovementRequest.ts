@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { CashMovementStatedTax } from './cashMovementStatedTax';
 
 
 /**
@@ -49,6 +50,18 @@ export interface CashMovementRequest {
      * The register\'s idempotency key (UUIDv7): a retry with the same id returns the first result
      */
     requestId: string;
+    /**
+     * Tax stated on the receipt, one entry per regime the category offers, for PETTY_EXPENSE only; absent and empty both mean none. The drawer still counts the movement\'s whole amount
+     */
+    statedTaxes?: Array<CashMovementStatedTax>;
+    /**
+     * Supplier on the receipt, for PETTY_EXPENSE only; required when any tax amount is stated, trimmed, at most 200 characters
+     */
+    supplierName?: string;
+    /**
+     * Supplier\'s indirect-tax registration number as printed, for PETTY_EXPENSE with at least one stated amount; checked by pos-tax, stored normalised, and never returned or logged
+     */
+    supplierRegistrationNumber?: string;
     /**
      * The vendor paid; required for VENDOR_COD
      */
@@ -103,7 +116,7 @@ export function instanceOfCashMovementRequest(value: object): value is CashMovem
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCashMovementRequestPropertyNames('amount', 'currencyCode', 'reason', 'requestId', );
-    const optionalStringProperties = createCashMovementRequestOptionalProperties({ name: 'approvalToken', nullable: false }, { name: 'bagNumber', nullable: false }, { name: 'categoryCode', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'note', nullable: false }, { name: 'reason', nullable: false }, { name: 'receiptReference', nullable: false }, { name: 'requestId', nullable: false }, { name: 'vendorId', nullable: false }, );
+    const optionalStringProperties = createCashMovementRequestOptionalProperties({ name: 'approvalToken', nullable: false }, { name: 'bagNumber', nullable: false }, { name: 'categoryCode', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'note', nullable: false }, { name: 'reason', nullable: false }, { name: 'receiptReference', nullable: false }, { name: 'requestId', nullable: false }, { name: 'supplierName', nullable: false }, { name: 'supplierRegistrationNumber', nullable: false }, { name: 'vendorId', nullable: false }, );
     const optionalNumberProperties = createCashMovementRequestOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createCashMovementRequestOptionalProperties();
 

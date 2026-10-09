@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { CashMovementStatedTax } from './cashMovementStatedTax';
 
 
 /**
@@ -74,6 +75,26 @@ export interface CashMovementResponse {
      */
     sessionId?: string;
     /**
+     * Tax the receipt states, one entry per regime; empty when none
+     */
+    statedTaxes?: Array<CashMovementStatedTax>;
+    /**
+     * Supplier on a petty-expense receipt, or null
+     */
+    supplierName?: string;
+    /**
+     * Whether the supplier\'s registration number was recorded; the number itself is never returned
+     */
+    supplierRegistrationNumberProvided?: boolean;
+    /**
+     * Whether an evidence rule asked for the supplier\'s number; null when no check was made
+     */
+    supplierRegistrationRequired?: boolean | null;
+    /**
+     * pos-tax\'s answer on the stated tax; null when no check was made
+     */
+    taxPlausibility?: CashMovementResponseTaxPlausibilityEnum | null;
+    /**
      * Vendor paid, for VENDOR_COD
      */
     vendorId?: string;
@@ -88,6 +109,10 @@ export enum CashMovementResponseReasonEnum {
     BankDrop = 'BANK_DROP',
     FloatIncrease = 'FLOAT_INCREASE',
     FloatDecrease = 'FLOAT_DECREASE'
+};
+export enum CashMovementResponseTaxPlausibilityEnum {
+    Plausible = 'PLAUSIBLE',
+    RateUnavailable = 'RATE_UNAVAILABLE'
 };
 
 
@@ -131,9 +156,9 @@ export function instanceOfCashMovementResponse(value: object): value is CashMove
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCashMovementResponsePropertyNames();
-    const optionalStringProperties = createCashMovementResponseOptionalProperties({ name: 'approvedBy', nullable: false }, { name: 'bagNumber', nullable: false }, { name: 'categoryCode', nullable: false }, { name: 'clerkId', nullable: false }, { name: 'clerkUserId', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'movementId', nullable: false }, { name: 'movementType', nullable: false }, { name: 'note', nullable: false }, { name: 'occurredAt', nullable: false }, { name: 'reason', nullable: false }, { name: 'receiptReference', nullable: false }, { name: 'requestId', nullable: false }, { name: 'sessionId', nullable: false }, { name: 'vendorId', nullable: false }, );
+    const optionalStringProperties = createCashMovementResponseOptionalProperties({ name: 'approvedBy', nullable: false }, { name: 'bagNumber', nullable: false }, { name: 'categoryCode', nullable: false }, { name: 'clerkId', nullable: false }, { name: 'clerkUserId', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'movementId', nullable: false }, { name: 'movementType', nullable: false }, { name: 'note', nullable: false }, { name: 'occurredAt', nullable: false }, { name: 'reason', nullable: false }, { name: 'receiptReference', nullable: false }, { name: 'requestId', nullable: false }, { name: 'sessionId', nullable: false }, { name: 'supplierName', nullable: false }, { name: 'taxPlausibility', nullable: true }, { name: 'vendorId', nullable: false }, );
     const optionalNumberProperties = createCashMovementResponseOptionalProperties({ name: 'amount', nullable: false }, );
-    const optionalBooleanProperties = createCashMovementResponseOptionalProperties();
+    const optionalBooleanProperties = createCashMovementResponseOptionalProperties({ name: 'supplierRegistrationNumberProvided', nullable: false }, { name: 'supplierRegistrationRequired', nullable: true }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalCashMovementResponsePropertyOfType(_v, property.name, 'string', property.nullable))
