@@ -29,6 +29,10 @@ export interface VendorApHold {
      * Who set the hold or last changed its reason (principal name); null without a hold
      */
     setBy?: string;
+    /**
+     * The display name of the person who set the hold (\"First Last\"), resolved now from accounting\'s people-contact copy; absent when not known or without a hold, never the sign-in name
+     */
+    setByName?: string;
 }
 
 function isOptionalVendorApHoldPropertyOfType(
@@ -70,7 +74,7 @@ export function instanceOfVendorApHold(value: object): value is VendorApHold {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createVendorApHoldPropertyNames('onHold', );
-    const optionalStringProperties = createVendorApHoldOptionalProperties({ name: 'reason', nullable: false }, { name: 'setAt', nullable: false }, { name: 'setBy', nullable: false }, );
+    const optionalStringProperties = createVendorApHoldOptionalProperties({ name: 'reason', nullable: false }, { name: 'setAt', nullable: false }, { name: 'setBy', nullable: false }, { name: 'setByName', nullable: false }, );
     const optionalNumberProperties = createVendorApHoldOptionalProperties();
     const optionalBooleanProperties = createVendorApHoldOptionalProperties({ name: 'onHold', nullable: false }, );
 

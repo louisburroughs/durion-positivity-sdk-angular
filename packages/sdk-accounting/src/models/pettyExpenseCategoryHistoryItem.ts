@@ -14,9 +14,13 @@
  */
 export interface PettyExpenseCategoryHistoryItem {
     /**
-     * Who made it (from the security context)
+     * Who made it: the sign-in name from the security context, kept for audit and never shown to a person
      */
     actor?: string;
+    /**
+     * The display name of the person who made it (\"First Last\"), resolved when the response is built from accounting\'s people-contact copy; absent when not known or SYSTEM, never the sign-in name
+     */
+    actorName?: string;
     /**
      * What changed
      */
@@ -86,7 +90,7 @@ export function instanceOfPettyExpenseCategoryHistoryItem(value: object): value 
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPettyExpenseCategoryHistoryItemPropertyNames();
-    const optionalStringProperties = createPettyExpenseCategoryHistoryItemOptionalProperties({ name: 'actor', nullable: false }, { name: 'changeType', nullable: false }, { name: 'changedAt', nullable: false }, { name: 'justification', nullable: false }, { name: 'newValue', nullable: false }, { name: 'oldValue', nullable: false }, );
+    const optionalStringProperties = createPettyExpenseCategoryHistoryItemOptionalProperties({ name: 'actor', nullable: false }, { name: 'actorName', nullable: false }, { name: 'changeType', nullable: false }, { name: 'changedAt', nullable: false }, { name: 'justification', nullable: false }, { name: 'newValue', nullable: false }, { name: 'oldValue', nullable: false }, );
     const optionalNumberProperties = createPettyExpenseCategoryHistoryItemOptionalProperties();
     const optionalBooleanProperties = createPettyExpenseCategoryHistoryItemOptionalProperties();
 

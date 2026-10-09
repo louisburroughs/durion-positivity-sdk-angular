@@ -41,6 +41,10 @@ export interface VendorApSettingsResponse {
      * Who confirmed it (principal name)
      */
     remitToConfirmedBy?: string;
+    /**
+     * The display name of the person who confirmed it (\"First Last\"), resolved now from accounting\'s people-contact copy; absent when not known, never the sign-in name
+     */
+    remitToConfirmedByName?: string;
 }
 export enum VendorApSettingsResponseDefaultDebitClassEnum {
     Goods = 'GOODS',
@@ -88,7 +92,7 @@ export function instanceOfVendorApSettingsResponse(value: object): value is Vend
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createVendorApSettingsResponsePropertyNames('acceptTaxOnResaleGoods', 'apHold', 'informationReturn', );
-    const optionalStringProperties = createVendorApSettingsResponseOptionalProperties({ name: 'defaultDebitClass', nullable: false }, { name: 'defaultExpenseMappingKey', nullable: false }, { name: 'remitToConfirmedAt', nullable: false }, { name: 'remitToConfirmedBy', nullable: false }, );
+    const optionalStringProperties = createVendorApSettingsResponseOptionalProperties({ name: 'defaultDebitClass', nullable: false }, { name: 'defaultExpenseMappingKey', nullable: false }, { name: 'remitToConfirmedAt', nullable: false }, { name: 'remitToConfirmedBy', nullable: false }, { name: 'remitToConfirmedByName', nullable: false }, );
     const optionalNumberProperties = createVendorApSettingsResponseOptionalProperties({ name: 'confirmedRemitToVersion', nullable: false }, );
     const optionalBooleanProperties = createVendorApSettingsResponseOptionalProperties({ name: 'acceptTaxOnResaleGoods', nullable: false }, );
 
