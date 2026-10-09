@@ -23,6 +23,8 @@ import { ChangeTaxRegistrationRequest } from '../models/changeTaxRegistrationReq
 // @ts-ignore
 import { RecordTaxRegistrationRequest } from '../models/recordTaxRegistrationRequest';
 // @ts-ignore
+import { TaxRegimesResponse } from '../models/taxRegimesResponse';
+// @ts-ignore
 import { TaxRegistrationListResponse } from '../models/taxRegistrationListResponse';
 // @ts-ignore
 import { TaxRegistrationView } from '../models/taxRegistrationView';
@@ -107,6 +109,75 @@ export class AccountingTaxRegistrationsService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: changeTaxRegistrationRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List Configured Tax Regimes
+     * Returns the indirect-tax regimes configured for a country, each with the region codes it covers and the tax types registered and recovered under it, relayed from pos-tax\&#39;s configuration. Use this tool to offer the regime choices of a tax registration; do not use it to read the company\&#39;s registrations, use listTaxRegistrations instead. Preconditions: the caller holds accounting:tax_registration:view; the values are placeholders held for expert advice, so source is STUB. Required inputs: none; countryCode (two upper-case letters) picks a country, otherwise the deployment\&#39;s tax country (accounting.tax.country) applies. Emits an ACCOUNTING_TAX_REGIMES_VIEW audit event; no state changes, and nothing is cached. Returns 200 with an empty regimes list when the country configures none, 400 VALIDATION_ERROR for a malformed countryCode, and 503 SERVICE_UNAVAILABLE with Retry-After when pos-tax cannot answer.
+     * @endpoint get /v1/accounting/tax-regimes
+     * @param countryCode Country code in ISO 3166-1 alpha-2 format; omit it for the tax country
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listTaxRegimes(countryCode?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxRegimesResponse>;
+    public listTaxRegimes(countryCode?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxRegimesResponse>>;
+    public listTaxRegimes(countryCode?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxRegimesResponse>>;
+    public listTaxRegimes(countryCode?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'countryCode',
+            <any>countryCode,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/tax-regimes`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<TaxRegimesResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
