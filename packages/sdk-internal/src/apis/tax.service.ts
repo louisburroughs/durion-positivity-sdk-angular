@@ -27,6 +27,8 @@ import { TaxCalculationResponse } from '../models/taxCalculationResponse';
 // @ts-ignore
 import { TaxEvidenceRulesResponse } from '../models/taxEvidenceRulesResponse';
 // @ts-ignore
+import { TaxInformationReturnFormsResponse } from '../models/taxInformationReturnFormsResponse';
+// @ts-ignore
 import { TaxPlausibilityCheckRequest } from '../models/taxPlausibilityCheckRequest';
 // @ts-ignore
 import { TaxPlausibilityCheckResponse } from '../models/taxPlausibilityCheckResponse';
@@ -335,6 +337,78 @@ export class TaxService extends BaseService {
         let localVarPath = `/v1/tax/evidence-rules`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<TaxEvidenceRulesResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List a country\&#39;s information-return forms
+     * Returns the information-return forms a country configures, each with its boxes and the payee-id schemes a payee may be reported under, so a vendor can be marked reportable in a form and box. Use this tool when pos-accounting validates or offers a vendor\&#39;s information-return flag; do not use it to read tax rates or evidence rules, which are getTaxRates and getTaxEvidenceRules instead. Preconditions: this endpoint is internal-only (ADR-0021/ADR-0014), reached by direct in-cluster calls from pos-accounting with the service authority, never through pos-api-gateway. Required inputs: countryCode, two upper-case letters. No events are emitted, no state changes and no tenant data is read; every value is configuration held for expert advice, so source is always STUB. Returns 200 with an empty list for a country without a configured form, and 400 VALIDATION_ERROR when countryCode is missing or malformed.
+     * @endpoint get /v1/tax/information-return-forms
+     * @param countryCode
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getTaxInformationReturnForms(countryCode: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxInformationReturnFormsResponse>;
+    public getTaxInformationReturnForms(countryCode: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxInformationReturnFormsResponse>>;
+    public getTaxInformationReturnForms(countryCode: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxInformationReturnFormsResponse>>;
+    public getTaxInformationReturnForms(countryCode: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (countryCode === null || countryCode === undefined) {
+            throw new Error('Required parameter countryCode was null or undefined when calling getTaxInformationReturnForms.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'countryCode',
+            <any>countryCode,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/tax/information-return-forms`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<TaxInformationReturnFormsResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),

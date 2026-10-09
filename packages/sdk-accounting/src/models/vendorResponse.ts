@@ -14,6 +14,10 @@ import { VendorApSettingsResponse } from './vendorApSettingsResponse';
  * A vendor from accounting\'s copy of the pos-supplier vendor master: the pos-supplier vendorId, its name, number and status, its current remit-to version and whether payment details changed
  */
 export interface VendorResponse {
+    /**
+     * True while the vendor is on AP hold: paying it answers 422 VENDOR_ON_AP_HOLD, while its bills are still approved and posted; the reason is in apSettings.apHold on getVendorById
+     */
+    apHold: boolean;
     apSettings?: VendorApSettingsResponse;
     /**
      * Vendor display name
@@ -85,10 +89,10 @@ export function instanceOfVendorResponse(value: object): value is VendorResponse
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createVendorResponsePropertyNames('name', 'paymentDetailsChanged', 'remitToVersion', 'status', 'vendorId', 'vendorNumber', );
+    const requiredProperties = createVendorResponsePropertyNames('apHold', 'name', 'paymentDetailsChanged', 'remitToVersion', 'status', 'vendorId', 'vendorNumber', );
     const optionalStringProperties = createVendorResponseOptionalProperties({ name: 'name', nullable: false }, { name: 'status', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorNumber', nullable: false }, );
     const optionalNumberProperties = createVendorResponseOptionalProperties({ name: 'remitToVersion', nullable: false }, );
-    const optionalBooleanProperties = createVendorResponseOptionalProperties({ name: 'paymentDetailsChanged', nullable: false }, );
+    const optionalBooleanProperties = createVendorResponseOptionalProperties({ name: 'apHold', nullable: false }, { name: 'paymentDetailsChanged', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalVendorResponsePropertyOfType(_v, property.name, 'string', property.nullable))

@@ -54,6 +54,10 @@ export interface VendorBillStageRow {
      */
     totalAmount: number;
     /**
+     * True while the bill\'s vendor is on AP hold (#2615): it is not paid until released, but it is still approved and posted
+     */
+    vendorApHold: boolean;
+    /**
      * Bill id
      */
     vendorBillId: string;
@@ -121,10 +125,10 @@ export function instanceOfVendorBillStageRow(value: object): value is VendorBill
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createVendorBillStageRowPropertyNames('billDate', 'billNumber', 'currencyCode', 'openAmount', 'status', 'totalAmount', 'vendorBillId', );
+    const requiredProperties = createVendorBillStageRowPropertyNames('billDate', 'billNumber', 'currencyCode', 'openAmount', 'status', 'totalAmount', 'vendorApHold', 'vendorBillId', );
     const optionalStringProperties = createVendorBillStageRowOptionalProperties({ name: 'billDate', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'channel', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'requiredTier', nullable: false }, { name: 'status', nullable: false }, { name: 'submittedAt', nullable: false }, { name: 'vendorBillId', nullable: false }, { name: 'vendorName', nullable: false }, );
     const optionalNumberProperties = createVendorBillStageRowOptionalProperties({ name: 'openAmount', nullable: false }, { name: 'totalAmount', nullable: false }, );
-    const optionalBooleanProperties = createVendorBillStageRowOptionalProperties();
+    const optionalBooleanProperties = createVendorBillStageRowOptionalProperties({ name: 'vendorApHold', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalVendorBillStageRowPropertyOfType(_v, property.name, 'string', property.nullable))

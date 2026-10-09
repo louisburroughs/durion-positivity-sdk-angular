@@ -7,12 +7,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { VendorApHoldRequest } from './vendorApHoldRequest';
+import { VendorInformationReturnRequest } from './vendorInformationReturnRequest';
 
 
 /**
- * The vendor\'s AP defaults to change, the justification and the request id. A field left out is unchanged; a field sent as null clears it.
+ * The vendor\'s AP settings to change (defaults, AP hold, information-return flag), the justification and the request id. A field left out is unchanged; a default sent as null clears it.
  */
 export interface VendorApSettingsRequest {
+    apHold?: VendorApHoldRequest;
     /**
      * GOODS, EXPENSE, or null to clear: the class a bill whose lines are not stored posts with when nobody names one. EXPENSE needs a defaultExpenseMappingKey (sent or already set)
      */
@@ -21,8 +24,9 @@ export interface VendorApSettingsRequest {
      * An active VENDOR_BILL expense key EXPENSE_<CODE>, or null to clear: used for EXPENSE and non-stock lines when nobody names one
      */
     defaultExpenseMappingKey?: string | null;
+    informationReturn?: VendorInformationReturnRequest;
     /**
-     * Why the defaults change, at least 10 characters; recorded on the audit row
+     * Why the settings change, at least 10 characters; recorded on every audit row, and the record of why a hold is released
      */
     justification: string;
     /**
