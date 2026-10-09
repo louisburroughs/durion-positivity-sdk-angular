@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { CashMovementEvidenceRule } from './cashMovementEvidenceRule';
 import { CategoryOption } from './categoryOption';
 import { ReasonOption } from './reasonOption';
 
@@ -23,6 +24,7 @@ export interface CashMovementOptionsResponse {
      * ISO 4217 code of the limits and running totals (the functional currency)
      */
     currencyCode?: string;
+    evidenceRule?: CashMovementEvidenceRule;
     /**
      * One entry per fixed reason
      */

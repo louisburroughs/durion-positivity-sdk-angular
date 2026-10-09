@@ -34,6 +34,10 @@ export interface TaxEvidenceRulesResponse {
      * Origin of the answer; always STUB, because every value is a placeholder
      */
     source: string;
+    /**
+     * Regime whose registration a supplier\'s number is, the registration a SUPPLIER_REGISTRATION_NUMBER rule asks the supplier to hold; null when the country names none
+     */
+    supplierRegistrationRegime?: string | null;
 }
 
 function isOptionalTaxEvidenceRulesResponsePropertyOfType(
@@ -75,7 +79,7 @@ export function instanceOfTaxEvidenceRulesResponse(value: object): value is TaxE
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTaxEvidenceRulesResponsePropertyNames('asOf', 'countryCode', 'rules', 'source', );
-    const optionalStringProperties = createTaxEvidenceRulesResponseOptionalProperties({ name: 'asOf', nullable: false }, { name: 'countryCode', nullable: false }, { name: 'currency', nullable: true }, { name: 'source', nullable: false }, );
+    const optionalStringProperties = createTaxEvidenceRulesResponseOptionalProperties({ name: 'asOf', nullable: false }, { name: 'countryCode', nullable: false }, { name: 'currency', nullable: true }, { name: 'source', nullable: false }, { name: 'supplierRegistrationRegime', nullable: true }, );
     const optionalNumberProperties = createTaxEvidenceRulesResponseOptionalProperties();
     const optionalBooleanProperties = createTaxEvidenceRulesResponseOptionalProperties();
 

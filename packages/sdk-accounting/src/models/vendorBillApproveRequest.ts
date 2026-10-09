@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { VendorBillTaxAmount } from './vendorBillTaxAmount';
 import { VendorBillDifference } from './vendorBillDifference';
 import { VendorBillClassification } from './vendorBillClassification';
 
@@ -25,6 +26,10 @@ export interface VendorBillApproveRequest {
      * To post into a CLOSED period: at least 10 characters, with accounting:period:override
      */
     overrideJustification?: string;
+    /**
+     * The tax the vendor\'s document states, by tax type, copied from the document (CAP:550 S32d, AW51); replaces the tax by type stored on the bill and must add up to its stated tax, else 422 AP_BILL_TAX_SPLIT_MISMATCH. Omit it to keep what the bill states
+     */
+    taxByType?: Array<VendorBillTaxAmount>;
 }
 
 function isOptionalVendorBillApproveRequestPropertyOfType(

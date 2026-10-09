@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { VendorBillTaxAmount } from './vendorBillTaxAmount';
 import { VendorBillDifference } from './vendorBillDifference';
 import { VendorBillClassification } from './vendorBillClassification';
 
@@ -29,6 +30,10 @@ export interface VendorBillExceptionResolutionRequest {
      * ACCEPT approves and posts the bill, CORRECT sends it back to PENDING_RECEIPT_MATCH, VOID voids it
      */
     resolutionAction: VendorBillExceptionResolutionRequestResolutionActionEnum;
+    /**
+     * The tax the vendor\'s document states, by tax type, ACCEPT only, copied from the document (CAP:550 S32d, AW51); replaces the tax by type stored on the bill and must add up to its stated tax, else 422 AP_BILL_TAX_SPLIT_MISMATCH. Omit it to keep what the bill states
+     */
+    taxByType?: Array<VendorBillTaxAmount>;
 }
 export enum VendorBillExceptionResolutionRequestResolutionActionEnum {
     Accept = 'ACCEPT',

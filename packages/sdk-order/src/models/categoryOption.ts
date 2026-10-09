@@ -19,6 +19,10 @@ export interface CategoryOption {
      */
     examples?: string;
     label?: string;
+    /**
+     * Regimes whose tax the register may state on this category\'s receipts here and today; empty when none
+     */
+    offeredRegimes?: Array<string>;
 }
 
 function isOptionalCategoryOptionPropertyOfType(

@@ -5,6 +5,7 @@ export * from './accountingConfiguration.service';
 export * from './accountingEvents.service';
 export * from './accountingExports.service';
 export * from './accountingGL.service';
+export * from './accountingInputTaxRecovery.service';
 export * from './accountingPeriods.service';
 export * from './accountingPettyExpenseCategories.service';
 export * from './accountingRegisterFloat.service';
