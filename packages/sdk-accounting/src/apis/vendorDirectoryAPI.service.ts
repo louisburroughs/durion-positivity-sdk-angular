@@ -19,6 +19,10 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 // @ts-ignore
 import { ApiError } from '../models/apiError';
 // @ts-ignore
+import { VendorApSettingsRequest } from '../models/vendorApSettingsRequest';
+// @ts-ignore
+import { VendorRemitToConfirmationRequest } from '../models/vendorRemitToConfirmationRequest';
+// @ts-ignore
 import { VendorResponse } from '../models/vendorResponse';
 
 // @ts-ignore
@@ -38,10 +42,84 @@ export class VendorDirectoryAPIService extends BaseService {
     }
 
     /**
+     * Confirm Vendor Remit-To
+     * Records that the caller confirmed the vendor\&#39;s current remit-to version, when, and how it was verified, so its bills approved at an earlier version can be paid again. A payment then passes for those bills, provided the payer is not the confirmer; a later remit-to change needs a new confirmation. Use this tool after verifying a changed remit-to with the vendor; do not use it to change the remit-to itself, use pos-supplier\&#39;s remit-to change approval instead. Preconditions: the caller holds accounting:ap:approve and the vendor is in the copy. Required inputs: remitToVersion (the vendor\&#39;s current version) and justification (at least 10 characters). Emits ACCOUNTING_VENDOR_REMIT_TO_CONFIRM and writes a REMIT_TO_CONFIRM audit row. Returns 200 with the vendor read; 400 VALIDATION_ERROR or JUSTIFICATION_REQUIRED; 403 VENDOR_REMIT_TO_SELF_CONFIRMATION when the caller requested this remit-to in pos-supplier; 409 VENDOR_PAYMENT_DETAILS_CHANGED when the version is not the current one; 503 VENDOR_REPLICATION_PENDING (Retry-After) when the vendor is not in the copy yet.
+     * @endpoint post /v1/accounting/vendors/{vendorId}/remit-to-confirmation
+     * @param vendorId pos-supplier vendor id
+     * @param vendorRemitToConfirmationRequest The version confirmed and how it was verified.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public confirmVendorRemitTo(vendorId: string, vendorRemitToConfirmationRequest: VendorRemitToConfirmationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VendorResponse>;
+    public confirmVendorRemitTo(vendorId: string, vendorRemitToConfirmationRequest: VendorRemitToConfirmationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VendorResponse>>;
+    public confirmVendorRemitTo(vendorId: string, vendorRemitToConfirmationRequest: VendorRemitToConfirmationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VendorResponse>>;
+    public confirmVendorRemitTo(vendorId: string, vendorRemitToConfirmationRequest: VendorRemitToConfirmationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (vendorId === null || vendorId === undefined) {
+            throw new Error('Required parameter vendorId was null or undefined when calling confirmVendorRemitTo.');
+        }
+        if (vendorRemitToConfirmationRequest === null || vendorRemitToConfirmationRequest === undefined) {
+            throw new Error('Required parameter vendorRemitToConfirmationRequest was null or undefined when calling confirmVendorRemitTo.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/vendors/${this.configuration.encodeParam({name: "vendorId", value: vendorId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/remit-to-confirmation`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<VendorResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: vendorRemitToConfirmationRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Get Vendor By Id
-     * Returns one AP vendor by its identifier, typically to display a name for a deep-linked vendor id. Use this tool when the vendor id is already known; use searchVendors instead when resolving a name typed by a user. Preconditions: the vendor must exist in the AP vendor directory. Required inputs: vendorId (UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_VENDOR_GET audit event; no state changes. Returns 404 when no vendor exists for the supplied id.
+     * Returns one vendor from accounting\&#39;s copy of the pos-supplier vendor master, with its vendorNumber, status, remitToVersion, paymentDetailsChanged and apSettings (the AP defaults and the last remit-to confirmation). Use this tool when the vendor id is already known, for example before confirming a changed remit-to; use searchVendors instead when resolving a name typed by a user. Preconditions: the caller holds accounting:ap:view and the vendor has been copied from pos-supplier. Required inputs: vendorId (the pos-supplier vendor UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_VENDOR_GET audit event; no state changes. Returns 503 VENDOR_REPLICATION_PENDING with Retry-After when the vendor is not in the copy yet.
      * @endpoint get /v1/accounting/vendors/{vendorId}
-     * @param vendorId Vendor identifier
+     * @param vendorId pos-supplier vendor id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -99,18 +177,19 @@ export class VendorDirectoryAPIService extends BaseService {
 
     /**
      * Search Vendors By Name
-     * Searches the AP vendor directory with a case-insensitive name-contains match, returning vendors ordered by name for typeahead use. Use this tool to resolve a vendor name to its vendorId; use getVendorById instead when a vendor id is already known and only its label is needed. Preconditions: none; a blank or absent name lists all vendors up to the limit. Required inputs: none; name is an optional contains term and limit defaults to 20 with a server cap of 100. Emits an ACCOUNTING_VENDOR_SEARCH audit event; no state changes. Returns 200 with an empty list when no vendor name matches.
+     * Searches accounting\&#39;s copy of the pos-supplier vendor master with a case-insensitive name-contains match, returning active and inactive vendors ordered by name, each with its vendorNumber, status, current remitToVersion and paymentDetailsChanged flag. Use this tool to resolve a vendor name to its pos-supplier vendorId; use getVendorById instead when a vendor id is already known, and use pos-supplier\&#39;s vendor endpoints to change a vendor. Preconditions: the caller holds accounting:ap:view; a vendor appears once its supplier.vendor.updated fact has been copied (seed with POST /v1/supplier/vendors/facts/replay). Required inputs: none; name is an optional contains term, status (ACTIVE or INACTIVE) an optional filter, and limit defaults to 20 with a server cap of 100. Emits an ACCOUNTING_VENDOR_SEARCH audit event; no state changes. Returns 200 with an empty list when no vendor matches, and 400 VALIDATION_ERROR for a status outside ACTIVE and INACTIVE.
      * @endpoint get /v1/accounting/vendors
      * @param name Name search term (case-insensitive contains)
      * @param limit Maximum results to return (server caps at 100)
+     * @param status ACTIVE or INACTIVE; absent returns both
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public searchVendors(name?: string, limit?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<VendorResponse>>;
-    public searchVendors(name?: string, limit?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<VendorResponse>>>;
-    public searchVendors(name?: string, limit?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<VendorResponse>>>;
-    public searchVendors(name?: string, limit?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public searchVendors(name?: string, limit?: number, status?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<VendorResponse>>;
+    public searchVendors(name?: string, limit?: number, status?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<VendorResponse>>>;
+    public searchVendors(name?: string, limit?: number, status?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<VendorResponse>>>;
+    public searchVendors(name?: string, limit?: number, status?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -127,6 +206,15 @@ export class VendorDirectoryAPIService extends BaseService {
             localVarQueryParameters,
             'limit',
             <any>limit,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'status',
+            <any>status,
             QueryParamStyle.Form,
             true,
         );
@@ -166,6 +254,80 @@ export class VendorDirectoryAPIService extends BaseService {
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Set Vendor AP Settings
+     * Sets the vendor\&#39;s AP defaults: defaultDebitClass (GOODS or EXPENSE) and defaultExpenseMappingKey (an active VENDOR_BILL key EXPENSE_&lt;CODE&gt;); a field left out is unchanged and a field sent as null clears it. An approval falls back to them only when neither the approver\&#39;s classification nor the proposal made at submission names a class or key; they never touch a posted entry, and each change writes an AP_VENDOR_SETTINGS_SET audit row, old to new. Use this tool when a controller sets how a vendor\&#39;s bills are classed by default; do not use it to classify one bill, use the approval\&#39;s classification instead. Preconditions: the caller holds accounting:ap_approval_policy:manage and the vendor is in the copy; an inactive vendor may be set. Required inputs: justification (at least 10 characters) and requestId (a UUID generated once per change); EXPENSE needs a key, sent or already set. Emits ACCOUNTING_VENDOR_AP_SETTINGS_SET; the call is idempotent on requestId: a replay writes nothing and returns the vendor as it is. Returns 200 with the vendor read; 400 VALIDATION_ERROR with fieldErrors or JUSTIFICATION_REQUIRED; 403 FORBIDDEN; 409 IDEMPOTENCY_CONFLICT for a requestId already used with another body; 503 VENDOR_REPLICATION_PENDING (Retry-After); nothing is written on a refusal.
+     * @endpoint put /v1/accounting/vendors/{vendorId}/ap-settings
+     * @param vendorId pos-supplier vendor id
+     * @param vendorApSettingsRequest The defaults to change, the justification and the request id.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public setVendorApSettings(vendorId: string, vendorApSettingsRequest: VendorApSettingsRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VendorResponse>;
+    public setVendorApSettings(vendorId: string, vendorApSettingsRequest: VendorApSettingsRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VendorResponse>>;
+    public setVendorApSettings(vendorId: string, vendorApSettingsRequest: VendorApSettingsRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VendorResponse>>;
+    public setVendorApSettings(vendorId: string, vendorApSettingsRequest: VendorApSettingsRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (vendorId === null || vendorId === undefined) {
+            throw new Error('Required parameter vendorId was null or undefined when calling setVendorApSettings.');
+        }
+        if (vendorApSettingsRequest === null || vendorApSettingsRequest === undefined) {
+            throw new Error('Required parameter vendorApSettingsRequest was null or undefined when calling setVendorApSettings.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/vendors/${this.configuration.encodeParam({name: "vendorId", value: vendorId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/ap-settings`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<VendorResponse>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: vendorApSettingsRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

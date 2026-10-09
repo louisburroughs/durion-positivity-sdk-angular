@@ -46,6 +46,10 @@ export interface RevisePurchaseOrderRequest {
      * Identifier of the location the goods should be shipped to
      */
     shipToLocationId?: string;
+    /**
+     * Identifier of the pos-supplier vendor the order is placed with instead; only while the order is DRAFT, and the vendor must be active in pos-order\'s vendor copy. Absent keeps the vendor
+     */
+    vendorId?: string;
 }
 
 function isOptionalRevisePurchaseOrderRequestPropertyOfType(
@@ -87,7 +91,7 @@ export function instanceOfRevisePurchaseOrderRequest(value: object): value is Re
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createRevisePurchaseOrderRequestPropertyNames('lines', 'poDate', 'revisionReason', );
-    const optionalStringProperties = createRevisePurchaseOrderRequestOptionalProperties({ name: 'comment', nullable: false }, { name: 'expectedDeliveryDate', nullable: false }, { name: 'paymentTermsId', nullable: false }, { name: 'poDate', nullable: false }, { name: 'requestedBy', nullable: false }, { name: 'revisionReason', nullable: false }, { name: 'shipToLocationId', nullable: false }, );
+    const optionalStringProperties = createRevisePurchaseOrderRequestOptionalProperties({ name: 'comment', nullable: false }, { name: 'expectedDeliveryDate', nullable: false }, { name: 'paymentTermsId', nullable: false }, { name: 'poDate', nullable: false }, { name: 'requestedBy', nullable: false }, { name: 'revisionReason', nullable: false }, { name: 'shipToLocationId', nullable: false }, { name: 'vendorId', nullable: false }, );
     const optionalNumberProperties = createRevisePurchaseOrderRequestOptionalProperties();
     const optionalBooleanProperties = createRevisePurchaseOrderRequestOptionalProperties();
 
