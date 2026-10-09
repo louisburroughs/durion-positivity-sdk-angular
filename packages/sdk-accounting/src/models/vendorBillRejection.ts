@@ -22,9 +22,13 @@ export interface VendorBillRejection {
      */
     rejectedAt: string;
     /**
-     * Who
+     * Who (sign-in name)
      */
     rejectedBy: string;
+    /**
+     * The display name of the person who rejected or voided it (\"First Last\"), resolved now from accounting\'s people-contact copy; absent when not known, never the sign-in name
+     */
+    rejectedByName?: string;
 }
 
 function isOptionalVendorBillRejectionPropertyOfType(
@@ -66,7 +70,7 @@ export function instanceOfVendorBillRejection(value: object): value is VendorBil
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createVendorBillRejectionPropertyNames('reason', 'rejectedAt', 'rejectedBy', );
-    const optionalStringProperties = createVendorBillRejectionOptionalProperties({ name: 'reason', nullable: false }, { name: 'rejectedAt', nullable: false }, { name: 'rejectedBy', nullable: false }, );
+    const optionalStringProperties = createVendorBillRejectionOptionalProperties({ name: 'reason', nullable: false }, { name: 'rejectedAt', nullable: false }, { name: 'rejectedBy', nullable: false }, { name: 'rejectedByName', nullable: false }, );
     const optionalNumberProperties = createVendorBillRejectionOptionalProperties();
     const optionalBooleanProperties = createVendorBillRejectionOptionalProperties();
 

@@ -21,6 +21,8 @@ import { APPaymentGLPostingRetryRequest } from '../models/aPPaymentGLPostingRetr
 // @ts-ignore
 import { APPaymentResponse } from '../models/aPPaymentResponse';
 // @ts-ignore
+import { ApPayFromAccountListResponse } from '../models/apPayFromAccountListResponse';
+// @ts-ignore
 import { ApiError } from '../models/apiError';
 // @ts-ignore
 import { ExecuteAPPaymentRequest } from '../models/executeAPPaymentRequest';
@@ -322,6 +324,62 @@ export class APPaymentsService extends BaseService {
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List AP Pay-From Accounts
+     * Lists the bank accounts a vendor payment may come from today: exactly the accounts executeApPayment would accept, computed by the same rule (a BANK_CASH account active from the start of asOf, not deactivated by now, and in the functional currency currencyCode). Each account carries bankAccountId (the GL account id executeApPayment takes), its number and name, and the bank name and masked number from its bank-account profile (both absent without one); a full bank account number is never served, and accounts are ordered by account number. defaultBankAccountId is the single eligible account an omitted bankAccountId resolves to, absent when there is none or more than one; an empty list means no account is set up and a payment answers 400 fieldErrors[bankAccountId], and the read is informational, since the payment still checks eligibility when it executes. Use this tool when a payer chooses where a vendor payment comes from; do not use it to reconcile, use listBankAccounts instead. Preconditions: none beyond accounting:ap:pay. Required inputs: none; there are no request parameters and no request body. Emits an ACCOUNTING_AP_PAY_FROM_ACCOUNTS_VIEW audit event; no state changes. Returns 401 without a valid token and 403 FORBIDDEN without accounting:ap:pay.
+     * @endpoint get /v1/accounting/ap/pay-from-accounts
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listApPayFromAccounts(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ApPayFromAccountListResponse>;
+    public listApPayFromAccounts(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApPayFromAccountListResponse>>;
+    public listApPayFromAccounts(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApPayFromAccountListResponse>>;
+    public listApPayFromAccounts(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/ap/pay-from-accounts`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ApPayFromAccountListResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

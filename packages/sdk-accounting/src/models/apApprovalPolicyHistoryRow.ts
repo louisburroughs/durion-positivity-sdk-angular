@@ -18,9 +18,13 @@ export interface ApApprovalPolicyHistoryRow {
      */
     changedAt: string;
     /**
-     * Who changed it
+     * Who changed it: the sign-in name, kept for audit and never shown to a person
      */
     changedBy: string;
+    /**
+     * The display name of the person who changed it (\"First Last\"), resolved now from accounting\'s people-contact copy; absent when not known, never the sign-in name
+     */
+    changedByName?: string;
     /**
      * The caller\'s roles at the time of the change
      */
@@ -82,7 +86,7 @@ export function instanceOfApApprovalPolicyHistoryRow(value: object): value is Ap
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createApApprovalPolicyHistoryRowPropertyNames('changedAt', 'changedBy', 'changedByRoles', 'justification', 'newValue', 'setting', );
-    const optionalStringProperties = createApApprovalPolicyHistoryRowOptionalProperties({ name: 'changedAt', nullable: false }, { name: 'changedBy', nullable: false }, { name: 'justification', nullable: false }, { name: 'newValue', nullable: false }, { name: 'oldValue', nullable: false }, { name: 'setting', nullable: false }, );
+    const optionalStringProperties = createApApprovalPolicyHistoryRowOptionalProperties({ name: 'changedAt', nullable: false }, { name: 'changedBy', nullable: false }, { name: 'changedByName', nullable: false }, { name: 'justification', nullable: false }, { name: 'newValue', nullable: false }, { name: 'oldValue', nullable: false }, { name: 'setting', nullable: false }, );
     const optionalNumberProperties = createApApprovalPolicyHistoryRowOptionalProperties();
     const optionalBooleanProperties = createApApprovalPolicyHistoryRowOptionalProperties();
 
