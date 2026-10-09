@@ -25,6 +25,12 @@ import { TaxCalculationRequest } from '../models/taxCalculationRequest';
 // @ts-ignore
 import { TaxCalculationResponse } from '../models/taxCalculationResponse';
 // @ts-ignore
+import { TaxEvidenceRulesResponse } from '../models/taxEvidenceRulesResponse';
+// @ts-ignore
+import { TaxPlausibilityCheckRequest } from '../models/taxPlausibilityCheckRequest';
+// @ts-ignore
+import { TaxPlausibilityCheckResponse } from '../models/taxPlausibilityCheckResponse';
+// @ts-ignore
 import { TaxProviderTransactionResult } from '../models/taxProviderTransactionResult';
 // @ts-ignore
 import { TaxRateLookupResponse } from '../models/taxRateLookupResponse';
@@ -118,6 +124,76 @@ export class TaxService extends BaseService {
     }
 
     /**
+     * Check a receipt\&#39;s stated tax
+     * Checks the tax amounts stated on a receipt against its total, a bookkeeping control against typing errors and not a tax rule, and answers whether the supplier\&#39;s registration number is needed and well formed. Use this tool when a drawer receipt with stated tax is recorded; do not use it to compute tax, which is calculateTax, or to read the evidence threshold, which is getTaxEvidenceRules instead. Preconditions: this endpoint is internal-only (ADR-0021/ADR-0014), reached by direct in-cluster calls from pos-order with the service authority, never through pos-api-gateway. Required inputs: countryCode, regionCode, postalCode, currencyCode (the country profile\&#39;s) and receiptTotal (tax included, above zero); asOf defaults to today, and statedTaxes (each regime at most once) and supplierRegistrationNumber are optional. No events are emitted, no state changes and no tenant data is read; the supplier\&#39;s number is never echoed, logged or stored, and source is always STUB. Each stated amount must be below receiptTotal, as must their sum, and at most receiptTotal times r over one plus r rounded up to the minor unit plus a configured tolerance, where r is the regime\&#39;s row rate in the region, or 0 when the regime does not cover the region; a regime that covers the region but has no row there is unrated, gets no rate bound, and makes the outcome RATE_UNAVAILABLE when its amount is above zero. Returns 400 VALIDATION_ERROR when a field is missing or malformed, an amount is negative or a regime is repeated, and then, in this order with the first failing step listing all its fieldErrors, 422 TAX_JURISDICTION_NOT_CONFIGURED when the country has no tax profile, CURRENCY_NOT_SUPPORTED when currencyCode is not the profile\&#39;s, AMOUNT_PRECISION_EXCEEDS_CURRENCY when an amount is finer than the currency\&#39;s minor unit, TAX_REGIME_NOT_DECLARED when the country does not declare a regime, and TAX_AMOUNT_IMPLAUSIBLE when an amount is implausible, with each offending amount\&#39;s maximum.
+     * @endpoint post /v1/tax/plausibility-checks
+     * @param taxPlausibilityCheckRequest A receipt\&#39;s address, total and stated tax amounts, with the supplier\&#39;s registration number when one is printed
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public checkTaxPlausibility(taxPlausibilityCheckRequest: TaxPlausibilityCheckRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxPlausibilityCheckResponse>;
+    public checkTaxPlausibility(taxPlausibilityCheckRequest: TaxPlausibilityCheckRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxPlausibilityCheckResponse>>;
+    public checkTaxPlausibility(taxPlausibilityCheckRequest: TaxPlausibilityCheckRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxPlausibilityCheckResponse>>;
+    public checkTaxPlausibility(taxPlausibilityCheckRequest: TaxPlausibilityCheckRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (taxPlausibilityCheckRequest === null || taxPlausibilityCheckRequest === undefined) {
+            throw new Error('Required parameter taxPlausibilityCheckRequest was null or undefined when calling checkTaxPlausibility.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/tax/plausibility-checks`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<TaxPlausibilityCheckResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: taxPlausibilityCheckRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Commit tax document
      * Commits the provider tax document for a finalized invoice so the recorded tax becomes filing-visible at the provider. Use this tool when an invoice is finalized; do not use it to recalculate amounts, which is calculateTax, and do not use it to reverse a commit, which is voidTaxDocument. Preconditions: tax must already have been calculated for this referenceId with a committable request, so that a provider document exists to commit. Required inputs: referenceId (UUID) path parameter, which is the source invoice id; referenceType is an optional query parameter defaulting to INVOICE. Emits a TAX_COMMIT event and updates the stored provider transaction; the call is idempotent, so an already-COMMITTED document is returned unchanged. Returns 200 with status PENDING_COMMIT rather than an error when the provider call fails, because a sale is never blocked on the provider, so callers must read the returned status instead of treating 200 as a completed commit and leave the re-commit job to true it up.
      * @endpoint post /v1/tax/transactions/{referenceId}/commit
@@ -177,6 +253,88 @@ export class TaxService extends BaseService {
         let localVarPath = `/v1/tax/transactions/${this.configuration.encodeParam({name: "referenceId", value: referenceId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/commit`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<TaxProviderTransactionResult>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List a country\&#39;s evidence rules
+     * Returns the evidence rules a country\&#39;s tax profile configures that are in effect on a date: which evidence a document type needs, such as the supplier\&#39;s registration number, from which total. Use this tool when a drawer receipt or a vendor bill must know whether it needs evidence for an input-tax claim; do not use it to check a receipt\&#39;s stated tax, which is checkTaxPlausibility instead. Preconditions: this endpoint is internal-only (ADR-0021/ADR-0014), reached by direct in-cluster calls from pos-order and pos-accounting with the service authority, never through pos-api-gateway. Required inputs: countryCode, two upper-case letters; asOf (ISO-8601 date) defaults to today. No events are emitted and no state changes; every rule is configuration held for expert advice, so source is always STUB, and amounts are in the returned currency. A caller that cannot obtain the rules retries or holds, and never treats them as absent. Returns 200 with an empty list for a country without a rule, and 400 VALIDATION_ERROR when countryCode or asOf is missing or malformed.
+     * @endpoint get /v1/tax/evidence-rules
+     * @param countryCode
+     * @param asOf
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getTaxEvidenceRules(countryCode: string, asOf?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxEvidenceRulesResponse>;
+    public getTaxEvidenceRules(countryCode: string, asOf?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxEvidenceRulesResponse>>;
+    public getTaxEvidenceRules(countryCode: string, asOf?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxEvidenceRulesResponse>>;
+    public getTaxEvidenceRules(countryCode: string, asOf?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (countryCode === null || countryCode === undefined) {
+            throw new Error('Required parameter countryCode was null or undefined when calling getTaxEvidenceRules.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'countryCode',
+            <any>countryCode,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'asOf',
+            <any>asOf,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/tax/evidence-rules`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<TaxEvidenceRulesResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),
