@@ -11,6 +11,7 @@ import { VendorBillMatchCandidateSummary } from './vendorBillMatchCandidateSumma
 import { VendorBillApproval } from './vendorBillApproval';
 import { VendorBillRejection } from './vendorBillRejection';
 import { VendorBillTaxByType } from './vendorBillTaxByType';
+import { VendorBillTaxOnResaleOverride } from './vendorBillTaxOnResaleOverride';
 import { VendorBillMatch } from './vendorBillMatch';
 import { VendorBillAvailableAction } from './vendorBillAvailableAction';
 import { VendorBillCheck } from './vendorBillCheck';
@@ -120,6 +121,7 @@ export interface VendorBillResponse {
      * The tax the vendor\'s document states, by tax type (CAP:550 S32d); empty when it states none by type
      */
     taxByType: Array<VendorBillTaxByType>;
+    taxOnResaleOverride?: VendorBillTaxOnResaleOverride;
     /**
      * Total bill amount
      */

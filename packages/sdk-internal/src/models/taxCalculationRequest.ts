@@ -66,7 +66,8 @@ export interface TaxCalculationRequest {
 }
 export enum TaxCalculationRequestCalculationTypeEnum {
     Sale = 'SALE',
-    Refund = 'REFUND'
+    Refund = 'REFUND',
+    Use = 'USE'
 };
 export enum TaxCalculationRequestReferenceTypeEnum {
     Estimate = 'ESTIMATE',

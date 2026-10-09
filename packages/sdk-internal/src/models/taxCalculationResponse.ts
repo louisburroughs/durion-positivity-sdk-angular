@@ -70,7 +70,8 @@ export interface TaxCalculationResponse {
 }
 export enum TaxCalculationResponseCalculationTypeEnum {
     Sale = 'SALE',
-    Refund = 'REFUND'
+    Refund = 'REFUND',
+    Use = 'USE'
 };
 export enum TaxCalculationResponseReferenceTypeEnum {
     Estimate = 'ESTIMATE',
