@@ -7,28 +7,38 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { VendorApSettingsResponse } from './vendorApSettingsResponse';
 
 
 /**
- * AP vendor directory entry (name to vendorId resolution)
+ * A vendor from accounting\'s copy of the pos-supplier vendor master: the pos-supplier vendorId, its name, number and status, its current remit-to version and whether payment details changed
  */
 export interface VendorResponse {
+    apSettings?: VendorApSettingsResponse;
     /**
      * Vendor display name
      */
     name: string;
     /**
-     * Vendor status
+     * True when an approved, open bill of the vendor was approved at another remit-to version than the current one and nobody has confirmed the current version: paying it answers 409 VENDOR_PAYMENT_DETAILS_CHANGED until a holder of accounting:ap:approve other than the payer confirms it
      */
-    status?: VendorResponseStatusEnum;
+    paymentDetailsChanged: boolean;
     /**
-     * Stable vendor identifier
+     * The vendor\'s current remit-to version: 0 with no remit-to, 1 for one given at creation, then +1 per approved change; a bill approved at another version is not paid until it is confirmed
+     */
+    remitToVersion: number;
+    /**
+     * ACTIVE, or INACTIVE: an inactive vendor takes no new bill, payment or purchase order, and its open bills are not paid while it is inactive
+     */
+    status: VendorResponseStatusEnum;
+    /**
+     * The pos-supplier vendor id, the one key bills, AP payments and purchase orders name
      */
     vendorId: string;
     /**
-     * Human-readable vendor number, when assigned
+     * The tenant-unique vendor number people quote
      */
-    vendorNumber?: string;
+    vendorNumber: string;
 }
 export enum VendorResponseStatusEnum {
     Active = 'ACTIVE',
@@ -75,10 +85,10 @@ export function instanceOfVendorResponse(value: object): value is VendorResponse
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createVendorResponsePropertyNames('name', 'vendorId', );
+    const requiredProperties = createVendorResponsePropertyNames('name', 'paymentDetailsChanged', 'remitToVersion', 'status', 'vendorId', 'vendorNumber', );
     const optionalStringProperties = createVendorResponseOptionalProperties({ name: 'name', nullable: false }, { name: 'status', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorNumber', nullable: false }, );
-    const optionalNumberProperties = createVendorResponseOptionalProperties();
-    const optionalBooleanProperties = createVendorResponseOptionalProperties();
+    const optionalNumberProperties = createVendorResponseOptionalProperties({ name: 'remitToVersion', nullable: false }, );
+    const optionalBooleanProperties = createVendorResponseOptionalProperties({ name: 'paymentDetailsChanged', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalVendorResponsePropertyOfType(_v, property.name, 'string', property.nullable))
