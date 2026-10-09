@@ -8,6 +8,7 @@ export * from './accountingGL.service';
 export * from './accountingPeriods.service';
 export * from './accountingPettyExpenseCategories.service';
 export * from './accountingRegisterFloat.service';
+export * from './accountingTaxRegistrations.service';
 export * from './accountingTenantTemplate.service';
 export * from './auditTrail.service';
 export * from './bankAccounts.service';
