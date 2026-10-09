@@ -38,6 +38,14 @@ export interface VendorBillSummaryResponse {
      */
     totalAmount: number;
     /**
+     * True while the bill\'s vendor is on AP hold: paying it answers 422 VENDOR_ON_AP_HOLD; the bill stays listed
+     */
+    vendorApHold: boolean;
+    /**
+     * Why the bill\'s vendor is on AP hold, to show beside the disabled Pay; null when the vendor is not held
+     */
+    vendorApHoldReason?: string;
+    /**
      * Vendor bill UUID
      */
     vendorBillId: string;
@@ -101,10 +109,10 @@ export function instanceOfVendorBillSummaryResponse(value: object): value is Ven
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createVendorBillSummaryResponsePropertyNames('billNumber', 'status', 'totalAmount', 'vendorBillId', 'vendorId', );
-    const optionalStringProperties = createVendorBillSummaryResponseOptionalProperties({ name: 'billDate', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'status', nullable: false }, { name: 'vendorBillId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, );
+    const requiredProperties = createVendorBillSummaryResponsePropertyNames('billNumber', 'status', 'totalAmount', 'vendorApHold', 'vendorBillId', 'vendorId', );
+    const optionalStringProperties = createVendorBillSummaryResponseOptionalProperties({ name: 'billDate', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'status', nullable: false }, { name: 'vendorApHoldReason', nullable: false }, { name: 'vendorBillId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, );
     const optionalNumberProperties = createVendorBillSummaryResponseOptionalProperties({ name: 'openAmount', nullable: false }, { name: 'totalAmount', nullable: false }, );
-    const optionalBooleanProperties = createVendorBillSummaryResponseOptionalProperties();
+    const optionalBooleanProperties = createVendorBillSummaryResponseOptionalProperties({ name: 'vendorApHold', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalVendorBillSummaryResponsePropertyOfType(_v, property.name, 'string', property.nullable))

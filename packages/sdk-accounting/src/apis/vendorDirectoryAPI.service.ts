@@ -19,6 +19,8 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 // @ts-ignore
 import { ApiError } from '../models/apiError';
 // @ts-ignore
+import { InformationReturnFormsResponse } from '../models/informationReturnFormsResponse';
+// @ts-ignore
 import { VendorApSettingsRequest } from '../models/vendorApSettingsRequest';
 // @ts-ignore
 import { VendorRemitToConfirmationRequest } from '../models/vendorRemitToConfirmationRequest';
@@ -117,7 +119,7 @@ export class VendorDirectoryAPIService extends BaseService {
 
     /**
      * Get Vendor By Id
-     * Returns one vendor from accounting\&#39;s copy of the pos-supplier vendor master, with its vendorNumber, status, remitToVersion, paymentDetailsChanged and apSettings (the AP defaults and the last remit-to confirmation). Use this tool when the vendor id is already known, for example before confirming a changed remit-to; use searchVendors instead when resolving a name typed by a user. Preconditions: the caller holds accounting:ap:view and the vendor has been copied from pos-supplier. Required inputs: vendorId (the pos-supplier vendor UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_VENDOR_GET audit event; no state changes. Returns 503 VENDOR_REPLICATION_PENDING with Retry-After when the vendor is not in the copy yet.
+     * Returns one vendor from accounting\&#39;s copy of the pos-supplier vendor master, with its vendorNumber, status, remitToVersion, paymentDetailsChanged, apHold and apSettings: the AP defaults, the last remit-to confirmation, apHold (onHold, reason, setBy, setAt) and informationReturn (reportable, form, box, payeeTaxRegistrationScheme, payeeTinOnFile and the masked payeeTinLast4; a full taxpayer number is never served). Use this tool when the vendor id is already known, for example before confirming a changed remit-to; use searchVendors instead when resolving a name typed by a user. Preconditions: the caller holds accounting:ap:view and the vendor has been copied from pos-supplier. Required inputs: vendorId (the pos-supplier vendor UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_VENDOR_GET audit event; no state changes. Returns 503 VENDOR_REPLICATION_PENDING with Retry-After when the vendor is not in the copy yet.
      * @endpoint get /v1/accounting/vendors/{vendorId}
      * @param vendorId pos-supplier vendor id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -176,8 +178,64 @@ export class VendorDirectoryAPIService extends BaseService {
     }
 
     /**
+     * List Information-Return Forms
+     * Returns the information-return forms configured for the tenant\&#39;s tax country (accounting.tax.country), each with its boxes and the payee-id schemes a payee may be reported under, relayed from pos-tax\&#39;s configuration. Use this tool to fill the form, box and scheme pickers of a vendor\&#39;s information-return flag; do not use it to make a vendor reportable, use setVendorApSettings instead. Preconditions: the caller holds accounting:ap:view; the values are placeholders held for expert advice, so source is STUB. Required inputs: none; the country is the deployment\&#39;s tax country, never a parameter. Emits an ACCOUNTING_INFORMATION_RETURN_FORMS_VIEW audit event; no state changes. Returns 200 with an empty forms list when the country configures none, and 503 SERVICE_UNAVAILABLE with Retry-After when pos-tax cannot answer.
+     * @endpoint get /v1/accounting/information-return-forms
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listInformationReturnForms(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<InformationReturnFormsResponse>;
+    public listInformationReturnForms(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InformationReturnFormsResponse>>;
+    public listInformationReturnForms(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InformationReturnFormsResponse>>;
+    public listInformationReturnForms(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/information-return-forms`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<InformationReturnFormsResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Search Vendors By Name
-     * Searches accounting\&#39;s copy of the pos-supplier vendor master with a case-insensitive name-contains match, returning active and inactive vendors ordered by name, each with its vendorNumber, status, current remitToVersion and paymentDetailsChanged flag. Use this tool to resolve a vendor name to its pos-supplier vendorId; use getVendorById instead when a vendor id is already known, and use pos-supplier\&#39;s vendor endpoints to change a vendor. Preconditions: the caller holds accounting:ap:view; a vendor appears once its supplier.vendor.updated fact has been copied (seed with POST /v1/supplier/vendors/facts/replay). Required inputs: none; name is an optional contains term, status (ACTIVE or INACTIVE) an optional filter, and limit defaults to 20 with a server cap of 100. Emits an ACCOUNTING_VENDOR_SEARCH audit event; no state changes. Returns 200 with an empty list when no vendor matches, and 400 VALIDATION_ERROR for a status outside ACTIVE and INACTIVE.
+     * Searches accounting\&#39;s copy of the pos-supplier vendor master with a case-insensitive name-contains match, returning active and inactive vendors ordered by name, each with its vendorNumber, status, current remitToVersion, paymentDetailsChanged flag and apHold flag (true while AP payments to the vendor are held). Use this tool to resolve a vendor name to its pos-supplier vendorId; use getVendorById instead when a vendor id is already known, and use pos-supplier\&#39;s vendor endpoints to change a vendor. Preconditions: the caller holds accounting:ap:view; a vendor appears once its supplier.vendor.updated fact has been copied (seed with POST /v1/supplier/vendors/facts/replay). Required inputs: none; name is an optional contains term, status (ACTIVE or INACTIVE) an optional filter, and limit defaults to 20 with a server cap of 100. Emits an ACCOUNTING_VENDOR_SEARCH audit event; no state changes. Returns 200 with an empty list when no vendor matches, and 400 VALIDATION_ERROR for a status outside ACTIVE and INACTIVE.
      * @endpoint get /v1/accounting/vendors
      * @param name Name search term (case-insensitive contains)
      * @param limit Maximum results to return (server caps at 100)
@@ -266,7 +324,7 @@ export class VendorDirectoryAPIService extends BaseService {
 
     /**
      * Set Vendor AP Settings
-     * Sets the vendor\&#39;s AP defaults: defaultDebitClass (GOODS or EXPENSE) and defaultExpenseMappingKey (an active VENDOR_BILL key EXPENSE_&lt;CODE&gt;); a field left out is unchanged and a field sent as null clears it. An approval falls back to them only when neither the approver\&#39;s classification nor the proposal made at submission names a class or key; they never touch a posted entry, and each change writes an AP_VENDOR_SETTINGS_SET audit row, old to new. Use this tool when a controller sets how a vendor\&#39;s bills are classed by default; do not use it to classify one bill, use the approval\&#39;s classification instead. Preconditions: the caller holds accounting:ap_approval_policy:manage and the vendor is in the copy; an inactive vendor may be set. Required inputs: justification (at least 10 characters) and requestId (a UUID generated once per change); EXPENSE needs a key, sent or already set. Emits ACCOUNTING_VENDOR_AP_SETTINGS_SET; the call is idempotent on requestId: a replay writes nothing and returns the vendor as it is. Returns 200 with the vendor read; 400 VALIDATION_ERROR with fieldErrors or JUSTIFICATION_REQUIRED; 403 FORBIDDEN; 409 IDEMPOTENCY_CONFLICT for a requestId already used with another body; 503 VENDOR_REPLICATION_PENDING (Retry-After); nothing is written on a refusal.
+     * Sets the vendor\&#39;s AP settings: defaultDebitClass and defaultExpenseMappingKey (a field left out is unchanged, null clears it), apHold {onHold, reason} (a hold stops AP payments to the vendor with 422 VENDOR_ON_AP_HOLD, never approval or posting) and informationReturn {reportable, form, box, payeeTaxRegistrationScheme} (codes from listInformationReturnForms). Each change writes an audit row: AP_VENDOR_SETTINGS_SET per default or information-return field, AP_VENDOR_HOLD_SET or AP_VENDOR_HOLD_CLEARED for the hold; nothing posts. Use this tool when a controller sets a vendor\&#39;s defaults, holds or releases its payments, or marks it reportable; do not use it to classify one bill, use the approval\&#39;s classification instead. Preconditions: the caller holds accounting:ap_approval_policy:manage and the vendor is in the copy; an inactive vendor may be set, held or released. Required inputs: justification (at least 10 characters) and requestId (a UUID generated once per change); a hold needs a reason of 10-500 characters; reportable needs form and box; apHold or informationReturn sent as null, and any unknown property, is refused. Emits ACCOUNTING_VENDOR_AP_SETTINGS_SET; idempotent on requestId: a replay writes nothing and returns the vendor as it is. Returns 200 with the vendor read; 400 VALIDATION_ERROR with fieldErrors or JUSTIFICATION_REQUIRED; 403; 409 IDEMPOTENCY_CONFLICT; 503 VENDOR_REPLICATION_PENDING or SERVICE_UNAVAILABLE (pos-tax, information-return change only), with Retry-After; nothing is written on a refusal.
      * @endpoint put /v1/accounting/vendors/{vendorId}/ap-settings
      * @param vendorId pos-supplier vendor id
      * @param vendorApSettingsRequest The defaults to change, the justification and the request id.

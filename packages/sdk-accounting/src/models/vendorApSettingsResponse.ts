@@ -7,12 +7,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { VendorApHold } from './vendorApHold';
+import { VendorInformationReturn } from './vendorInformationReturn';
 
 
 /**
- * The vendor\'s accounting-side settings: AP defaults (AW39) and the remit-to confirmation
+ * The vendor\'s accounting-side settings: AP defaults (AW39), the remit-to confirmation, the AP payment hold and the information-return flag
  */
 export interface VendorApSettingsResponse {
+    apHold: VendorApHold;
     /**
      * The remit-to version last confirmed; payment by anyone but the confirmer passes on it while it is current
      */
@@ -25,6 +28,7 @@ export interface VendorApSettingsResponse {
      * An active VENDOR_BILL expense key EXPENSE_<CODE>, used for EXPENSE and non-stock lines when nobody names one
      */
     defaultExpenseMappingKey?: string;
+    informationReturn: VendorInformationReturn;
     /**
      * When it was confirmed
      */
@@ -79,7 +83,7 @@ export function instanceOfVendorApSettingsResponse(value: object): value is Vend
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createVendorApSettingsResponsePropertyNames();
+    const requiredProperties = createVendorApSettingsResponsePropertyNames('apHold', 'informationReturn', );
     const optionalStringProperties = createVendorApSettingsResponseOptionalProperties({ name: 'defaultDebitClass', nullable: false }, { name: 'defaultExpenseMappingKey', nullable: false }, { name: 'remitToConfirmedAt', nullable: false }, { name: 'remitToConfirmedBy', nullable: false }, );
     const optionalNumberProperties = createVendorApSettingsResponseOptionalProperties({ name: 'confirmedRemitToVersion', nullable: false }, );
     const optionalBooleanProperties = createVendorApSettingsResponseOptionalProperties();
