@@ -313,6 +313,7 @@ export * from './vendorBillSubmitRequest';
 export * from './vendorBillSummaryResponse';
 export * from './vendorBillTaxAmount';
 export * from './vendorBillTaxByType';
+export * from './vendorBillTaxOnResaleOverride';
 export * from './vendorBillVoidRequest';
 export * from './vendorInformationReturn';
 export * from './vendorInformationReturnRequest';

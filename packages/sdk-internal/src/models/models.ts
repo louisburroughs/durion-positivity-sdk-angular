@@ -23,6 +23,7 @@ export * from './taxPlausibilityCheckResponse';
 export * from './taxPlausibilityMaximum';
 export * from './taxPlausibilityRateUsed';
 export * from './taxProviderTransactionResult';
+export * from './taxPurchaseRulesResponse';
 export * from './taxRateComponent';
 export * from './taxRateLookupResponse';
 export * from './taxRegimeEntry';

@@ -35,6 +35,8 @@ import { TaxPlausibilityCheckResponse } from '../models/taxPlausibilityCheckResp
 // @ts-ignore
 import { TaxProviderTransactionResult } from '../models/taxProviderTransactionResult';
 // @ts-ignore
+import { TaxPurchaseRulesResponse } from '../models/taxPurchaseRulesResponse';
+// @ts-ignore
 import { TaxRateLookupResponse } from '../models/taxRateLookupResponse';
 // @ts-ignore
 import { TaxTypesResponse } from '../models/taxTypesResponse';
@@ -57,7 +59,7 @@ export class TaxService extends BaseService {
 
     /**
      * Calculate tax
-     * Calculates tax for the supplied line items against the destination address and returns the per-line and total tax amounts. Use this tool whenever a quote, estimate or invoice needs tax figures; do not use it to make a calculation permanent, which is commitTaxDocument. Preconditions: none beyond an authenticated caller; when an exemption is claimed the referenced certificate must already exist in the registry and be ACTIVE for the destination state on the transaction date, otherwise tax is calculated as taxable. Required inputs: lineItems (at least one) and destinationAddress with countryCode and postalCode; currencyCode defaults to USD, calculationType defaults to SALE, and referenceId should carry the source document id so the result can later be committed. Emits a TAX_CALCULATE event and, in production mode, calls the configured external tax provider; no provider document is created until commitTaxDocument is called. A destination whose country the per-country default routes to a plug-in is priced by that plug-in in every provider mode, one typed jurisdiction row per tax type, and taxType and inputTaxRecoverable are null on every other country\&#39;s rows. Returns 400 when line items or the destination address are missing or malformed, 422 TAX_JURISDICTION_NOT_CONFIGURED when such a country has no rate row for the region on the transaction date or CURRENCY_NOT_SUPPORTED when currencyCode is not that country\&#39;s configured currency, and 500 when the provider is unreachable in production mode.
+     * Calculates tax for the supplied line items against the destination address and returns the per-line and total tax amounts. Use this tool whenever a quote, estimate or invoice needs tax figures; do not use it to make a calculation permanent, which is commitTaxDocument. Preconditions: none beyond an authenticated caller; when an exemption is claimed the referenced certificate must already exist in the registry and be ACTIVE for the destination state on the transaction date, otherwise tax is calculated as taxable. Required inputs: lineItems (at least one) and destinationAddress with countryCode and postalCode; currencyCode defaults to USD, calculationType defaults to SALE (USE, a buyer\&#39;s self-assessed tax, is priced exactly like SALE), and referenceId should carry the source document id so the result can later be committed. Emits a TAX_CALCULATE event and, in production mode, calls the configured external tax provider; no provider document is created until commitTaxDocument is called. A destination whose country the per-country default routes to a plug-in is priced by that plug-in in every provider mode, one typed jurisdiction row per tax type, and taxType and inputTaxRecoverable are null on every other country\&#39;s rows. Returns 400 when line items or the destination address are missing or malformed, 422 TAX_JURISDICTION_NOT_CONFIGURED when such a country has no rate row for the region on the transaction date or CURRENCY_NOT_SUPPORTED when currencyCode is not that country\&#39;s configured currency, 501 TAX_CALCULATION_TYPE_UNSUPPORTED when calculationType USE reaches an external provider, and 500 when the provider is unreachable in production mode.
      * @endpoint post /v1/tax/calculate
      * @param taxCalculationRequest International tax calculation request
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -409,6 +411,88 @@ export class TaxService extends BaseService {
         let localVarPath = `/v1/tax/information-return-forms`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<TaxInformationReturnFormsResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Read a country\&#39;s purchase-tax rules
+     * Returns a country\&#39;s purchase-tax rules on a date: whether a vendor bill charging tax on goods for resale is held for a person (HOLD or ALLOW), and whether a bill stating no tax self-assesses use tax on its expense lines. Use this tool when pos-accounting decides or shows a vendor bill\&#39;s purchase tax; do not use it to price the self-assessed tax, which is calculateTax with calculationType USE instead. Preconditions: this endpoint is internal-only (ADR-0021/ADR-0014), reached by direct in-cluster calls from pos-accounting with the service authority, never through pos-api-gateway. Required inputs: countryCode, two upper-case letters; asOf (ISO-8601 date) defaults to today. No events are emitted, no state changes and no tenant data is read; every rule is configuration held for expert advice, so source is always STUB, and a country without rules answers configured false with ALLOW and false. Returns 200 for every well-formed country, and 400 VALIDATION_ERROR when countryCode or asOf is missing or malformed.
+     * @endpoint get /v1/tax/purchase-rules
+     * @param countryCode
+     * @param asOf
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getTaxPurchaseRules(countryCode: string, asOf?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxPurchaseRulesResponse>;
+    public getTaxPurchaseRules(countryCode: string, asOf?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxPurchaseRulesResponse>>;
+    public getTaxPurchaseRules(countryCode: string, asOf?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxPurchaseRulesResponse>>;
+    public getTaxPurchaseRules(countryCode: string, asOf?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (countryCode === null || countryCode === undefined) {
+            throw new Error('Required parameter countryCode was null or undefined when calling getTaxPurchaseRules.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'countryCode',
+            <any>countryCode,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'asOf',
+            <any>asOf,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/tax/purchase-rules`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<TaxPurchaseRulesResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),

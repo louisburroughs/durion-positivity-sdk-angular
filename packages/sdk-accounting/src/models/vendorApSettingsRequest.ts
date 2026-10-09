@@ -12,9 +12,13 @@ import { VendorInformationReturnRequest } from './vendorInformationReturnRequest
 
 
 /**
- * The vendor\'s AP settings to change (defaults, AP hold, information-return flag), the justification and the request id. A field left out is unchanged; a default sent as null clears it.
+ * The vendor\'s AP settings to change (defaults, AP hold, information-return flag, tax-on-resale acceptance), the justification and the request id. A field left out is unchanged; a default sent as null clears it.
  */
 export interface VendorApSettingsRequest {
+    /**
+     * Optional: whether a bill of this vendor charging tax on goods for resale is approved without a per-bill override where the tax country\'s purchase-tax rules hold such bills (CAP:550 S43); absent leaves it unchanged, null is refused
+     */
+    acceptTaxOnResaleGoods?: boolean;
     apHold?: VendorApHoldRequest;
     /**
      * GOODS, EXPENSE, or null to clear: the class a bill whose lines are not stored posts with when nobody names one. EXPENSE needs a defaultExpenseMappingKey (sent or already set)
@@ -82,7 +86,7 @@ export function instanceOfVendorApSettingsRequest(value: object): value is Vendo
     const requiredProperties = createVendorApSettingsRequestPropertyNames('justification', 'requestId', );
     const optionalStringProperties = createVendorApSettingsRequestOptionalProperties({ name: 'defaultDebitClass', nullable: true }, { name: 'defaultExpenseMappingKey', nullable: true }, { name: 'justification', nullable: false }, { name: 'requestId', nullable: false }, );
     const optionalNumberProperties = createVendorApSettingsRequestOptionalProperties();
-    const optionalBooleanProperties = createVendorApSettingsRequestOptionalProperties();
+    const optionalBooleanProperties = createVendorApSettingsRequestOptionalProperties({ name: 'acceptTaxOnResaleGoods', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalVendorApSettingsRequestPropertyOfType(_v, property.name, 'string', property.nullable))

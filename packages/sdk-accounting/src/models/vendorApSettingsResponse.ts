@@ -15,6 +15,10 @@ import { VendorInformationReturn } from './vendorInformationReturn';
  * The vendor\'s accounting-side settings: AP defaults (AW39), the remit-to confirmation, the AP payment hold and the information-return flag
  */
 export interface VendorApSettingsResponse {
+    /**
+     * Whether a bill of this vendor charging tax on goods for resale is approved without a per-bill override where the tax country\'s purchase-tax rules hold such bills (CAP:550 S43); false when not set
+     */
+    acceptTaxOnResaleGoods: boolean;
     apHold: VendorApHold;
     /**
      * The remit-to version last confirmed; payment by anyone but the confirmer passes on it while it is current
@@ -83,10 +87,10 @@ export function instanceOfVendorApSettingsResponse(value: object): value is Vend
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createVendorApSettingsResponsePropertyNames('apHold', 'informationReturn', );
+    const requiredProperties = createVendorApSettingsResponsePropertyNames('acceptTaxOnResaleGoods', 'apHold', 'informationReturn', );
     const optionalStringProperties = createVendorApSettingsResponseOptionalProperties({ name: 'defaultDebitClass', nullable: false }, { name: 'defaultExpenseMappingKey', nullable: false }, { name: 'remitToConfirmedAt', nullable: false }, { name: 'remitToConfirmedBy', nullable: false }, );
     const optionalNumberProperties = createVendorApSettingsResponseOptionalProperties({ name: 'confirmedRemitToVersion', nullable: false }, );
-    const optionalBooleanProperties = createVendorApSettingsResponseOptionalProperties();
+    const optionalBooleanProperties = createVendorApSettingsResponseOptionalProperties({ name: 'acceptTaxOnResaleGoods', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalVendorApSettingsResponsePropertyOfType(_v, property.name, 'string', property.nullable))

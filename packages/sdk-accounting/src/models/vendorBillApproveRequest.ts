@@ -30,6 +30,10 @@ export interface VendorBillApproveRequest {
      * The tax the vendor\'s document states, by tax type, copied from the document (CAP:550 S32d, AW51); replaces the tax by type stored on the bill and must add up to its stated tax, else 422 AP_BILL_TAX_SPLIT_MISMATCH. Omit it to keep what the bill states
      */
     taxByType?: Array<VendorBillTaxAmount>;
+    /**
+     * Accepts, for this bill only, tax the vendor charged on goods for resale where the tax country\'s purchase-tax rules hold such bills (check TAX_ON_RESALE_GOODS FAIL): why it is accepted, 10-1000 characters; looked at only when the hold applies (CAP:550 S43)
+     */
+    taxOnResaleOverrideJustification?: string;
 }
 
 function isOptionalVendorBillApproveRequestPropertyOfType(
@@ -71,7 +75,7 @@ export function instanceOfVendorBillApproveRequest(value: object): value is Vend
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createVendorBillApproveRequestPropertyNames();
-    const optionalStringProperties = createVendorBillApproveRequestOptionalProperties({ name: 'justification', nullable: false }, { name: 'overrideJustification', nullable: false }, );
+    const optionalStringProperties = createVendorBillApproveRequestOptionalProperties({ name: 'justification', nullable: false }, { name: 'overrideJustification', nullable: false }, { name: 'taxOnResaleOverrideJustification', nullable: false }, );
     const optionalNumberProperties = createVendorBillApproveRequestOptionalProperties();
     const optionalBooleanProperties = createVendorBillApproveRequestOptionalProperties();
 

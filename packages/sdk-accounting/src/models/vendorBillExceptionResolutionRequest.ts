@@ -34,6 +34,10 @@ export interface VendorBillExceptionResolutionRequest {
      * The tax the vendor\'s document states, by tax type, ACCEPT only, copied from the document (CAP:550 S32d, AW51); replaces the tax by type stored on the bill and must add up to its stated tax, else 422 AP_BILL_TAX_SPLIT_MISMATCH. Omit it to keep what the bill states
      */
     taxByType?: Array<VendorBillTaxAmount>;
+    /**
+     * ACCEPT only: accepts, for this bill only, tax the vendor charged on goods for resale where the tax country\'s purchase-tax rules hold such bills, 10-1000 characters (CAP:550 S43)
+     */
+    taxOnResaleOverrideJustification?: string;
 }
 export enum VendorBillExceptionResolutionRequestResolutionActionEnum {
     Accept = 'ACCEPT',
@@ -82,7 +86,7 @@ export function instanceOfVendorBillExceptionResolutionRequest(value: object): v
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createVendorBillExceptionResolutionRequestPropertyNames('reason', 'resolutionAction', );
-    const optionalStringProperties = createVendorBillExceptionResolutionRequestOptionalProperties({ name: 'overrideJustification', nullable: false }, { name: 'reason', nullable: false }, { name: 'resolutionAction', nullable: false }, );
+    const optionalStringProperties = createVendorBillExceptionResolutionRequestOptionalProperties({ name: 'overrideJustification', nullable: false }, { name: 'reason', nullable: false }, { name: 'resolutionAction', nullable: false }, { name: 'taxOnResaleOverrideJustification', nullable: false }, );
     const optionalNumberProperties = createVendorBillExceptionResolutionRequestOptionalProperties();
     const optionalBooleanProperties = createVendorBillExceptionResolutionRequestOptionalProperties();
 
