@@ -22,7 +22,7 @@ export interface PurchaseOrderStatusSummary {
      */
     lineCount: number;
     /**
-     * Sum of order open balances, in minor currency units
+     * Sum of order open balances (ex-tax), in minor currency units
      */
     openBalanceMinor: number;
     /**
