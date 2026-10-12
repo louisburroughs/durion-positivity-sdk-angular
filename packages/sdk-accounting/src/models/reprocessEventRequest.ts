@@ -10,7 +10,7 @@
 
 
 /**
- * Request to reprocess a suspended accounting event. The triggering user is the authenticated caller and is never taken from the body.
+ * Request to reprocess a SUSPENDED or FAILED accounting event. The triggering user is the authenticated caller and is never taken from the body.
  */
 export interface ReprocessEventRequest {
     /**
