@@ -22,6 +22,12 @@ import { ApiError } from '../models/apiError';
 import { AuditExportJobResponse } from '../models/auditExportJobResponse';
 // @ts-ignore
 import { AuditExportRequest } from '../models/auditExportRequest';
+// @ts-ignore
+import { AuditExportWebhookRegistrationResponse } from '../models/auditExportWebhookRegistrationResponse';
+// @ts-ignore
+import { AuditExportWebhookRequest } from '../models/auditExportWebhookRequest';
+// @ts-ignore
+import { AuditExportWebhookResponse } from '../models/auditExportWebhookResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -37,6 +43,62 @@ export class AuditExportsService extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
+    }
+
+    /**
+     * Remove the Audit Export Webhook
+     * Removes the HTTPS endpoint the caller\&#39;s tenant receives WEBHOOK audit exports at, so no further export is sent outside the shop. Use this tool to stop webhook delivery; use registerAuditExportWebhook instead to point it elsewhere or to rotate the signing secret. Preconditions: the caller must hold security:audit_export:webhook_manage; a WEBHOOK job still being delivered is not sent once its destination is removed, and WEBHOOK requests answer 422 until another destination is registered. Required inputs: none. Emits a SECURITY_AUDIT_EXPORT_WEBHOOK_DELETE event and is idempotent, answering 204 even when nothing is registered. Returns 403 when the caller lacks the permission.
+     * @endpoint delete /v1/audit/exports/webhook
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public deleteAuditExportWebhook(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteAuditExportWebhook(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteAuditExportWebhook(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteAuditExportWebhook(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/audit/exports/webhook`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
     }
 
     /**
@@ -91,7 +153,7 @@ export class AuditExportsService extends BaseService {
 
     /**
      * Get Audit Export Job Status
-     * Returns the current status of an audit export job of the caller\&#39;s tenant (PENDING, IN_PROGRESS, COMPLETED or FAILED) with its completion time, row count, download URL and error message when present. Use this tool to poll a job created by requestAuditExport; do not resubmit the export while the job is still PENDING or IN_PROGRESS. Preconditions: the caller must hold security:audit:export, and the job must belong to the caller\&#39;s tenant, since another tenant\&#39;s job id answers 404. Required inputs: jobId (UUID) as a path parameter. This is a read-only status projection that emits no events; a job interrupted by a service restart is moved to FAILED by a scheduled sweep once the configured timeout passes, so a poll never waits forever. Returns 404 when the job id is unknown to the caller\&#39;s tenant or the job was purged after the configured retention period (seven days by default).
+     * Returns the current status of an audit export job of the caller\&#39;s tenant (PENDING, IN_PROGRESS, COMPLETED or FAILED) with its completion time, row count, download URL and error message when present, and for a WEBHOOK job its destination and delivery outcome. Use this tool to poll a job created by requestAuditExport; do not resubmit the export while the job is still PENDING or IN_PROGRESS. Preconditions: the caller must hold security:audit:export, and the job must belong to the caller\&#39;s tenant, since another tenant\&#39;s job id answers 404. Required inputs: jobId (UUID) as a path parameter. This is a read-only status projection that emits no events; a job interrupted by a service restart is moved to FAILED by a scheduled sweep once the configured timeout passes, so a poll never waits forever. Returns 404 when the job id is unknown to the caller\&#39;s tenant or the job was purged after the configured retention period (seven days by default).
      * @endpoint get /v1/audit/exports/{jobId}
      * @param jobId Export job UUID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -150,8 +212,134 @@ export class AuditExportsService extends BaseService {
     }
 
     /**
+     * Get the Audit Export Webhook
+     * Returns the HTTPS endpoint the caller\&#39;s tenant receives WEBHOOK audit exports at, with when and by whom it was registered, and never its signing secret. Use this tool to see where a WEBHOOK export would send audit data, and to name that destination to the user before requesting one; do not use it to change the destination, which is registerAuditExportWebhook. Preconditions: the caller must hold security:audit_export:webhook_manage or security:audit:export. Required inputs: none. This is a read-only lookup and no events are emitted. Returns 404 AUDIT_EXPORT_WEBHOOK_NOT_REGISTERED when the tenant has no destination, in which case a WEBHOOK export is refused.
+     * @endpoint get /v1/audit/exports/webhook
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getAuditExportWebhook(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuditExportWebhookResponse>;
+    public getAuditExportWebhook(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuditExportWebhookResponse>>;
+    public getAuditExportWebhook(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuditExportWebhookResponse>>;
+    public getAuditExportWebhook(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/audit/exports/webhook`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<AuditExportWebhookResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Register the Audit Export Webhook
+     * Registers the HTTPS endpoint the caller\&#39;s tenant receives WEBHOOK audit exports at, replacing any earlier one, and returns it with a newly issued signing secret. Use this tool to set or rotate where audit exports are delivered; do not use it to export anything, which is requestAuditExport with deliveryMode WEBHOOK. Preconditions: the caller must hold security:audit_export:webhook_manage; the url must be an absolute https URL with a DNS host name, no user info and no fragment, at most 2048 characters, and its host must resolve only to publicly routable addresses (never loopback, private, link-local, carrier-grade NAT, multicast, reserved or cloud metadata). Required inputs: url in the request body. Emits a SECURITY_AUDIT_EXPORT_WEBHOOK_REGISTER event; signingSecret appears only in this response, every earlier secret stops working, and each delivery carries X-Audit-Export-Signature, sha256&#x3D; followed by the hex HMAC-SHA256 of the X-Audit-Export-Timestamp value, a dot and the body, keyed with that secret. Returns 400 VALIDATION_ERROR with one fieldErrors entry on url per broken rule, and 403 without the permission.
+     * @endpoint put /v1/audit/exports/webhook
+     * @param auditExportWebhookRequest The https endpoint WEBHOOK audit exports are delivered to.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public registerAuditExportWebhook(auditExportWebhookRequest: AuditExportWebhookRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuditExportWebhookRegistrationResponse>;
+    public registerAuditExportWebhook(auditExportWebhookRequest: AuditExportWebhookRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuditExportWebhookRegistrationResponse>>;
+    public registerAuditExportWebhook(auditExportWebhookRequest: AuditExportWebhookRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuditExportWebhookRegistrationResponse>>;
+    public registerAuditExportWebhook(auditExportWebhookRequest: AuditExportWebhookRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (auditExportWebhookRequest === null || auditExportWebhookRequest === undefined) {
+            throw new Error('Required parameter auditExportWebhookRequest was null or undefined when calling registerAuditExportWebhook.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/audit/exports/webhook`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<AuditExportWebhookRegistrationResponse>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: auditExportWebhookRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Request an Asynchronous Audit Export
-     * Submits an asynchronous audit export job for the caller\&#39;s tenant and answers 202 Accepted with the job id and an initial PENDING status. Use this tool for bulk extraction of audit data as a file; use searchAuditEvents instead for interactive paged queries. Preconditions: the caller must hold security:audit:export; jobs are persisted per tenant, run in the background once the request commits, and are deleted with their file after the configured retention period. Required inputs: format (CSV or JSON) and deliveryMode, which must be DOWNLOAD; filters is optional and scopes the export with the same criteria as searchAuditEvents. Emits a SECURITY_AUDIT_EXPORT_REQUEST event; poll getAuditExportJob until the job is COMPLETED, then fetch its downloadUrl with downloadAuditExport, or FAILED, where errorMessage says why (for example more matching events than the configured row limit). Returns 400 when format or deliveryMode is missing or invalid or fromDate is not before toDate, and 400 AUDIT_EXPORT_WEBHOOK_UNSUPPORTED for WEBHOOK delivery, which has no configured destination yet.
+     * Submits an asynchronous audit export job for the caller\&#39;s tenant and answers 202 Accepted with the job id and an initial PENDING status. Use this tool for bulk extraction of audit data as a file; use searchAuditEvents instead for interactive paged queries. Preconditions: the caller must hold security:audit:export; jobs are persisted per tenant, run in the background once the request commits, and are deleted with their file after the configured retention period; deliveryMode WEBHOOK also sends the signed file outside the shop to the tenant\&#39;s registered webhook (read it with getAuditExportWebhook and confirm that destination with the user first). Required inputs: format (CSV or JSON) and deliveryMode (DOWNLOAD or WEBHOOK); filters is optional and scopes the export with the same criteria as searchAuditEvents. Emits a SECURITY_AUDIT_EXPORT_REQUEST event; poll getAuditExportJob until the job is COMPLETED, then fetch its downloadUrl with downloadAuditExport, or FAILED, where errorMessage says why (for example more matching events than the configured row limit, or a webhook that never answered 2xx within the configured attempts). Returns 400 when format or deliveryMode is missing or invalid or fromDate is not before toDate, and 422 AUDIT_EXPORT_WEBHOOK_NOT_REGISTERED for WEBHOOK delivery when the tenant has no registered webhook, in which case no job is created.
      * @endpoint post /v1/audit/exports
      * @param auditExportRequest Format, delivery mode, and optional filter scope of the export job.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

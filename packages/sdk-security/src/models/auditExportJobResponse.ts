@@ -18,7 +18,27 @@ export interface AuditExportJobResponse {
      */
     completedAt?: string;
     /**
-     * Gateway-relative path that downloads the export file with the same security:audit:export authority (null until COMPLETED)
+     * WEBHOOK only: when the endpoint accepted the file; null unless DELIVERED
+     */
+    deliveredAt?: string;
+    /**
+     * WEBHOOK only: how many delivery attempts were made; null until delivery ends
+     */
+    deliveryAttempts?: number;
+    /**
+     * WEBHOOK only: short reason the last attempt failed (an HTTP status such as \"HTTP 503\", an exception class name, DESTINATION_CHANGED or DESTINATION_REFUSED), never the endpoint\'s response body; null unless delivery failed
+     */
+    deliveryError?: string;
+    /**
+     * How the export is delivered: DOWNLOAD (fetch downloadUrl) or WEBHOOK (sent to the tenant\'s registered webhook, webhookUrl)
+     */
+    deliveryMode: AuditExportJobResponseDeliveryModeEnum;
+    /**
+     * WEBHOOK only: DELIVERED (an attempt answered 2xx; the job is COMPLETED) or FAILED (no attempt succeeded, or the destination changed or was refused; the job is FAILED); null for DOWNLOAD and until delivery ends
+     */
+    deliveryStatus?: AuditExportJobResponseDeliveryStatusEnum;
+    /**
+     * Gateway-relative path that downloads the export file with the same security:audit:export authority (null until COMPLETED; a WEBHOOK job whose delivery failed is FAILED and keeps no file)
      */
     downloadUrl?: string;
     /**
@@ -45,7 +65,19 @@ export interface AuditExportJobResponse {
      * Current status of the export job: PENDING (queued), IN_PROGRESS (running), COMPLETED (file ready to download) or FAILED (see errorMessage)
      */
     status: AuditExportJobResponseStatusEnum;
+    /**
+     * WEBHOOK only: the destination this job delivers to, pinned when it was requested (a later re-registration to another URL is never used for it); null for DOWNLOAD
+     */
+    webhookUrl?: string;
 }
+export enum AuditExportJobResponseDeliveryModeEnum {
+    Download = 'DOWNLOAD',
+    Webhook = 'WEBHOOK'
+};
+export enum AuditExportJobResponseDeliveryStatusEnum {
+    Delivered = 'DELIVERED',
+    Failed = 'FAILED'
+};
 export enum AuditExportJobResponseFormatEnum {
     Csv = 'CSV',
     Json = 'JSON'
@@ -97,9 +129,9 @@ export function instanceOfAuditExportJobResponse(value: object): value is AuditE
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAuditExportJobResponsePropertyNames('format', 'jobId', 'requestedAt', 'status', );
-    const optionalStringProperties = createAuditExportJobResponseOptionalProperties({ name: 'completedAt', nullable: false }, { name: 'downloadUrl', nullable: false }, { name: 'errorMessage', nullable: false }, { name: 'format', nullable: false }, { name: 'jobId', nullable: false }, { name: 'requestedAt', nullable: false }, { name: 'status', nullable: false }, );
-    const optionalNumberProperties = createAuditExportJobResponseOptionalProperties({ name: 'rowCount', nullable: false }, );
+    const requiredProperties = createAuditExportJobResponsePropertyNames('deliveryMode', 'format', 'jobId', 'requestedAt', 'status', );
+    const optionalStringProperties = createAuditExportJobResponseOptionalProperties({ name: 'completedAt', nullable: false }, { name: 'deliveredAt', nullable: false }, { name: 'deliveryError', nullable: false }, { name: 'deliveryMode', nullable: false }, { name: 'deliveryStatus', nullable: false }, { name: 'downloadUrl', nullable: false }, { name: 'errorMessage', nullable: false }, { name: 'format', nullable: false }, { name: 'jobId', nullable: false }, { name: 'requestedAt', nullable: false }, { name: 'status', nullable: false }, { name: 'webhookUrl', nullable: false }, );
+    const optionalNumberProperties = createAuditExportJobResponseOptionalProperties({ name: 'deliveryAttempts', nullable: false }, { name: 'rowCount', nullable: false }, );
     const optionalBooleanProperties = createAuditExportJobResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
