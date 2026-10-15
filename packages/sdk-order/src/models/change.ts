@@ -18,6 +18,10 @@ export interface Change {
      */
     actor?: string;
     /**
+     * The actor\'s display name, \"First Last\", name only; null when it can\'t be resolved. Never the username (#2608, ADR-0064)
+     */
+    actorName?: string | null;
+    /**
      * When
      */
     changedAt?: string;
@@ -69,7 +73,7 @@ export function instanceOfChange(value: object): value is Change {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createChangePropertyNames();
-    const optionalStringProperties = createChangeOptionalProperties({ name: 'actor', nullable: false }, { name: 'changedAt', nullable: false }, { name: 'justification', nullable: false }, { name: 'newValue', nullable: false }, { name: 'oldValue', nullable: false }, { name: 'setting', nullable: false }, );
+    const optionalStringProperties = createChangeOptionalProperties({ name: 'actor', nullable: false }, { name: 'actorName', nullable: true }, { name: 'changedAt', nullable: false }, { name: 'justification', nullable: false }, { name: 'newValue', nullable: false }, { name: 'oldValue', nullable: false }, { name: 'setting', nullable: false }, );
     const optionalNumberProperties = createChangeOptionalProperties();
     const optionalBooleanProperties = createChangeOptionalProperties();
 

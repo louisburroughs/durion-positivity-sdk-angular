@@ -15,6 +15,10 @@
 export interface RegisterSessionResponse {
     closedAt?: string;
     closedByClerkId?: string;
+    /**
+     * The closer\'s display name, \"First Last\", name only; null until the session is closed or when it can\'t be resolved. Never the username (#2608, ADR-0064)
+     */
+    closedByName?: string | null;
     closingStartedAt?: string;
     countedCash?: number;
     /**
@@ -24,6 +28,10 @@ export interface RegisterSessionResponse {
     locationId?: string;
     openedAt?: string;
     openedByClerkId?: string;
+    /**
+     * The opener\'s display name, \"First Last\", name only; null when it can\'t be resolved. Never the username (#2608, ADR-0064)
+     */
+    openedByName?: string | null;
     openingFloat?: number;
     overShort?: number;
     sessionId?: string;
@@ -72,7 +80,7 @@ export function instanceOfRegisterSessionResponse(value: object): value is Regis
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createRegisterSessionResponsePropertyNames();
-    const optionalStringProperties = createRegisterSessionResponseOptionalProperties({ name: 'closedAt', nullable: false }, { name: 'closedByClerkId', nullable: false }, { name: 'closingStartedAt', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'locationId', nullable: false }, { name: 'openedAt', nullable: false }, { name: 'openedByClerkId', nullable: false }, { name: 'sessionId', nullable: false }, { name: 'status', nullable: false }, { name: 'terminalId', nullable: false }, );
+    const optionalStringProperties = createRegisterSessionResponseOptionalProperties({ name: 'closedAt', nullable: false }, { name: 'closedByClerkId', nullable: false }, { name: 'closedByName', nullable: true }, { name: 'closingStartedAt', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'locationId', nullable: false }, { name: 'openedAt', nullable: false }, { name: 'openedByClerkId', nullable: false }, { name: 'openedByName', nullable: true }, { name: 'sessionId', nullable: false }, { name: 'status', nullable: false }, { name: 'terminalId', nullable: false }, );
     const optionalNumberProperties = createRegisterSessionResponseOptionalProperties({ name: 'countedCash', nullable: false }, { name: 'openingFloat', nullable: false }, { name: 'overShort', nullable: false }, { name: 'theoreticalCash', nullable: false }, );
     const optionalBooleanProperties = createRegisterSessionResponseOptionalProperties({ name: 'varianceApproved', nullable: false }, );
 
