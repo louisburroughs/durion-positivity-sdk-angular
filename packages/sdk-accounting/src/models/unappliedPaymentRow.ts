@@ -15,6 +15,10 @@ import { PaymentMatchSuggestion } from './paymentMatchSuggestion';
  */
 export interface UnappliedPaymentRow {
     /**
+     * Why automatic application did not apply the payment when it settled: the reason on its newest automatic-application record. NOT_POSTABLE is a skip (a method other than CASH or CARD, another customer\'s invoice, or an invoice already paid); INVOICE_NOT_FOUND, INVOICE_NOT_ELIGIBLE, PERIOD_CLOSED and ACCOUNTING_TIME_ZONE_UNSET are holds that are retried or reprocessed. Null when the payment has no such record or the record was later processed
+     */
+    autoApplicationReason?: UnappliedPaymentRowAutoApplicationReasonEnum | null;
+    /**
      * Payment currency (ISO 4217)
      */
     currency: string;
@@ -39,6 +43,10 @@ export interface UnappliedPaymentRow {
      */
     paymentMethod?: string | null;
     /**
+     * True only when the invoice the payment was taken against is already paid (sourceInvoiceState PAID) and this payment applied nothing to it that is still in force: the payment is possibly a duplicate. False for every other state, and for a payment that itself paid the invoice, in full or in part, and has a remainder waiting
+     */
+    possibleDuplicate: boolean;
+    /**
      * When the payment cleared
      */
     receivedAt: string;
@@ -50,6 +58,10 @@ export interface UnappliedPaymentRow {
      * Number of the invoice the payment was taken against; null when unknown
      */
     sourceInvoiceNumber?: string | null;
+    /**
+     * State of the invoice the payment was taken against, by the rule automatic application decides with: OPEN (it has an open balance this payment can pay), PAID (no open balance is left; it may have been paid by this payment, see possibleDuplicate), NOT_FOUND (not in accounting\'s invoice replica yet), NOT_ELIGIBLE (not FINALIZED or POSTED, so it cannot take a payment), OTHER_CUSTOMER (its customer is missing or is not the payment\'s); null when the payment names no invoice
+     */
+    sourceInvoiceState?: UnappliedPaymentRowSourceInvoiceStateEnum | null;
     suggestion: PaymentMatchSuggestion;
     /**
      * Amount the payment cleared for
@@ -60,6 +72,22 @@ export interface UnappliedPaymentRow {
      */
     unappliedAmount: number;
 }
+export enum UnappliedPaymentRowAutoApplicationReasonEnum {
+    NotPostable = 'NOT_POSTABLE',
+    InvoiceNotFound = 'INVOICE_NOT_FOUND',
+    InvoiceNotEligible = 'INVOICE_NOT_ELIGIBLE',
+    PeriodClosed = 'PERIOD_CLOSED',
+    AccountingTimeZoneUnset = 'ACCOUNTING_TIME_ZONE_UNSET'
+};
+export enum UnappliedPaymentRowSourceInvoiceStateEnum {
+    Open = 'OPEN',
+    Paid = 'PAID',
+    NotFound = 'NOT_FOUND',
+    NotEligible = 'NOT_ELIGIBLE',
+    OtherCustomer = 'OTHER_CUSTOMER'
+};
+
+
 
 function isOptionalUnappliedPaymentRowPropertyOfType(
     value: Record<string, unknown>,
@@ -99,10 +127,10 @@ export function instanceOfUnappliedPaymentRow(value: object): value is Unapplied
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createUnappliedPaymentRowPropertyNames('currency', 'customerId', 'paymentId', 'receivedAt', 'suggestion', 'totalAmount', 'unappliedAmount', );
-    const optionalStringProperties = createUnappliedPaymentRowOptionalProperties({ name: 'currency', nullable: false }, { name: 'customerDisplayName', nullable: true }, { name: 'customerId', nullable: false }, { name: 'customerReference', nullable: true }, { name: 'paymentId', nullable: false }, { name: 'paymentMethod', nullable: true }, { name: 'receivedAt', nullable: false }, { name: 'sourceInvoiceId', nullable: true }, { name: 'sourceInvoiceNumber', nullable: true }, );
+    const requiredProperties = createUnappliedPaymentRowPropertyNames('currency', 'customerId', 'paymentId', 'possibleDuplicate', 'receivedAt', 'suggestion', 'totalAmount', 'unappliedAmount', );
+    const optionalStringProperties = createUnappliedPaymentRowOptionalProperties({ name: 'autoApplicationReason', nullable: true }, { name: 'currency', nullable: false }, { name: 'customerDisplayName', nullable: true }, { name: 'customerId', nullable: false }, { name: 'customerReference', nullable: true }, { name: 'paymentId', nullable: false }, { name: 'paymentMethod', nullable: true }, { name: 'receivedAt', nullable: false }, { name: 'sourceInvoiceId', nullable: true }, { name: 'sourceInvoiceNumber', nullable: true }, { name: 'sourceInvoiceState', nullable: true }, );
     const optionalNumberProperties = createUnappliedPaymentRowOptionalProperties({ name: 'totalAmount', nullable: false }, { name: 'unappliedAmount', nullable: false }, );
-    const optionalBooleanProperties = createUnappliedPaymentRowOptionalProperties();
+    const optionalBooleanProperties = createUnappliedPaymentRowOptionalProperties({ name: 'possibleDuplicate', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalUnappliedPaymentRowPropertyOfType(_v, property.name, 'string', property.nullable))
