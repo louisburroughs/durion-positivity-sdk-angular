@@ -43,7 +43,7 @@ export interface ExecuteAPPaymentRequest {
      */
     overrideJustification?: string;
     /**
-     * Payment method (ACH, CHECK, WIRE, CREDIT_CARD, OTHER)
+     * Payment method: ACH, CHECK or WIRE. CREDIT_CARD and OTHER are refused (422 AP_PAYMENT_METHOD_NOT_SUPPORTED), and so is CASH: a cash payment is created by the session-close posting of a drawer cash-on-delivery movement, never by this command (S17)
      */
     paymentMethod: ExecuteAPPaymentRequestPaymentMethodEnum;
     /**
@@ -64,6 +64,7 @@ export enum ExecuteAPPaymentRequestPaymentMethodEnum {
     Check = 'CHECK',
     Wire = 'WIRE',
     CreditCard = 'CREDIT_CARD',
+    Cash = 'CASH',
     Other = 'OTHER'
 };
 

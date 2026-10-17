@@ -35,6 +35,8 @@ import { TaxIdRevealRequest } from '../models/taxIdRevealRequest';
 // @ts-ignore
 import { TaxIdRevealView } from '../models/taxIdRevealView';
 // @ts-ignore
+import { TaxRegistrationSchemes } from '../models/taxRegistrationSchemes';
+// @ts-ignore
 import { VendorCreateRequest } from '../models/vendorCreateRequest';
 // @ts-ignore
 import { VendorFactReplayResult } from '../models/vendorFactReplayResult';
@@ -141,7 +143,7 @@ export class SupplierVendorsService extends BaseService {
 
     /**
      * Create vendor
-     * Creates an ACTIVE vendor, with or without a supplier connection, and publishes supplier.vendor.updated. Use this tool to add a party the shop buys from or pays; do not use it to change a vendor, which is updateSupplierVendor, or to connect a supplier, which is a vendor profile naming this vendor. Preconditions: a vendorNumber, when given, must not be used by another vendor of the tenant. Required inputs: legalName, displayName, defaultPaymentTerms (DUE_ON_RECEIPT or NET1 to NET120) and defaultCurrency (ISO 4217); vendorNumber is optional and allocated as V-000001, V-000002 and so on when omitted, and never changes afterwards; taxRegistrations and remitTo are optional, and each new registration needs its number, which is encrypted at once and never returned (the response shows last4). Emits a SUPPLIER_VENDOR_CREATE audit event and queues one supplier.vendor.updated fact in the same transaction; a remitTo given here is stored as version 1 without approval. Returns 201 with the vendor, 400 VALIDATION_ERROR when a field is missing or malformed, and 409 SUPPLIER_VENDOR_NUMBER_TAKEN when the number is in use.
+     * Creates an ACTIVE vendor, with or without a supplier connection, and publishes supplier.vendor.updated. Use this tool to add a party the shop buys from or pays; do not use it to change a vendor, which is updateSupplierVendor, or to connect a supplier, which is a vendor profile naming this vendor. Preconditions: a vendorNumber, when given, must not be used by another vendor of the tenant. Required inputs: legalName, displayName, defaultPaymentTerms (DUE_ON_RECEIPT or NET1 to NET120) and defaultCurrency (ISO 4217); vendorNumber is optional and allocated as V-000001, V-000002 and so on when omitted, and never changes afterwards; taxRegistrations and remitTo are optional, and each new registration needs its number, which is encrypted at once and never returned (the response shows last4), and a listed scheme (#2623): a code of listSupplierVendorTaxRegistrationSchemes (stored as that code), with region required and listed where the scheme is regional and absent otherwise. Emits a SUPPLIER_VENDOR_CREATE audit event and queues one supplier.vendor.updated fact in the same transaction; a remitTo given here is stored as version 1 without approval. Send a requestId (a UUID the client mints) to make the create idempotent: a retry after a timeout or 5xx with the same requestId and the same payload answers the original 201 body and creates nothing; the same requestId with another payload is refused, so reuse a requestId only for an identical payload. Returns 201 with the vendor, 400 VALIDATION_ERROR when a field is missing or malformed or a registration\&#39;s scheme or region is not listed (fieldErrors names taxRegistrations[i].scheme or .region; every violation is reported), 409 SUPPLIER_VENDOR_NUMBER_TAKEN when the number is in use, 409 IDEMPOTENCY_CONFLICT when the requestId was used with a different payload or is in use by a concurrent create, and 503 SERVICE_UNAVAILABLE when a registration carries a number and pos-tax\&#39;s scheme list cannot be read (nothing is stored).
      * @endpoint post /v1/supplier/vendors
      * @param vendorCreateRequest Vendor to create.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -486,6 +488,75 @@ export class SupplierVendorsService extends BaseService {
         let localVarPath = `/v1/supplier/vendors/${this.configuration.encodeParam({name: "vendorId", value: vendorId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/tax-id-reveals`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<PagedResponseTaxIdRevealRecordView>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List the tax-registration schemes a vendor may be filed under
+     * Returns pos-tax\&#39;s closed vocabulary of tax-registration schemes, unchanged: per country, each scheme\&#39;s code, label, holder type (BUSINESS or PERSON) and whether a registration under it belongs to one region, with the allowed regions. Codes are unique across countries. Use this tool to fill the vendor form\&#39;s scheme picker (and its region picker where the scheme is regional) before creating or updating a vendor\&#39;s tax registrations; do not use it to read a vendor, which is getSupplierVendor. Preconditions: none; the list is reference configuration, not tenant data, so every holder of supplier:vendor:read may read it. People never call pos-tax directly (ADR-0071). Required inputs: none; countryCode, two upper-case letters, narrows the list to one country. Emits a SUPPLIER_VENDOR_TAX_REGISTRATION_SCHEME_LIST audit event; nothing is changed. Returns 200 with the list (source is STUB while the vocabulary is a placeholder; empty for a country without a scheme), 400 VALIDATION_ERROR for a malformed countryCode, and 503 SERVICE_UNAVAILABLE when pos-tax cannot be reached.
+     * @endpoint get /v1/supplier/vendors/tax-registration-schemes
+     * @param countryCode ISO 3166-1 alpha-2 country code; omit for every country
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listSupplierVendorTaxRegistrationSchemes(countryCode?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxRegistrationSchemes>;
+    public listSupplierVendorTaxRegistrationSchemes(countryCode?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxRegistrationSchemes>>;
+    public listSupplierVendorTaxRegistrationSchemes(countryCode?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxRegistrationSchemes>>;
+    public listSupplierVendorTaxRegistrationSchemes(countryCode?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'countryCode',
+            <any>countryCode,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/supplier/vendors/tax-registration-schemes`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<TaxRegistrationSchemes>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),
@@ -983,7 +1054,7 @@ export class SupplierVendorsService extends BaseService {
 
     /**
      * Update vendor
-     * Replaces a vendor\&#39;s legal and display names, tax registrations, default payment terms and default currency, and publishes supplier.vendor.updated. Use this tool to correct or complete a vendor; do not use it for the remit-to, which needs a remit-to change a second person approves, or for the status, which is deactivation and reactivation. The vendorNumber never changes. Preconditions: the vendor must exist, and version must be the version the caller read. Required inputs: vendorId (UUIDv7) path parameter plus the full body, because every field is replaced; omitting taxRegistrations clears them. Send a stored registration\&#39;s registrationId without number to keep it (its scheme and region must be unchanged), with number to replace the number, and send a new registration without registrationId and with its number. Emits a SUPPLIER_VENDOR_UPDATE audit event and queues one supplier.vendor.updated fact in the same transaction. Returns 200 with the vendor, 400 VALIDATION_ERROR for a malformed field or a refused registration (fieldErrors names taxRegistrations[i].number, .registrationId, .scheme or .region), 404 SUPPLIER_VENDOR_NOT_FOUND, and 409 CONFLICT when version is stale.
+     * Replaces a vendor\&#39;s legal and display names, tax registrations, default payment terms and default currency, and publishes supplier.vendor.updated. Use this tool to correct or complete a vendor; do not use it for the remit-to, which needs a remit-to change a second person approves, or for the status, which is deactivation and reactivation, and the vendorNumber never changes. Preconditions: the vendor must exist, and version must be the version the caller read. Required inputs: vendorId (UUIDv7) path parameter plus the full body, because every field is replaced; omitting taxRegistrations clears them; send a stored registration\&#39;s registrationId without number to keep it (its scheme and region must be unchanged), with number to replace the number, and send a new registration without registrationId and with its number. Emits a SUPPLIER_VENDOR_UPDATE audit event and queues one supplier.vendor.updated fact in the same transaction. A registration entered or re-keyed with a number is filed under a listed scheme (#2623): a code of listSupplierVendorTaxRegistrationSchemes, with a region exactly where the scheme is regional; a kept registration (registrationId without number) is not re-checked. Returns 200 with the vendor, 400 VALIDATION_ERROR for a malformed field or a refused registration (fieldErrors names taxRegistrations[i].number, .registrationId, .scheme or .region; every scheme or region violation is reported), 404 SUPPLIER_VENDOR_NOT_FOUND, 409 CONFLICT when version is stale, and 503 SERVICE_UNAVAILABLE when a registration carries a number and pos-tax\&#39;s scheme list cannot be read (nothing is stored).
      * @endpoint put /v1/supplier/vendors/{vendorId}
      * @param vendorId Vendor identifier (UUIDv7). Must reference a vendor of the caller\&#39;s tenant.
      * @param vendorUpdateRequest Replacement values and the version the caller read.

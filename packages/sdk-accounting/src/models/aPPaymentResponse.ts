@@ -23,6 +23,10 @@ export interface APPaymentResponse {
      */
     bankAccountId?: string;
     /**
+     * For a CASH payment: the VENDOR_COD drawer movement it came from (S17)
+     */
+    cashMovementId?: string;
+    /**
      * Payment created timestamp
      */
     createdAt?: string;
@@ -75,9 +79,57 @@ export interface APPaymentResponse {
      */
     paymentId?: string;
     /**
+     * How the vendor was paid; CASH is a drawer cash-on-delivery payment (S17)
+     */
+    paymentMethod?: APPaymentResponsePaymentMethodEnum;
+    /**
      * Payment reference (idempotency key)
      */
     paymentRef?: string;
+    /**
+     * DEFERRED_PAST_HARD_LOCK when the entry was dated the retry\'s business date because the payment\'s own date is hard-locked (#2729); null otherwise
+     */
+    postingDateRule?: string;
+    /**
+     * For a CASH payment: the register session whose close created it (S17)
+     */
+    registerSessionId?: string;
+    /**
+     * The date the mirror entry is (or will be) posted on
+     */
+    returnDate?: string;
+    /**
+     * RETURN_DATE (the failure date\'s period was open) or DETECTION_DATE (it was closed, so the mirror is dated when the return was detected)
+     */
+    returnDateRule?: string;
+    /**
+     * The gateway\'s or bank\'s return code (never free text)
+     */
+    returnFailureCode?: string;
+    /**
+     * The mirror entry: the reversal of the payment\'s own journal entry
+     */
+    returnJournalEntryId?: string;
+    /**
+     * The return date the bank or the gateway reported, as attested (kept whatever dates the mirror)
+     */
+    returnReportedDate?: string;
+    /**
+     * When the return was recorded
+     */
+    returnedAt?: string;
+    /**
+     * When the gateway answered SUCCEEDED
+     */
+    settledAt?: string;
+    /**
+     * When the settlement job last re-read the gateway
+     */
+    settlementCheckedAt?: string;
+    /**
+     * Whether the gateway settled the charge (#2642): IN_FLIGHT (accepted PENDING, re-read by the settlement job), SETTLED, RETURNED; absent on CASH payments and rows older than the field
+     */
+    settlementStatus?: APPaymentResponseSettlementStatusEnum;
     /**
      * Payment status
      */
@@ -94,7 +146,32 @@ export interface APPaymentResponse {
      * Vendor name
      */
     vendorName?: string;
+    /**
+     * Why a VOIDED payment was voided (#2729)
+     */
+    voidReason?: string;
+    /**
+     * When the payment was voided
+     */
+    voidedAt?: string;
+    /**
+     * Who voided the payment
+     */
+    voidedBy?: string;
 }
+export enum APPaymentResponsePaymentMethodEnum {
+    Ach = 'ACH',
+    Check = 'CHECK',
+    Wire = 'WIRE',
+    CreditCard = 'CREDIT_CARD',
+    Cash = 'CASH',
+    Other = 'OTHER'
+};
+export enum APPaymentResponseSettlementStatusEnum {
+    InFlight = 'IN_FLIGHT',
+    Settled = 'SETTLED',
+    Returned = 'RETURNED'
+};
 export enum APPaymentResponseStatusEnum {
     Initiated = 'INITIATED',
     GatewayPending = 'GATEWAY_PENDING',
@@ -102,7 +179,10 @@ export enum APPaymentResponseStatusEnum {
     GatewaySucceeded = 'GATEWAY_SUCCEEDED',
     GlPostPending = 'GL_POST_PENDING',
     GlPosted = 'GL_POSTED',
-    GlPostFailed = 'GL_POST_FAILED'
+    GlPostFailed = 'GL_POST_FAILED',
+    Voided = 'VOIDED',
+    ReturnPending = 'RETURN_PENDING',
+    Returned = 'RETURNED'
 };
 
 
@@ -146,7 +226,7 @@ export function instanceOfAPPaymentResponse(value: object): value is APPaymentRe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAPPaymentResponsePropertyNames();
-    const optionalStringProperties = createAPPaymentResponseOptionalProperties({ name: 'bankAccountId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'currency', nullable: false }, { name: 'gatewayTimestamp', nullable: false }, { name: 'gatewayTransactionId', nullable: false }, { name: 'glJournalEntryId', nullable: false }, { name: 'glPostError', nullable: false }, { name: 'glPostedAt', nullable: false }, { name: 'memo', nullable: false }, { name: 'paymentDate', nullable: false }, { name: 'paymentId', nullable: false }, { name: 'paymentRef', nullable: false }, { name: 'status', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, );
+    const optionalStringProperties = createAPPaymentResponseOptionalProperties({ name: 'bankAccountId', nullable: false }, { name: 'cashMovementId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'currency', nullable: false }, { name: 'gatewayTimestamp', nullable: false }, { name: 'gatewayTransactionId', nullable: false }, { name: 'glJournalEntryId', nullable: false }, { name: 'glPostError', nullable: false }, { name: 'glPostedAt', nullable: false }, { name: 'memo', nullable: false }, { name: 'paymentDate', nullable: false }, { name: 'paymentId', nullable: false }, { name: 'paymentMethod', nullable: false }, { name: 'paymentRef', nullable: false }, { name: 'postingDateRule', nullable: false }, { name: 'registerSessionId', nullable: false }, { name: 'returnDate', nullable: false }, { name: 'returnDateRule', nullable: false }, { name: 'returnFailureCode', nullable: false }, { name: 'returnJournalEntryId', nullable: false }, { name: 'returnReportedDate', nullable: false }, { name: 'returnedAt', nullable: false }, { name: 'settledAt', nullable: false }, { name: 'settlementCheckedAt', nullable: false }, { name: 'settlementStatus', nullable: false }, { name: 'status', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, { name: 'voidReason', nullable: false }, { name: 'voidedAt', nullable: false }, { name: 'voidedBy', nullable: false }, );
     const optionalNumberProperties = createAPPaymentResponseOptionalProperties({ name: 'feeAmount', nullable: false }, { name: 'grossAmount', nullable: false }, { name: 'unappliedAmount', nullable: false }, );
     const optionalBooleanProperties = createAPPaymentResponseOptionalProperties();
 

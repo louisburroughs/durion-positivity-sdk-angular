@@ -14,6 +14,10 @@
  */
 export interface PurchaseOrderLineResponse {
     /**
+     * Base units short-closed: the vendor will not ship them (#2635)
+     */
+    cancelledQuantityDecimal?: number;
+    /**
      * Effective base-per-document-unit conversion factor applied at derivation time
      */
     conversionFactor?: number;
@@ -30,6 +34,10 @@ export interface PurchaseOrderLineResponse {
      */
     documentUom?: string;
     /**
+     * GL account the line was written with; null when none. Returned so a read, edited and revised line keeps it (#2681)
+     */
+    glAccountId?: string;
+    /**
      * Unique identifier of this purchase order line
      */
     lineId: string;
@@ -42,7 +50,7 @@ export interface PurchaseOrderLineResponse {
      */
     lineTotalMinor?: number;
     /**
-     * Quantity on this line not yet received
+     * Quantity on this line the vendor still owes: ordered − received − returned − cancelled, never negative (#2635)
      */
     openQuantityDecimal?: number;
     /**
@@ -50,9 +58,21 @@ export interface PurchaseOrderLineResponse {
      */
     quantityDecimal?: number;
     /**
+     * Base units received, net of receipt corrections and returns (#2635)
+     */
+    receivedQuantityDecimal?: number;
+    /**
+     * Base units returned to the vendor for credit; a reopen for replacement takes them back (#2635)
+     */
+    returnedQuantityDecimal?: number;
+    /**
      * Identifier of the SKU on this line
      */
     skuId?: string;
+    /**
+     * Tax code the line was written with; null when none. Returned so a read, edited and revised line keeps it (#2681)
+     */
+    taxCodeId?: string;
     /**
      * Tax amount for this line in the smallest currency unit (e.g. cents)
      */
@@ -102,8 +122,8 @@ export function instanceOfPurchaseOrderLineResponse(value: object): value is Pur
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPurchaseOrderLineResponsePropertyNames('lineId', 'lineNumber', );
-    const optionalStringProperties = createPurchaseOrderLineResponseOptionalProperties({ name: 'description', nullable: false }, { name: 'documentUom', nullable: false }, { name: 'lineId', nullable: false }, { name: 'skuId', nullable: false }, );
-    const optionalNumberProperties = createPurchaseOrderLineResponseOptionalProperties({ name: 'conversionFactor', nullable: false }, { name: 'documentQuantity', nullable: false }, { name: 'lineNumber', nullable: false }, { name: 'lineTotalMinor', nullable: false }, { name: 'openQuantityDecimal', nullable: false }, { name: 'quantityDecimal', nullable: false }, { name: 'taxMinor', nullable: false }, { name: 'unitCostMinor', nullable: false }, );
+    const optionalStringProperties = createPurchaseOrderLineResponseOptionalProperties({ name: 'description', nullable: false }, { name: 'documentUom', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'lineId', nullable: false }, { name: 'skuId', nullable: false }, { name: 'taxCodeId', nullable: false }, );
+    const optionalNumberProperties = createPurchaseOrderLineResponseOptionalProperties({ name: 'cancelledQuantityDecimal', nullable: false }, { name: 'conversionFactor', nullable: false }, { name: 'documentQuantity', nullable: false }, { name: 'lineNumber', nullable: false }, { name: 'lineTotalMinor', nullable: false }, { name: 'openQuantityDecimal', nullable: false }, { name: 'quantityDecimal', nullable: false }, { name: 'receivedQuantityDecimal', nullable: false }, { name: 'returnedQuantityDecimal', nullable: false }, { name: 'taxMinor', nullable: false }, { name: 'unitCostMinor', nullable: false }, );
     const optionalBooleanProperties = createPurchaseOrderLineResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

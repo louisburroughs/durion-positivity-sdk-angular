@@ -95,6 +95,10 @@ export interface PurchaseOrderResponse {
      */
     taxMinor?: number;
     /**
+     * Whether the order has a purchasing channel to be sent through: its vendor\'s designated transmission profile, stamped at create, vendor-changing revise, approve and (until the first send) transmit (#2713); while nothing was sent it also reflects a channel the vendor gained since, which transmit would stamp. False predicts 422 SUPPLIER_REF_MISSING on transmit; the vendor\'s administrator designates a purchasing profile in pos-supplier
+     */
+    transmittable: boolean;
+    /**
      * Timestamp at which the purchase order was last updated
      */
     updatedAt: string;
@@ -160,10 +164,10 @@ export function instanceOfPurchaseOrderResponse(value: object): value is Purchas
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPurchaseOrderResponsePropertyNames('createdAt', 'currency', 'poNumber', 'purchaseOrderId', 'status', 'updatedAt', 'vendorId', 'versionNumber', );
+    const requiredProperties = createPurchaseOrderResponsePropertyNames('createdAt', 'currency', 'poNumber', 'purchaseOrderId', 'status', 'transmittable', 'updatedAt', 'vendorId', 'versionNumber', );
     const optionalStringProperties = createPurchaseOrderResponseOptionalProperties({ name: 'approvalNotes', nullable: false }, { name: 'approvalTimestamp', nullable: false }, { name: 'approverId', nullable: false }, { name: 'comment', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'currency', nullable: false }, { name: 'expectedDeliveryDate', nullable: false }, { name: 'paymentTermsId', nullable: false }, { name: 'poDate', nullable: false }, { name: 'poNumber', nullable: false }, { name: 'purchaseOrderId', nullable: false }, { name: 'requestedBy', nullable: false }, { name: 'shipToLocationId', nullable: false }, { name: 'status', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'updatedBy', nullable: false }, { name: 'vendorId', nullable: false }, );
     const optionalNumberProperties = createPurchaseOrderResponseOptionalProperties({ name: 'grandTotalMinor', nullable: false }, { name: 'openBalanceMinor', nullable: false }, { name: 'subtotalMinor', nullable: false }, { name: 'taxMinor', nullable: false }, { name: 'versionNumber', nullable: false }, );
-    const optionalBooleanProperties = createPurchaseOrderResponseOptionalProperties();
+    const optionalBooleanProperties = createPurchaseOrderResponseOptionalProperties({ name: 'transmittable', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalPurchaseOrderResponsePropertyOfType(_v, property.name, 'string', property.nullable))

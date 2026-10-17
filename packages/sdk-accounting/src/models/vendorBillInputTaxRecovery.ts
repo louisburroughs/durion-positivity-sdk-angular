@@ -34,6 +34,10 @@ export interface VendorBillInputTaxRecovery {
      */
     regime?: string;
     /**
+     * The regime\'s configured display label; null when unknown, never the code (#2679)
+     */
+    regimeLabel?: string | null;
+    /**
      * The stated amount, signed like the bill
      */
     statedAmount: number;
@@ -41,6 +45,10 @@ export interface VendorBillInputTaxRecovery {
      * The tax type; null for a tax stated without its type
      */
     taxType?: string;
+    /**
+     * The tax type\'s configured display label; null when unknown, never the code (#2679)
+     */
+    taxTypeLabel?: string | null;
 }
 
 function isOptionalVendorBillInputTaxRecoveryPropertyOfType(
@@ -82,7 +90,7 @@ export function instanceOfVendorBillInputTaxRecovery(value: object): value is Ve
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createVendorBillInputTaxRecoveryPropertyNames('recoveredAmount', 'statedAmount', );
-    const optionalStringProperties = createVendorBillInputTaxRecoveryOptionalProperties({ name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'recoveryWithheldReason', nullable: false }, { name: 'regime', nullable: false }, { name: 'taxType', nullable: false }, );
+    const optionalStringProperties = createVendorBillInputTaxRecoveryOptionalProperties({ name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'recoveryWithheldReason', nullable: false }, { name: 'regime', nullable: false }, { name: 'regimeLabel', nullable: true }, { name: 'taxType', nullable: false }, { name: 'taxTypeLabel', nullable: true }, );
     const optionalNumberProperties = createVendorBillInputTaxRecoveryOptionalProperties({ name: 'recoveredAmount', nullable: false }, { name: 'statedAmount', nullable: false }, );
     const optionalBooleanProperties = createVendorBillInputTaxRecoveryOptionalProperties();
 

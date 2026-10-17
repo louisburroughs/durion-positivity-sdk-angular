@@ -30,13 +30,49 @@ export interface PettyExpenseCategoryHistoryItem {
      */
     changedAt?: string;
     /**
+     * CREATE: the business date the category posts from; REMAP: the requested effectiveFrom
+     */
+    effectiveFrom?: string;
+    /**
      * Why
      */
     justification?: string;
     /**
+     * CREATE and REMAP: that account\'s name at that moment
+     */
+    newAccountName?: string;
+    /**
+     * CREATE and REMAP: the number of the account the category posts to from effectiveFrom
+     */
+    newAccountNumber?: string;
+    /**
+     * CREATE and RELABEL: the examples after
+     */
+    newExamples?: string;
+    /**
+     * CREATE and RELABEL: the label after
+     */
+    newLabel?: string;
+    /**
      * The value after
      */
     newValue?: string;
+    /**
+     * REMAP: the name of the account replaced, as it was at that moment
+     */
+    oldAccountName?: string;
+    /**
+     * REMAP: the number of the account replaced; null when none was in effect
+     */
+    oldAccountNumber?: string;
+    /**
+     * RELABEL: the examples before
+     */
+    oldExamples?: string;
+    /**
+     * RELABEL: the label before. Null on other rows and on rows written before #2675
+     */
+    oldLabel?: string;
     /**
      * The value before
      */
@@ -90,7 +126,7 @@ export function instanceOfPettyExpenseCategoryHistoryItem(value: object): value 
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPettyExpenseCategoryHistoryItemPropertyNames();
-    const optionalStringProperties = createPettyExpenseCategoryHistoryItemOptionalProperties({ name: 'actor', nullable: false }, { name: 'actorName', nullable: false }, { name: 'changeType', nullable: false }, { name: 'changedAt', nullable: false }, { name: 'justification', nullable: false }, { name: 'newValue', nullable: false }, { name: 'oldValue', nullable: false }, );
+    const optionalStringProperties = createPettyExpenseCategoryHistoryItemOptionalProperties({ name: 'actor', nullable: false }, { name: 'actorName', nullable: false }, { name: 'changeType', nullable: false }, { name: 'changedAt', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'justification', nullable: false }, { name: 'newAccountName', nullable: false }, { name: 'newAccountNumber', nullable: false }, { name: 'newExamples', nullable: false }, { name: 'newLabel', nullable: false }, { name: 'newValue', nullable: false }, { name: 'oldAccountName', nullable: false }, { name: 'oldAccountNumber', nullable: false }, { name: 'oldExamples', nullable: false }, { name: 'oldLabel', nullable: false }, { name: 'oldValue', nullable: false }, );
     const optionalNumberProperties = createPettyExpenseCategoryHistoryItemOptionalProperties();
     const optionalBooleanProperties = createPettyExpenseCategoryHistoryItemOptionalProperties();
 

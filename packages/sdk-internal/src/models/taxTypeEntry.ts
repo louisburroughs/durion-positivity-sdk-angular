@@ -22,6 +22,10 @@ export interface TaxTypeEntry {
      */
     jurisdictionType: TaxTypeEntryJurisdictionTypeEnum;
     /**
+     * Configured display label; null when the profile sets none (never the code)
+     */
+    label?: string | null;
+    /**
      * Regime the tax type is registered and recovered under; null when it has none
      */
     regime?: string | null;
@@ -81,7 +85,7 @@ export function instanceOfTaxTypeEntry(value: object): value is TaxTypeEntry {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTaxTypeEntryPropertyNames('inputTaxRecoverable', 'jurisdictionType', 'taxType', );
-    const optionalStringProperties = createTaxTypeEntryOptionalProperties({ name: 'jurisdictionType', nullable: false }, { name: 'regime', nullable: true }, { name: 'taxType', nullable: false }, );
+    const optionalStringProperties = createTaxTypeEntryOptionalProperties({ name: 'jurisdictionType', nullable: false }, { name: 'label', nullable: true }, { name: 'regime', nullable: true }, { name: 'taxType', nullable: false }, );
     const optionalNumberProperties = createTaxTypeEntryOptionalProperties();
     const optionalBooleanProperties = createTaxTypeEntryOptionalProperties({ name: 'inputTaxRecoverable', nullable: false }, );
 

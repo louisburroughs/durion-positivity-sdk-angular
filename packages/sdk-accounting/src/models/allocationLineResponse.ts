@@ -26,6 +26,10 @@ export interface AllocationLineResponse {
      */
     appliedAmount?: number;
     /**
+     * Set when the payment was returned (#2642): the row is history and no longer counts towards the bill\'s allocated amount
+     */
+    reopenedAt?: string;
+    /**
      * Vendor bill UUID
      */
     vendorBillId?: string;
@@ -70,7 +74,7 @@ export function instanceOfAllocationLineResponse(value: object): value is Alloca
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAllocationLineResponsePropertyNames();
-    const optionalStringProperties = createAllocationLineResponseOptionalProperties({ name: 'allocationId', nullable: false }, { name: 'vendorBillId', nullable: false }, );
+    const optionalStringProperties = createAllocationLineResponseOptionalProperties({ name: 'allocationId', nullable: false }, { name: 'reopenedAt', nullable: false }, { name: 'vendorBillId', nullable: false }, );
     const optionalNumberProperties = createAllocationLineResponseOptionalProperties({ name: 'allocationSequence', nullable: false }, { name: 'appliedAmount', nullable: false }, );
     const optionalBooleanProperties = createAllocationLineResponseOptionalProperties();
 

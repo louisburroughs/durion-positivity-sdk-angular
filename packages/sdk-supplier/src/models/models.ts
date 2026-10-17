@@ -44,6 +44,8 @@ export * from './taxIdRevealRecordView';
 export * from './taxIdRevealRequest';
 export * from './taxIdRevealView';
 export * from './taxRegistrationDto';
+export * from './taxRegistrationScheme';
+export * from './taxRegistrationSchemes';
 export * from './taxRegistrationView';
 export * from './transmissionResolutionRequest';
 export * from './vendorCreateRequest';

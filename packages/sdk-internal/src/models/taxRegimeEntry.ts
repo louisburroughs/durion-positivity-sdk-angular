@@ -14,6 +14,10 @@
  */
 export interface TaxRegimeEntry {
     /**
+     * Configured display label; null when the profile sets none (never the code)
+     */
+    label?: string | null;
+    /**
      * Regime name
      */
     regime: string;
@@ -62,7 +66,7 @@ export function instanceOfTaxRegimeEntry(value: object): value is TaxRegimeEntry
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTaxRegimeEntryPropertyNames('regime', 'regions', );
-    const optionalStringProperties = createTaxRegimeEntryOptionalProperties({ name: 'regime', nullable: false }, );
+    const optionalStringProperties = createTaxRegimeEntryOptionalProperties({ name: 'label', nullable: true }, { name: 'regime', nullable: false }, );
     const optionalNumberProperties = createTaxRegimeEntryOptionalProperties();
     const optionalBooleanProperties = createTaxRegimeEntryOptionalProperties();
 

@@ -17,6 +17,10 @@ export interface ApprovePurchaseOrderRequest {
      * Free-text notes recorded by the approver explaining the approval decision
      */
     approvalNotes?: string;
+    /**
+     * Optional: the versionNumber of the order the approver read. When given, the approval is applied only if the order is still at that version, so a person approves the content they saw; otherwise 409 PURCHASE_ORDER_VERSION_CONFLICT and nothing changes (#2681). Absent approves the current version
+     */
+    expectedVersionNumber?: number;
 }
 
 function isOptionalApprovePurchaseOrderRequestPropertyOfType(
@@ -59,7 +63,7 @@ export function instanceOfApprovePurchaseOrderRequest(value: object): value is A
 
     const requiredProperties = createApprovePurchaseOrderRequestPropertyNames();
     const optionalStringProperties = createApprovePurchaseOrderRequestOptionalProperties({ name: 'approvalNotes', nullable: false }, );
-    const optionalNumberProperties = createApprovePurchaseOrderRequestOptionalProperties();
+    const optionalNumberProperties = createApprovePurchaseOrderRequestOptionalProperties({ name: 'expectedVersionNumber', nullable: false }, );
     const optionalBooleanProperties = createApprovePurchaseOrderRequestOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

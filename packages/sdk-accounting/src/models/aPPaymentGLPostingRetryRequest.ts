@@ -14,6 +14,14 @@
  */
 export interface APPaymentGLPostingRetryRequest {
     /**
+     * When the payment\'s own date is now hard-locked (glPostError PERIOD_HARD_LOCKED), post the entry on today\'s business date instead (#2729, AW42: never back into the original period); the entry\'s description carries the original payment date and the payment records postingDateRule DEFERRED_PAST_HARD_LOCK. Needs justification. Default false
+     */
+    deferPastHardLock?: boolean;
+    /**
+     * Why the posting is deferred past the hard lock; required with deferPastHardLock, audited under the caller
+     */
+    justification?: string;
+    /**
      * Justification for posting into the CLOSED period of the payment\'s own date; honoured only with the caller\'s accounting:period:override, and audited under the caller. A retry never reuses the override the payer gave on the pay command. Never bypasses the hard lock.
      */
     overrideJustification?: string;
@@ -58,9 +66,9 @@ export function instanceOfAPPaymentGLPostingRetryRequest(value: object): value i
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAPPaymentGLPostingRetryRequestPropertyNames();
-    const optionalStringProperties = createAPPaymentGLPostingRetryRequestOptionalProperties({ name: 'overrideJustification', nullable: false }, );
+    const optionalStringProperties = createAPPaymentGLPostingRetryRequestOptionalProperties({ name: 'justification', nullable: false }, { name: 'overrideJustification', nullable: false }, );
     const optionalNumberProperties = createAPPaymentGLPostingRetryRequestOptionalProperties();
-    const optionalBooleanProperties = createAPPaymentGLPostingRetryRequestOptionalProperties();
+    const optionalBooleanProperties = createAPPaymentGLPostingRetryRequestOptionalProperties({ name: 'deferPastHardLock', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalAPPaymentGLPostingRetryRequestPropertyOfType(_v, property.name, 'string', property.nullable))

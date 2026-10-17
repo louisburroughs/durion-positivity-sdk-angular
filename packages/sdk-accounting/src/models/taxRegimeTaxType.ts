@@ -18,6 +18,10 @@ export interface TaxRegimeTaxType {
      */
     jurisdictionType: TaxRegimeTaxTypeJurisdictionTypeEnum;
     /**
+     * The tax type\'s configured display label; null when the profile sets none, never the code (#2679)
+     */
+    label?: string | null;
+    /**
      * The configured tax-type code
      */
     taxType: string;
@@ -73,7 +77,7 @@ export function instanceOfTaxRegimeTaxType(value: object): value is TaxRegimeTax
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTaxRegimeTaxTypePropertyNames('jurisdictionType', 'taxType', );
-    const optionalStringProperties = createTaxRegimeTaxTypeOptionalProperties({ name: 'jurisdictionType', nullable: false }, { name: 'taxType', nullable: false }, );
+    const optionalStringProperties = createTaxRegimeTaxTypeOptionalProperties({ name: 'jurisdictionType', nullable: false }, { name: 'label', nullable: true }, { name: 'taxType', nullable: false }, );
     const optionalNumberProperties = createTaxRegimeTaxTypeOptionalProperties();
     const optionalBooleanProperties = createTaxRegimeTaxTypeOptionalProperties();
 

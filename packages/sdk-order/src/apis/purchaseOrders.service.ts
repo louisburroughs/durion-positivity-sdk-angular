@@ -21,17 +21,27 @@ import { ApiError } from '../models/apiError';
 // @ts-ignore
 import { ApprovePurchaseOrderRequest } from '../models/approvePurchaseOrderRequest';
 // @ts-ignore
+import { CancelPurchaseOrderLineRequest } from '../models/cancelPurchaseOrderLineRequest';
+// @ts-ignore
+import { ClosePurchaseOrderRequest } from '../models/closePurchaseOrderRequest';
+// @ts-ignore
 import { CreatePurchaseOrderRequest } from '../models/createPurchaseOrderRequest';
 // @ts-ignore
 import { PagePurchaseOrderResponse } from '../models/pagePurchaseOrderResponse';
 // @ts-ignore
 import { PagePurchaseOrderTransmissionEvent } from '../models/pagePurchaseOrderTransmissionEvent';
 // @ts-ignore
+import { PagePurchaseOrderVendorResponse } from '../models/pagePurchaseOrderVendorResponse';
+// @ts-ignore
 import { ProcurementAvailability } from '../models/procurementAvailability';
 // @ts-ignore
 import { PurchaseOrderResponse } from '../models/purchaseOrderResponse';
 // @ts-ignore
 import { PurchaseOrderSummaryResponse } from '../models/purchaseOrderSummaryResponse';
+// @ts-ignore
+import { PurchaseOrderVendorResponse } from '../models/purchaseOrderVendorResponse';
+// @ts-ignore
+import { ReopenPurchaseOrderLineRequest } from '../models/reopenPurchaseOrderLineRequest';
 // @ts-ignore
 import { RevisePurchaseOrderRequest } from '../models/revisePurchaseOrderRequest';
 
@@ -53,7 +63,7 @@ export class PurchaseOrdersService extends BaseService {
 
     /**
      * Approve Purchase Order
-     * Approves a DRAFT purchase order, moving it to APPROVED and recording the approver, timestamp and optional notes. Use this tool to release a drafted order for receiving; do not use cancelPurchaseOrder, which terminates the order, and note that receiving happens in pos-inventory, whose createGoodsReceipt rejects orders that were never approved. Preconditions: the purchase order must exist and be in DRAFT status, and its vendor must be ACTIVE in pos-order\&#39;s vendor copy; an order requested by pos-inventory may name another vendor and is revised to a valid one first. Required inputs: poId (UUIDv7) path parameter and a JSON body where approvalNotes is optional, so an empty object is acceptable. Emits an ORDER_PURCHASE_ORDER_APPROVE event; the order becomes eligible for ASNs, goods receipts and receiving sessions. Returns 404 when the purchase order does not exist, 409 when it is not in DRAFT status, 422 VENDOR_INACTIVE when its vendor is inactive, and 503 VENDOR_REPLICATION_PENDING with Retry-After when its vendor has not reached the copy yet.
+     * Approves a DRAFT purchase order, moving it to APPROVED and recording the approver, timestamp and optional notes. Use this tool to release a drafted order for receiving; do not use cancelPurchaseOrder, which terminates the order, and note that receiving happens in pos-inventory, whose createGoodsReceipt rejects orders that were never approved. Preconditions: the purchase order must exist and be in DRAFT status, and its vendor must be ACTIVE in pos-order\&#39;s vendor copy; an order requested by pos-inventory may name another vendor and is revised to a valid one first. Required inputs: poId (UUIDv7) path parameter and a JSON body where approvalNotes and expectedVersionNumber are optional, so an empty object is acceptable; send expectedVersionNumber (the versionNumber the approver read) so the approval applies only to the content they saw. Emits an ORDER_PURCHASE_ORDER_APPROVE event; the order becomes eligible for ASNs, goods receipts and receiving sessions. Returns 404 when the purchase order does not exist, 409 PURCHASE_ORDER_INVALID_STATE when it is not in DRAFT status, 409 PURCHASE_ORDER_VERSION_CONFLICT when expectedVersionNumber is not the order\&#39;s current versionNumber (nothing changes; re-read and approve again), 422 VENDOR_INACTIVE when its vendor is inactive, and 503 VENDOR_REPLICATION_PENDING with Retry-After when its vendor has not reached the copy yet.
      * @endpoint post /v1/orders/purchase-orders/{poId}/approve
      * @param poId Purchase order identifier
      * @param approvePurchaseOrderRequest Approval decision metadata; every field is optional.
@@ -175,6 +185,158 @@ export class PurchaseOrdersService extends BaseService {
         return this.httpClient.request<PurchaseOrderResponse>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Cancel a remainder of a purchase-order line
+     * Cancels part or all of one line\&#39;s open quantity because the vendor will not ship it (CAP:550 #2635): the line\&#39;s cancelled figures take the quantity and its value, open and balance fall by the same, the status is re-derived (CLOSED once every line is settled with a short-closed remainder) and the order\&#39;s state is published, so receiving expects nothing more for it. Use this tool for one line; do not use it for every remainder at once (closePurchaseOrder) or for an order nothing arrived on (cancelPurchaseOrder instead). Preconditions: the order is APPROVED, PARTIALLY_RECEIVED or FULLY_RECEIVED (a DRAFT is revised, not short-closed); the line belongs to the order; quantity is at most the line\&#39;s open quantity. Required inputs: poId and lineId path parameters; quantity (base units, &gt; 0) and a reason. Emits an ORDER_PURCHASE_ORDER_LINE_CANCEL event and publishes purchaseorder.updated. Returns 200 with the order, 400 PURCHASE_ORDER_BAD_REQUEST for a missing reason or a quantity that is not positive, 404 PURCHASE_ORDER_NOT_FOUND for an unknown order or line, and 409 PURCHASE_ORDER_INVALID_STATE on a DRAFT (nextAction: revise), CANCELLED or CLOSED order or a quantity above the open quantity.
+     * @endpoint post /v1/orders/purchase-orders/{poId}/lines/{lineId}/cancel
+     * @param poId Purchase order identifier
+     * @param lineId Purchase order line identifier
+     * @param cancelPurchaseOrderLineRequest The quantity to cancel and why the vendor will not ship it.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public cancelPurchaseOrderLine(poId: string, lineId: string, cancelPurchaseOrderLineRequest: CancelPurchaseOrderLineRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PurchaseOrderResponse>;
+    public cancelPurchaseOrderLine(poId: string, lineId: string, cancelPurchaseOrderLineRequest: CancelPurchaseOrderLineRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PurchaseOrderResponse>>;
+    public cancelPurchaseOrderLine(poId: string, lineId: string, cancelPurchaseOrderLineRequest: CancelPurchaseOrderLineRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PurchaseOrderResponse>>;
+    public cancelPurchaseOrderLine(poId: string, lineId: string, cancelPurchaseOrderLineRequest: CancelPurchaseOrderLineRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (poId === null || poId === undefined) {
+            throw new Error('Required parameter poId was null or undefined when calling cancelPurchaseOrderLine.');
+        }
+        if (lineId === null || lineId === undefined) {
+            throw new Error('Required parameter lineId was null or undefined when calling cancelPurchaseOrderLine.');
+        }
+        if (cancelPurchaseOrderLineRequest === null || cancelPurchaseOrderLineRequest === undefined) {
+            throw new Error('Required parameter cancelPurchaseOrderLineRequest was null or undefined when calling cancelPurchaseOrderLine.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/orders/purchase-orders/${this.configuration.encodeParam({name: "poId", value: poId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/lines/${this.configuration.encodeParam({name: "lineId", value: lineId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/cancel`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PurchaseOrderResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: cancelPurchaseOrderLineRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Close a purchase order: cancel every remaining open quantity
+     * Short-closes a purchase order something was received on (CAP:550 #2635): every remaining open quantity on every line is cancelled with its value, the balance falls to what was received, the order is CLOSED and its state is published, so receiving expects nothing more. Use this tool when the vendor will not ship the rest; do not use it for one line (cancelPurchaseOrderLine) or for an order nothing arrived on (cancelPurchaseOrder instead). Preconditions: the order is APPROVED, PARTIALLY_RECEIVED or FULLY_RECEIVED and something was received on it. Required inputs: poId path parameter and a reason. Emits an ORDER_PURCHASE_ORDER_CLOSE event and publishes purchaseorder.updated. Returns 200 with the order, 400 PURCHASE_ORDER_BAD_REQUEST for a missing reason, 404 PURCHASE_ORDER_NOT_FOUND, and 409 PURCHASE_ORDER_INVALID_STATE on a DRAFT, CANCELLED or CLOSED order, or on an order with nothing received (nextAction names cancelPurchaseOrder).
+     * @endpoint post /v1/orders/purchase-orders/{poId}/close
+     * @param poId Purchase order identifier
+     * @param closePurchaseOrderRequest Why the remaining open quantity is cancelled.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public closePurchaseOrder(poId: string, closePurchaseOrderRequest: ClosePurchaseOrderRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PurchaseOrderResponse>;
+    public closePurchaseOrder(poId: string, closePurchaseOrderRequest: ClosePurchaseOrderRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PurchaseOrderResponse>>;
+    public closePurchaseOrder(poId: string, closePurchaseOrderRequest: ClosePurchaseOrderRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PurchaseOrderResponse>>;
+    public closePurchaseOrder(poId: string, closePurchaseOrderRequest: ClosePurchaseOrderRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (poId === null || poId === undefined) {
+            throw new Error('Required parameter poId was null or undefined when calling closePurchaseOrder.');
+        }
+        if (closePurchaseOrderRequest === null || closePurchaseOrderRequest === undefined) {
+            throw new Error('Required parameter closePurchaseOrderRequest was null or undefined when calling closePurchaseOrder.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/orders/purchase-orders/${this.configuration.encodeParam({name: "poId", value: poId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/close`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PurchaseOrderResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: closePurchaseOrderRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -405,6 +567,66 @@ export class PurchaseOrdersService extends BaseService {
     }
 
     /**
+     * Get Purchase-Order Vendor
+     * Returns one vendor of pos-order\&#39;s vendor copy by its pos-supplier vendor id: vendorNumber, displayName and status. Use this tool to name the vendor on a purchase-order screen when the vendorId is already known; do not use it to search, use listPurchaseOrderVendors instead to find one. Preconditions: none. An INACTIVE vendor is returned as such (200), since that is a fact about the vendor, not a refusal of this read. Required inputs: vendorId (path). Emits an ORDER_PURCHASE_ORDER_VENDOR_GET audit event; read-only, never calls pos-supplier. Returns 503 VENDOR_REPLICATION_PENDING with Retry-After when the copy does not hold the id: pos-order cannot tell a vendor that does not exist from one whose fact has not arrived, so it never answers 404 (ADR-0017 §1). A malformed vendorId is 400.
+     * @endpoint get /v1/orders/purchase-order-vendors/{vendorId}
+     * @param vendorId The pos-supplier vendor id
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getPurchaseOrderVendor(vendorId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PurchaseOrderVendorResponse>;
+    public getPurchaseOrderVendor(vendorId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PurchaseOrderVendorResponse>>;
+    public getPurchaseOrderVendor(vendorId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PurchaseOrderVendorResponse>>;
+    public getPurchaseOrderVendor(vendorId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (vendorId === null || vendorId === undefined) {
+            throw new Error('Required parameter vendorId was null or undefined when calling getPurchaseOrderVendor.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/orders/purchase-order-vendors/${this.configuration.encodeParam({name: "vendorId", value: vendorId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PurchaseOrderVendorResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * List Purchase Order Transmission Events
      * Returns a page of the purchase order\&#39;s append-only vendor transmission timeline: every confirmation, rejection, status observation, not-dispatched notice and review escalation heard about the order, including the despatchDate and estimatedDeliveryDate a status observation may carry. Use this tool when a buyer chasing an order needs what happened to it, not just where it stands; use getPurchaseOrder instead for the order\&#39;s current transmission state, which this timeline never collapses to. Preconditions: the purchase order must exist; an order that was never transmitted simply has an empty timeline. Required inputs: poId (UUIDv7) path parameter; standard page and size parameters control pagination, and the sort parameter is ignored because the ordering is the semantics of the timeline. Entries are ordered by the vendor\&#39;s clock (observedAt ascending), with ties broken by platform receipt time (recordedAt) and then by event id, so a late-arriving observation sits where the vendor observed it and the sequence is stable across reads. Emits an ORDER_PURCHASE_ORDER_TRANSMISSION_EVENTS audit event; no state changes, this is a read-only projection. Returns 200 with an empty page when the order has no timeline yet, and 404 when the purchase order does not exist.
      * @endpoint get /v1/orders/purchase-orders/{poId}/transmission-events
@@ -484,6 +706,115 @@ export class PurchaseOrdersService extends BaseService {
         let localVarPath = `/v1/orders/purchase-orders/${this.configuration.encodeParam({name: "poId", value: poId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/transmission-events`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<PagePurchaseOrderTransmissionEvent>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List Purchase-Order Vendors
+     * Returns a page of the vendors a purchase order may name, from pos-order\&#39;s own copy of the pos-supplier vendor master: vendorId, vendorNumber, displayName and status, nothing else. Use this tool to pick the vendorId for createPurchaseOrder or a vendor-changing revision; do not use it to read or change the vendor master itself, which is supplier-owned (use the pos-supplier vendor endpoints instead). A vendor listed here as ACTIVE never answers 503 VENDOR_REPLICATION_PENDING on create, and a DRAFT order whose vendor is not in the ACTIVE list is one approvePurchaseOrder will refuse. Preconditions: none; the copy is fed by supplier.vendor.updated, so a vendor created in pos-supplier moments ago may not be listed yet. Required inputs: none; status (ACTIVE or INACTIVE, upper case) and q (a case-insensitive substring of the vendor number or display name, at most 255 characters) narrow the result, and page, size and sort (vendorNumber, displayName, status or vendorId; default displayName,asc) control pagination. Emits an ORDER_PURCHASE_ORDER_VENDOR_LIST audit event; a read-only projection that never calls pos-supplier. Returns 200 with an empty page when nothing matches; 400 PURCHASE_ORDER_BAD_REQUEST on a sort property outside the four listed, and 400 VALIDATION_ERROR (with fieldErrors) on a status that is not ACTIVE or INACTIVE or a q over 255 characters.
+     * @endpoint get /v1/orders/purchase-order-vendors
+     * @param status Only vendors in this status; omit for every vendor of the copy, active or inactive
+     * @param q Case-insensitive substring of the vendor number or display name
+     * @param page Zero-based page index (0..N)
+     * @param size The size of the page to be returned
+     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listPurchaseOrderVendors(status?: 'ACTIVE' | 'INACTIVE', q?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagePurchaseOrderVendorResponse>;
+    public listPurchaseOrderVendors(status?: 'ACTIVE' | 'INACTIVE', q?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagePurchaseOrderVendorResponse>>;
+    public listPurchaseOrderVendors(status?: 'ACTIVE' | 'INACTIVE', q?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagePurchaseOrderVendorResponse>>;
+    public listPurchaseOrderVendors(status?: 'ACTIVE' | 'INACTIVE', q?: string, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'status',
+            <any>status,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'q',
+            <any>q,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'sort',
+            <any>sort,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/orders/purchase-order-vendors`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PagePurchaseOrderVendorResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),
@@ -627,8 +958,86 @@ export class PurchaseOrdersService extends BaseService {
     }
 
     /**
+     * Reopen a returned quantity of a purchase-order line for a replacement
+     * Reopens part or all of a line\&#39;s returned quantity because the vendor will replace the goods on this order (CAP:550 #2635): the quantity leaves the line\&#39;s returned figures and is open again, the open balance rises by its value, the status is re-derived (FULLY_RECEIVED becomes PARTIALLY_RECEIVED) and the order\&#39;s state is published, so receiving expects the replacement on the original line. Never a new purchase order (ADR-0052). Use this tool after pos-inventory recorded a RETURN_TO_VENDOR and the vendor agreed to replace; do not use it for a receipt correction, which reopens the line by itself. Preconditions: the order is not CANCELLED or CLOSED; the line belongs to the order; quantity is at most the line\&#39;s returned quantity. Required inputs: poId and lineId path parameters; quantity (base units, &gt; 0); vendorReturnId is optional, kept for the audit trail. Emits an ORDER_PURCHASE_ORDER_LINE_REOPEN event and publishes purchaseorder.updated. Returns 200 with the order, 400 PURCHASE_ORDER_BAD_REQUEST for a quantity that is not positive, 404 PURCHASE_ORDER_NOT_FOUND for an unknown order or line, and 409 PURCHASE_ORDER_INVALID_STATE on a CANCELLED or CLOSED order or a quantity above what was returned.
+     * @endpoint post /v1/orders/purchase-orders/{poId}/lines/{lineId}/reopen
+     * @param poId Purchase order identifier
+     * @param lineId Purchase order line identifier
+     * @param reopenPurchaseOrderLineRequest The quantity to reopen and, optionally, the vendor return it belongs to.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public reopenPurchaseOrderLine(poId: string, lineId: string, reopenPurchaseOrderLineRequest: ReopenPurchaseOrderLineRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PurchaseOrderResponse>;
+    public reopenPurchaseOrderLine(poId: string, lineId: string, reopenPurchaseOrderLineRequest: ReopenPurchaseOrderLineRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PurchaseOrderResponse>>;
+    public reopenPurchaseOrderLine(poId: string, lineId: string, reopenPurchaseOrderLineRequest: ReopenPurchaseOrderLineRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PurchaseOrderResponse>>;
+    public reopenPurchaseOrderLine(poId: string, lineId: string, reopenPurchaseOrderLineRequest: ReopenPurchaseOrderLineRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (poId === null || poId === undefined) {
+            throw new Error('Required parameter poId was null or undefined when calling reopenPurchaseOrderLine.');
+        }
+        if (lineId === null || lineId === undefined) {
+            throw new Error('Required parameter lineId was null or undefined when calling reopenPurchaseOrderLine.');
+        }
+        if (reopenPurchaseOrderLineRequest === null || reopenPurchaseOrderLineRequest === undefined) {
+            throw new Error('Required parameter reopenPurchaseOrderLineRequest was null or undefined when calling reopenPurchaseOrderLine.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/orders/purchase-orders/${this.configuration.encodeParam({name: "poId", value: poId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/lines/${this.configuration.encodeParam({name: "lineId", value: lineId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/reopen`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PurchaseOrderResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: reopenPurchaseOrderLineRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Revise Purchase Order
-     * Revises an existing purchase order in place: the version number increments, the header fields and every line are replaced, totals are recomputed, and the open balance resets to the ex-tax value (subtotal) of the new lines. Use this tool to change quantities, costs or delivery terms on an order; do not use createPurchaseOrder, which starts a new order, and use cancelPurchaseOrder instead when the order should be terminated rather than changed. Preconditions: the purchase order must exist and be DRAFT, or APPROVED with nothing received on any line (every line\&#39;s open quantity still equals its ordered quantity), because a revision replaces every line with new line ids; from PARTIALLY_RECEIVED on, and on CLOSED or CANCELLED orders, revise is refused and nothing changes. Required inputs: poId (UUIDv7) path parameter plus poDate, revisionReason and the full replacement lines list, because every line is replaced rather than merged; paymentTermsId, expectedDeliveryDate, shipToLocationId, requestedBy and comment overwrite the stored values even when omitted, while an optional vendorId changes the vendor of a DRAFT order only. Emits an ORDER_PURCHASE_ORDER_REVISE event carrying the field-level delta and the revision reason. Returns 404 when the purchase order does not exist, 409 PURCHASE_ORDER_INVALID_STATE when the order is not DRAFT or APPROVED or has received goods on any line, or when vendorId changes the vendor of an order past DRAFT, 422 VENDOR_INACTIVE for an inactive new vendor or when a line\&#39;s documentUom has no conversion path to the product\&#39;s base UoM, and 503 VENDOR_REPLICATION_PENDING with Retry-After when the new vendor has not reached the copy yet.
+     * Revises an existing purchase order in place: the version number increments, the header fields and every line are replaced, totals are recomputed, and the open balance resets to the ex-tax value (subtotal) of the new lines. Use this tool to change quantities, costs or delivery terms on an order; do not use createPurchaseOrder, which starts a new order, and use cancelPurchaseOrder instead when the order should be terminated rather than changed. Preconditions: the purchase order must exist and be DRAFT, or APPROVED with nothing received on any line (every line\&#39;s open quantity still equals its ordered quantity), because a revision replaces every line with new line ids; from PARTIALLY_RECEIVED on, and on CLOSED or CANCELLED orders, revise is refused and nothing changes. Required inputs: poId (UUIDv7) path parameter plus expectedVersionNumber (the versionNumber the last read returned; the revise applies only if the order is still at that version), poDate, revisionReason and the full replacement lines list, because every line is replaced rather than merged; each line\&#39;s taxCodeId and glAccountId are returned by getPurchaseOrder, so a read, edited and revised line keeps them. paymentTermsId, expectedDeliveryDate, shipToLocationId and comment overwrite the stored values even when omitted; requestedBy is the order\&#39;s requester (not the reviser, who is the caller): omitted keeps it, blank clears it, a value corrects it; an optional vendorId changes the vendor of a DRAFT order only. Emits an ORDER_PURCHASE_ORDER_REVISE event carrying the field-level delta and the revision reason. Returns 404 when the purchase order does not exist, 409 PURCHASE_ORDER_VERSION_CONFLICT when expectedVersionNumber is not the order\&#39;s current versionNumber (nothing changes, no fact is published; re-read the order and revise again), 409 PURCHASE_ORDER_INVALID_STATE when the order is not DRAFT or APPROVED or has received goods on any line, or when vendorId changes the vendor of an order past DRAFT, 422 VENDOR_INACTIVE for an inactive new vendor or when a line\&#39;s documentUom has no conversion path to the product\&#39;s base UoM, and 503 VENDOR_REPLICATION_PENDING with Retry-After when the new vendor has not reached the copy yet.
      * @endpoint post /v1/orders/purchase-orders/{poId}/revisions
      * @param poId Purchase order identifier
      * @param revisePurchaseOrderRequest Replacement header values and the full replacement line set, with the reason for the revision.

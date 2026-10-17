@@ -18,6 +18,10 @@ export interface VendorBillTaxByType {
      */
     amount: number;
     /**
+     * The tax type\'s configured display label; null when the profile sets none or the tax service did not answer, never the code (#2679)
+     */
+    label?: string | null;
+    /**
      * Where it came from: DOCUMENT, the bill\'s own channel, or APPROVAL, copied from the document by the approver
      */
     source: VendorBillTaxByTypeSourceEnum;
@@ -72,7 +76,7 @@ export function instanceOfVendorBillTaxByType(value: object): value is VendorBil
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createVendorBillTaxByTypePropertyNames('amount', 'source', 'taxType', );
-    const optionalStringProperties = createVendorBillTaxByTypeOptionalProperties({ name: 'source', nullable: false }, { name: 'taxType', nullable: false }, );
+    const optionalStringProperties = createVendorBillTaxByTypeOptionalProperties({ name: 'label', nullable: true }, { name: 'source', nullable: false }, { name: 'taxType', nullable: false }, );
     const optionalNumberProperties = createVendorBillTaxByTypeOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createVendorBillTaxByTypeOptionalProperties();
 
