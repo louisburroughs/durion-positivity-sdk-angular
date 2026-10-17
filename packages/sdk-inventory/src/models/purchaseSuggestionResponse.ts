@@ -30,6 +30,10 @@ export interface PurchaseSuggestionResponse {
      */
     earliestExpectedDate?: string;
     /**
+     * The feed\'s own vendor id: the manufacturer UUID or the distributor id as its feed carries it; null when no vendor was selectable
+     */
+    feedVendorRef?: string;
+    /**
      * Stock item (SKU) to purchase
      */
     itemSKU: string;
@@ -41,6 +45,14 @@ export interface PurchaseSuggestionResponse {
      * Destination location the purchased stock is for
      */
     locationId: string;
+    /**
+     * CAP:550 S36: computed on read for a CONVERTED suggestion; ORDER_VENDOR_INACTIVE or ORDER_VENDOR_NOT_IN_COPY when the open order\'s vendor would be refused at approval or transmission, ORDER_NOT_PLACED when no order has appeared within the placement grace; null otherwise
+     */
+    orderAttention?: string | null;
+    /**
+     * CAP:550 S36: the requested order\'s status as pos-inventory\'s copy of pos-order shows it (DRAFT, APPROVED, ...); null until the order\'s fact arrives or when not converted
+     */
+    orderStatus?: string | null;
     /**
      * Replenishment policy the suggestion was computed for
      */
@@ -78,13 +90,25 @@ export interface PurchaseSuggestionResponse {
      */
     updatedAt: string;
     /**
+     * The mapped vendor\'s display name from the local vendor copy; null while unmapped or when the vendor is not in the copy
+     */
+    vendorDisplayName?: string;
+    /**
+     * The pos-supplier vendor the feed vendor is mapped to; null while it is unmapped
+     */
+    vendorId?: string;
+    /**
+     * The mapped vendor\'s number from the local vendor copy; null while unmapped or when the vendor is not in the copy
+     */
+    vendorNumber?: string;
+    /**
      * Selected vendor\'s pack size captured at suggestion time
      */
     vendorPackSize?: number;
     /**
-     * Selected manufacturer or distributor identifier; null when no vendor was selectable
+     * The mapped vendor\'s status from the local vendor copy; null while unmapped or when the vendor is not in the copy
      */
-    vendorRefId?: string;
+    vendorStatus?: PurchaseSuggestionResponseVendorStatusEnum;
 }
 export enum PurchaseSuggestionResponseStatusEnum {
     Suggested = 'SUGGESTED',
@@ -95,6 +119,10 @@ export enum PurchaseSuggestionResponseStatusEnum {
 export enum PurchaseSuggestionResponseSuggestedVendorTypeEnum {
     Manufacturer = 'MANUFACTURER',
     Distributor = 'DISTRIBUTOR'
+};
+export enum PurchaseSuggestionResponseVendorStatusEnum {
+    Active = 'ACTIVE',
+    Inactive = 'INACTIVE'
 };
 
 
@@ -138,7 +166,7 @@ export function instanceOfPurchaseSuggestionResponse(value: object): value is Pu
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPurchaseSuggestionResponsePropertyNames('createdAt', 'itemSKU', 'locationId', 'policyId', 'selectionReason', 'status', 'suggestedQuantity', 'suggestionId', 'updatedAt', );
-    const optionalStringProperties = createPurchaseSuggestionResponseOptionalProperties({ name: 'convertedPurchaseOrderId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'dismissalReason', nullable: false }, { name: 'earliestExpectedDate', nullable: false }, { name: 'itemSKU', nullable: false }, { name: 'locationId', nullable: false }, { name: 'policyId', nullable: false }, { name: 'selectionReason', nullable: false }, { name: 'status', nullable: false }, { name: 'suggestedVendorType', nullable: false }, { name: 'suggestionId', nullable: false }, { name: 'unitCostCurrency', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'vendorRefId', nullable: false }, );
+    const optionalStringProperties = createPurchaseSuggestionResponseOptionalProperties({ name: 'convertedPurchaseOrderId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'dismissalReason', nullable: false }, { name: 'earliestExpectedDate', nullable: false }, { name: 'feedVendorRef', nullable: false }, { name: 'itemSKU', nullable: false }, { name: 'locationId', nullable: false }, { name: 'orderAttention', nullable: true }, { name: 'orderStatus', nullable: true }, { name: 'policyId', nullable: false }, { name: 'selectionReason', nullable: false }, { name: 'status', nullable: false }, { name: 'suggestedVendorType', nullable: false }, { name: 'suggestionId', nullable: false }, { name: 'unitCostCurrency', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'vendorDisplayName', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorNumber', nullable: false }, { name: 'vendorStatus', nullable: false }, );
     const optionalNumberProperties = createPurchaseSuggestionResponseOptionalProperties({ name: 'leadTimeDays', nullable: false }, { name: 'suggestedQuantity', nullable: false }, { name: 'unitCostMinor', nullable: false }, { name: 'vendorPackSize', nullable: false }, );
     const optionalBooleanProperties = createPurchaseSuggestionResponseOptionalProperties();
 

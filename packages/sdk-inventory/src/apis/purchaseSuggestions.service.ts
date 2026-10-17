@@ -105,7 +105,7 @@ export class PurchaseSuggestionsService extends BaseService {
 
     /**
      * Convert Purchase Suggestions To Purchase Order
-     * Converts ACCEPTED purchase suggestions into one multi-line DRAFT purchase order, stamping each suggestion CONVERTED with the created order\&#39;s id; a line is keyed in the vendor\&#39;s pack UoM when the suggestion captured a pack size the quantity divides evenly by. Use this tool after acceptPurchaseSuggestion to turn approved replenishment into an order; do not use createPurchaseOrder, the manual path that ignores suggestions, and note that conversion never approves spend, so approvePurchaseOrder must still run on the DRAFT order. Preconditions: every listed suggestion must exist, be ACCEPTED, carry a vendor reference and a feed unit cost with an ISO 4217 currency code, all must share one vendor and one currency (codes compare case-insensitively and the order carries the upper-case code), and all must resolve to a single ship-to site. Required inputs: suggestionIds (non-empty list of UUIDs); duplicates are collapsed, and the caller needs both inventory:replenishment:manage and order:purchase_order:create. Emits an INVENTORY_PURCHASE_SUGGESTION_CONVERT event and creates the DRAFT order through the standard purchase order path, with the latest expected date among the suggestions as the expected delivery date. Returns 404 when a listed suggestion does not exist, 422 when a suggestion is not ACCEPTED, lacks a vendor, unit cost or currency, carries a currency that is not an ISO 4217 code, or the suggestions mix vendors, currencies or ship-to sites, and 400 when suggestionIds is empty.
+     * Requests one multi-line purchase order from pos-order for ACCEPTED purchase suggestions (pos-order places it in DRAFT; the order is requested, not created here), stamping each suggestion CONVERTED with the requested order\&#39;s id and the pos-supplier vendor it resolved to; a line is keyed in the vendor\&#39;s pack UoM when the suggestion captured a pack size the quantity divides evenly by. Use this tool after acceptPurchaseSuggestion to turn approved replenishment into an order; do not use createPurchaseOrder, the manual path that ignores suggestions, and note that conversion never approves spend, so approvePurchaseOrder must still run on the DRAFT order. Preconditions: every listed suggestion must exist, be ACCEPTED, carry a feed vendor reference mapped to an ACTIVE pos-supplier vendor in pos-inventory\&#39;s vendor copy (422 PURCHASE_SUGGESTION_VENDOR_UNMAPPED, VENDOR_NOT_FOUND or VENDOR_INACTIVE otherwise) and a feed unit cost with an ISO 4217 currency code, all must resolve to one vendor and one currency (codes compare case-insensitively and the order carries the upper-case code) and to a single ship-to site; a deployment without the outbox answers 422 PURCHASE_ORDER_REQUEST_UNAVAILABLE and nothing is marked. Required inputs: suggestionIds (non-empty list of UUIDs); duplicates are collapsed, and the caller needs both inventory:replenishment:manage and order:purchase_order:create. Emits an INVENTORY_PURCHASE_SUGGESTION_CONVERT event and creates the DRAFT order through the standard purchase order path, with the latest expected date among the suggestions as the expected delivery date. Returns 404 when a listed suggestion does not exist, 422 when a suggestion is not ACCEPTED, lacks a vendor, unit cost or currency, carries a currency that is not an ISO 4217 code, or the suggestions mix vendors, currencies or ship-to sites, and 400 when suggestionIds is empty.
      * @endpoint post /v1/inventory/purchase-suggestions/convert
      * @param convertPurchaseSuggestionsRequest The ACCEPTED suggestions to fold into a single DRAFT purchase order; all must share one vendor and be priced in one ISO 4217 currency.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -314,6 +314,7 @@ export class PurchaseSuggestionsService extends BaseService {
      * @param status Lifecycle status filter (SUGGESTED, ACCEPTED, CONVERTED, DISMISSED)
      * @param sku Stock item (SKU) filter
      * @param locationId Destination location filter
+     * @param orderAttention CAP:550 S36: only CONVERTED suggestions whose order needs attention for this reason (ORDER_VENDOR_INACTIVE, ORDER_VENDOR_NOT_IN_COPY, ORDER_NOT_PLACED)
      * @param page Zero-based page index (0..N)
      * @param size The size of the page to be returned
      * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
@@ -321,10 +322,10 @@ export class PurchaseSuggestionsService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listPurchaseSuggestions(status?: string, sku?: string, locationId?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<string>;
-    public listPurchaseSuggestions(status?: string, sku?: string, locationId?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<string>>;
-    public listPurchaseSuggestions(status?: string, sku?: string, locationId?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<string>>;
-    public listPurchaseSuggestions(status?: string, sku?: string, locationId?: string, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listPurchaseSuggestions(status?: string, sku?: string, locationId?: string, orderAttention?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<string>;
+    public listPurchaseSuggestions(status?: string, sku?: string, locationId?: string, orderAttention?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<string>>;
+    public listPurchaseSuggestions(status?: string, sku?: string, locationId?: string, orderAttention?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<string>>;
+    public listPurchaseSuggestions(status?: string, sku?: string, locationId?: string, orderAttention?: string, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -350,6 +351,15 @@ export class PurchaseSuggestionsService extends BaseService {
             localVarQueryParameters,
             'locationId',
             <any>locationId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'orderAttention',
+            <any>orderAttention,
             QueryParamStyle.Form,
             true,
         );
