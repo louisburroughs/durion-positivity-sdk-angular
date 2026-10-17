@@ -22,6 +22,14 @@ export interface InitiatePaymentResponse {
      */
     capturedAmount?: number;
     /**
+     * Cash tender only: the increment applied; absent when the currency has none
+     */
+    cashIncrement?: number;
+    /**
+     * Cash tender only: signed rounding, settledAmount minus the amount applied
+     */
+    cashRoundingAmount?: number;
+    /**
      * Gateway provider identifier (e.g., stripe)
      */
     gatewayProvider?: string;
@@ -30,9 +38,17 @@ export interface InitiatePaymentResponse {
      */
     gatewayResponse?: string;
     /**
+     * CARD (gateway capture) or CASH (register tender, ADR-0067 A8)
+     */
+    methodType?: InitiatePaymentResponseMethodTypeEnum;
+    /**
      * Payment intent identifier
      */
     paymentIntentId: string;
+    /**
+     * Cash tender only: the cash actually taken after rounding to the currency\'s cash increment
+     */
+    settledAmount?: number;
     /**
      * Current lifecycle status of the payment intent
      */
@@ -42,6 +58,10 @@ export interface InitiatePaymentResponse {
      */
     voidedRemainderAmount?: number;
 }
+export enum InitiatePaymentResponseMethodTypeEnum {
+    Card = 'CARD',
+    Cash = 'CASH'
+};
 export enum InitiatePaymentResponseStatusEnum {
     Pending = 'PENDING',
     Authorized = 'AUTHORIZED',
@@ -92,8 +112,8 @@ export function instanceOfInitiatePaymentResponse(value: object): value is Initi
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createInitiatePaymentResponsePropertyNames('paymentIntentId', 'status', );
-    const optionalStringProperties = createInitiatePaymentResponseOptionalProperties({ name: 'gatewayProvider', nullable: false }, { name: 'gatewayResponse', nullable: false }, { name: 'paymentIntentId', nullable: false }, { name: 'status', nullable: false }, );
-    const optionalNumberProperties = createInitiatePaymentResponseOptionalProperties({ name: 'authorizedAmount', nullable: false }, { name: 'capturedAmount', nullable: false }, { name: 'voidedRemainderAmount', nullable: false }, );
+    const optionalStringProperties = createInitiatePaymentResponseOptionalProperties({ name: 'gatewayProvider', nullable: false }, { name: 'gatewayResponse', nullable: false }, { name: 'methodType', nullable: false }, { name: 'paymentIntentId', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createInitiatePaymentResponseOptionalProperties({ name: 'authorizedAmount', nullable: false }, { name: 'capturedAmount', nullable: false }, { name: 'cashIncrement', nullable: false }, { name: 'cashRoundingAmount', nullable: false }, { name: 'settledAmount', nullable: false }, { name: 'voidedRemainderAmount', nullable: false }, );
     const optionalBooleanProperties = createInitiatePaymentResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

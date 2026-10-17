@@ -13,6 +13,10 @@
  * Register session state
  */
 export interface RegisterSessionResponse {
+    /**
+     * ADR-0067 A8: the cash increment a cash tender in the drawer\'s currency rounds to (pos.order.cash-increments); null when the currency does not round
+     */
+    cashIncrement?: number | null;
     closedAt?: string;
     closedByClerkId?: string;
     /**
@@ -81,7 +85,7 @@ export function instanceOfRegisterSessionResponse(value: object): value is Regis
 
     const requiredProperties = createRegisterSessionResponsePropertyNames();
     const optionalStringProperties = createRegisterSessionResponseOptionalProperties({ name: 'closedAt', nullable: false }, { name: 'closedByClerkId', nullable: false }, { name: 'closedByName', nullable: true }, { name: 'closingStartedAt', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'locationId', nullable: false }, { name: 'openedAt', nullable: false }, { name: 'openedByClerkId', nullable: false }, { name: 'openedByName', nullable: true }, { name: 'sessionId', nullable: false }, { name: 'status', nullable: false }, { name: 'terminalId', nullable: false }, );
-    const optionalNumberProperties = createRegisterSessionResponseOptionalProperties({ name: 'countedCash', nullable: false }, { name: 'openingFloat', nullable: false }, { name: 'overShort', nullable: false }, { name: 'theoreticalCash', nullable: false }, );
+    const optionalNumberProperties = createRegisterSessionResponseOptionalProperties({ name: 'cashIncrement', nullable: true }, { name: 'countedCash', nullable: false }, { name: 'openingFloat', nullable: false }, { name: 'overShort', nullable: false }, { name: 'theoreticalCash', nullable: false }, );
     const optionalBooleanProperties = createRegisterSessionResponseOptionalProperties({ name: 'varianceApproved', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

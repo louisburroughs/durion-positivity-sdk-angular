@@ -21,6 +21,14 @@ export interface TenantUpdateRequest {
      * New human-readable name, unique across the registry case- and whitespace-insensitively; omitted or null leaves it unchanged
      */
     displayName?: string;
+    /**
+     * New locale, a BCP 47 tag with a region from pos.tenant.supported-locales; omitted or null leaves it unchanged
+     */
+    locale?: string;
+    /**
+     * Move the tenant to another reading tier (CAP:550 S45); omitted or null leaves it. Must name an active tier, else 422 READING_TIER_NOT_ASSIGNABLE; publishes tenant.reading-allowance.changed
+     */
+    readingTierCode?: string;
 }
 
 function isOptionalTenantUpdateRequestPropertyOfType(
@@ -62,7 +70,7 @@ export function instanceOfTenantUpdateRequest(value: object): value is TenantUpd
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTenantUpdateRequestPropertyNames();
-    const optionalStringProperties = createTenantUpdateRequestOptionalProperties({ name: 'cell', nullable: false }, { name: 'displayName', nullable: false }, );
+    const optionalStringProperties = createTenantUpdateRequestOptionalProperties({ name: 'cell', nullable: false }, { name: 'displayName', nullable: false }, { name: 'locale', nullable: false }, { name: 'readingTierCode', nullable: false }, );
     const optionalNumberProperties = createTenantUpdateRequestOptionalProperties();
     const optionalBooleanProperties = createTenantUpdateRequestOptionalProperties();
 

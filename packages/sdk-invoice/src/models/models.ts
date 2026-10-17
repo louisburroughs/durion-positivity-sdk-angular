@@ -37,6 +37,7 @@ export * from './paymentIntentResponse';
 export * from './printDeliveryRequest';
 export * from './receiptResponse';
 export * from './receiptViewResponse';
+export * from './recordCashPaymentRequest';
 export * from './refundPaymentRequest';
 export * from './refundPaymentResponse';
 export * from './reprintReceiptRequest';

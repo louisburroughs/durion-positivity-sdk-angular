@@ -26,6 +26,8 @@ import { InitiatePaymentRequest } from '../models/initiatePaymentRequest';
 import { InitiatePaymentResponse } from '../models/initiatePaymentResponse';
 // @ts-ignore
 import { PaymentIntentResponse } from '../models/paymentIntentResponse';
+// @ts-ignore
+import { RecordCashPaymentRequest } from '../models/recordCashPaymentRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -309,6 +311,80 @@ export class PaymentService extends BaseService {
         return this.httpClient.request<Array<PaymentIntentResponse>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Record Cash Payment on Invoice
+     * Records a cash tender taken at the register against an invoice as a CAPTURED payment intent without calling the payment gateway, keeping the invoice amount and the cash that changed hands apart (settledAmount, cashRoundingAmount, cashIncrement). Use this tool when the register has already rounded the cash to the currency\&#39;s smallest coin; do not use initiatePayment, which takes card tender through the gateway, and do not round here, because pos-order owns the cash increment and the HALF_UP rounding at the register. Preconditions: the invoice must exist and must name a customer (partyId); currencyCode must be the functional currency pos-invoice records in; the caller needs the invoice:payment:process authority scoped to the invoice\&#39;s location (ADR-0061) and invoice:payment:limit_override when the amount exceeds 500.00. Required inputs: idempotencyKey, amount (the invoice amount applied), settledAmount (the cash taken), cashRoundingAmount (settledAmount minus amount, 0 when no increment applies), currencyCode and, when the currency rounds, cashIncrement; sessionId, terminalId and cashierId are optional receipt context. The rounding triple is checked, not trusted: settledAmount must be amount rounded HALF_UP to a multiple of cashIncrement, the difference may not exceed half an increment, and without a cashIncrement the three must agree exactly. Emits an INVOICE_PAYMENT_CASH_RECORD event and publishes payment.payment.settled with the three additive fields so pos-accounting can post the rounding. Returns 201 with the intent, 403 when the authority is missing or the location is outside the caller\&#39;s reach, 404 when the invoice does not exist, 409 when the idempotencyKey was already used with a different payload or is being recorded concurrently, 422 with INVOICE_PARTY_REQUIRED when the invoice has no customer and 422 with CASH_ROUNDING_INVALID when the triple or the currency does not hold together.
+     * @endpoint post /v1/invoices/{invoiceId}/payments/cash
+     * @param invoiceId
+     * @param recordCashPaymentRequest Cash tender details: the invoice amount applied, the rounded cash taken, the signed rounding difference, the increment the register rounded to and the register context.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public recordCashPayment(invoiceId: string, recordCashPaymentRequest: RecordCashPaymentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<InitiatePaymentResponse>;
+    public recordCashPayment(invoiceId: string, recordCashPaymentRequest: RecordCashPaymentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InitiatePaymentResponse>>;
+    public recordCashPayment(invoiceId: string, recordCashPaymentRequest: RecordCashPaymentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InitiatePaymentResponse>>;
+    public recordCashPayment(invoiceId: string, recordCashPaymentRequest: RecordCashPaymentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (invoiceId === null || invoiceId === undefined) {
+            throw new Error('Required parameter invoiceId was null or undefined when calling recordCashPayment.');
+        }
+        if (recordCashPaymentRequest === null || recordCashPaymentRequest === undefined) {
+            throw new Error('Required parameter recordCashPaymentRequest was null or undefined when calling recordCashPayment.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/invoices/${this.configuration.encodeParam({name: "invoiceId", value: invoiceId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/payments/cash`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<InitiatePaymentResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: recordCashPaymentRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

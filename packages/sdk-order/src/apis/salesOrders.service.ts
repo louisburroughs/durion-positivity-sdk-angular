@@ -21,6 +21,10 @@ import { AddItemRequest } from '../models/addItemRequest';
 // @ts-ignore
 import { ApiError } from '../models/apiError';
 // @ts-ignore
+import { CashTenderRequest } from '../models/cashTenderRequest';
+// @ts-ignore
+import { CashTenderResponse } from '../models/cashTenderResponse';
+// @ts-ignore
 import { CheckoutRequest } from '../models/checkoutRequest';
 // @ts-ignore
 import { CreateCartRequest } from '../models/createCartRequest';
@@ -708,6 +712,87 @@ export class SalesOrdersService extends BaseService {
         return this.httpClient.request<SalesOrderResponse>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Record Cash Tender on Order
+     * Records a cash tender taken at the register against a checked-out order: pos-order computes the amount due, rounds the cash due HALF_UP to the currency\&#39;s cash increment (CAD 0.05; USD and JPY do not round), checks the tender covers it and records the tender on the order\&#39;s invoice through pos-invoice, which publishes the settled fact that completes the order. Use this tool when the customer pays cash at the counter; do not use checkout, which freezes the cart and declares the tender without recording it, and do not round the amount yourself, because the register owns the increment and the rounding. Preconditions: the order is PENDING_PAYMENT with an invoice; it belongs to an OPEN register session; currencyCode is the drawer\&#39;s currency; the caller holds order:order:checkout for the order\&#39;s location. Required inputs: the Idempotency-Key header (a replay with the same payload returns the same tender, another payload is 409), cashTendered (what the customer handed over, at the currency\&#39;s exponent) and currencyCode; cashApplied is optional and names a partial cash amount for a split tender, which rounds nothing and must be a whole multiple of the increment. Only a cash tender that closes the balance rounds; the rounding is signed (positive when the customer paid more than due) and is posted by pos-accounting, never to the customer\&#39;s balance. Emits an ORDER_CASH_TENDER_RECORD event. Returns 201 with amountDue, cashIncrement, cashDue, cashRoundingAmount, cashTendered, changeDue and the recorded payment intent; 400 when the header is missing or cashApplied exceeds the balance (ORDER_INVALID_ARGUMENT) or the body fails validation (VALIDATION_ERROR); 403 when the authority is missing or, above 500.00, the clerk lacks invoice:payment:limit_override; 404 when the order does not exist; 409 when the order is not PENDING_PAYMENT (ORDER_INVALID_STATE_TRANSITION), the session is not OPEN (REGISTER_SESSION_CONFLICT), the key was reused with another payload (ORDER_IDEMPOTENCY_CONFLICT) or pos-invoice\&#39;s balance disagrees (ORDER_CONFLICT); 422 with CASH_TENDER_INSUFFICIENT, CASH_AMOUNT_NOT_IN_INCREMENT, CASH_TENDER_SESSION_REQUIRED, CURRENCY_NOT_SUPPORTED or AMOUNT_PRECISION_EXCEEDS_CURRENCY; 503 when pos-invoice is unreachable.
+     * @endpoint post /v1/orders/{orderId}/payments/cash
+     * @param orderId
+     * @param idempotencyKey Required idempotency key; a replay with the same payload returns the same tender
+     * @param cashTenderRequest The cash handed over, an optional partial amount applied and the drawer\&#39;s currency.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public recordCashTender(orderId: string, idempotencyKey: string, cashTenderRequest: CashTenderRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CashTenderResponse>;
+    public recordCashTender(orderId: string, idempotencyKey: string, cashTenderRequest: CashTenderRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CashTenderResponse>>;
+    public recordCashTender(orderId: string, idempotencyKey: string, cashTenderRequest: CashTenderRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CashTenderResponse>>;
+    public recordCashTender(orderId: string, idempotencyKey: string, cashTenderRequest: CashTenderRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (orderId === null || orderId === undefined) {
+            throw new Error('Required parameter orderId was null or undefined when calling recordCashTender.');
+        }
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling recordCashTender.');
+        }
+        if (cashTenderRequest === null || cashTenderRequest === undefined) {
+            throw new Error('Required parameter cashTenderRequest was null or undefined when calling recordCashTender.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/orders/${this.configuration.encodeParam({name: "orderId", value: orderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/payments/cash`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<CashTenderResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: cashTenderRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

@@ -22,6 +22,10 @@ export interface TenantMeResponse {
      */
     id: string;
     /**
+     * The tenant\'s locale (BCP 47, ADR-0030 §2); null while the replica has not learned it
+     */
+    locale?: string;
+    /**
      * URL-safe unique name
      */
     slug: string;
@@ -70,7 +74,7 @@ export function instanceOfTenantMeResponse(value: object): value is TenantMeResp
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTenantMeResponsePropertyNames('id', 'slug', 'status', );
-    const optionalStringProperties = createTenantMeResponseOptionalProperties({ name: 'displayName', nullable: false }, { name: 'id', nullable: false }, { name: 'slug', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createTenantMeResponseOptionalProperties({ name: 'displayName', nullable: false }, { name: 'id', nullable: false }, { name: 'locale', nullable: false }, { name: 'slug', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createTenantMeResponseOptionalProperties();
     const optionalBooleanProperties = createTenantMeResponseOptionalProperties();
 
