@@ -42,3 +42,4 @@ export * from './supplierStockHints.service';
 export * from './traceability.service';
 export * from './transferOrders.service';
 export * from './valuationMethods.service';
+export * from './vendorFeedMappings.service';
