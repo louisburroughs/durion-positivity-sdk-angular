@@ -21,7 +21,15 @@ import { AccountingTimeZoneResponse } from '../models/accountingTimeZoneResponse
 // @ts-ignore
 import { AccountingTimeZoneUpdateRequest } from '../models/accountingTimeZoneUpdateRequest';
 // @ts-ignore
+import { AgedThresholdsRequest } from '../models/agedThresholdsRequest';
+// @ts-ignore
+import { AgedThresholdsResponse } from '../models/agedThresholdsResponse';
+// @ts-ignore
 import { ApiError } from '../models/apiError';
+// @ts-ignore
+import { CashSafetyCushionRequest } from '../models/cashSafetyCushionRequest';
+// @ts-ignore
+import { CashSafetyCushionResponse } from '../models/cashSafetyCushionResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -37,6 +45,118 @@ export class AccountingConfigurationService extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
+    }
+
+    /**
+     * Get Aged Thresholds
+     * Returns the tenant\&#39;s three aged-item thresholds, in calendar days on the accounting date: undepositedCashAgedDays (default 3), vendorCodUnappliedAgedDays (default 14) and deliveriesNotBilledDays (default 30). They decide when undeposited register cash, an unapplied vendor cash-on-delivery payment and a delivery with no approved bill become to-do items. Use this tool to read the current thresholds before changing them; use setAgedThresholds instead to change them, and do not use it to list the aged items themselves. Preconditions: the caller holds accounting:period:hard_lock. Required inputs: none; there are no parameters and no request body. Emits an ACCOUNTING_CONFIGURATION_AGED_THRESHOLDS_VIEW audit event; nothing is changed. Returns 200 with the three effective values; a value never written reads as its default.
+     * @endpoint get /v1/accounting/configuration/aged-thresholds
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getAgedThresholds(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AgedThresholdsResponse>;
+    public getAgedThresholds(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AgedThresholdsResponse>>;
+    public getAgedThresholds(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AgedThresholdsResponse>>;
+    public getAgedThresholds(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/configuration/aged-thresholds`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<AgedThresholdsResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get Cash Safety Cushion
+     * Returns the tenant\&#39;s cash safety cushion: a management threshold in the functional currency that the 30-day cash outlook compares its lowest projected balance against. The amount is null while the cushion is unset, and 0 is a real value. Use this tool to read the current cushion before changing it; use setCashSafetyCushion instead to change or clear it, and do not use it to read cash balances. Preconditions: the caller holds accounting:period:hard_lock. Required inputs: none; there are no parameters and no request body. Emits an ACCOUNTING_CONFIGURATION_CASH_SAFETY_CUSHION_VIEW audit event; nothing is changed. Returns 200 with the amount (null when unset) and the functional currency code.
+     * @endpoint get /v1/accounting/configuration/cash-safety-cushion
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getCashSafetyCushion(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CashSafetyCushionResponse>;
+    public getCashSafetyCushion(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CashSafetyCushionResponse>>;
+    public getCashSafetyCushion(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CashSafetyCushionResponse>>;
+    public getCashSafetyCushion(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/configuration/cash-safety-cushion`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<CashSafetyCushionResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
     }
 
     /**
@@ -99,6 +219,146 @@ export class AccountingConfigurationService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: accountingTimeZoneUpdateRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Set Aged Thresholds
+     * Replaces the tenant\&#39;s three aged-item thresholds, in calendar days on the accounting date: undepositedCashAgedDays (1 to 30), vendorCodUnappliedAgedDays (1 to 90) and deliveriesNotBilledDays (7 to 120). Use this tool when Finance changes how long undeposited register cash, an unapplied vendor cash-on-delivery payment or a delivery with no approved bill may wait before it is flagged; use getAgedThresholds instead to read them, and do not use it to act on an aged item. Preconditions: the caller holds accounting:period:hard_lock. Required inputs: all three day counts, a justification of at least 10 characters, and requestId, a UUID generated once per change. Emits an ACCOUNTING_CONFIGURATION_AGED_THRESHOLDS_SET event and writes one audit row per threshold whose value changes (old and new value, justification, requestId); an unchanged threshold writes nothing, and a replayed requestId changes nothing. Returns 400 VALIDATION_ERROR for a missing field or a value outside its range, 400 JUSTIFICATION_REQUIRED for a justification of 1 to 9 characters, and 409 for a requestId already used with another body.
+     * @endpoint put /v1/accounting/configuration/aged-thresholds
+     * @param agedThresholdsRequest The three thresholds with the audit justification and the request id.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public setAgedThresholds(agedThresholdsRequest: AgedThresholdsRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AgedThresholdsResponse>;
+    public setAgedThresholds(agedThresholdsRequest: AgedThresholdsRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AgedThresholdsResponse>>;
+    public setAgedThresholds(agedThresholdsRequest: AgedThresholdsRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AgedThresholdsResponse>>;
+    public setAgedThresholds(agedThresholdsRequest: AgedThresholdsRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (agedThresholdsRequest === null || agedThresholdsRequest === undefined) {
+            throw new Error('Required parameter agedThresholdsRequest was null or undefined when calling setAgedThresholds.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/configuration/aged-thresholds`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<AgedThresholdsResponse>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: agedThresholdsRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Set Cash Safety Cushion
+     * Sets or clears the tenant\&#39;s cash safety cushion: the amount, in the functional currency, below which the 30-day cash outlook warns that the lowest projected balance falls short. It is only a threshold: it is never posted, never reserved and never taken off the cash shown, and it refuses nothing. Use this tool when Finance sets, raises, lowers or removes the cushion; use getCashSafetyCushion instead to read it, and do not use it to move money. Preconditions: the caller holds accounting:period:hard_lock, and currencyCode is the tenant\&#39;s functional currency. Required inputs: amount (not negative, at the currency\&#39;s minor-unit precision, 0 allowed; null clears the cushion), currencyCode (ISO 4217), a justification of at least 10 characters, and requestId, a UUID generated once per change. Emits an ACCOUNTING_CONFIGURATION_CASH_SAFETY_CUSHION_SET event and audits the old and new amount with the justification and requestId; setting the current value again, or replaying a requestId, changes nothing. Returns 400 VALIDATION_ERROR for a missing field, an unknown currency code, a negative amount or too many decimal places, 400 JUSTIFICATION_REQUIRED for a justification of 1 to 9 characters, 409 for a requestId already used with another body, and 422 CURRENCY_NOT_SUPPORTED for a currency other than the functional one.
+     * @endpoint put /v1/accounting/configuration/cash-safety-cushion
+     * @param cashSafetyCushionRequest The cushion with its currency, the audit justification and the request id.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public setCashSafetyCushion(cashSafetyCushionRequest: CashSafetyCushionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CashSafetyCushionResponse>;
+    public setCashSafetyCushion(cashSafetyCushionRequest: CashSafetyCushionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CashSafetyCushionResponse>>;
+    public setCashSafetyCushion(cashSafetyCushionRequest: CashSafetyCushionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CashSafetyCushionResponse>>;
+    public setCashSafetyCushion(cashSafetyCushionRequest: CashSafetyCushionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (cashSafetyCushionRequest === null || cashSafetyCushionRequest === undefined) {
+            throw new Error('Required parameter cashSafetyCushionRequest was null or undefined when calling setCashSafetyCushion.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/configuration/cash-safety-cushion`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<CashSafetyCushionResponse>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: cashSafetyCushionRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

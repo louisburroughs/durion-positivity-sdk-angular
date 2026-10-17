@@ -20,9 +20,17 @@ export interface AgedPayablesReport {
      */
     asOfDate: string;
     /**
+     * Open amount of approved bills aged on an estimated due date across all vendors; part of totals.totalOutstanding, not added to it
+     */
+    estimatedDueDateAmount: number;
+    /**
      * Timestamp when the report was generated (ISO 8601)
      */
     generatedAt: string;
+    /**
+     * totals.totalOutstanding + unappliedPayments: approved open bills less unapplied AP payments only; credit notes and unapproved bills are not netted
+     */
+    netOwed: number;
     /**
      * Per-vendor aging rows ordered by vendor name; empty when no open payables exist
      */
@@ -32,6 +40,10 @@ export interface AgedPayablesReport {
      */
     totalIncludingUnapproved: number;
     totals: AgingSummary;
+    /**
+     * Minus the sum of every vendor\'s unapplied AP payments (not voided, functional currency only); zero or negative
+     */
+    unappliedPayments: number;
     /**
      * Open amount on bills not yet approved (PENDING_RECEIPT_MATCH, MATCH_EXCEPTION) across all vendors; never aged
      */
@@ -80,9 +92,9 @@ export function instanceOfAgedPayablesReport(value: object): value is AgedPayabl
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAgedPayablesReportPropertyNames('asOfDate', 'generatedAt', 'rows', 'totalIncludingUnapproved', 'totals', 'unapproved', 'unapprovedBillCount', );
+    const requiredProperties = createAgedPayablesReportPropertyNames('asOfDate', 'estimatedDueDateAmount', 'generatedAt', 'netOwed', 'rows', 'totalIncludingUnapproved', 'totals', 'unappliedPayments', 'unapproved', 'unapprovedBillCount', );
     const optionalStringProperties = createAgedPayablesReportOptionalProperties({ name: 'asOfDate', nullable: false }, { name: 'generatedAt', nullable: false }, );
-    const optionalNumberProperties = createAgedPayablesReportOptionalProperties({ name: 'totalIncludingUnapproved', nullable: false }, { name: 'unapproved', nullable: false }, { name: 'unapprovedBillCount', nullable: false }, );
+    const optionalNumberProperties = createAgedPayablesReportOptionalProperties({ name: 'estimatedDueDateAmount', nullable: false }, { name: 'netOwed', nullable: false }, { name: 'totalIncludingUnapproved', nullable: false }, { name: 'unappliedPayments', nullable: false }, { name: 'unapproved', nullable: false }, { name: 'unapprovedBillCount', nullable: false }, );
     const optionalBooleanProperties = createAgedPayablesReportOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

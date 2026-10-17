@@ -18,6 +18,7 @@ export * from './bankImports.service';
 export * from './bankReconciliation.service';
 export * from './bankStatements.service';
 export * from './bankTransactions.service';
+export * from './cashPosition.service';
 export * from './creditMemos.service';
 export * from './customerCredits.service';
 export * from './defaultGLMappings.service';
