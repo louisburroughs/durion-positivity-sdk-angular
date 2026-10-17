@@ -22,6 +22,14 @@ export interface PaymentIntentResponse {
      */
     capturedAmount?: number;
     /**
+     * Cash tender only: the increment applied; absent when the currency has none
+     */
+    cashIncrement?: number;
+    /**
+     * Cash tender only: signed rounding, settledAmount minus the amount applied
+     */
+    cashRoundingAmount?: number;
+    /**
      * When the payment intent was created
      */
     createdAt: string;
@@ -37,6 +45,10 @@ export interface PaymentIntentResponse {
      * Invoice the payment intent belongs to
      */
     invoiceId: string;
+    /**
+     * CARD (gateway capture) or CASH (register tender, ADR-0067 A8)
+     */
+    methodType?: PaymentIntentResponseMethodTypeEnum;
     /**
      * SALE_CAPTURE or AUTH_ONLY
      */
@@ -54,6 +66,10 @@ export interface PaymentIntentResponse {
      */
     refundedAmount?: number;
     /**
+     * Cash tender only: the cash actually taken after rounding to the currency\'s cash increment
+     */
+    settledAmount?: number;
+    /**
      * Current lifecycle status of the payment intent
      */
     status: PaymentIntentResponseStatusEnum;
@@ -66,6 +82,10 @@ export interface PaymentIntentResponse {
      */
     voidedRemainderAmount?: number;
 }
+export enum PaymentIntentResponseMethodTypeEnum {
+    Card = 'CARD',
+    Cash = 'CASH'
+};
 export enum PaymentIntentResponsePaymentFlowEnum {
     SaleCapture = 'SALE_CAPTURE',
     AuthOnly = 'AUTH_ONLY'
@@ -120,8 +140,8 @@ export function instanceOfPaymentIntentResponse(value: object): value is Payment
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPaymentIntentResponsePropertyNames('createdAt', 'invoiceId', 'paymentFlow', 'paymentId', 'status', 'updatedAt', );
-    const optionalStringProperties = createPaymentIntentResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'gatewayProvider', nullable: false }, { name: 'gatewayReference', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'paymentFlow', nullable: false }, { name: 'paymentId', nullable: false }, { name: 'status', nullable: false }, { name: 'updatedAt', nullable: false }, );
-    const optionalNumberProperties = createPaymentIntentResponseOptionalProperties({ name: 'authorizedAmount', nullable: false }, { name: 'capturedAmount', nullable: false }, { name: 'refundableAmount', nullable: true }, { name: 'refundedAmount', nullable: false }, { name: 'voidedRemainderAmount', nullable: false }, );
+    const optionalStringProperties = createPaymentIntentResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'gatewayProvider', nullable: false }, { name: 'gatewayReference', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'methodType', nullable: false }, { name: 'paymentFlow', nullable: false }, { name: 'paymentId', nullable: false }, { name: 'status', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const optionalNumberProperties = createPaymentIntentResponseOptionalProperties({ name: 'authorizedAmount', nullable: false }, { name: 'capturedAmount', nullable: false }, { name: 'cashIncrement', nullable: false }, { name: 'cashRoundingAmount', nullable: false }, { name: 'refundableAmount', nullable: true }, { name: 'refundedAmount', nullable: false }, { name: 'settledAmount', nullable: false }, { name: 'voidedRemainderAmount', nullable: false }, );
     const optionalBooleanProperties = createPaymentIntentResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

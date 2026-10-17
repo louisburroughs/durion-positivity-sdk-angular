@@ -46,6 +46,14 @@ export interface TenantResponse {
      */
     initialAdminEmail: string;
     /**
+     * The shop\'s locale (BCP 47)
+     */
+    locale: string;
+    /**
+     * The reading tier the tenant is on (CAP:550 S45)
+     */
+    readingTierCode: string;
+    /**
      * URL-safe unique name
      */
     slug: string;
@@ -109,8 +117,8 @@ export function instanceOfTenantResponse(value: object): value is TenantResponse
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTenantResponsePropertyNames('accountId', 'createdAt', 'displayName', 'id', 'initialAdminEmail', 'slug', 'status', 'updatedAt', );
-    const optionalStringProperties = createTenantResponseOptionalProperties({ name: 'accountId', nullable: false }, { name: 'activatedAt', nullable: false }, { name: 'cell', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'decommissionedAt', nullable: false }, { name: 'displayName', nullable: false }, { name: 'id', nullable: false }, { name: 'initialAdminEmail', nullable: false }, { name: 'slug', nullable: false }, { name: 'status', nullable: false }, { name: 'suspendedAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const requiredProperties = createTenantResponsePropertyNames('accountId', 'createdAt', 'displayName', 'id', 'initialAdminEmail', 'locale', 'readingTierCode', 'slug', 'status', 'updatedAt', );
+    const optionalStringProperties = createTenantResponseOptionalProperties({ name: 'accountId', nullable: false }, { name: 'activatedAt', nullable: false }, { name: 'cell', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'decommissionedAt', nullable: false }, { name: 'displayName', nullable: false }, { name: 'id', nullable: false }, { name: 'initialAdminEmail', nullable: false }, { name: 'locale', nullable: false }, { name: 'readingTierCode', nullable: false }, { name: 'slug', nullable: false }, { name: 'status', nullable: false }, { name: 'suspendedAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createTenantResponseOptionalProperties();
     const optionalBooleanProperties = createTenantResponseOptionalProperties();
 

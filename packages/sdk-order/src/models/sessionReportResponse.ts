@@ -17,6 +17,10 @@ import { CashMovementResponse } from './cashMovementResponse';
  */
 export interface SessionReportResponse {
     cashMovements?: number;
+    /**
+     * ADR-0067 A8: signed sum of the cash rounding over the session\'s cash tenders (positive when customers paid more than due); informational, never part of over/short
+     */
+    cashRoundingTotal?: number;
     cashSettlements?: number;
     countedCash?: number;
     generatedAt?: string;
@@ -78,7 +82,7 @@ export function instanceOfSessionReportResponse(value: object): value is Session
 
     const requiredProperties = createSessionReportResponsePropertyNames();
     const optionalStringProperties = createSessionReportResponseOptionalProperties({ name: 'generatedAt', nullable: false }, { name: 'locationId', nullable: false }, { name: 'openedAt', nullable: false }, { name: 'reportType', nullable: false }, { name: 'sessionId', nullable: false }, { name: 'status', nullable: false }, { name: 'terminalId', nullable: false }, );
-    const optionalNumberProperties = createSessionReportResponseOptionalProperties({ name: 'cashMovements', nullable: false }, { name: 'cashSettlements', nullable: false }, { name: 'countedCash', nullable: false }, { name: 'openingFloat', nullable: false }, { name: 'orderCount', nullable: false }, { name: 'overShort', nullable: false }, { name: 'theoreticalCash', nullable: false }, );
+    const optionalNumberProperties = createSessionReportResponseOptionalProperties({ name: 'cashMovements', nullable: false }, { name: 'cashRoundingTotal', nullable: false }, { name: 'cashSettlements', nullable: false }, { name: 'countedCash', nullable: false }, { name: 'openingFloat', nullable: false }, { name: 'orderCount', nullable: false }, { name: 'overShort', nullable: false }, { name: 'theoreticalCash', nullable: false }, );
     const optionalBooleanProperties = createSessionReportResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

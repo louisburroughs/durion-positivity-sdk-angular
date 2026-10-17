@@ -30,6 +30,14 @@ export interface TenantCreateRequest {
      */
     initialAdminEmail: string;
     /**
+     * The shop\'s locale as a BCP 47 tag with a region (en-US, es-US, es-MX, fr-CA, fr-FR by default; pos.tenant.supported-locales); case is normalised (fr-ca becomes fr-CA). A bare language or an unlisted tag is 400 VALIDATION_ERROR with fieldErrors[locale]
+     */
+    locale: string;
+    /**
+     * The reading tier the tenant starts on (CAP:550 S45); STANDARD when omitted. Must name an active tier, else 422 READING_TIER_NOT_ASSIGNABLE
+     */
+    readingTierCode?: string;
+    /**
      * URL-safe unique name; lowercase letters, digits and hyphens, 3 to 63 characters
      */
     slug: string;
@@ -73,8 +81,8 @@ export function instanceOfTenantCreateRequest(value: object): value is TenantCre
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTenantCreateRequestPropertyNames('accountId', 'initialAdminEmail', 'slug', );
-    const optionalStringProperties = createTenantCreateRequestOptionalProperties({ name: 'accountId', nullable: false }, { name: 'cell', nullable: false }, { name: 'displayName', nullable: false }, { name: 'initialAdminEmail', nullable: false }, { name: 'slug', nullable: false }, );
+    const requiredProperties = createTenantCreateRequestPropertyNames('accountId', 'initialAdminEmail', 'locale', 'slug', );
+    const optionalStringProperties = createTenantCreateRequestOptionalProperties({ name: 'accountId', nullable: false }, { name: 'cell', nullable: false }, { name: 'displayName', nullable: false }, { name: 'initialAdminEmail', nullable: false }, { name: 'locale', nullable: false }, { name: 'readingTierCode', nullable: false }, { name: 'slug', nullable: false }, );
     const optionalNumberProperties = createTenantCreateRequestOptionalProperties();
     const optionalBooleanProperties = createTenantCreateRequestOptionalProperties();
 
