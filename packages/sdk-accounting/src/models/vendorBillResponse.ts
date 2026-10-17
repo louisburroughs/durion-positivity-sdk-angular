@@ -7,18 +7,19 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { VendorBillMatchCandidateSummary } from './vendorBillMatchCandidateSummary';
-import { VendorBillApproval } from './vendorBillApproval';
 import { VendorBillRejection } from './vendorBillRejection';
 import { VendorBillTaxByType } from './vendorBillTaxByType';
-import { VendorBillTaxOnResaleOverride } from './vendorBillTaxOnResaleOverride';
 import { VendorBillMatch } from './vendorBillMatch';
 import { VendorBillAvailableAction } from './vendorBillAvailableAction';
 import { VendorBillCheck } from './vendorBillCheck';
 import { VendorBillReissue } from './vendorBillReissue';
+import { VendorBillLine } from './vendorBillLine';
+import { VendorBillMatchCandidateSummary } from './vendorBillMatchCandidateSummary';
+import { VendorBillApproval } from './vendorBillApproval';
+import { VendorBillTaxTypeChoice } from './vendorBillTaxTypeChoice';
+import { VendorBillTaxOnResaleOverride } from './vendorBillTaxOnResaleOverride';
 import { VendorBillInputTaxRecovery } from './vendorBillInputTaxRecovery';
 import { VendorBillPosting } from './vendorBillPosting';
-import { VendorBillLine } from './vendorBillLine';
 
 
 /**
@@ -126,6 +127,10 @@ export interface VendorBillResponse {
      */
     taxByType: Array<VendorBillTaxByType>;
     taxOnResaleOverride?: VendorBillTaxOnResaleOverride;
+    /**
+     * The tax types the approver may split the stated tax into (CAP:550 #2679, AW51): those of the regimes whose recovery is on as of the date the approval would post on, for the bill\'s tax country, with their labels. Filled only while the bill is approvable (AWAITING_APPROVAL or MATCH_EXCEPTION) and states tax; otherwise empty, which includes a tenant without recovery. Null when recovery cannot be read now (the tax service did not answer): unknown, not empty. A guide for the client only; approve and ACCEPT validate taxByType[] as before
+     */
+    taxTypeChoices?: Array<VendorBillTaxTypeChoice>;
     /**
      * Total bill amount
      */

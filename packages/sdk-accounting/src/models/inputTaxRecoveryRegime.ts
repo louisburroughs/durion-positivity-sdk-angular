@@ -25,6 +25,10 @@ export interface InputTaxRecoveryRegime {
      */
     enabled: boolean | null;
     /**
+     * The regime\'s configured display label; null when the profile sets none or the tax service did not answer, never the code (#2679)
+     */
+    label?: string | null;
+    /**
      * Regime code, as the country profile names it
      */
     regime: string;
@@ -70,7 +74,7 @@ export function instanceOfInputTaxRecoveryRegime(value: object): value is InputT
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createInputTaxRecoveryRegimePropertyNames('account', 'countryCode', 'enabled', 'regime', 'registration', );
-    const optionalStringProperties = createInputTaxRecoveryRegimeOptionalProperties({ name: 'countryCode', nullable: false }, { name: 'regime', nullable: false }, );
+    const optionalStringProperties = createInputTaxRecoveryRegimeOptionalProperties({ name: 'countryCode', nullable: false }, { name: 'label', nullable: true }, { name: 'regime', nullable: false }, );
     const optionalNumberProperties = createInputTaxRecoveryRegimeOptionalProperties();
     const optionalBooleanProperties = createInputTaxRecoveryRegimeOptionalProperties({ name: 'enabled', nullable: true }, );
 

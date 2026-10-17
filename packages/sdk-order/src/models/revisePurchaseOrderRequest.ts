@@ -23,6 +23,10 @@ export interface RevisePurchaseOrderRequest {
      */
     expectedDeliveryDate?: string;
     /**
+     * The versionNumber of the order this revision was built on, as the last read returned it. The revise is applied only if the order is still at that version; otherwise 409 PURCHASE_ORDER_VERSION_CONFLICT and nothing changes (#2681)
+     */
+    expectedVersionNumber: number;
+    /**
      * Order lines replacing the existing purchase order lines
      */
     lines: Array<PurchaseOrderLineRequest>;
@@ -35,7 +39,7 @@ export interface RevisePurchaseOrderRequest {
      */
     poDate: string;
     /**
-     * Identifier or name of the person who requested the revision
+     * The order\'s requester: the person the goods are for, as on create. Not the reviser, who is the authenticated caller. Omitted keeps the order\'s current requester, blank clears it, a value corrects it
      */
     requestedBy?: string;
     /**
@@ -90,9 +94,9 @@ export function instanceOfRevisePurchaseOrderRequest(value: object): value is Re
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRevisePurchaseOrderRequestPropertyNames('lines', 'poDate', 'revisionReason', );
+    const requiredProperties = createRevisePurchaseOrderRequestPropertyNames('expectedVersionNumber', 'lines', 'poDate', 'revisionReason', );
     const optionalStringProperties = createRevisePurchaseOrderRequestOptionalProperties({ name: 'comment', nullable: false }, { name: 'expectedDeliveryDate', nullable: false }, { name: 'paymentTermsId', nullable: false }, { name: 'poDate', nullable: false }, { name: 'requestedBy', nullable: false }, { name: 'revisionReason', nullable: false }, { name: 'shipToLocationId', nullable: false }, { name: 'vendorId', nullable: false }, );
-    const optionalNumberProperties = createRevisePurchaseOrderRequestOptionalProperties();
+    const optionalNumberProperties = createRevisePurchaseOrderRequestOptionalProperties({ name: 'expectedVersionNumber', nullable: false }, );
     const optionalBooleanProperties = createRevisePurchaseOrderRequestOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

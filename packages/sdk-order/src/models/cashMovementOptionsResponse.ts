@@ -8,6 +8,7 @@
  * Do not edit the class manually.
  */
 import { CashMovementEvidenceRule } from './cashMovementEvidenceRule';
+import { VendorOption } from './vendorOption';
 import { CategoryOption } from './categoryOption';
 import { ReasonOption } from './reasonOption';
 
@@ -33,6 +34,10 @@ export interface CashMovementOptionsResponse {
      * The session
      */
     sessionId?: string;
+    /**
+     * The ACTIVE vendors a drawer may pay cash on delivery (VENDOR_COD), by display name; pos-order\'s copy of the pos-supplier vendor master (#2576)
+     */
+    vendors?: Array<VendorOption>;
 }
 
 function isOptionalCashMovementOptionsResponsePropertyOfType(

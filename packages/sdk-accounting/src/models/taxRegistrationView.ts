@@ -38,6 +38,10 @@ export interface TaxRegistrationView {
      */
     regime: string;
     /**
+     * The regime\'s configured display label; null when the profile sets none or the tax service did not answer, never the code (#2679)
+     */
+    regimeLabel?: string | null;
+    /**
      * Registration id (pos-tax\'s)
      */
     registrationId: string;
@@ -94,7 +98,7 @@ export function instanceOfTaxRegistrationView(value: object): value is TaxRegist
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTaxRegistrationViewPropertyNames('changedAt', 'countryCode', 'effectiveFrom', 'jurisdictionCode', 'regime', 'registrationId', 'registrationNumber', 'status', 'version', );
-    const optionalStringProperties = createTaxRegistrationViewOptionalProperties({ name: 'changedAt', nullable: false }, { name: 'countryCode', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, { name: 'jurisdictionCode', nullable: false }, { name: 'regime', nullable: false }, { name: 'registrationId', nullable: false }, { name: 'registrationNumber', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createTaxRegistrationViewOptionalProperties({ name: 'changedAt', nullable: false }, { name: 'countryCode', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, { name: 'jurisdictionCode', nullable: false }, { name: 'regime', nullable: false }, { name: 'regimeLabel', nullable: true }, { name: 'registrationId', nullable: false }, { name: 'registrationNumber', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createTaxRegistrationViewOptionalProperties({ name: 'version', nullable: false }, );
     const optionalBooleanProperties = createTaxRegistrationViewOptionalProperties();
 

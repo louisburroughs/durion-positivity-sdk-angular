@@ -39,6 +39,8 @@ import { TaxPurchaseRulesResponse } from '../models/taxPurchaseRulesResponse';
 // @ts-ignore
 import { TaxRateLookupResponse } from '../models/taxRateLookupResponse';
 // @ts-ignore
+import { TaxRegistrationSchemesResponse } from '../models/taxRegistrationSchemesResponse';
+// @ts-ignore
 import { TaxTypesResponse } from '../models/taxTypesResponse';
 
 // @ts-ignore
@@ -608,6 +610,75 @@ export class TaxService extends BaseService {
         let localVarPath = `/v1/tax/rates`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<TaxRateLookupResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List the tax-registration schemes, per country
+     * Returns the closed vocabulary of tax-registration schemes: per country, each scheme\&#39;s code, label, holder type (BUSINESS or PERSON) and whether a registration under it belongs to one region, with the allowed regions. Codes are unique across countries, so a code alone identifies a scheme. Use this tool when pos-supplier validates a vendor\&#39;s tax registrations at entry or offers the scheme picker of the vendor form; do not use it to read tax rates, evidence rules or information-return forms, which are getTaxRates, getTaxEvidenceRules and getTaxInformationReturnForms instead. Preconditions: this endpoint is internal-only (ADR-0021/ADR-0014), reached by direct in-cluster calls from pos-supplier with the service authority, never through pos-api-gateway. Required inputs: none; countryCode, two upper-case letters, narrows the answer to one country. No events are emitted, no state changes and no tenant data is read; every value is configuration held for expert advice, so source is always STUB. Returns 200 with an empty list for a well-formed country without a configured scheme, and 400 VALIDATION_ERROR when countryCode is malformed.
+     * @endpoint get /v1/tax/registration-schemes
+     * @param countryCode
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getTaxRegistrationSchemes(countryCode?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxRegistrationSchemesResponse>;
+    public getTaxRegistrationSchemes(countryCode?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxRegistrationSchemesResponse>>;
+    public getTaxRegistrationSchemes(countryCode?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxRegistrationSchemesResponse>>;
+    public getTaxRegistrationSchemes(countryCode?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'countryCode',
+            <any>countryCode,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/tax/registration-schemes`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<TaxRegistrationSchemesResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),
