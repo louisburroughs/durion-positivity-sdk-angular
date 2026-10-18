@@ -36,3 +36,4 @@ export * from './postingRules.service';
 export * from './settlementReconciliation.service';
 export * from './vendorBillAPI.service';
 export * from './vendorDirectoryAPI.service';
+export * from './workItems.service';
