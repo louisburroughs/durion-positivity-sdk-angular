@@ -15,6 +15,10 @@ import { ReceivedLineItem } from './receivedLineItem';
  */
 export interface GoodsReceivedEvent {
     /**
+     * The vendor\'s delivery-note or ASN number for this receipt; optional. Compared after the same normalisation as a bill number (case, spacing, punctuation and leading zeros ignored).
+     */
+    deliveryReference?: string;
+    /**
      * Optional dimensional context for GL mapping
      */
     dimensions?: { [key: string]: string; };
@@ -34,6 +38,10 @@ export interface GoodsReceivedEvent {
      * Purchase order UUID
      */
     purchaseOrderId: string;
+    /**
+     * The purchase order\'s number as the vendor knows it; optional. With deliveryReference it lets a later bill for the same delivery be recognised as a duplicate of this one.
+     */
+    purchaseOrderNumber?: string;
     /**
      * Date goods were received
      */
@@ -87,7 +95,7 @@ export function instanceOfGoodsReceivedEvent(value: object): value is GoodsRecei
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createGoodsReceivedEventPropertyNames('eventId', 'lineItems', 'organizationId', 'purchaseOrderId', 'receivedDate', 'vendorId', );
-    const optionalStringProperties = createGoodsReceivedEventOptionalProperties({ name: 'eventId', nullable: false }, { name: 'organizationId', nullable: false }, { name: 'purchaseOrderId', nullable: false }, { name: 'receivedDate', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, );
+    const optionalStringProperties = createGoodsReceivedEventOptionalProperties({ name: 'deliveryReference', nullable: false }, { name: 'eventId', nullable: false }, { name: 'organizationId', nullable: false }, { name: 'purchaseOrderId', nullable: false }, { name: 'purchaseOrderNumber', nullable: false }, { name: 'receivedDate', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, );
     const optionalNumberProperties = createGoodsReceivedEventOptionalProperties();
     const optionalBooleanProperties = createGoodsReceivedEventOptionalProperties();
 
