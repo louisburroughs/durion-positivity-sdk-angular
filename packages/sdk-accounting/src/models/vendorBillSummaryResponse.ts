@@ -22,6 +22,10 @@ export interface VendorBillSummaryResponse {
      */
     billNumber: string;
     /**
+     * INVOICE, or CREDIT_NOTE when the vendor issued a credit: its amounts are then negative
+     */
+    documentType: VendorBillSummaryResponseDocumentTypeEnum;
+    /**
      * Due date
      */
     dueDate?: string;
@@ -58,6 +62,10 @@ export interface VendorBillSummaryResponse {
      */
     vendorName?: string;
 }
+export enum VendorBillSummaryResponseDocumentTypeEnum {
+    Invoice = 'INVOICE',
+    CreditNote = 'CREDIT_NOTE'
+};
 export enum VendorBillSummaryResponseStatusEnum {
     PendingReceiptMatch = 'PENDING_RECEIPT_MATCH',
     MatchException = 'MATCH_EXCEPTION',
@@ -109,8 +117,8 @@ export function instanceOfVendorBillSummaryResponse(value: object): value is Ven
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createVendorBillSummaryResponsePropertyNames('billNumber', 'status', 'totalAmount', 'vendorApHold', 'vendorBillId', 'vendorId', );
-    const optionalStringProperties = createVendorBillSummaryResponseOptionalProperties({ name: 'billDate', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'status', nullable: false }, { name: 'vendorApHoldReason', nullable: false }, { name: 'vendorBillId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, );
+    const requiredProperties = createVendorBillSummaryResponsePropertyNames('billNumber', 'documentType', 'status', 'totalAmount', 'vendorApHold', 'vendorBillId', 'vendorId', );
+    const optionalStringProperties = createVendorBillSummaryResponseOptionalProperties({ name: 'billDate', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'documentType', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'status', nullable: false }, { name: 'vendorApHoldReason', nullable: false }, { name: 'vendorBillId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, );
     const optionalNumberProperties = createVendorBillSummaryResponseOptionalProperties({ name: 'openAmount', nullable: false }, { name: 'totalAmount', nullable: false }, );
     const optionalBooleanProperties = createVendorBillSummaryResponseOptionalProperties({ name: 'vendorApHold', nullable: false }, );
 

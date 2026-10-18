@@ -25,6 +25,10 @@ import { BillIntakeDiscardRequest } from '../models/billIntakeDiscardRequest';
 // @ts-ignore
 import { BillIntakeEditRequest } from '../models/billIntakeEditRequest';
 // @ts-ignore
+import { BillIntakeMappingRequest } from '../models/billIntakeMappingRequest';
+// @ts-ignore
+import { BillIntakeMappingTemplateList } from '../models/billIntakeMappingTemplateList';
+// @ts-ignore
 import { BillIntakePage } from '../models/billIntakePage';
 // @ts-ignore
 import { BillIntakeResponse } from '../models/billIntakeResponse';
@@ -51,7 +55,7 @@ export class BillIntakeService extends BaseService {
 
     /**
      * Confirm Bill Draft
-     * Confirms a checked bill draft and creates the vendor bill from it, created by the caller, in PENDING_RECEIPT_MATCH (CURRENCY_HOLD for a foreign currency). Nothing posts, and the draft\&#39;s debit class is not copied onto the bill: submit and approval own it. A due date becomes the bill\&#39;s only if a person accepted or corrected it. Use this tool when every field of the draft has been looked at; do not use it for a goods receipt (createVendorBillFromGoodsReceived) or a credit note (taken in by a vendor statement). Preconditions: the draft is READY_FOR_REVIEW at the version you read; its vendor is found and active; no field is CHECK_THIS (an empty optional field does not count); vendor, billNumber, billDate, currency and totalAmount are present; no live bill of the vendor holds the same number and date, or the same delivery of the same order. Required inputs: intakeId, version; an optional requestId (UUIDv7) makes a retry answer the same bill. Emits an ACCOUNTING_BILL_INTAKE_CONFIRM event and one BILL_INTAKE audit row. Returns 201 with the bill; 400 VALIDATION_ERROR (a required field empty, or a total that is not above zero); 404 BILL_INTAKE_NOT_FOUND; 409 AP_BILL_DUPLICATE with conflicts naming what matched, BILL_INTAKE_INVALID_STATE or OPTIMISTIC_LOCK; 422 BILL_INTAKE_FIELDS_UNCHECKED (fieldErrors name the fields), CREDIT_NOTE_NOT_CONFIRMABLE (the draft is a credit note), VENDOR_NOT_FOUND or VENDOR_INACTIVE.
+     * Confirms a checked bill draft and creates the vendor bill from it, created by the caller, in PENDING_RECEIPT_MATCH (CURRENCY_HOLD for a foreign currency). Nothing posts, and the draft\&#39;s debit class is not copied onto the bill: submit and approval own it; a due date becomes the bill\&#39;s only if a person accepted or corrected it. Use this tool when every field of the draft has been looked at; do not use it for a goods receipt (createVendorBillFromGoodsReceived) or a credit note (taken in by a vendor statement). Preconditions: the draft is READY_FOR_REVIEW at the version you read; its vendor is found and active; no field is CHECK_THIS (an empty optional field does not count); vendor, billNumber, billDate, currency and totalAmount are present; no live bill of the vendor holds the same number and date, or the same delivery of the same order. Required inputs: intakeId, version; an optional requestId (UUIDv7) makes a retry answer the same bill. Emits an ACCOUNTING_BILL_INTAKE_CONFIRM event and one BILL_INTAKE audit row. Returns 201 with the bill; 400 VALIDATION_ERROR (a required field empty, or a total that is not above zero); 404 BILL_INTAKE_NOT_FOUND; 409 AP_BILL_DUPLICATE with conflicts naming what matched, BILL_INTAKE_INVALID_STATE or OPTIMISTIC_LOCK; 422 BILL_INTAKE_FIELDS_UNCHECKED (fieldErrors name the fields), VENDOR_NOT_FOUND or VENDOR_INACTIVE; a draft whose documentType is CREDIT_NOTE becomes a credit note, a bill with negative amounts, that waits to be sent for approval.
      * @endpoint post /v1/accounting/bill-intake/{intakeId}/confirmation
      * @param intakeId
      * @param billIntakeConfirmRequest The draft version you read and an optional UUIDv7 requestId that makes the confirmation replayable.
@@ -258,6 +262,145 @@ export class BillIntakeService extends BaseService {
     }
 
     /**
+     * Import Bills From A Spreadsheet
+     * Imports one CSV or XLSX file of supplier bills and creates one bill draft per invoice: rows are grouped by supplier, invoice number and invoice date, header fields repeat on each line row, and a row that cannot be read is listed in the draft\&#39;s rowErrors with its field marked CHECK_THIS. A person checks each draft before any bill exists, and nothing posts. Use this tool to bring in many bills at once from a spreadsheet; do not use it for a PDF or a photo of one bill (uploadBillDocuments), for a bank statement (createBankImport) or for a vendor statement. Preconditions: the caller holds accounting:bill_intake:create (and accounting:bill_intake:manage to saveMappingAs); the file is judged by its content, never by its name or declared type, and a file that is neither text nor a workbook is refused with status FILE_REJECTED and reason TYPE_NOT_ALLOWED. Required inputs: file (one CSV or XLSX, at most 25 MB) and a UUIDv7 requestId; optional: mapping (a JSON object of import column to the file\&#39;s header), templateId (a saved mapping), saveMappingAs (a name to save the mapping under; a name that is taken is 409 MAPPING_TEMPLATE_EXISTS unless replace is true) and replace; an optional document_type column says what a row is: credit memo or credit note (any case) makes a credit note, invoice or blank an invoice, anything else is marked CHECK_THIS; amounts in a row are never negative; required columns: supplier_name, invoice_number, invoice_date, line_description, line_amount and due_date or terms; with none of mapping and templateId the file\&#39;s headers are matched against a saved template, then against the column names themselves; when none fits the draft waits in EXTRACTING with mappingRequired and the file\&#39;s sourceColumns until mapping is sent; a replay of the same requestId with the same file returns the same drafts. Emits an ACCOUNTING_BILL_INTAKE_IMPORT event and one BILL_INTAKE audit row naming the file\&#39;s sha-256. Returns 201 with the draft of the import (the first invoice; the others appear as READY_FOR_REVIEW drafts once the sheet is read); 400 VALIDATION_ERROR for no file, a malformed mapping or an unknown templateId; 403 without the permission (or saveMappingAs without manage); 409 IDEMPOTENCY_CONFLICT when the requestId was used with another file; 409 MAPPING_TEMPLATE_EXISTS when saveMappingAs names a template that exists and replace is not true; 413 PAYLOAD_TOO_LARGE over 25 MB.
+     * @endpoint post /v1/accounting/bill-intake/imports
+     * @param requestId A caller-generated UUIDv7 that makes the import replayable
+     * @param file The spreadsheet: one CSV or XLSX in a part named file
+     * @param mapping The column mapping as a JSON object: import column to the file\&#39;s header
+     * @param templateId A saved mapping template to apply (list them with listBillIntakeMappingTemplates)
+     * @param saveMappingAs Save the mapping under this name; needs accounting:bill_intake:manage
+     * @param replace Replace the template of that name when it exists (else 409 MAPPING_TEMPLATE_EXISTS)
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public importBillSpreadsheet(requestId: string, file: Blob, mapping?: string, templateId?: string, saveMappingAs?: string, replace?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BillIntakeUploadResponse>;
+    public importBillSpreadsheet(requestId: string, file: Blob, mapping?: string, templateId?: string, saveMappingAs?: string, replace?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BillIntakeUploadResponse>>;
+    public importBillSpreadsheet(requestId: string, file: Blob, mapping?: string, templateId?: string, saveMappingAs?: string, replace?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BillIntakeUploadResponse>>;
+    public importBillSpreadsheet(requestId: string, file: Blob, mapping?: string, templateId?: string, saveMappingAs?: string, replace?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (requestId === null || requestId === undefined) {
+            throw new Error('Required parameter requestId was null or undefined when calling importBillSpreadsheet.');
+        }
+        if (file === null || file === undefined) {
+            throw new Error('Required parameter file was null or undefined when calling importBillSpreadsheet.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'requestId',
+            <any>requestId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'mapping',
+            <any>mapping,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'templateId',
+            <any>templateId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'saveMappingAs',
+            <any>saveMappingAs,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'replace',
+            <any>replace,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'multipart/form-data'
+        ];
+
+        const canConsumeForm = this.canConsumeForm(consumes);
+
+        let localVarFormParams: { append(param: string, value: any): any; };
+        let localVarUseForm = false;
+        let localVarConvertFormParamsToString = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        // see https://stackoverflow.com/questions/4007969/application-x-www-form-urlencoded-or-multipart-form-data
+        localVarUseForm = canConsumeForm;
+        if (localVarUseForm) {
+            localVarFormParams = new FormData();
+        } else {
+            localVarFormParams = new HttpParams({encoder: this.encoder});
+        }
+
+        if (file !== undefined) {
+            localVarFormParams = localVarFormParams.append('file', <any>file) as any || localVarFormParams;
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/bill-intake/imports`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<BillIntakeUploadResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: localVarConvertFormParamsToString ? localVarFormParams.toString() : localVarFormParams,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * List Bill Drafts
      * Lists bill drafts, newest first, optionally for one status or one channel, a page at a time, each with its reference, vendor, bill number, total and status. Use this tool to find the drafts waiting for review or the files that were refused; do not use it for bills, use listVendorBills instead, and read one draft with getBillIntake before editing it. Preconditions: the caller holds accounting:ap:view. Inputs: optional status (QUARANTINED, FILE_REJECTED, EXTRACTING, READY_FOR_REVIEW, CONFIRMED, DISCARDED), optional channel (UPLOAD, IMPORT, EDI, EMAIL_IN), page (0-based) and size (1 to 200). Emits an ACCOUNTING_BILL_INTAKE_LIST event and changes nothing. Returns 200 with the page, 400 when the page bounds are invalid, and 403 without accounting:ap:view.
      * @endpoint get /v1/accounting/bill-intake
@@ -357,6 +500,136 @@ export class BillIntakeService extends BaseService {
     }
 
     /**
+     * List Bill Import Mapping Templates
+     * Lists the saved column mappings for spreadsheet imports, by name, each with the import column to header map it applies. No event beyond the read is emitted and nothing is stored. Use this tool to find the templateId to send with an import (importBillSpreadsheet); do not use it to read bill drafts (listBillIntake) or to save a mapping (send saveMappingAs with an import or a mapping). Preconditions: the caller holds accounting:ap:view. Required inputs: none. Emits an ACCOUNTING_BILL_INTAKE_MAPPING_TEMPLATE_LIST read event; no data is written. Returns 200 with the templates, an empty list when none is saved; 403 without the permission.
+     * @endpoint get /v1/accounting/bill-intake/mapping-templates
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listBillIntakeMappingTemplates(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BillIntakeMappingTemplateList>;
+    public listBillIntakeMappingTemplates(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BillIntakeMappingTemplateList>>;
+    public listBillIntakeMappingTemplates(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BillIntakeMappingTemplateList>>;
+    public listBillIntakeMappingTemplates(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/bill-intake/mapping-templates`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<BillIntakeMappingTemplateList>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Map The Columns Of A Bill Import
+     * Maps the columns of an imported spreadsheet that could not be mapped on its own and reads its rows into bill drafts: the first invoice stays on this draft, every other becomes a READY_FOR_REVIEW draft. Nothing posts. Use this tool when an import is EXTRACTING with mappingRequired true and sourceColumns listed; do not use it to edit a draft that is READY_FOR_REVIEW (updateBillIntake) or to change the mapping of an import already read. Preconditions: the caller holds accounting:bill_intake:create (and accounting:bill_intake:manage to saveMappingAs); the draft is an import waiting for its mapping, at the version you read. Required inputs: intakeId, version and mapping, an object of import column to a header of the file, naming at least supplier_name, invoice_number, invoice_date, line_description, line_amount and due_date or terms. Optional: saveMappingAs, a name to save the mapping under so a file with the same headers is mapped without asking, and replace (true replaces a template of that name, which is audited). Emits an ACCOUNTING_BILL_INTAKE_MAPPING event and one BILL_INTAKE audit row. Returns 200 with the draft; 400 VALIDATION_ERROR with fieldErrors naming each unmapped required column or header the file does not have; 403 without the permission (or saveMappingAs without manage); 404 BILL_INTAKE_NOT_FOUND; 409 BILL_INTAKE_INVALID_STATE when the draft is not waiting for a mapping, MAPPING_TEMPLATE_EXISTS when saveMappingAs names a template that exists and replace is not true, or OPTIMISTIC_LOCK.
+     * @endpoint put /v1/accounting/bill-intake/{intakeId}/mapping
+     * @param intakeId
+     * @param billIntakeMappingRequest The draft version you read and the mapping of import columns to the file\&#39;s headers.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public mapBillIntakeColumns(intakeId: string, billIntakeMappingRequest: BillIntakeMappingRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BillIntakeResponse>;
+    public mapBillIntakeColumns(intakeId: string, billIntakeMappingRequest: BillIntakeMappingRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BillIntakeResponse>>;
+    public mapBillIntakeColumns(intakeId: string, billIntakeMappingRequest: BillIntakeMappingRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BillIntakeResponse>>;
+    public mapBillIntakeColumns(intakeId: string, billIntakeMappingRequest: BillIntakeMappingRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (intakeId === null || intakeId === undefined) {
+            throw new Error('Required parameter intakeId was null or undefined when calling mapBillIntakeColumns.');
+        }
+        if (billIntakeMappingRequest === null || billIntakeMappingRequest === undefined) {
+            throw new Error('Required parameter billIntakeMappingRequest was null or undefined when calling mapBillIntakeColumns.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/bill-intake/${this.configuration.encodeParam({name: "intakeId", value: intakeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/mapping`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<BillIntakeResponse>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: billIntakeMappingRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Read Bill Draft Again
      * Sends a bill draft back to be read again: its file goes to EXTRACTING and the reading is retried, the retry window starting now. Use this tool when the reading failed or the reader was down and the draft is still blank; do not use it to redo a reading that succeeded, correct the fields with updateBillIntake instead. Preconditions: the draft is READY_FOR_REVIEW, its last reading failed, and nobody has edited it (an edit would be lost); the caller holds accounting:bill_intake:create. Required inputs: intakeId. Emits an ACCOUNTING_BILL_INTAKE_EXTRACTION_RETRY event and one BILL_INTAKE audit row. Returns 202 with the draft now EXTRACTING, 404 BILL_INTAKE_NOT_FOUND, and 409 BILL_INTAKE_INVALID_STATE when it is not eligible.
      * @endpoint post /v1/accounting/bill-intake/{intakeId}/extraction-retry
@@ -418,10 +691,10 @@ export class BillIntakeService extends BaseService {
 
     /**
      * Edit Bill Draft
-     * Edits a bill draft: marks each field you touch ACCEPTED (the value is kept) or CORRECTED (a new value), picks the vendor from accounting\&#39;s vendor list, and replaces the tax by type or the lines. The checks then run again over the whole draft, so totals, tax by type and duplicates are re-judged; a field you accepted or corrected is never taken back by a check. Use this tool to check and key a draft before confirming it; do not use it to change a bill, which does not exist until the draft is confirmed. Preconditions: the draft is READY_FOR_REVIEW; version is the one you read, else 409 OPTIMISTIC_LOCK; the caller holds accounting:bill_intake:create. Required inputs: version, and at least one of fields, vendorId, taxByType or lines; a field\&#39;s state is ACCEPTED or CORRECTED, never READ or CHECK_THIS; dates are yyyy-MM-dd, amounts have at most 4 decimals. Emits an ACCOUNTING_BILL_INTAKE_UPDATE event and one BILL_INTAKE audit row naming the fields, never a value. Returns 200 with the draft, 400 VALIDATION_ERROR with fieldErrors, 404 BILL_INTAKE_NOT_FOUND, 409 BILL_INTAKE_INVALID_STATE or OPTIMISTIC_LOCK.
+     * Edits a bill draft: marks each field you touch ACCEPTED (the value is kept) or CORRECTED (a new value), picks the vendor from accounting\&#39;s vendor list, and replaces the tax by type or the lines. The checks then run again over the whole draft, so totals, tax by type and duplicates are re-judged; a field you accepted or corrected is never taken back by a check. Use this tool to check and key a draft before confirming it; do not use it to change a bill, which does not exist until the draft is confirmed. Preconditions: the draft is READY_FOR_REVIEW; version is the one you read, else 409 OPTIMISTIC_LOCK; the caller holds accounting:bill_intake:create. Required inputs: version, and at least one of fields, vendorId, taxByType or lines; a field\&#39;s state is ACCEPTED or CORRECTED, never READ or CHECK_THIS; dates are yyyy-MM-dd, amounts have at most 4 decimals and are never negative (the amounts of a draft are magnitudes). documentType is INVOICE or CREDIT_NOTE: a credit note is chosen with it, not with a minus sign, and confirmation then gives its bill negative amounts. Emits an ACCOUNTING_BILL_INTAKE_UPDATE event and one BILL_INTAKE audit row naming the fields, never a value. Returns 200 with the draft, 400 VALIDATION_ERROR with fieldErrors, 404 BILL_INTAKE_NOT_FOUND, 409 BILL_INTAKE_INVALID_STATE or OPTIMISTIC_LOCK.
      * @endpoint put /v1/accounting/bill-intake/{intakeId}
      * @param intakeId
-     * @param billIntakeEditRequest The draft version you read and the fields, vendor, tax by type or lines you change; each touched field names its state.
+     * @param billIntakeEditRequest The draft version you read and the fields, vendor, tax by type or lines you change; each touched field names its state. documentType is INVOICE or CREDIT_NOTE; amounts are magnitudes, never negative.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options

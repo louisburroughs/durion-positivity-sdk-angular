@@ -40,7 +40,7 @@ export interface BillIntakeResponse {
      */
     extractionOutcome?: BillIntakeResponseExtractionOutcomeEnum | null;
     /**
-     * Header fields by name: billNumber, billDate, dueDate, terms, currency, netAmount, taxAmount, freight, totalAmount, purchaseOrderNumber, deliveryReference, debitClass, expenseMappingKey
+     * Header fields by name: documentType (INVOICE or CREDIT_NOTE), billNumber, billDate, dueDate, terms, currency, netAmount, taxAmount, freight, totalAmount, purchaseOrderNumber, deliveryReference, debitClass, expenseMappingKey
      */
     header?: { [key: string]: BillIntakeFieldView; };
     /**
@@ -60,6 +60,10 @@ export interface BillIntakeResponse {
      */
     lines?: Array<{ [key: string]: BillIntakeFieldView; }>;
     /**
+     * True for an import still waiting for its column mapping (PUT .../mapping)
+     */
+    mappingRequired?: boolean;
+    /**
      * Possible duplicates found by the checks
      */
     possibleDuplicates?: Array<BillIntakeDuplicateView>;
@@ -71,6 +75,22 @@ export interface BillIntakeResponse {
      * Rows of an import that could not be read, with their reasons
      */
     rowErrors?: Array<object>;
+    /**
+     * First physical row of an import this draft was read from
+     */
+    rowFrom?: number | null;
+    /**
+     * Last physical row of an import this draft was read from
+     */
+    rowTo?: number | null;
+    /**
+     * The header row of an imported spreadsheet, to map from
+     */
+    sourceColumns?: Array<string> | null;
+    /**
+     * The import draft this one was split from, when a sheet held several invoices
+     */
+    splitOf?: string | null;
     status?: BillIntakeResponseStatusEnum;
     /**
      * Tax by type
@@ -161,9 +181,9 @@ export function instanceOfBillIntakeResponse(value: object): value is BillIntake
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBillIntakeResponsePropertyNames();
-    const optionalStringProperties = createBillIntakeResponseOptionalProperties({ name: 'channel', nullable: false }, { name: 'confirmedAt', nullable: false }, { name: 'confirmedBillId', nullable: true }, { name: 'confirmedBy', nullable: false }, { name: 'discardReason', nullable: true }, { name: 'discardedAt', nullable: false }, { name: 'discardedBy', nullable: false }, { name: 'extractionOutcome', nullable: true }, { name: 'intakeId', nullable: false }, { name: 'intakeReference', nullable: false }, { name: 'rejectionReason', nullable: true }, { name: 'status', nullable: false }, { name: 'uploadedAt', nullable: false }, { name: 'uploadedBy', nullable: false }, { name: 'vendorResolution', nullable: true }, );
-    const optionalNumberProperties = createBillIntakeResponseOptionalProperties({ name: 'version', nullable: false }, );
-    const optionalBooleanProperties = createBillIntakeResponseOptionalProperties({ name: 'edited', nullable: false }, { name: 'lastExtractionFailed', nullable: false }, );
+    const optionalStringProperties = createBillIntakeResponseOptionalProperties({ name: 'channel', nullable: false }, { name: 'confirmedAt', nullable: false }, { name: 'confirmedBillId', nullable: true }, { name: 'confirmedBy', nullable: false }, { name: 'discardReason', nullable: true }, { name: 'discardedAt', nullable: false }, { name: 'discardedBy', nullable: false }, { name: 'extractionOutcome', nullable: true }, { name: 'intakeId', nullable: false }, { name: 'intakeReference', nullable: false }, { name: 'rejectionReason', nullable: true }, { name: 'splitOf', nullable: true }, { name: 'status', nullable: false }, { name: 'uploadedAt', nullable: false }, { name: 'uploadedBy', nullable: false }, { name: 'vendorResolution', nullable: true }, );
+    const optionalNumberProperties = createBillIntakeResponseOptionalProperties({ name: 'rowFrom', nullable: true }, { name: 'rowTo', nullable: true }, { name: 'version', nullable: false }, );
+    const optionalBooleanProperties = createBillIntakeResponseOptionalProperties({ name: 'edited', nullable: false }, { name: 'lastExtractionFailed', nullable: false }, { name: 'mappingRequired', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalBillIntakeResponsePropertyOfType(_v, property.name, 'string', property.nullable))
