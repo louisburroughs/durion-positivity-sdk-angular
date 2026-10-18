@@ -18,6 +18,10 @@ export interface TenantMeResponse {
      */
     displayName?: string;
     /**
+     * The tenant\'s functional currency, an ISO 4217 code chosen at creation and never changed (ADR-0067); null while the replica has not learned it
+     */
+    functionalCurrency?: string;
+    /**
      * Tenant id, the token\'s tid claim
      */
     id: string;
@@ -74,7 +78,7 @@ export function instanceOfTenantMeResponse(value: object): value is TenantMeResp
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTenantMeResponsePropertyNames('id', 'slug', 'status', );
-    const optionalStringProperties = createTenantMeResponseOptionalProperties({ name: 'displayName', nullable: false }, { name: 'id', nullable: false }, { name: 'locale', nullable: false }, { name: 'slug', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createTenantMeResponseOptionalProperties({ name: 'displayName', nullable: false }, { name: 'functionalCurrency', nullable: false }, { name: 'id', nullable: false }, { name: 'locale', nullable: false }, { name: 'slug', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createTenantMeResponseOptionalProperties();
     const optionalBooleanProperties = createTenantMeResponseOptionalProperties();
 

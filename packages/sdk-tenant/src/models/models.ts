@@ -14,5 +14,6 @@ export * from './readingTierResponse';
 export * from './readingTierUpdateRequest';
 export * from './suggestedAlternative';
 export * from './tenantCreateRequest';
+export * from './tenantReEmitResponse';
 export * from './tenantResponse';
 export * from './tenantUpdateRequest';

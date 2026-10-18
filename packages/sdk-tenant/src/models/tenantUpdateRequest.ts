@@ -22,6 +22,10 @@ export interface TenantUpdateRequest {
      */
     displayName?: string;
     /**
+     * Declared only so that a change can be refused: the functional currency is immutable (ADR-0067 OP-1). Omitted, null or equal to the stored code leaves the tenant as it is; any other value, compared verbatim and including a blank one, is 409 TENANT_FUNCTIONAL_CURRENCY_IMMUTABLE and nothing in the request is applied. Leave it out unless you mean to confirm the stored code
+     */
+    functionalCurrency?: string;
+    /**
      * New locale, a BCP 47 tag with a region from pos.tenant.supported-locales; omitted or null leaves it unchanged
      */
     locale?: string;
@@ -70,7 +74,7 @@ export function instanceOfTenantUpdateRequest(value: object): value is TenantUpd
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTenantUpdateRequestPropertyNames();
-    const optionalStringProperties = createTenantUpdateRequestOptionalProperties({ name: 'cell', nullable: false }, { name: 'displayName', nullable: false }, { name: 'locale', nullable: false }, { name: 'readingTierCode', nullable: false }, );
+    const optionalStringProperties = createTenantUpdateRequestOptionalProperties({ name: 'cell', nullable: false }, { name: 'displayName', nullable: false }, { name: 'functionalCurrency', nullable: false }, { name: 'locale', nullable: false }, { name: 'readingTierCode', nullable: false }, );
     const optionalNumberProperties = createTenantUpdateRequestOptionalProperties();
     const optionalBooleanProperties = createTenantUpdateRequestOptionalProperties();
 

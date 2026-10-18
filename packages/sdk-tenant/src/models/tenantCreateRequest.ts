@@ -26,6 +26,10 @@ export interface TenantCreateRequest {
      */
     displayName?: string;
     /**
+     * The shop\'s functional currency (ADR-0067 PC-1): the ISO 4217 code every module books, prices and invoices this tenant\'s money in. Any code with a defined exponent is accepted (USD, CAD, EUR, JPY, KWD), in upper case; there is no allow-list and no default. It is set once and never changes; a wrong value is corrected by decommissioning the PENDING tenant and creating another. Missing, lower-case, unknown or exponent-less codes (XXX) are 400 VALIDATION_ERROR with fieldErrors[functionalCurrency]
+     */
+    functionalCurrency: string;
+    /**
      * Email of the initial administrator pos-security-service creates while provisioning
      */
     initialAdminEmail: string;
@@ -81,8 +85,8 @@ export function instanceOfTenantCreateRequest(value: object): value is TenantCre
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTenantCreateRequestPropertyNames('accountId', 'initialAdminEmail', 'locale', 'slug', );
-    const optionalStringProperties = createTenantCreateRequestOptionalProperties({ name: 'accountId', nullable: false }, { name: 'cell', nullable: false }, { name: 'displayName', nullable: false }, { name: 'initialAdminEmail', nullable: false }, { name: 'locale', nullable: false }, { name: 'readingTierCode', nullable: false }, { name: 'slug', nullable: false }, );
+    const requiredProperties = createTenantCreateRequestPropertyNames('accountId', 'functionalCurrency', 'initialAdminEmail', 'locale', 'slug', );
+    const optionalStringProperties = createTenantCreateRequestOptionalProperties({ name: 'accountId', nullable: false }, { name: 'cell', nullable: false }, { name: 'displayName', nullable: false }, { name: 'functionalCurrency', nullable: false }, { name: 'initialAdminEmail', nullable: false }, { name: 'locale', nullable: false }, { name: 'readingTierCode', nullable: false }, { name: 'slug', nullable: false }, );
     const optionalNumberProperties = createTenantCreateRequestOptionalProperties();
     const optionalBooleanProperties = createTenantCreateRequestOptionalProperties();
 

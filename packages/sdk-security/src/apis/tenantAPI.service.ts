@@ -39,7 +39,7 @@ export class TenantAPIService extends BaseService {
 
     /**
      * Get the Caller\&#39;s Tenant
-     * Returns the tenant the caller\&#39;s token belongs to (its tid claim) as the security service knows it from the tenant registry\&#39;s published projection: id, slug, display name, lifecycle status and locale. Use this tool to show the tenant name in the header or to check the tenant is ACTIVE; do not use it to look up another tenant, which only platform staff can do through the pos-tenant registry. Preconditions: an authenticated caller whose tenant has been published to the replica. Required inputs: none; the tenant comes from the token. Emits a SECURITY_TENANT_ME_GET event. Returns 200 with the tenant, 401 without a bound tenant and 404 when the replica does not know it yet.
+     * Returns the tenant the caller\&#39;s token belongs to (its tid claim) as the security service knows it from the tenant registry\&#39;s published projection: id, slug, display name, lifecycle status, locale and functional currency (ADR-0067). Use this tool to show the tenant name in the header or to check the tenant is ACTIVE; do not use it to look up another tenant, which only platform staff can do through the pos-tenant registry. Preconditions: an authenticated caller whose tenant has been published to the replica. Required inputs: none; the tenant comes from the token. Emits a SECURITY_TENANT_ME_GET event. Returns 200 with the tenant, 401 without a bound tenant and 404 when the replica does not know it yet.
      * @endpoint get /v1/tenants/me
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
