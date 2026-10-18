@@ -26,6 +26,10 @@ export interface VendorBillListRow {
      */
     billNumber: string;
     /**
+     * INVOICE, or CREDIT_NOTE when the vendor issued a credit: its amounts are then negative
+     */
+    documentType: VendorBillListRowDocumentTypeEnum;
+    /**
      * Bill due date; bills matched by this endpoint always have a due date in the requested window
      */
     dueDate?: string;
@@ -42,6 +46,10 @@ export interface VendorBillListRow {
      */
     vendorName?: string | null;
 }
+export enum VendorBillListRowDocumentTypeEnum {
+    Invoice = 'INVOICE',
+    CreditNote = 'CREDIT_NOTE'
+};
 export enum VendorBillListRowStatusEnum {
     PendingReceiptMatch = 'PENDING_RECEIPT_MATCH',
     MatchException = 'MATCH_EXCEPTION',
@@ -93,8 +101,8 @@ export function instanceOfVendorBillListRow(value: object): value is VendorBillL
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createVendorBillListRowPropertyNames('amount', 'billId', 'billNumber', 'status', 'vendorId', );
-    const optionalStringProperties = createVendorBillListRowOptionalProperties({ name: 'billId', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'status', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: true }, );
+    const requiredProperties = createVendorBillListRowPropertyNames('amount', 'billId', 'billNumber', 'documentType', 'status', 'vendorId', );
+    const optionalStringProperties = createVendorBillListRowOptionalProperties({ name: 'billId', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'documentType', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'status', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: true }, );
     const optionalNumberProperties = createVendorBillListRowOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createVendorBillListRowOptionalProperties();
 
