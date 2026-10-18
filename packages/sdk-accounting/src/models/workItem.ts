@@ -72,6 +72,7 @@ export enum WorkItemTypeEnum {
     BillWaitingOnDelivery = 'BILL_WAITING_ON_DELIVERY',
     BillAwaitingApproval = 'BILL_AWAITING_APPROVAL',
     BillsDueSoon = 'BILLS_DUE_SOON',
+    DeliveriesNotBilled = 'DELIVERIES_NOT_BILLED',
     PaymentToMatch = 'PAYMENT_TO_MATCH',
     PaymentNoCustomer = 'PAYMENT_NO_CUSTOMER',
     UnpaidWalkInSale = 'UNPAID_WALK_IN_SALE',
