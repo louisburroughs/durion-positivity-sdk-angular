@@ -21,6 +21,8 @@ import { ApiError } from '../models/apiError';
 // @ts-ignore
 import { TenantCreateRequest } from '../models/tenantCreateRequest';
 // @ts-ignore
+import { TenantReEmitResponse } from '../models/tenantReEmitResponse';
+// @ts-ignore
 import { TenantResponse } from '../models/tenantResponse';
 // @ts-ignore
 import { TenantUpdateRequest } from '../models/tenantUpdateRequest';
@@ -43,9 +45,9 @@ export class PlatformTenantAPIService extends BaseService {
 
     /**
      * Register a Tenant
-     * Registers a tenant under an existing account in status PENDING and publishes tenant.created on tenant.events.v1; pos-security-service provisions the role template and the initial administrator named by initialAdminEmail, then answers tenant.provisioned, which moves the tenant to ACTIVE. Use this tool once per customer tenancy, after createAccount when the owning account does not exist; do not use it to change an existing tenant, use updateTenant or the lifecycle operations instead. Preconditions: the account exists, and neither the slug nor the display name is taken. Required inputs: slug, accountId, initialAdminEmail and locale (a BCP 47 tag with a region from pos.tenant.supported-locales, #2618; a bare language or an unlisted tag is 400 VALIDATION_ERROR with fieldErrors[locale]); cell, displayName and readingTierCode (STANDARD when omitted; an inactive or unknown tier is 422 READING_TIER_NOT_ASSIGNABLE, #2619) are optional. Omitting displayName seeds it from the account\&#39;s legal name, suffixed \&quot; #2\&quot;, \&quot; #3\&quot; and so on only where that would collide — a fallback, so prefer naming the tenant explicitly. Emits a TENANT_CREATE event. Returns 201 with the tenant, 404 when the account is unknown, 409 when the slug or the display name is taken and 422 READING_TIER_NOT_ASSIGNABLE for an unknown or inactive tier.
+     * Registers a tenant under an existing account in status PENDING and publishes tenant.created on tenant.events.v1; pos-security-service provisions the role template and the initial administrator named by initialAdminEmail, then answers tenant.provisioned, which moves the tenant to ACTIVE. Use this tool once per customer tenancy, after createAccount when the owning account does not exist; do not use it to change an existing tenant, use updateTenant or the lifecycle operations instead. Preconditions: the account exists, and neither the slug nor the display name is taken. Required inputs: slug, accountId, initialAdminEmail, locale (a BCP 47 tag with a region from pos.tenant.supported-locales, #2618; a bare language or an unlisted tag is 400 VALIDATION_ERROR with fieldErrors[locale]) and functionalCurrency (an upper-case ISO 4217 code with a defined exponent, chosen explicitly and never changed afterwards, ADR-0067; anything else is 400 VALIDATION_ERROR with fieldErrors[functionalCurrency]); cell, displayName and readingTierCode (STANDARD when omitted; an inactive or unknown tier is 422 READING_TIER_NOT_ASSIGNABLE, #2619) are optional. Omitting displayName seeds it from the account\&#39;s legal name, suffixed \&quot; #2\&quot;, \&quot; #3\&quot; and so on only where that would collide — a fallback, so prefer naming the tenant explicitly. Emits a TENANT_CREATE event. Returns 201 with the tenant, 404 when the account is unknown, 409 when the slug or the display name is taken and 422 READING_TIER_NOT_ASSIGNABLE for an unknown or inactive tier.
      * @endpoint post /v1/platform/tenants
-     * @param tenantCreateRequest Tenant to register: slug, owning account, the initial administrator and, preferably, the display name users will sign in by.
+     * @param tenantCreateRequest Tenant to register: slug, owning account, the initial administrator, the locale, the functional currency and, preferably, the display name users will sign in by.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -301,6 +303,62 @@ export class PlatformTenantAPIService extends BaseService {
     }
 
     /**
+     * Re-emit the Tenant Projection
+     * Republishes every tenant\&#39;s current projection on tenant.events.v1 as a tenant.updated fact, whatever the tenant\&#39;s status, so that every replica learns every existing tenant from its owner (ADR-0044 section 4). Use this tool once after a deployment that adds a field to the projection or a new replica, such as the functional currency of ADR-0067; do not use it to change a tenant, since no tenant row or version changes. Preconditions: the caller is bound to the platform tenant and holds platform:tenant:update. Required inputs: none; there is no body. Each fact carries the tenant\&#39;s current aggregate version and a new event id, so consumers apply a fact whose version equals the stored one and ignore only an older one. Emits a TENANT_REEMIT event. Returns 202 with the number of tenants re-emitted, and 403 off the platform tenant or without the permission.
+     * @endpoint post /v1/platform/tenants/re-emit
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public reEmitTenants(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TenantReEmitResponse>;
+    public reEmitTenants(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TenantReEmitResponse>>;
+    public reEmitTenants(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TenantReEmitResponse>>;
+    public reEmitTenants(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/platform/tenants/re-emit`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<TenantReEmitResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Reactivate a Tenant
      * Moves a SUSPENDED tenant back to ACTIVE and publishes tenant.reactivated. Use this tool to lift a hold placed by suspendTenant; do not use it on a PENDING tenant, which becomes ACTIVE through tenant.provisioned instead. Preconditions: the tenant is SUSPENDED. Required inputs: id (UUID) as a path parameter; no body. Emits a TENANT_REACTIVATE event. Returns 200 with the tenant, 404 when it does not exist and 409 when it is not SUSPENDED.
      * @endpoint post /v1/platform/tenants/{id}/reactivate
@@ -422,7 +480,7 @@ export class PlatformTenantAPIService extends BaseService {
 
     /**
      * Update a Tenant
-     * Changes a tenant\&#39;s display name, cell, locale or reading tier and publishes tenant.updated (a tier change also publishes tenant.reading-allowance.changed, #2619); slug, account and status are never changed here. Use this tool for descriptive edits; do not use it to change status, use suspendTenant, reactivateTenant or decommissionTenant instead. Preconditions: the tenant exists, is not DECOMMISSIONED, and the new display name is not already held by another tenant. Required inputs: id (UUID) as a path parameter and a body with any of displayName, cell, locale (a listed BCP 47 tag with a region, #2618) and readingTierCode (an active tier, else 422 READING_TIER_NOT_ASSIGNABLE); a null field leaves the value unchanged. Emits a TENANT_UPDATE event. Returns 200 with the tenant, 404 when it does not exist, 409 when it is decommissioned or the display name is taken and 422 READING_TIER_NOT_ASSIGNABLE for an unknown or inactive tier.
+     * Changes a tenant\&#39;s display name, cell, locale or reading tier and publishes tenant.updated (a tier change also publishes tenant.reading-allowance.changed, #2619); slug, account, status and functional currency are never changed here. Use this tool for descriptive edits; do not use it to change status, use suspendTenant, reactivateTenant or decommissionTenant instead. Preconditions: the tenant exists, is not DECOMMISSIONED, and the new display name is not already held by another tenant. Required inputs: id (UUID) as a path parameter and a body with any of displayName, cell, locale (a listed BCP 47 tag with a region, #2618) and readingTierCode (an active tier, else 422 READING_TIER_NOT_ASSIGNABLE); a null field leaves the value unchanged. functionalCurrency is accepted only when it equals the stored code. Emits a TENANT_UPDATE event. Returns 200 with the tenant, 404 when it does not exist, 409 when it is decommissioned or the display name is taken, 409 TENANT_FUNCTIONAL_CURRENCY_IMMUTABLE for a different functionalCurrency (nothing is applied) and 422 READING_TIER_NOT_ASSIGNABLE for an unknown or inactive tier.
      * @endpoint patch /v1/platform/tenants/{id}
      * @param id
      * @param tenantUpdateRequest Fields to change; a null field leaves the value unchanged.

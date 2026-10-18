@@ -38,6 +38,10 @@ export interface TenantResponse {
      */
     displayName: string;
     /**
+     * The tenant\'s functional currency, an ISO 4217 code chosen at creation and never changed (ADR-0067); USD for every tenant that existed before it was introduced
+     */
+    functionalCurrency: string;
+    /**
      * Tenant id; the value every module\'s tenant_id refers to
      */
     id: string;
@@ -117,8 +121,8 @@ export function instanceOfTenantResponse(value: object): value is TenantResponse
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTenantResponsePropertyNames('accountId', 'createdAt', 'displayName', 'id', 'initialAdminEmail', 'locale', 'readingTierCode', 'slug', 'status', 'updatedAt', );
-    const optionalStringProperties = createTenantResponseOptionalProperties({ name: 'accountId', nullable: false }, { name: 'activatedAt', nullable: false }, { name: 'cell', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'decommissionedAt', nullable: false }, { name: 'displayName', nullable: false }, { name: 'id', nullable: false }, { name: 'initialAdminEmail', nullable: false }, { name: 'locale', nullable: false }, { name: 'readingTierCode', nullable: false }, { name: 'slug', nullable: false }, { name: 'status', nullable: false }, { name: 'suspendedAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const requiredProperties = createTenantResponsePropertyNames('accountId', 'createdAt', 'displayName', 'functionalCurrency', 'id', 'initialAdminEmail', 'locale', 'readingTierCode', 'slug', 'status', 'updatedAt', );
+    const optionalStringProperties = createTenantResponseOptionalProperties({ name: 'accountId', nullable: false }, { name: 'activatedAt', nullable: false }, { name: 'cell', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'decommissionedAt', nullable: false }, { name: 'displayName', nullable: false }, { name: 'functionalCurrency', nullable: false }, { name: 'id', nullable: false }, { name: 'initialAdminEmail', nullable: false }, { name: 'locale', nullable: false }, { name: 'readingTierCode', nullable: false }, { name: 'slug', nullable: false }, { name: 'status', nullable: false }, { name: 'suspendedAt', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createTenantResponseOptionalProperties();
     const optionalBooleanProperties = createTenantResponseOptionalProperties();
 
