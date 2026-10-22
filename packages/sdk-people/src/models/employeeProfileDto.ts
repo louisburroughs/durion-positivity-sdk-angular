@@ -8,6 +8,7 @@
  * Do not edit the class manually.
  */
 import { EmployeeContactInfoDto } from './employeeContactInfoDto';
+import { EmployeePropagationDto } from './employeePropagationDto';
 import { EmployeeJobRoleDto } from './employeeJobRoleDto';
 
 
@@ -49,6 +50,7 @@ export interface EmployeeProfileDto {
      * Preferred name of the employee
      */
     preferredName?: string;
+    propagation?: EmployeePropagationDto;
     /**
      * Employment status of the employee
      */

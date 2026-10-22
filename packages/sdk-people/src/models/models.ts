@@ -22,6 +22,7 @@ export * from './employeeIdentityDto';
 export * from './employeeJobRoleDto';
 export * from './employeeLocationDto';
 export * from './employeeProfileDto';
+export * from './employeePropagationDto';
 export * from './employeeRoleAssignmentDto';
 export * from './employeeStatusCountsResponse';
 export * from './employeeSummaryDto';

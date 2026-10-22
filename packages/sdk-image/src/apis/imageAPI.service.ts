@@ -41,22 +41,26 @@ export class ImageAPIService extends BaseService {
 
     /**
      * Get image by filename
-     * Returns the stored image file matching a filename as a binary attachment. Use this tool when only the filename is known, such as a reference embedded in catalog data; use getImageById instead when the numeric id is available, because filenames are not guaranteed unique over time. Preconditions: an image record with that exact filename must exist and its backing file must still be present on disk. Required inputs: filename path parameter, matched exactly including extension; there is no request body and no resizing or format options. No events are emitted and no state changes; this is a read-only file retrieval. Returns 404 when no image record matches the filename or the backing file is missing from storage.
+     * Returns image bytes inline for an exact filename match. Use this operation when only the filename is known; do not use it when the numeric image ID is available, use getImageById instead, because filenames are not unique over time. Preconditions: a matching record must exist; legacy records are served only when pos.image.legacy-root is configured and the path resolves safely beneath it. Required inputs: filename including its extension; If-None-Match is optional, and there is no body. No events are emitted and no state changes occur. Stored content has a strong ETag and private, no-cache headers; a matching If-None-Match returns 304. Filenames are never immutable. Returns 404 for no matching record, an unconfigured legacy root, a missing file, or an escaping path; variants are not currently supported.
      * @endpoint get /v1/images/filename/{filename}
      * @param filename Filename of the image to retrieve
+     * @param ifNoneMatch
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getImageByFilename(filename: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<Blob>;
-    public getImageByFilename(filename: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Blob>>;
-    public getImageByFilename(filename: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Blob>>;
-    public getImageByFilename(filename: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getImageByFilename(filename: string, ifNoneMatch?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<Blob>;
+    public getImageByFilename(filename: string, ifNoneMatch?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Blob>>;
+    public getImageByFilename(filename: string, ifNoneMatch?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Blob>>;
+    public getImageByFilename(filename: string, ifNoneMatch?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (filename === null || filename === undefined) {
             throw new Error('Required parameter filename was null or undefined when calling getImageByFilename.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (ifNoneMatch !== undefined && ifNoneMatch !== null) {
+            localVarHeaders = localVarHeaders.set('If-None-Match', String(ifNoneMatch));
+        }
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             '*/*'
@@ -87,22 +91,26 @@ export class ImageAPIService extends BaseService {
 
     /**
      * Get image by ID
-     * Returns the stored image file for a numeric image id as a binary attachment. Use this tool when the image\&#39;s database id is already known; use getImageByFilename instead when only the filename is known. Preconditions: the image record must exist and its backing file must still be present on disk. Required inputs: id (numeric database id) path parameter; there is no request body and no resizing or format options. No events are emitted and no state changes; this is a read-only file retrieval. Returns 404 when no image record has that id or the backing file is missing from storage.
+     * Returns image bytes inline for a numeric image record ID. Use this operation when the caller has the numeric image ID; do not use it when only the filename is known, use getImageByFilename instead. Preconditions: the image record must exist; legacy records are served only when pos.image.legacy-root is configured and the path resolves safely beneath it. Required inputs: id (numeric database ID); If-None-Match is optional, and there is no request body. No events are emitted and no state changes occur. Stored bytes carry a strong ETag and private, immutable-by-ID cache headers; a matching If-None-Match returns 304. Returns 404 for an unknown record, an unconfigured legacy root, a missing file, or an escaping path; use getImageByFilename for filename lookup. Variants are not currently supported.
      * @endpoint get /v1/images/id/{id}
      * @param id ID of the image to retrieve
+     * @param ifNoneMatch
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getImageById(id: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<Blob>;
-    public getImageById(id: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Blob>>;
-    public getImageById(id: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Blob>>;
-    public getImageById(id: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getImageById(id: number, ifNoneMatch?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<Blob>;
+    public getImageById(id: number, ifNoneMatch?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Blob>>;
+    public getImageById(id: number, ifNoneMatch?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Blob>>;
+    public getImageById(id: number, ifNoneMatch?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling getImageById.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (ifNoneMatch !== undefined && ifNoneMatch !== null) {
+            localVarHeaders = localVarHeaders.set('If-None-Match', String(ifNoneMatch));
+        }
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             '*/*'
@@ -133,7 +141,7 @@ export class ImageAPIService extends BaseService {
 
     /**
      * Store An Image
-     * Stores image bytes and returns a reference to them, or returns the reference already held when the same bytes from the same origin have been stored before. Use this tool when ingesting artwork that must not depend on a third party to render, such as manufacturer marketing images; do not use it to register an image that already lives somewhere this service can read, because that needs no copy. Preconditions: the content must not be empty, because an empty body is a failed download and storing one would stop it ever being retried. Required inputs: filename, contentType and content as base64; sourceUri and context are optional, and sourceUri is kept as provenance rather than as a render source. No events are emitted. Returns 200 with the reference, whose newlyStored flag says whether this call did the storing or found the bytes already held, and 400 when the content is empty.
+     * Stores JPEG, PNG, WebP, or GIF image bytes and returns a reference, reusing the existing reference when the same origin and content hash were already stored. Use this operation when a caller has image bytes that must be served by pos-image; do not use it to register an image that remains at an external URL or an existing legacy filesystem path. Preconditions: decoded content is nonempty, has supported magic bytes, and does not exceed pos.image.max-bytes (10 MiB by default); SVG is not supported. Required inputs: filename, a MIME claim (which may be blank), and base64 content; sourceUri and context are optional, and sourceUri is provenance only. No events are emitted; the operation creates or reuses tenant-scoped image and image_content rows. Returns 413 for content over the configured decoded-size limit and 400 for invalid base64, empty or unsupported bytes, or a claim naming a different supported image type.
      * @endpoint post /v1/images
      * @param storeImageRequest The image to store, with the origin it was fetched from where there was one.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

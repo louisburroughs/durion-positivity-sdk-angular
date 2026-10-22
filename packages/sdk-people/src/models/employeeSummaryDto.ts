@@ -10,6 +10,7 @@
 import { EmployeeLocationDto } from './employeeLocationDto';
 import { EmployeeRoleAssignmentDto } from './employeeRoleAssignmentDto';
 import { EmployeeContactInfoDto } from './employeeContactInfoDto';
+import { EmployeePropagationDto } from './employeePropagationDto';
 import { EmployeeJobRoleDto } from './employeeJobRoleDto';
 
 
@@ -56,6 +57,7 @@ export interface EmployeeSummaryDto {
      */
     preferredName?: string;
     primaryLocation?: EmployeeLocationDto;
+    propagation?: EmployeePropagationDto;
     /**
      * Active application-role assignments (DECISION-PEOPLE-026); null unless `include=ROLE_ASSIGNMENTS` was requested, empty when requested but the person holds none
      */
