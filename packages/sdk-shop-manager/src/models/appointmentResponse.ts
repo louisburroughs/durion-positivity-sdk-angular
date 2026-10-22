@@ -90,6 +90,10 @@ export interface AppointmentResponse {
      * Snapshot of vehicle attributes captured at booking time
      */
     vehicleSnapshot?: object;
+    /**
+     * The workorder this appointment is linked to (#2118), read from the most current work_order_appointment_mapping row (the same rule as actualStartAt). Read-only. Null when no workorder is linked or none of its replicas has landed yet; while a reopened workorder\'s newest mapping is still replicating, the superseded workorder\'s id is returned, as the actuals do (#2089); workexec\'s assign guards refuse a closed workorder. Use it to dispatch: read the plan from GET /v1/appointments/{appointmentId}/assignments, then call workexec\'s assignTechnician on this workorder. Cancelling or rescheduling the appointment never changes that workorder\'s technician of record (DECISION-SHOPMGMT-026).
+     */
+    workorderId?: string;
 }
 
 function isOptionalAppointmentResponsePropertyOfType(
@@ -131,7 +135,7 @@ export function instanceOfAppointmentResponse(value: object): value is Appointme
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAppointmentResponsePropertyNames('affected', 'appointmentId', 'createdAt', 'crmCustomerId', 'crmVehicleId', 'endAt', 'locationId', 'startAt', 'status', );
-    const optionalStringProperties = createAppointmentResponseOptionalProperties({ name: 'actualEndAt', nullable: false }, { name: 'actualStartAt', nullable: false }, { name: 'appointmentId', nullable: false }, { name: 'cancellationNotes', nullable: false }, { name: 'cancellationReason', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'crmCustomerId', nullable: false }, { name: 'crmVehicleId', nullable: false }, { name: 'endAt', nullable: false }, { name: 'expectedEndAt', nullable: false }, { name: 'locationId', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'startAt', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createAppointmentResponseOptionalProperties({ name: 'actualEndAt', nullable: false }, { name: 'actualStartAt', nullable: false }, { name: 'appointmentId', nullable: false }, { name: 'cancellationNotes', nullable: false }, { name: 'cancellationReason', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'crmCustomerId', nullable: false }, { name: 'crmVehicleId', nullable: false }, { name: 'endAt', nullable: false }, { name: 'expectedEndAt', nullable: false }, { name: 'locationId', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'startAt', nullable: false }, { name: 'status', nullable: false }, { name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createAppointmentResponseOptionalProperties();
     const optionalBooleanProperties = createAppointmentResponseOptionalProperties({ name: 'affected', nullable: false }, );
 

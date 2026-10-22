@@ -14,10 +14,6 @@
  */
 export interface OperationalContextResponse {
     /**
-     * Assigned mechanic identifiers
-     */
-    assignedMechanics?: Array<string>;
-    /**
      * Assigned resource identifiers
      */
     assignedResources?: Array<string>;
@@ -33,6 +29,10 @@ export interface OperationalContextResponse {
      * Whether context is locked after work start
      */
     locked: boolean;
+    /**
+     * Planned mechanic person ids (scheduling intention, unvalidated). Read-only: never the technician of record, and not written by the override. Read the technician from the technician endpoints.
+     */
+    plannedMechanicIds?: Array<string>;
     /**
      * Identifier of the workorder\'s primary assigned resource; read together with resourceType, which says whether it is a bay or a mobile unit
      */

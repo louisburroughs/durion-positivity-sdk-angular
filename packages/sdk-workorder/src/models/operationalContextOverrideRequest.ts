@@ -10,13 +10,9 @@
 
 
 /**
- * Manager override payload for workorder operational context
+ * Manager override payload for workorder operational context. Re-slots the service position (and location); it never changes the technician of record or the planned mechanics - use the technician endpoints for that. An unknown property, including the removed assignedMechanics, is a 400.
  */
 export interface OperationalContextOverrideRequest {
-    /**
-     * Assigned mechanic identifiers
-     */
-    assignedMechanics?: Array<string>;
     /**
      * Assigned resource identifiers
      */
