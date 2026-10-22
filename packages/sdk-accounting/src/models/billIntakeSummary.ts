@@ -18,7 +18,15 @@ export interface BillIntakeSummary {
     currency?: string;
     intakeId?: string;
     intakeReference?: string;
+    /**
+     * Pages (or frames) of the document once it is inspected; null before then and when there is no document
+     */
+    pageCount?: number | null;
     rejectionReason?: string;
+    /**
+     * The uploaded or emailed document, for its page previews (GET /v1/accounting/bill-source-files/{fileId}/preview); null for a spreadsheet import and an EDI draft
+     */
+    sourceFileId?: string | null;
     status?: BillIntakeSummaryStatusEnum;
     totalAmount?: number;
     uploadedAt?: string;
@@ -90,8 +98,8 @@ export function instanceOfBillIntakeSummary(value: object): value is BillIntakeS
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBillIntakeSummaryPropertyNames();
-    const optionalStringProperties = createBillIntakeSummaryOptionalProperties({ name: 'billNumber', nullable: false }, { name: 'channel', nullable: false }, { name: 'currency', nullable: false }, { name: 'intakeId', nullable: false }, { name: 'intakeReference', nullable: false }, { name: 'rejectionReason', nullable: false }, { name: 'status', nullable: false }, { name: 'uploadedAt', nullable: false }, { name: 'vendorName', nullable: true }, { name: 'vendorResolution', nullable: false }, );
-    const optionalNumberProperties = createBillIntakeSummaryOptionalProperties({ name: 'totalAmount', nullable: false }, );
+    const optionalStringProperties = createBillIntakeSummaryOptionalProperties({ name: 'billNumber', nullable: false }, { name: 'channel', nullable: false }, { name: 'currency', nullable: false }, { name: 'intakeId', nullable: false }, { name: 'intakeReference', nullable: false }, { name: 'rejectionReason', nullable: false }, { name: 'sourceFileId', nullable: true }, { name: 'status', nullable: false }, { name: 'uploadedAt', nullable: false }, { name: 'vendorName', nullable: true }, { name: 'vendorResolution', nullable: false }, );
+    const optionalNumberProperties = createBillIntakeSummaryOptionalProperties({ name: 'pageCount', nullable: true }, { name: 'totalAmount', nullable: false }, );
     const optionalBooleanProperties = createBillIntakeSummaryOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

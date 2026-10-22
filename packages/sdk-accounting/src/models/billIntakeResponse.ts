@@ -64,6 +64,10 @@ export interface BillIntakeResponse {
      */
     mappingRequired?: boolean;
     /**
+     * Pages (or frames) of the document once it is inspected; null before then and when there is no document
+     */
+    pageCount?: number | null;
+    /**
      * Possible duplicates found by the checks
      */
     possibleDuplicates?: Array<BillIntakeDuplicateView>;
@@ -87,6 +91,10 @@ export interface BillIntakeResponse {
      * The header row of an imported spreadsheet, to map from
      */
     sourceColumns?: Array<string> | null;
+    /**
+     * The uploaded or emailed document, for its page previews (GET /v1/accounting/bill-source-files/{fileId}/preview); null for a spreadsheet import and an EDI draft
+     */
+    sourceFileId?: string | null;
     /**
      * The import draft this one was split from, when a sheet held several invoices
      */
@@ -181,8 +189,8 @@ export function instanceOfBillIntakeResponse(value: object): value is BillIntake
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBillIntakeResponsePropertyNames();
-    const optionalStringProperties = createBillIntakeResponseOptionalProperties({ name: 'channel', nullable: false }, { name: 'confirmedAt', nullable: false }, { name: 'confirmedBillId', nullable: true }, { name: 'confirmedBy', nullable: false }, { name: 'discardReason', nullable: true }, { name: 'discardedAt', nullable: false }, { name: 'discardedBy', nullable: false }, { name: 'extractionOutcome', nullable: true }, { name: 'intakeId', nullable: false }, { name: 'intakeReference', nullable: false }, { name: 'rejectionReason', nullable: true }, { name: 'splitOf', nullable: true }, { name: 'status', nullable: false }, { name: 'uploadedAt', nullable: false }, { name: 'uploadedBy', nullable: false }, { name: 'vendorResolution', nullable: true }, );
-    const optionalNumberProperties = createBillIntakeResponseOptionalProperties({ name: 'rowFrom', nullable: true }, { name: 'rowTo', nullable: true }, { name: 'version', nullable: false }, );
+    const optionalStringProperties = createBillIntakeResponseOptionalProperties({ name: 'channel', nullable: false }, { name: 'confirmedAt', nullable: false }, { name: 'confirmedBillId', nullable: true }, { name: 'confirmedBy', nullable: false }, { name: 'discardReason', nullable: true }, { name: 'discardedAt', nullable: false }, { name: 'discardedBy', nullable: false }, { name: 'extractionOutcome', nullable: true }, { name: 'intakeId', nullable: false }, { name: 'intakeReference', nullable: false }, { name: 'rejectionReason', nullable: true }, { name: 'sourceFileId', nullable: true }, { name: 'splitOf', nullable: true }, { name: 'status', nullable: false }, { name: 'uploadedAt', nullable: false }, { name: 'uploadedBy', nullable: false }, { name: 'vendorResolution', nullable: true }, );
+    const optionalNumberProperties = createBillIntakeResponseOptionalProperties({ name: 'pageCount', nullable: true }, { name: 'rowFrom', nullable: true }, { name: 'rowTo', nullable: true }, { name: 'version', nullable: false }, );
     const optionalBooleanProperties = createBillIntakeResponseOptionalProperties({ name: 'edited', nullable: false }, { name: 'lastExtractionFailed', nullable: false }, { name: 'mappingRequired', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
