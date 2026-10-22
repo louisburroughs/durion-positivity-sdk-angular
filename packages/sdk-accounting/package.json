@@ -1,6 +1,6 @@
 {
   "name": "@durion-sdk/accounting",
-  "version": "0.147.0-alpha",
+  "version": "0.148.0-alpha",
   "description": "OpenAPI client for @durion-sdk/accounting",
   "author": "OpenAPI-Generator Contributors",
   "repository": {

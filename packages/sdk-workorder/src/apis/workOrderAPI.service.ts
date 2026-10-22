@@ -44,6 +44,10 @@ import { WorkorderResponse } from '../models/workorderResponse';
 import { WorkorderSnapshotResponse } from '../models/workorderSnapshotResponse';
 // @ts-ignore
 import { WorkorderStateTransitionResponse } from '../models/workorderStateTransitionResponse';
+// @ts-ignore
+import { WorkorderTransferRequest } from '../models/workorderTransferRequest';
+// @ts-ignore
+import { WorkorderTransferResponse } from '../models/workorderTransferResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -973,6 +977,84 @@ export class WorkOrderAPIService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: reopenWorkorderRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Transfer a Workorder to Another Location
+     * Transfers the same unstarted workorder to a different active location, releasing its current position and technician; an ASSIGNED workorder returns to APPROVED. Use this tool when an unstarted workorder must move to another shop, for example at the customer\&#39;s request or for capacity; do not use it for a workorder that has recorded time, has parts in hand, or is closed. Finish or cancel that work at its current location instead, and create a new workorder at the other location. Preconditions: the caller holds workorder:workorder:transfer in scope for both the current and the target location, the target location is a different active location, the workorder is not closed, and it has no pending change request, no recorded time, and no picked parts. Required inputs: workorderId (UUID) as a path parameter, and toLocationId (UUID) and reasonCode (CUSTOMER_REQUEST, CAPACITY, EQUIPMENT, MOBILE_DEPOT or OTHER) in the body; OTHER requires a non-blank note of at most 500 characters. An optional Idempotency-Key header replays the original transfer response. Emits a WORKORDER_TRANSFER event and the workorder.workorder.transferred domain event. Returns 200, 400 VALIDATION_FAILED, 403 LOCATION_SCOPE_DENIED, 404 NOT_FOUND, 409 WORKORDER_CLOSED or WORKORDER_TRANSFER_NOT_ALLOWED, and 422 WORKORDER_TRANSFER_LOCATION_INVALID, WORKORDER_TRANSFER_LOCATION_INACTIVE, WORKORDER_TRANSFER_CHANGE_REQUEST_PENDING, WORKORDER_TRANSFER_TIME_RECORDED, or WORKORDER_TRANSFER_PARTS_IN_HAND.
+     * @endpoint post /v1/workorders/{workorderId}/transfer
+     * @param workorderId
+     * @param workorderTransferRequest Target location, the business reason for the transfer, and a note (required when the reason is OTHER).
+     * @param idempotencyKey
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public transferWorkorder(workorderId: string, workorderTransferRequest: WorkorderTransferRequest, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkorderTransferResponse>;
+    public transferWorkorder(workorderId: string, workorderTransferRequest: WorkorderTransferRequest, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkorderTransferResponse>>;
+    public transferWorkorder(workorderId: string, workorderTransferRequest: WorkorderTransferRequest, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkorderTransferResponse>>;
+    public transferWorkorder(workorderId: string, workorderTransferRequest: WorkorderTransferRequest, idempotencyKey?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (workorderId === null || workorderId === undefined) {
+            throw new Error('Required parameter workorderId was null or undefined when calling transferWorkorder.');
+        }
+        if (workorderTransferRequest === null || workorderTransferRequest === undefined) {
+            throw new Error('Required parameter workorderTransferRequest was null or undefined when calling transferWorkorder.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/transfer`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<WorkorderTransferResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: workorderTransferRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

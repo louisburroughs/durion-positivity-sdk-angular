@@ -122,3 +122,5 @@ export * from './workorderStatusHistoryEntry';
 export * from './workorderStatusTransitionsResponse';
 export * from './workorderStatusView';
 export * from './workorderSummary';
+export * from './workorderTransferRequest';
+export * from './workorderTransferResponse';
