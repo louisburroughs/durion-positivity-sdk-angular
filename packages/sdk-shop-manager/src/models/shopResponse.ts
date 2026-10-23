@@ -16,7 +16,6 @@ export interface ShopResponse {
     address?: string;
     id?: string;
     name?: string;
-    timezone?: string;
 }
 
 function isOptionalShopResponsePropertyOfType(
@@ -58,7 +57,7 @@ export function instanceOfShopResponse(value: object): value is ShopResponse {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createShopResponsePropertyNames();
-    const optionalStringProperties = createShopResponseOptionalProperties({ name: 'address', nullable: false }, { name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'timezone', nullable: false }, );
+    const optionalStringProperties = createShopResponseOptionalProperties({ name: 'address', nullable: false }, { name: 'id', nullable: false }, { name: 'name', nullable: false }, );
     const optionalNumberProperties = createShopResponseOptionalProperties();
     const optionalBooleanProperties = createShopResponseOptionalProperties();
 
