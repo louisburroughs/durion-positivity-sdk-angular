@@ -43,7 +43,7 @@ export interface ScheduleViewResponse {
      */
     viewGeneratedAt: string;
     /**
-     * Non-fatal warnings generated while assembling the view
+     * Non-fatal warning entries use a code, optionally followed by \': detail\'. LOCATION_HOLIDAY includes the closure reason after \': \'; other codes are HR_SYSTEM_UNAVAILABLE, LOCATION_CLOSED, and LOCATION_HOURS_UNAVAILABLE.
      */
     warnings?: Array<string>;
 }

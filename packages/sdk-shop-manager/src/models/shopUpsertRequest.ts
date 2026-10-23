@@ -21,10 +21,6 @@ export interface ShopUpsertRequest {
      * Display name of the shop
      */
     name: string;
-    /**
-     * IANA timezone the shop\'s day window is computed in
-     */
-    timezone?: string;
 }
 
 function isOptionalShopUpsertRequestPropertyOfType(
@@ -66,7 +62,7 @@ export function instanceOfShopUpsertRequest(value: object): value is ShopUpsertR
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createShopUpsertRequestPropertyNames('name', );
-    const optionalStringProperties = createShopUpsertRequestOptionalProperties({ name: 'address', nullable: false }, { name: 'name', nullable: false }, { name: 'timezone', nullable: false }, );
+    const optionalStringProperties = createShopUpsertRequestOptionalProperties({ name: 'address', nullable: false }, { name: 'name', nullable: false }, );
     const optionalNumberProperties = createShopUpsertRequestOptionalProperties();
     const optionalBooleanProperties = createShopUpsertRequestOptionalProperties();
 
