@@ -78,6 +78,7 @@ export enum TraceabilityMovementEventTypeEnum {
     AllocationReleased = 'ALLOCATION_RELEASED',
     BackorderCreated = 'BACKORDER_CREATED',
     BackorderResolved = 'BACKORDER_RESOLVED',
+    BackorderCancelled = 'BACKORDER_CANCELLED',
     PickTaskCreated = 'PICK_TASK_CREATED',
     PickTaskCompleted = 'PICK_TASK_COMPLETED'
 };
