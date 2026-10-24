@@ -38,6 +38,14 @@ export interface PickTaskResponse {
      */
     quantityRequired: number;
     /**
+     * Cumulative quantity returned from this task
+     */
+    quantityReturned: number;
+    /**
+     * Picked quantity not yet returned or consumed
+     */
+    quantityStaged: number;
+    /**
      * Identifier of the SKU to be picked
      */
     skuId: string;
@@ -105,9 +113,9 @@ export function instanceOfPickTaskResponse(value: object): value is PickTaskResp
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPickTaskResponsePropertyNames('locationId', 'pickListId', 'pickTaskId', 'quantityPicked', 'quantityRequired', 'skuId', 'sortOrder', 'status', );
+    const requiredProperties = createPickTaskResponsePropertyNames('locationId', 'pickListId', 'pickTaskId', 'quantityPicked', 'quantityRequired', 'quantityReturned', 'quantityStaged', 'skuId', 'sortOrder', 'status', );
     const optionalStringProperties = createPickTaskResponseOptionalProperties({ name: 'locationId', nullable: false }, { name: 'pickListId', nullable: false }, { name: 'pickTaskId', nullable: false }, { name: 'pickedLotId', nullable: false }, { name: 'skuId', nullable: false }, { name: 'status', nullable: false }, { name: 'suggestedLotNumber', nullable: false }, { name: 'unitOfMeasure', nullable: false }, );
-    const optionalNumberProperties = createPickTaskResponseOptionalProperties({ name: 'quantityPicked', nullable: false }, { name: 'quantityRequired', nullable: false }, { name: 'sortOrder', nullable: false }, );
+    const optionalNumberProperties = createPickTaskResponseOptionalProperties({ name: 'quantityPicked', nullable: false }, { name: 'quantityRequired', nullable: false }, { name: 'quantityReturned', nullable: false }, { name: 'quantityStaged', nullable: false }, { name: 'sortOrder', nullable: false }, );
     const optionalBooleanProperties = createPickTaskResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
