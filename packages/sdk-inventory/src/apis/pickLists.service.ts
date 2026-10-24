@@ -27,6 +27,10 @@ import { PickListResponse } from '../models/pickListResponse';
 // @ts-ignore
 import { PickTaskResponse } from '../models/pickTaskResponse';
 // @ts-ignore
+import { ReturnStagedRequest } from '../models/returnStagedRequest';
+// @ts-ignore
+import { StagedPickTaskResponse } from '../models/stagedPickTaskResponse';
+// @ts-ignore
 import { UpdatePickListStatusRequest } from '../models/updatePickListStatusRequest';
 
 // @ts-ignore
@@ -446,6 +450,108 @@ export class PickListsService extends BaseService {
     }
 
     /**
+     * List staged picked tasks at a site
+     * Returns a paginated list of PICKED pick tasks with positive staged quantity for the required site. Use this tool when site staff need to identify picked parts still awaiting return; do not use getPickList, which shows tasks for one known list only. Preconditions: locationId must identify a site and is checked against the caller\&#39;s location scope. Required inputs: locationId (UUID); page and size are optional pagination controls; there is no request body. No events are emitted and the query changes no inventory state. Returns 200 with an empty page when the site has no staged tasks, or 403 when the caller is outside the site\&#39;s scope.
+     * @endpoint get /v1/inventory/pick-lists/staged-tasks/by-site
+     * @param locationId Site location identifier
+     * @param page Zero-based page index (0..N)
+     * @param size The size of the page to be returned
+     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listStagedPickTasks(locationId: string, page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<string>;
+    public listStagedPickTasks(locationId: string, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<string>>;
+    public listStagedPickTasks(locationId: string, page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<string>>;
+    public listStagedPickTasks(locationId: string, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (locationId === null || locationId === undefined) {
+            throw new Error('Required parameter locationId was null or undefined when calling listStagedPickTasks.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'locationId',
+            <any>locationId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'sort',
+            <any>sort,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/inventory/pick-lists/staged-tasks/by-site`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<string>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Release pick list
      * Releases a pick list by setting its status to READY_TO_PICK so its pick tasks can be executed. Use this tool when planning is done and picking should start, then confirm each task with confirmPickTask; do not use updatePickListStatus for release — it applies any status without this operation\&#39;s intent. Preconditions: the pick list must exist; no prior-status guard is enforced, so releasing an already released or completed list simply re-applies READY_TO_PICK. Required inputs: pickListId (UUID) path parameter; there is no request body. Emits an INVENTORY_PICK_LIST_RELEASE event; no ledger entries are written. Returns 404 when no pick list exists for the supplied id.
      * @endpoint post /v1/inventory/pick-lists/{pickListId}/release
@@ -495,6 +601,84 @@ export class PickListsService extends BaseService {
         return this.httpClient.request<PickListResponse>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Return staged picked quantity to stock
+     * Returns staged, unconsumed quantity from one PICKED task, releases its matching HARD allocation, and leaves the task PICKED. Use this tool when inventory staff return staged goods to stock; do not use submitToStock, which returns consumed goods, or consumePickedItems. Preconditions: the task must exist in the path\&#39;s pick list and be PICKED; requested quantity cannot exceed its staged balance. Required inputs: pickListId and taskId (UUIDs); quantity (positive whole number) and reasonCode; destinationStorageLocationId is optional; notes are required for OTHER and limited to 500 characters; expectedQuantityStaged is optional. Emits INVENTORY_PICK_TASK_RETURN_STAGED and publishes the updated task snapshot; allocation release and any destination movement are atomic. Returns 200 on success, 400 for invalid input, 403 when location scope denies access, 404 for an unknown task, 409 for a stale expectedQuantityStaged, and 422 for invalid task state, excess quantity, or destination.
+     * @endpoint post /v1/inventory/pick-lists/{pickListId}/tasks/{taskId}/return-staged
+     * @param pickListId Pick list identifier
+     * @param taskId Pick task identifier
+     * @param returnStagedRequest Return quantity and reason; an optional active destination defaults to the confirmed pick bin.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public returnStagedPickTask(pickListId: string, taskId: string, returnStagedRequest: ReturnStagedRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<StagedPickTaskResponse>;
+    public returnStagedPickTask(pickListId: string, taskId: string, returnStagedRequest: ReturnStagedRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<StagedPickTaskResponse>>;
+    public returnStagedPickTask(pickListId: string, taskId: string, returnStagedRequest: ReturnStagedRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<StagedPickTaskResponse>>;
+    public returnStagedPickTask(pickListId: string, taskId: string, returnStagedRequest: ReturnStagedRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (pickListId === null || pickListId === undefined) {
+            throw new Error('Required parameter pickListId was null or undefined when calling returnStagedPickTask.');
+        }
+        if (taskId === null || taskId === undefined) {
+            throw new Error('Required parameter taskId was null or undefined when calling returnStagedPickTask.');
+        }
+        if (returnStagedRequest === null || returnStagedRequest === undefined) {
+            throw new Error('Required parameter returnStagedRequest was null or undefined when calling returnStagedPickTask.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/inventory/pick-lists/${this.configuration.encodeParam({name: "pickListId", value: pickListId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/tasks/${this.configuration.encodeParam({name: "taskId", value: taskId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/return-staged`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<StagedPickTaskResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: returnStagedRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

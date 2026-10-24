@@ -1,6 +1,6 @@
 {
   "name": "@durion-sdk/event-receiver",
-  "version": "0.150.0-alpha",
+  "version": "0.151.0-alpha",
   "description": "OpenAPI client for @durion-sdk/event-receiver",
   "author": "OpenAPI-Generator Contributors",
   "repository": {
