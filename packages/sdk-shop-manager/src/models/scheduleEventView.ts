@@ -28,7 +28,7 @@ export interface ScheduleEventView {
      */
     eventId: string;
     /**
-     * Event type (e.g. APPOINTMENT, WORK_ORDER, SHIFT, PTO)
+     * Event type (e.g. APPOINTMENT, SHIFT, PTO)
      */
     eventType: string;
     /**
@@ -48,17 +48,9 @@ export interface ScheduleEventView {
      */
     subType?: string;
     /**
-     * Assigned technician person identifiers for WORK_ORDER events; empty when unknown
-     */
-    technicianIds?: Array<string>;
-    /**
      * Event display title
      */
     title?: string;
-    /**
-     * Workorder identifier for WORK_ORDER events; null for other event types
-     */
-    workorderId?: string;
 }
 
 function isOptionalScheduleEventViewPropertyOfType(
@@ -100,7 +92,7 @@ export function instanceOfScheduleEventView(value: object): value is ScheduleEve
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createScheduleEventViewPropertyNames('affected', 'endTime', 'eventId', 'eventType', 'hasConflict', 'startTime', );
-    const optionalStringProperties = createScheduleEventViewOptionalProperties({ name: 'endTime', nullable: false }, { name: 'eventId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'severity', nullable: false }, { name: 'startTime', nullable: false }, { name: 'subType', nullable: false }, { name: 'title', nullable: false }, { name: 'workorderId', nullable: false }, );
+    const optionalStringProperties = createScheduleEventViewOptionalProperties({ name: 'endTime', nullable: false }, { name: 'eventId', nullable: false }, { name: 'eventType', nullable: false }, { name: 'severity', nullable: false }, { name: 'startTime', nullable: false }, { name: 'subType', nullable: false }, { name: 'title', nullable: false }, );
     const optionalNumberProperties = createScheduleEventViewOptionalProperties();
     const optionalBooleanProperties = createScheduleEventViewOptionalProperties({ name: 'affected', nullable: false }, { name: 'hasConflict', nullable: false }, );
 

@@ -7,6 +7,8 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ResponseWarning } from './responseWarning';
+import { WorkorderLaborAdjustmentResponse } from './workorderLaborAdjustmentResponse';
 
 
 /**
@@ -17,10 +19,6 @@ export interface WorkorderLaborEntryResponse {
      * Whether this session is still active (not stopped)
      */
     active: boolean;
-    /**
-     * Adjustment reason (if hours were manually adjusted)
-     */
-    adjustmentReason?: string;
     /**
      * Creation timestamp
      */
@@ -41,6 +39,7 @@ export interface WorkorderLaborEntryResponse {
      * Unique ID of the labor entry
      */
     id: string;
+    lastAdjustment?: WorkorderLaborAdjustmentResponse;
     /**
      * Session notes
      */
@@ -53,6 +52,10 @@ export interface WorkorderLaborEntryResponse {
      * Technician ID who performed the work
      */
     technicianId?: string;
+    /**
+     * Non-blocking warnings
+     */
+    warnings: Array<ResponseWarning>;
     /**
      * Workorder ID
      */
@@ -101,8 +104,8 @@ export function instanceOfWorkorderLaborEntryResponse(value: object): value is W
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createWorkorderLaborEntryResponsePropertyNames('active', 'id', 'workorderId', );
-    const optionalStringProperties = createWorkorderLaborEntryResponseOptionalProperties({ name: 'adjustmentReason', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'endTime', nullable: false }, { name: 'id', nullable: false }, { name: 'notes', nullable: false }, { name: 'startTime', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderServiceId', nullable: false }, );
+    const requiredProperties = createWorkorderLaborEntryResponsePropertyNames('active', 'id', 'warnings', 'workorderId', );
+    const optionalStringProperties = createWorkorderLaborEntryResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'endTime', nullable: false }, { name: 'id', nullable: false }, { name: 'notes', nullable: false }, { name: 'startTime', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderServiceId', nullable: false }, );
     const optionalNumberProperties = createWorkorderLaborEntryResponseOptionalProperties({ name: 'hoursWorked', nullable: false }, );
     const optionalBooleanProperties = createWorkorderLaborEntryResponseOptionalProperties({ name: 'active', nullable: false }, );
 

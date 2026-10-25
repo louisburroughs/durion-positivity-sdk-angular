@@ -23,6 +23,8 @@ import { ApiError } from '../models/apiError';
 // @ts-ignore
 import { StartLaborRequest } from '../models/startLaborRequest';
 // @ts-ignore
+import { WorkorderLaborAdjustmentResponse } from '../models/workorderLaborAdjustmentResponse';
+// @ts-ignore
 import { WorkorderLaborEntryResponse } from '../models/workorderLaborEntryResponse';
 
 // @ts-ignore
@@ -43,7 +45,7 @@ export class WorkorderLaborAPIService extends BaseService {
 
     /**
      * Adjust Labor Entry Hours
-     * Manually overrides the hours worked on a labor entry, recording the adjustment reason and the adjusting user for the audit trail. This is a supervisor-only action; supervisors may adjust their own entries. Use this tool to correct recorded hours after a timesheet review; do not use stopLaborSession, which computes hours from elapsed time when a session ends. Preconditions: the labor entry must exist and its workorder location must be within the caller\&#39;s reach when location scope applies; the entry retains its original times, with the adjusted hours and reason stored alongside them. Required inputs: workorderId and entryId (UUIDs) as path parameters, plus hoursWorked (decimal) and adjustmentReason in the body; an Idempotency-Key header makes retries return the already-adjusted entry. Emits a WORKORDER_LABOR_ADJUST event. Returns 403 when the caller lacks supervisor authority or the workorder location is outside the caller\&#39;s reach, 404 when no labor entry exists for the id, and 400 when the hours value is rejected as invalid.
+     * Manually corrects the hours on a stopped labor entry, preserving the immutable audit record and the authenticated adjusting user. This is a supervisor-only action; supervisors may adjust their own entries. Use this tool to correct a recorded entry after timesheet review; do not use stopLaborSession, which records elapsed time for a running entry. Preconditions: the entry belongs to workorderId and has an endTime; when location scope applies, an entry on a workorder outside the caller\&#39;s reach is denied. Required inputs: workorderId and entryId (UUIDs) in the path and hoursWorked and adjustmentReason in the body; an optional Idempotency-Key replays the first adjustment. Emits workorder.labor-adjustment.recorded.v1 keyed by laborEntryId. Returns 400 when the hours are invalid or the caller has no authenticated user id, 404 when no entry belongs to the named workorder, 409 when the entry has not stopped, and 422 when the adjusted hours do not change. COMPLETED or CANCELLED workorders succeed with a WORKORDER_CLOSED warning.
      * @endpoint put /v1/workorders/{workorderId}/labor/{entryId}/adjust
      * @param workorderId ID of the workorder
      * @param entryId ID of the labor entry to adjust
@@ -113,6 +115,70 @@ export class WorkorderLaborAPIService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: adjustLaborRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get labor adjustment history
+     * Returns immutable labor adjustment history for a recorded entry, newest first. Use this tool to review how labor hours changed; do not use the labor-entry list when audit details are required. Preconditions: the entry belongs to the named workorder. Required inputs: workorderId and entryId UUID path parameters. No events are emitted. Returns 403 when the caller is outside the workorder\&#39;s location reach and 404 when the labor entry does not belong to the workorder; otherwise returns 200 with adjustment history.
+     * @endpoint get /v1/workorders/{workorderId}/labor/{entryId}/adjustments
+     * @param workorderId
+     * @param entryId
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getLaborAdjustments(workorderId: string, entryId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<WorkorderLaborAdjustmentResponse>>;
+    public getLaborAdjustments(workorderId: string, entryId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<WorkorderLaborAdjustmentResponse>>>;
+    public getLaborAdjustments(workorderId: string, entryId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<WorkorderLaborAdjustmentResponse>>>;
+    public getLaborAdjustments(workorderId: string, entryId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (workorderId === null || workorderId === undefined) {
+            throw new Error('Required parameter workorderId was null or undefined when calling getLaborAdjustments.');
+        }
+        if (entryId === null || entryId === undefined) {
+            throw new Error('Required parameter entryId was null or undefined when calling getLaborAdjustments.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/labor/${this.configuration.encodeParam({name: "entryId", value: entryId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/adjustments`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<WorkorderLaborAdjustmentResponse>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
