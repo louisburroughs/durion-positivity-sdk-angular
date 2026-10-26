@@ -20,7 +20,7 @@ export interface BillIntakeEditRequest {
      */
     fields?: { [key: string]: FieldEdit; };
     /**
-     * Replaces the draft\'s lines; each line maps description, partNumber, quantity, unitCost and lineAmount to {value?, state}
+     * Replaces the draft\'s lines; each line maps description, partNumber, quantity, unitCost, lineAmount, optional debitClass (GOODS or EXPENSE) and optional expenseMappingKey to {value?, state}
      */
     lines?: Array<{ [key: string]: FieldEdit; }>;
     /**

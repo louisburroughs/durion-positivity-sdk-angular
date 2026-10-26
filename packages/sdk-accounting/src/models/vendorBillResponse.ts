@@ -72,6 +72,10 @@ export interface VendorBillResponse {
      */
     dueDate?: string;
     /**
+     * Freight stated separately on an intake document; included in netAmount and posted to 5060
+     */
+    freightAmount?: number;
+    /**
      * What the posting did with each stated tax amount for a tenant that recovers input tax: the amount recovered and its account, or why nothing was (CAP:550 S32d); null before the posting and for a tenant without recovery, whose bill books the gross
      */
     inputTaxRecovery?: Array<VendorBillInputTaxRecovery>;
@@ -80,7 +84,7 @@ export interface VendorBillResponse {
      */
     journalEntryId?: string;
     /**
-     * Received lines with what the vendor billed; empty for a bill without lines
+     * Received or intake document lines with what the vendor billed; empty for a bill without lines
      */
     lines: Array<VendorBillLine>;
     match?: VendorBillMatch;
@@ -213,7 +217,7 @@ export function instanceOfVendorBillResponse(value: object): value is VendorBill
 
     const requiredProperties = createVendorBillResponsePropertyNames('availableActions', 'billNumber', 'checks', 'createdAt', 'lines', 'openAmount', 'openCandidates', 'reissues', 'status', 'taxByType', 'totalAmount', 'vendorBillId', 'vendorId', );
     const optionalStringProperties = createVendorBillResponseOptionalProperties({ name: 'billDate', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'channel', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'createdByName', nullable: false }, { name: 'currency', nullable: true }, { name: 'documentType', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'journalEntryId', nullable: false }, { name: 'originEventId', nullable: false }, { name: 'originEventType', nullable: false }, { name: 'paymentTransactionId', nullable: false }, { name: 'status', nullable: false }, { name: 'statusExplanation', nullable: false }, { name: 'vendorBillId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, );
-    const optionalNumberProperties = createVendorBillResponseOptionalProperties({ name: 'netAmount', nullable: false }, { name: 'openAmount', nullable: false }, { name: 'taxAmount', nullable: false }, { name: 'totalAmount', nullable: false }, );
+    const optionalNumberProperties = createVendorBillResponseOptionalProperties({ name: 'freightAmount', nullable: false }, { name: 'netAmount', nullable: false }, { name: 'openAmount', nullable: false }, { name: 'taxAmount', nullable: false }, { name: 'totalAmount', nullable: false }, );
     const optionalBooleanProperties = createVendorBillResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

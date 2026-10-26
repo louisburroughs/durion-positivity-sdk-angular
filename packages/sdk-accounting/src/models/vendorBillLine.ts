@@ -10,7 +10,7 @@
 
 
 /**
- * A received line with what the vendor billed for it
+ * A received or intake document line with its proposed debit class
  */
 export interface VendorBillLine {
     /**
@@ -26,11 +26,19 @@ export interface VendorBillLine {
      */
     currencyCode: string;
     /**
+     * Proposed per-line debit class; null falls back to the line\'s existing derivation
+     */
+    debitClass?: VendorBillLineDebitClassEnum;
+    /**
      * Description
      */
     description?: string;
     /**
-     * Whether the product is stocked
+     * Per-line VENDOR_BILL expense key, when applicable
+     */
+    expenseMappingKey?: string;
+    /**
+     * Whether the product is stocked (true for GOODS, false for EXPENSE)
      */
     inventoryItem: boolean;
     /**
@@ -38,18 +46,30 @@ export interface VendorBillLine {
      */
     lineNumber: number;
     /**
-     * Product
+     * Product; null on an intake document line
      */
-    productId: string;
+    productId?: string | null;
     /**
-     * Quantity received (0 for a billed line with no receipt)
+     * Quantity received (0 for a billed line with no receipt), or the intake document quantity
      */
     receivedQuantity: number;
     /**
-     * Unit price received
+     * Unit price received, or the intake document unit cost
      */
     receivedUnitPrice: number;
+    /**
+     * Supplier part/SKU
+     */
+    sku?: string;
 }
+export enum VendorBillLineDebitClassEnum {
+    ReceiptMatched = 'RECEIPT_MATCHED',
+    Goods = 'GOODS',
+    Expense = 'EXPENSE',
+    PriceAllowance = 'PRICE_ALLOWANCE'
+};
+
+
 
 function isOptionalVendorBillLinePropertyOfType(
     value: Record<string, unknown>,
@@ -89,8 +109,8 @@ export function instanceOfVendorBillLine(value: object): value is VendorBillLine
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createVendorBillLinePropertyNames('currencyCode', 'inventoryItem', 'lineNumber', 'productId', 'receivedQuantity', 'receivedUnitPrice', );
-    const optionalStringProperties = createVendorBillLineOptionalProperties({ name: 'currencyCode', nullable: false }, { name: 'description', nullable: false }, { name: 'productId', nullable: false }, );
+    const requiredProperties = createVendorBillLinePropertyNames('currencyCode', 'inventoryItem', 'lineNumber', 'receivedQuantity', 'receivedUnitPrice', );
+    const optionalStringProperties = createVendorBillLineOptionalProperties({ name: 'currencyCode', nullable: false }, { name: 'debitClass', nullable: false }, { name: 'description', nullable: false }, { name: 'expenseMappingKey', nullable: false }, { name: 'productId', nullable: true }, { name: 'sku', nullable: false }, );
     const optionalNumberProperties = createVendorBillLineOptionalProperties({ name: 'billedQuantity', nullable: false }, { name: 'billedUnitPrice', nullable: false }, { name: 'lineNumber', nullable: false }, { name: 'receivedQuantity', nullable: false }, { name: 'receivedUnitPrice', nullable: false }, );
     const optionalBooleanProperties = createVendorBillLineOptionalProperties({ name: 'inventoryItem', nullable: false }, );
 
