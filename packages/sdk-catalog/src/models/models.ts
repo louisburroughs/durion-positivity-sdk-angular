@@ -66,6 +66,8 @@ export * from './serviceFactReplayResultDto';
 export * from './serviceLaborStandardImportRequestDto';
 export * from './serviceLaborStandardRequestDto';
 export * from './serviceLaborStandardResponseDto';
+export * from './serviceOperationXrefDto';
+export * from './serviceOperationXrefMapRequestDto';
 export * from './servicePackageBulkIngestRecord';
 export * from './servicePackageMemberBulkIngestRecord';
 export * from './servicePackageMemberRequestDto';

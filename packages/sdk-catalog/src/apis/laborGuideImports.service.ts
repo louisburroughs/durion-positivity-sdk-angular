@@ -22,6 +22,10 @@ import { ApiError } from '../models/apiError';
 import { LaborGuideImportSummaryDto } from '../models/laborGuideImportSummaryDto';
 // @ts-ignore
 import { LaborGuideUnmappedOperationDto } from '../models/laborGuideUnmappedOperationDto';
+// @ts-ignore
+import { ServiceOperationXrefDto } from '../models/serviceOperationXrefDto';
+// @ts-ignore
+import { ServiceOperationXrefMapRequestDto } from '../models/serviceOperationXrefMapRequestDto';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -97,7 +101,7 @@ export class LaborGuideImportsService extends BaseService {
 
     /**
      * List Vendor Operation Codes Awaiting Curation
-     * Returns vendor operation codes that imports carried but no service_operation_xref row maps, most recently seen first, with occurrence counts so a curator can drain the queue by impact. Use this tool for mapping curation after an import; do not expect entries to clear themselves — adding the xref row is deliberate human work, and the next import then lands the lines. Preconditions: none. Required inputs: none. Emits a CATALOG_LABOR_GUIDE_UNMAPPED_LIST event; no state changes. Returns 200 with an empty array when every code the feeds carry is mapped, and 403 when the caller lacks the view permission.
+     * Returns vendor operation codes that imports carried but no service_operation_xref row maps, most recently seen first, with occurrence counts so a curator can drain the queue by impact. Use this tool to review unmapped codes after an import and map one with PUT /unmapped/{sourceCode}/{providerOpCode}; do not use it to author a mapping elsewhere. Mappings apply to matching lines in chunks not previously applied by a later import; completed revisions and already-applied chunks are never replayed, so a code seen only there takes effect when a later provider revision carries it. Preconditions: none. Required inputs: none. Emits a CATALOG_LABOR_GUIDE_UNMAPPED_LIST event and returns 200 with an empty array when every code is mapped, or 403 when the caller lacks the view permission.
      * @endpoint get /v1/catalog/labor-guide-imports/unmapped
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -141,6 +145,84 @@ export class LaborGuideImportsService extends BaseService {
         return this.httpClient.request<Array<LaborGuideUnmappedOperationDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Map an Unmapped Labor-Guide Operation
+     * Maps a vendor operation code to a Durion service and removes its curation-queue entry. Use this tool after reviewing an unmapped code and choosing the service that owns its labor times; do not use it to replay completed imports or already-applied chunks, because a later provider revision is required when the code appeared only in an applied chunk. Preconditions: the service must exist and the code must be queued or already mapped to the same service. Required inputs: sourceCode and providerOpCode path variables plus a body containing serviceId. Emits a CATALOG_LABOR_GUIDE_UNMAPPED_MAP event and returns the mapping; matching lines are resolved only in chunks not previously applied by a later import. Returns 400 for malformed input, 403 without the manage permission, 404 for an unknown service or absent queue entry, and 409 for conflicting mappings. Returns 422 for synthetic time-class codes.
+     * @endpoint put /v1/catalog/labor-guide-imports/unmapped/{sourceCode}/{providerOpCode}
+     * @param sourceCode
+     * @param providerOpCode
+     * @param serviceOperationXrefMapRequestDto Catalog service that owns the vendor operation code and receives its imported labor standards.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public mapUnmappedLaborGuideOperation(sourceCode: string, providerOpCode: string, serviceOperationXrefMapRequestDto: ServiceOperationXrefMapRequestDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ServiceOperationXrefDto>;
+    public mapUnmappedLaborGuideOperation(sourceCode: string, providerOpCode: string, serviceOperationXrefMapRequestDto: ServiceOperationXrefMapRequestDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ServiceOperationXrefDto>>;
+    public mapUnmappedLaborGuideOperation(sourceCode: string, providerOpCode: string, serviceOperationXrefMapRequestDto: ServiceOperationXrefMapRequestDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ServiceOperationXrefDto>>;
+    public mapUnmappedLaborGuideOperation(sourceCode: string, providerOpCode: string, serviceOperationXrefMapRequestDto: ServiceOperationXrefMapRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (sourceCode === null || sourceCode === undefined) {
+            throw new Error('Required parameter sourceCode was null or undefined when calling mapUnmappedLaborGuideOperation.');
+        }
+        if (providerOpCode === null || providerOpCode === undefined) {
+            throw new Error('Required parameter providerOpCode was null or undefined when calling mapUnmappedLaborGuideOperation.');
+        }
+        if (serviceOperationXrefMapRequestDto === null || serviceOperationXrefMapRequestDto === undefined) {
+            throw new Error('Required parameter serviceOperationXrefMapRequestDto was null or undefined when calling mapUnmappedLaborGuideOperation.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/catalog/labor-guide-imports/unmapped/${this.configuration.encodeParam({name: "sourceCode", value: sourceCode, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/${this.configuration.encodeParam({name: "providerOpCode", value: providerOpCode, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ServiceOperationXrefDto>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: serviceOperationXrefMapRequestDto,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
