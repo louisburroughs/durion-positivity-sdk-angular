@@ -56,7 +56,7 @@ export interface BillIntakeResponse {
      */
     lastExtractionFailed?: boolean;
     /**
-     * Line items, each a map of description, partNumber, quantity, unitCost and lineAmount
+     * Line items, each a map of description, partNumber, quantity, unitCost, lineAmount, optional debitClass (GOODS or EXPENSE) and optional expenseMappingKey; each field has the same READ/CHECK_THIS/ACCEPTED/CORRECTED state as header fields
      */
     lines?: Array<{ [key: string]: BillIntakeFieldView; }>;
     /**
