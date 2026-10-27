@@ -21,6 +21,8 @@ import { ApiError } from '../models/apiError';
 // @ts-ignore
 import { AutomaticPaymentApplicationsPage } from '../models/automaticPaymentApplicationsPage';
 // @ts-ignore
+import { CustomerBalanceFactReplayResult } from '../models/customerBalanceFactReplayResult';
+// @ts-ignore
 import { CustomerOpenInvoicesPage } from '../models/customerOpenInvoicesPage';
 // @ts-ignore
 import { PagePaymentApplicationListRow } from '../models/pagePaymentApplicationListRow';
@@ -587,6 +589,85 @@ export class PaymentApplicationsService extends BaseService {
         let localVarPath = `/v1/accounting/receivable-payments`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<UnappliedPaymentsPage>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Re-emit Customer Balance Facts
+     * Re-publishes accounting.customer-balance.changed for one page of customers, each at its current version, so event-fed copies of customer balances (pos-customer\&#39;s) can be seeded or repaired; returns what it queued and a cursor for the next page. Use this tool once after the first deployment of the fact, so customers whose receivables predate it get a balance, and after a consumer outage longer than broker retention; do not use it to fix one customer, whose fact follows their next posting. Preconditions: the caller needs accounting:events:reprocess authority; fact publication must be on, a replay with it off is refused rather than reported as a no-op. Consumers apply an equal version, so a replayed fact repairs a copy and never regresses one. Required inputs: none; afterCustomerId resumes from a previous page\&#39;s nextAfterCustomerId, and limit (default 200) is clamped into 1 to 500 rather than rejected. Emits an ACCOUNTING_CUSTOMER_BALANCE_FACT_REPLAY event; creates the balance row of a customer with an AR-eligible invoice who has none and queues one fact per customer in the page; changes no receivable. Returns 200 with complete&#x3D;true and a null cursor once the last customer is reached, 403 when the caller lacks the authority, and 409 when fact publication is off.
+     * @endpoint post /v1/accounting/customer-balances/facts/replay
+     * @param afterCustomerId The previous page\&#39;s nextAfterCustomerId; omit to start at the beginning
+     * @param limit Customers in the page, clamped into 1 to 500
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public replayCustomerBalanceFacts(afterCustomerId?: string, limit?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CustomerBalanceFactReplayResult>;
+    public replayCustomerBalanceFacts(afterCustomerId?: string, limit?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CustomerBalanceFactReplayResult>>;
+    public replayCustomerBalanceFacts(afterCustomerId?: string, limit?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CustomerBalanceFactReplayResult>>;
+    public replayCustomerBalanceFacts(afterCustomerId?: string, limit?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'afterCustomerId',
+            <any>afterCustomerId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'limit',
+            <any>limit,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/customer-balances/facts/replay`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<CustomerBalanceFactReplayResult>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),
