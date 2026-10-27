@@ -23,6 +23,10 @@ export interface WorkItemsResponse {
      */
     countsByArea: { [key: string]: number; };
     /**
+     * ISO 4217 code of every amount: the functional currency
+     */
+    currencyCode: string;
+    /**
      * The items of this page, oldest first
      */
     items: Array<WorkItem>;
@@ -70,8 +74,8 @@ export function instanceOfWorkItemsResponse(value: object): value is WorkItemsRe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createWorkItemsResponsePropertyNames('asOf', 'countsByArea', 'items', );
-    const optionalStringProperties = createWorkItemsResponseOptionalProperties({ name: 'asOf', nullable: false }, { name: 'nextCursor', nullable: true }, );
+    const requiredProperties = createWorkItemsResponsePropertyNames('asOf', 'countsByArea', 'currencyCode', 'items', );
+    const optionalStringProperties = createWorkItemsResponseOptionalProperties({ name: 'asOf', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'nextCursor', nullable: true }, );
     const optionalNumberProperties = createWorkItemsResponseOptionalProperties();
     const optionalBooleanProperties = createWorkItemsResponseOptionalProperties();
 
