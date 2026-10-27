@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../models/apiError';
+// @ts-ignore
 import { CreateTravelSegmentAdjustmentRequest } from '../models/createTravelSegmentAdjustmentRequest';
 // @ts-ignore
 import { StartTravelSegmentRequest } from '../models/startTravelSegmentRequest';
@@ -26,6 +28,8 @@ import { StopTravelSegmentRequest } from '../models/stopTravelSegmentRequest';
 import { SubmitTravelSegmentsRequest } from '../models/submitTravelSegmentsRequest';
 // @ts-ignore
 import { TravelSegmentAdjustmentResponse } from '../models/travelSegmentAdjustmentResponse';
+// @ts-ignore
+import { TravelSegmentDetailResponse } from '../models/travelSegmentDetailResponse';
 // @ts-ignore
 import { TravelSegmentResponse } from '../models/travelSegmentResponse';
 
@@ -109,6 +113,78 @@ export class TravelSegmentAPIService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: createTravelSegmentAdjustmentRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List Travel Segments for Assignment
+     * Returns every travel segment recorded for a mobile work assignment, oldest first by startAt, with each segment\&#39;s status, start and end instants, and adjustments. Use this tool after a page reload or after a start, stop, or submit request has a refusal or unknown outcome so the client can reconcile the server state; do not use it to start, stop, or submit a segment. Preconditions: at least one segment for the assignment must exist in the caller\&#39;s tenant; this module has no separate assignment registry, so an assignment with no recorded segments is treated as not found. Required inputs: mobileWorkAssignmentId (UUID) as a query parameter; the request never supplies a tenant id, which comes from the authenticated request context. No events are emitted and no state changes occur; the response is read-only, and the running segment is identified by status IN_PROGRESS. Returns 200 with the ordered segment details, 400 when the query parameter is missing or malformed, 403 without workorder:labor:view or workorder:labor:add, and 404 TRAVEL_SEGMENT_NOT_FOUND when no segment exists for the assignment in the caller\&#39;s tenant.
+     * @endpoint get /v1/workorders/travelSegments
+     * @param mobileWorkAssignmentId UUID of the mobile work assignment whose travel segments should be read
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listTravelSegments(mobileWorkAssignmentId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<TravelSegmentDetailResponse>>;
+    public listTravelSegments(mobileWorkAssignmentId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<TravelSegmentDetailResponse>>>;
+    public listTravelSegments(mobileWorkAssignmentId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<TravelSegmentDetailResponse>>>;
+    public listTravelSegments(mobileWorkAssignmentId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (mobileWorkAssignmentId === null || mobileWorkAssignmentId === undefined) {
+            throw new Error('Required parameter mobileWorkAssignmentId was null or undefined when calling listTravelSegments.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'mobileWorkAssignmentId',
+            <any>mobileWorkAssignmentId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/workorders/travelSegments`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<TravelSegmentDetailResponse>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
