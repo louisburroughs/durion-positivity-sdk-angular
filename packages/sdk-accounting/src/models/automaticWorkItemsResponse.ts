@@ -19,6 +19,10 @@ export interface AutomaticWorkItemsResponse {
      */
     asOf: string;
     /**
+     * ISO 4217 code of every amount: the functional currency
+     */
+    currencyCode: string;
+    /**
      * The items of this page, oldest first
      */
     items: Array<AutomaticWorkItem>;
@@ -66,8 +70,8 @@ export function instanceOfAutomaticWorkItemsResponse(value: object): value is Au
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAutomaticWorkItemsResponsePropertyNames('asOf', 'items', );
-    const optionalStringProperties = createAutomaticWorkItemsResponseOptionalProperties({ name: 'asOf', nullable: false }, { name: 'nextCursor', nullable: true }, );
+    const requiredProperties = createAutomaticWorkItemsResponsePropertyNames('asOf', 'currencyCode', 'items', );
+    const optionalStringProperties = createAutomaticWorkItemsResponseOptionalProperties({ name: 'asOf', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'nextCursor', nullable: true }, );
     const optionalNumberProperties = createAutomaticWorkItemsResponseOptionalProperties();
     const optionalBooleanProperties = createAutomaticWorkItemsResponseOptionalProperties();
 
