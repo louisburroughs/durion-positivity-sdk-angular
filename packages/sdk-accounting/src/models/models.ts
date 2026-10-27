@@ -130,6 +130,7 @@ export * from './conflict';
 export * from './contractField';
 export * from './createCreditMemoRequest';
 export * from './creditMemoResponse';
+export * from './customerBalanceFactReplayResult';
 export * from './customerCreditApplicationRequest';
 export * from './customerCreditInfo';
 export * from './customerCreditRefundRequest';
