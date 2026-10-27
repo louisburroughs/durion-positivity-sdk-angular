@@ -90,6 +90,7 @@ export * from './technicianAssignmentResponse';
 export * from './technicianLaborAnalyticsResponse';
 export * from './technicianLaborRow';
 export * from './travelSegmentAdjustmentResponse';
+export * from './travelSegmentDetailResponse';
 export * from './travelSegmentResponse';
 export * from './updateEstimateItemRequest';
 export * from './workSessionResponse';
