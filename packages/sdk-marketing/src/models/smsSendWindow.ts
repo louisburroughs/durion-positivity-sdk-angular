@@ -9,9 +9,21 @@
  */
 
 
+/**
+ * Advisory local-time window for SMS sends
+ */
 export interface SmsSendWindow {
+    /**
+     * End of the advisory window
+     */
     end: string;
+    /**
+     * Whether the window is enforced; false in v1
+     */
     enforced: boolean;
+    /**
+     * Beginning of the advisory window
+     */
     start: string;
 }
 

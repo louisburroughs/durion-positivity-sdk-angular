@@ -10,16 +10,16 @@
 
 
 /**
- * Tenant campaign starter
+ * A tenant-owned campaign starter
  */
 export interface StarterResponse {
     audienceCount?: number;
-    audienceType: string;
-    defaultChannels: Array<string>;
+    audienceType?: string;
+    defaultChannels?: Set<string>;
     emailTemplateId?: string;
-    icon: string;
-    key: string;
-    segmentId: string;
+    icon?: string;
+    key?: string;
+    segmentId?: string;
     smsTemplateId?: string;
 }
 
@@ -61,7 +61,7 @@ export function instanceOfStarterResponse(value: object): value is StarterRespon
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createStarterResponsePropertyNames('audienceType', 'defaultChannels', 'icon', 'key', 'segmentId', );
+    const requiredProperties = createStarterResponsePropertyNames();
     const optionalStringProperties = createStarterResponseOptionalProperties({ name: 'audienceType', nullable: false }, { name: 'emailTemplateId', nullable: false }, { name: 'icon', nullable: false }, { name: 'key', nullable: false }, { name: 'segmentId', nullable: false }, { name: 'smsTemplateId', nullable: false }, );
     const optionalNumberProperties = createStarterResponseOptionalProperties({ name: 'audienceCount', nullable: false }, );
     const optionalBooleanProperties = createStarterResponseOptionalProperties();

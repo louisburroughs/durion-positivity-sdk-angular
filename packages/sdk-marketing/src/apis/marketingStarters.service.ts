@@ -46,10 +46,10 @@ export class MarketingStartersService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listMarketingStarters(audienceType?: 'COMMERCIAL' | 'INDIVIDUAL', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<StarterResponse>>;
-    public listMarketingStarters(audienceType?: 'COMMERCIAL' | 'INDIVIDUAL', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<StarterResponse>>>;
-    public listMarketingStarters(audienceType?: 'COMMERCIAL' | 'INDIVIDUAL', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<StarterResponse>>>;
-    public listMarketingStarters(audienceType?: 'COMMERCIAL' | 'INDIVIDUAL', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listMarketingStarters(audienceType?: 'COMMERCIAL' | 'INDIVIDUAL' | 'BOTH', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<StarterResponse>>;
+    public listMarketingStarters(audienceType?: 'COMMERCIAL' | 'INDIVIDUAL' | 'BOTH', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<StarterResponse>>>;
+    public listMarketingStarters(audienceType?: 'COMMERCIAL' | 'INDIVIDUAL' | 'BOTH', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<StarterResponse>>>;
+    public listMarketingStarters(audienceType?: 'COMMERCIAL' | 'INDIVIDUAL' | 'BOTH', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 

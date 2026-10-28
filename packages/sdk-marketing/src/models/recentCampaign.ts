@@ -7,22 +7,22 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { CampaignWindow } from './campaignWindow';
+import { Window } from './window';
 
 
 export interface RecentCampaign {
-    alwaysOn: boolean;
-    audienceType: string;
+    alwaysOn?: boolean;
+    audienceType?: string;
     booked?: number;
     bookedValue?: number;
-    campaignId: string;
+    campaignId?: string;
     campaignProgramId?: string;
-    channels: Array<string>;
-    displayStatus: string;
-    name: string;
+    channels?: Set<string>;
+    displayStatus?: string;
+    name?: string;
     openRate?: number;
     sent?: number;
-    window: CampaignWindow;
+    window?: Window;
 }
 
 function isOptionalRecentCampaignPropertyOfType(
@@ -63,7 +63,7 @@ export function instanceOfRecentCampaign(value: object): value is RecentCampaign
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRecentCampaignPropertyNames('alwaysOn', 'audienceType', 'campaignId', 'channels', 'displayStatus', 'name', 'window', );
+    const requiredProperties = createRecentCampaignPropertyNames();
     const optionalStringProperties = createRecentCampaignOptionalProperties({ name: 'audienceType', nullable: false }, { name: 'campaignId', nullable: false }, { name: 'campaignProgramId', nullable: false }, { name: 'displayStatus', nullable: false }, { name: 'name', nullable: false }, );
     const optionalNumberProperties = createRecentCampaignOptionalProperties({ name: 'booked', nullable: false }, { name: 'bookedValue', nullable: false }, { name: 'sent', nullable: false }, );
     const optionalBooleanProperties = createRecentCampaignOptionalProperties({ name: 'alwaysOn', nullable: false }, );
