@@ -20,9 +20,9 @@ export interface CampaignStatsResponse {
      */
     attributedDiscount: number;
     /**
-     * Targeted party kind
+     * Targeted party kind; persisted campaigns are never BOTH
      */
-    audienceType: string;
+    audienceType: CampaignStatsResponseAudienceTypeEnum;
     /**
      * Bookings credited to this campaign
      */
@@ -45,14 +45,20 @@ export interface CampaignStatsResponse {
      */
     code: string;
     /**
-     * Opened divided by delivered; null when no email was delivered
+     * Opened divided by delivered; null when nothing was delivered
      */
-    openRate?: number;
+    openRate?: number | null;
     /**
      * Redemptions credited to this campaign
      */
     redeemed: number;
 }
+export enum CampaignStatsResponseAudienceTypeEnum {
+    Commercial = 'COMMERCIAL',
+    Individual = 'INDIVIDUAL'
+};
+
+
 
 function isOptionalCampaignStatsResponsePropertyOfType(
     value: Record<string, unknown>,

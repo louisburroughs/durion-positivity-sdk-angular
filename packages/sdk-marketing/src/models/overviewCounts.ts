@@ -9,6 +9,9 @@
  */
 
 
+/**
+ * Campaign counts by lifecycle status
+ */
 export interface OverviewCounts {
     drafts: number;
     paused: number;

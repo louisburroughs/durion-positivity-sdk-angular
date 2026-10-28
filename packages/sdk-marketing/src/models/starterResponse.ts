@@ -13,15 +13,21 @@
  * A tenant-owned campaign starter
  */
 export interface StarterResponse {
-    audienceCount?: number;
-    audienceType?: string;
-    defaultChannels?: Set<string>;
-    emailTemplateId?: string;
-    icon?: string;
-    key?: string;
-    segmentId?: string;
-    smsTemplateId?: string;
+    audienceCount?: number | null;
+    audienceType: StarterResponseAudienceTypeEnum;
+    defaultChannels: Set<string>;
+    emailTemplateId?: string | null;
+    icon: string;
+    key: string;
+    segmentId: string;
+    smsTemplateId?: string | null;
 }
+export enum StarterResponseAudienceTypeEnum {
+    Commercial = 'COMMERCIAL',
+    Individual = 'INDIVIDUAL'
+};
+
+
 
 function isOptionalStarterResponsePropertyOfType(
     value: Record<string, unknown>,
@@ -61,9 +67,9 @@ export function instanceOfStarterResponse(value: object): value is StarterRespon
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createStarterResponsePropertyNames();
-    const optionalStringProperties = createStarterResponseOptionalProperties({ name: 'audienceType', nullable: false }, { name: 'emailTemplateId', nullable: false }, { name: 'icon', nullable: false }, { name: 'key', nullable: false }, { name: 'segmentId', nullable: false }, { name: 'smsTemplateId', nullable: false }, );
-    const optionalNumberProperties = createStarterResponseOptionalProperties({ name: 'audienceCount', nullable: false }, );
+    const requiredProperties = createStarterResponsePropertyNames('audienceType', 'defaultChannels', 'icon', 'key', 'segmentId', );
+    const optionalStringProperties = createStarterResponseOptionalProperties({ name: 'audienceType', nullable: false }, { name: 'emailTemplateId', nullable: true }, { name: 'icon', nullable: false }, { name: 'key', nullable: false }, { name: 'segmentId', nullable: false }, { name: 'smsTemplateId', nullable: true }, );
+    const optionalNumberProperties = createStarterResponseOptionalProperties({ name: 'audienceCount', nullable: true }, );
     const optionalBooleanProperties = createStarterResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

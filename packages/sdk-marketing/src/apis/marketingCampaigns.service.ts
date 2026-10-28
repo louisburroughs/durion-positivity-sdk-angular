@@ -299,18 +299,18 @@ export class MarketingCampaignsService extends BaseService {
 
     /**
      * Get Campaign Overview
-     * Returns the campaign launchpad summary the Customers home page renders: lifecycle counts, a bounded list of recent campaigns and their per-row funnel figures. Use this tool to paint the whole table in one call; do not use the per-campaign stats endpoint for each row, which would cost one request per campaign. Preconditions: none, because a tenant with no campaigns simply returns zero counts and an empty recent list. Required inputs: none; audienceType optionally narrows every count and row to COMMERCIAL or INDIVIDUAL, and recent bounds the row list to between 1 and 20 campaigns. Emits a MARKETING_CAMPAIGN_OVERVIEW_GET audit event per call and otherwise only reads the campaign read model. Returns 403 when the caller lacks marketing:campaign:view. Per-row sent, openRate and booking figures are null for a caller without marketing:stats:view, while the counts stay populated.
+     * Returns the campaign launchpad summary the Customers home page renders: lifecycle counts, a bounded list of recent campaigns and their per-row funnel figures. Use this tool to paint the whole table in one call; do not use the per-campaign stats endpoint for each row, which would cost one request per campaign. Preconditions: none, because a tenant with no campaigns simply returns zero counts and an empty recent list. Required inputs: none; audienceType optionally narrows every count and row to COMMERCIAL or INDIVIDUAL, and recent bounds the row list to between 1 and 20 campaigns. A recent value outside 1-20 is clamped to the nearest bound instead of being rejected with a 400. Emits a MARKETING_CAMPAIGN_OVERVIEW_GET audit event per call and otherwise only reads the campaign read model. Returns 403 when the caller lacks marketing:campaign:view. Per-row sent, openRate and booking figures are null for a caller without marketing:stats:view, while the counts stay populated.
      * @endpoint get /v1/marketing/campaigns/overview
-     * @param audienceType
-     * @param recent
+     * @param audienceType Optional audience filter; an unknown value matches no campaign
+     * @param recent Recent campaigns to return; out-of-range values are clamped to 1-20
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getCampaignOverview(audienceType?: string, recent?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CampaignOverviewResponse>;
-    public getCampaignOverview(audienceType?: string, recent?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CampaignOverviewResponse>>;
-    public getCampaignOverview(audienceType?: string, recent?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CampaignOverviewResponse>>;
-    public getCampaignOverview(audienceType?: string, recent?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getCampaignOverview(audienceType?: 'COMMERCIAL' | 'INDIVIDUAL', recent?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CampaignOverviewResponse>;
+    public getCampaignOverview(audienceType?: 'COMMERCIAL' | 'INDIVIDUAL', recent?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CampaignOverviewResponse>>;
+    public getCampaignOverview(audienceType?: 'COMMERCIAL' | 'INDIVIDUAL', recent?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CampaignOverviewResponse>>;
+    public getCampaignOverview(audienceType?: 'COMMERCIAL' | 'INDIVIDUAL', recent?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
