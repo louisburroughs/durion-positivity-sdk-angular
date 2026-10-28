@@ -1,5 +1,6 @@
 export * from './apiError';
 export * from './audiencePreviewResponse';
+export * from './bookedValue';
 export * from './campaignResponse';
 export * from './campaignStatsResponse';
 export * from './channelFunnel';

@@ -2,6 +2,7 @@ export * from './appointmentAssignments.service';
 export * from './appointmentsAPI.service';
 export * from './conflictOverrideAPI.service';
 export * from './mechanicRosterAPI.service';
+export * from './outboxAdministration.service';
 export * from './scheduleAPI.service';
 export * from './shopAPI.service';
 export * from './shopAudit.service';

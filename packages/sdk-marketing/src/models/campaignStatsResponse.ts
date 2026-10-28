@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { BookedValue } from './bookedValue';
 import { ChannelFunnel } from './channelFunnel';
 
 
@@ -22,6 +23,11 @@ export interface CampaignStatsResponse {
      * Targeted party kind
      */
     audienceType: CampaignStatsResponseAudienceTypeEnum;
+    /**
+     * Bookings credited to this campaign
+     */
+    booked: number;
+    bookedValue: BookedValue;
     /**
      * Campaign
      */
@@ -88,9 +94,9 @@ export function instanceOfCampaignStatsResponse(value: object): value is Campaig
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCampaignStatsResponsePropertyNames('attributedDiscount', 'audienceType', 'campaignId', 'channels', 'code', 'redeemed', );
+    const requiredProperties = createCampaignStatsResponsePropertyNames('attributedDiscount', 'audienceType', 'booked', 'bookedValue', 'campaignId', 'channels', 'code', 'redeemed', );
     const optionalStringProperties = createCampaignStatsResponseOptionalProperties({ name: 'audienceType', nullable: false }, { name: 'campaignId', nullable: false }, { name: 'campaignProgramId', nullable: false }, { name: 'code', nullable: false }, );
-    const optionalNumberProperties = createCampaignStatsResponseOptionalProperties({ name: 'attributedDiscount', nullable: false }, { name: 'redeemed', nullable: false }, );
+    const optionalNumberProperties = createCampaignStatsResponseOptionalProperties({ name: 'attributedDiscount', nullable: false }, { name: 'booked', nullable: false }, { name: 'redeemed', nullable: false }, );
     const optionalBooleanProperties = createCampaignStatsResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
