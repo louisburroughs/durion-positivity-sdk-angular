@@ -10,19 +10,19 @@
 
 
 /**
- * One sampled audience member and the eligibility decision
+ * One sampled audience member and why it was or was not counted as reachable
  */
 export interface SampleRecipient {
     /**
-     * Contact party addressed for a commercial account
+     * Party whose consent governed the decision and who would be addressed: the CRM\'s designated contact for a commercial account, the person themselves for an individual. Null when the CRM has reported no decision for this party.
      */
     contactPartyId?: string;
     /**
-     * Whether this party is eligible
+     * Whether this party would be sent to on this channel
      */
     eligible: boolean;
     /**
-     * Party in the snapshot
+     * Party in the audience snapshot
      */
     partyId: string;
     /**

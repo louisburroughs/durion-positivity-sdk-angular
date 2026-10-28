@@ -10,8 +10,8 @@
 
 
 export interface Booked90d {
-    value?: number;
-    visits?: number;
+    value?: number | null;
+    visits?: number | null;
 }
 
 function isOptionalBooked90dPropertyOfType(
@@ -54,7 +54,7 @@ export function instanceOfBooked90d(value: object): value is Booked90d {
 
     const requiredProperties = createBooked90dPropertyNames();
     const optionalStringProperties = createBooked90dOptionalProperties();
-    const optionalNumberProperties = createBooked90dOptionalProperties({ name: 'value', nullable: false }, { name: 'visits', nullable: false }, );
+    const optionalNumberProperties = createBooked90dOptionalProperties({ name: 'value', nullable: true }, { name: 'visits', nullable: true }, );
     const optionalBooleanProperties = createBooked90dOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

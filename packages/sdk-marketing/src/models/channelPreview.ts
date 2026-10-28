@@ -21,15 +21,15 @@ export interface ChannelPreview {
     /**
      * Eligible after consent and suppression; null while PENDING
      */
-    eligible?: number;
+    eligible: number | null;
     /**
-     * Bounded sample of eligibility decisions
+     * A bounded sample of the snapshot with the per-party decision behind the eligible count; identifiers and reason codes only, never contact details
      */
     sample: Array<SampleRecipient>;
     /**
      * Parties targeted on this channel; null while PENDING
      */
-    targeted?: number;
+    targeted: number | null;
     /**
      * Whether a template is attached
      */
@@ -80,9 +80,9 @@ export function instanceOfChannelPreview(value: object): value is ChannelPreview
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createChannelPreviewPropertyNames('channel', 'sample', 'templateAttached', );
+    const requiredProperties = createChannelPreviewPropertyNames('channel', 'eligible', 'sample', 'targeted', 'templateAttached', );
     const optionalStringProperties = createChannelPreviewOptionalProperties({ name: 'channel', nullable: false }, );
-    const optionalNumberProperties = createChannelPreviewOptionalProperties({ name: 'eligible', nullable: false }, { name: 'targeted', nullable: false }, );
+    const optionalNumberProperties = createChannelPreviewOptionalProperties({ name: 'eligible', nullable: true }, { name: 'targeted', nullable: true }, );
     const optionalBooleanProperties = createChannelPreviewOptionalProperties({ name: 'templateAttached', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

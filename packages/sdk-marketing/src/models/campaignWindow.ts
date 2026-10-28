@@ -9,9 +9,12 @@
  */
 
 
+/**
+ * Window a campaign is active in
+ */
 export interface CampaignWindow {
-    from?: string;
-    to?: string;
+    from?: string | null;
+    to?: string | null;
 }
 
 function isOptionalCampaignWindowPropertyOfType(
@@ -53,7 +56,7 @@ export function instanceOfCampaignWindow(value: object): value is CampaignWindow
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCampaignWindowPropertyNames();
-    const optionalStringProperties = createCampaignWindowOptionalProperties({ name: 'from', nullable: false }, { name: 'to', nullable: false }, );
+    const optionalStringProperties = createCampaignWindowOptionalProperties({ name: 'from', nullable: true }, { name: 'to', nullable: true }, );
     const optionalNumberProperties = createCampaignWindowOptionalProperties();
     const optionalBooleanProperties = createCampaignWindowOptionalProperties();
 

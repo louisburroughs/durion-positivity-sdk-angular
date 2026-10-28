@@ -7,23 +7,29 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Window } from './window';
+import { CampaignWindow } from './campaignWindow';
 
 
 export interface RecentCampaign {
-    alwaysOn?: boolean;
-    audienceType?: string;
-    booked?: number;
-    bookedValue?: number;
-    campaignId?: string;
-    campaignProgramId?: string;
-    channels?: Set<string>;
-    displayStatus?: string;
-    name?: string;
-    openRate?: number;
-    sent?: number;
-    window?: Window;
+    alwaysOn: boolean;
+    audienceType: RecentCampaignAudienceTypeEnum;
+    booked?: number | null;
+    bookedValue?: number | null;
+    campaignId: string;
+    campaignProgramId?: string | null;
+    channels: Set<string>;
+    displayStatus: string;
+    name: string;
+    openRate?: number | null;
+    sent?: number | null;
+    window: CampaignWindow;
 }
+export enum RecentCampaignAudienceTypeEnum {
+    Commercial = 'COMMERCIAL',
+    Individual = 'INDIVIDUAL'
+};
+
+
 
 function isOptionalRecentCampaignPropertyOfType(
     value: Record<string, unknown>,
@@ -63,9 +69,9 @@ export function instanceOfRecentCampaign(value: object): value is RecentCampaign
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRecentCampaignPropertyNames();
-    const optionalStringProperties = createRecentCampaignOptionalProperties({ name: 'audienceType', nullable: false }, { name: 'campaignId', nullable: false }, { name: 'campaignProgramId', nullable: false }, { name: 'displayStatus', nullable: false }, { name: 'name', nullable: false }, );
-    const optionalNumberProperties = createRecentCampaignOptionalProperties({ name: 'booked', nullable: false }, { name: 'bookedValue', nullable: false }, { name: 'sent', nullable: false }, );
+    const requiredProperties = createRecentCampaignPropertyNames('alwaysOn', 'audienceType', 'campaignId', 'channels', 'displayStatus', 'name', 'window', );
+    const optionalStringProperties = createRecentCampaignOptionalProperties({ name: 'audienceType', nullable: false }, { name: 'campaignId', nullable: false }, { name: 'campaignProgramId', nullable: true }, { name: 'displayStatus', nullable: false }, { name: 'name', nullable: false }, );
+    const optionalNumberProperties = createRecentCampaignOptionalProperties({ name: 'booked', nullable: true }, { name: 'bookedValue', nullable: true }, { name: 'sent', nullable: true }, );
     const optionalBooleanProperties = createRecentCampaignOptionalProperties({ name: 'alwaysOn', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
