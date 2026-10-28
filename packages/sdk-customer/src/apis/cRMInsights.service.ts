@@ -20,6 +20,8 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 import { ApiError } from '../models/apiError';
 // @ts-ignore
 import { CommercialWatchResponse } from '../models/commercialWatchResponse';
+// @ts-ignore
+import { CustomerInsightsOverviewResponse } from '../models/customerInsightsOverviewResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -93,6 +95,95 @@ export class CRMInsightsService extends BaseService {
         let localVarPath = `/v1/crm/insights/commercial-watch`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<CommercialWatchResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get Customers Home Overview
+     * Returns customer-class KPIs, retention measures, closed-workorder value, monthly value, and individual visit recency for the tenant. Use this tool for the Customers home overview and retention follow-up planning; use the party and segment endpoints instead for customer records or saved audience membership. Preconditions: the caller holds crm:insights:view, and the local service-history projection may lag the workorder owner. Required inputs: audience (ALL, COMMERCIAL, or INDIVIDUAL), periodDays (30, 90, or 365), and months (1 through 12), all with defaults and no request body. Emits the CRM_INSIGHTS_OVERVIEW_VIEW audit event and changes no state. Returns 400 VALIDATION_ERROR when a query parameter is invalid and 403 PERMISSION_DENIED when the caller lacks crm:insights:view. The closedWorkorderValue measure is the sum of closed-workorder amounts from the service-history projection, not ledger revenue; do not use it as ledger revenue reporting.
+     * @endpoint get /v1/crm/insights/overview
+     * @param audience
+     * @param periodDays
+     * @param months
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getCustomerInsightsOverview(audience?: 'ALL' | 'COMMERCIAL' | 'INDIVIDUAL', periodDays?: number, months?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CustomerInsightsOverviewResponse>;
+    public getCustomerInsightsOverview(audience?: 'ALL' | 'COMMERCIAL' | 'INDIVIDUAL', periodDays?: number, months?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CustomerInsightsOverviewResponse>>;
+    public getCustomerInsightsOverview(audience?: 'ALL' | 'COMMERCIAL' | 'INDIVIDUAL', periodDays?: number, months?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CustomerInsightsOverviewResponse>>;
+    public getCustomerInsightsOverview(audience?: 'ALL' | 'COMMERCIAL' | 'INDIVIDUAL', periodDays?: number, months?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'audience',
+            <any>audience,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'periodDays',
+            <any>periodDays,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'months',
+            <any>months,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/crm/insights/overview`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<CustomerInsightsOverviewResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),
