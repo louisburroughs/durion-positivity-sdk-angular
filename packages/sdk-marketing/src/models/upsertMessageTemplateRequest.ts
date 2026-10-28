@@ -36,8 +36,7 @@ export interface UpsertMessageTemplateRequest {
 }
 export enum UpsertMessageTemplateRequestAudienceTypeEnum {
     Commercial = 'COMMERCIAL',
-    Individual = 'INDIVIDUAL',
-    Both = 'BOTH'
+    Individual = 'INDIVIDUAL'
 };
 export enum UpsertMessageTemplateRequestChannelEnum {
     Email = 'EMAIL',

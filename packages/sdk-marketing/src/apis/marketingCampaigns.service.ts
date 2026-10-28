@@ -19,11 +19,7 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 // @ts-ignore
 import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { AudiencePreviewRequest } from '../models/audiencePreviewRequest';
-// @ts-ignore
 import { AudiencePreviewResponse } from '../models/audiencePreviewResponse';
-// @ts-ignore
-import { CampaignOverviewResponse } from '../models/campaignOverviewResponse';
 // @ts-ignore
 import { CampaignResponse } from '../models/campaignResponse';
 // @ts-ignore
@@ -298,85 +294,6 @@ export class MarketingCampaignsService extends BaseService {
     }
 
     /**
-     * Get Campaign Overview
-     * Returns the campaign launchpad summary the Customers home page renders: lifecycle counts, a bounded list of recent campaigns and their per-row funnel figures. Use this tool to paint the whole table in one call; do not use the per-campaign stats endpoint for each row, which would cost one request per campaign. Preconditions: none, because a tenant with no campaigns simply returns zero counts and an empty recent list. Required inputs: none; audienceType optionally narrows every count and row to COMMERCIAL or INDIVIDUAL, and recent bounds the row list to between 1 and 20 campaigns. No events are emitted; the endpoint only reads the campaign read model. Returns 403 when the caller lacks marketing:campaign:view. Per-row sent, openRate and booking figures are null for a caller without marketing:stats:view, while the counts stay populated.
-     * @endpoint get /v1/marketing/campaigns/overview
-     * @param audienceType
-     * @param recent
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public getCampaignOverview(audienceType?: string, recent?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CampaignOverviewResponse>;
-    public getCampaignOverview(audienceType?: string, recent?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CampaignOverviewResponse>>;
-    public getCampaignOverview(audienceType?: string, recent?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CampaignOverviewResponse>>;
-    public getCampaignOverview(audienceType?: string, recent?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-
-        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
-
-        localVarQueryParameters = this.addToHttpParams(
-            localVarQueryParameters,
-            'audienceType',
-            <any>audienceType,
-            QueryParamStyle.Form,
-            true,
-        );
-
-
-        localVarQueryParameters = this.addToHttpParams(
-            localVarQueryParameters,
-            'recent',
-            <any>recent,
-            QueryParamStyle.Form,
-            true,
-        );
-
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/marketing/campaigns/overview`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<CampaignOverviewResponse>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                params: localVarQueryParameters.toHttpParams(),
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
      * List Campaign Send Records
      * Lists the per-recipient, per-channel send rows a campaign dispatch queued, including status, failure reason, provider message id, attempts and timestamps. Use this tool to inspect individual delivery outcomes; use getCampaignStats instead for aggregate funnel and attribution numbers. Preconditions: none; an unknown campaignId yields an empty page rather than an error. Required inputs: campaignId (UUID) as a path parameter; page defaults to 0 and size defaults to 50, clamped between 1 and 200, ordered by queuedAt ascending. Emits a MARKETING_CAMPAIGN_SENDS_LIST audit event; no marketing state is changed and this is a read-only projection. Returns 200 with an empty page when the campaign has no send rows, so an empty result is not an error condition.
      * @endpoint get /v1/marketing/campaigns/{campaignId}/sends
@@ -588,76 +505,6 @@ export class MarketingCampaignsService extends BaseService {
         return this.httpClient.request<CampaignResponse>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Preview Audience Before Campaign
-     * Resolves a segment\&#39;s audience size and reach without requiring a saved campaign, so the composer can show live counts before anything is created. Use this tool while drafting a campaign, from either a saved segment id or a starter key; for a campaign that already exists, use the campaign-bound preview endpoint instead. Preconditions: the segment must be an active replica of a CRM segment in this tenant, and a starter key must belong to a seeded starter whose segment has replicated. Required inputs: audienceType (COMMERCIAL, INDIVIDUAL or BOTH), channels (one or more of EMAIL and SMS), and exactly one of segmentId or starterKey; emailTemplateId and smsTemplateId only mark a channel as ready to send. Emits a MARKETING_CAMPAIGNLESS_AUDIENCE_PREVIEW event, and asks the CRM for a fresher resolution on every call; no campaign or message is created here. Returns 400 when neither segmentId nor starterKey is supplied, 404 when the segment or starter is unknown, and 422 when the segment is inactive or belongs to another audience type. Counts are PENDING with null figures until the asynchronous CRM resolution replies, so null counts mean \&quot;ask again\&quot;, not \&quot;nobody to contact\&quot;.
-     * @endpoint post /v1/marketing/campaigns/audience-preview
-     * @param audiencePreviewRequest Preview request: audienceType, the channels to evaluate and exactly one of segmentId or starterKey; template ids only mark a channel as ready to send.
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public previewAudienceBeforeCampaign(audiencePreviewRequest: AudiencePreviewRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AudiencePreviewResponse>;
-    public previewAudienceBeforeCampaign(audiencePreviewRequest: AudiencePreviewRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AudiencePreviewResponse>>;
-    public previewAudienceBeforeCampaign(audiencePreviewRequest: AudiencePreviewRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AudiencePreviewResponse>>;
-    public previewAudienceBeforeCampaign(audiencePreviewRequest: AudiencePreviewRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (audiencePreviewRequest === null || audiencePreviewRequest === undefined) {
-            throw new Error('Required parameter audiencePreviewRequest was null or undefined when calling previewAudienceBeforeCampaign.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/marketing/campaigns/audience-preview`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<AudiencePreviewResponse>('post', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: audiencePreviewRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
