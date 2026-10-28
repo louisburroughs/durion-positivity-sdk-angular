@@ -307,10 +307,10 @@ export class MarketingCampaignsService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getCampaignOverview(audienceType?: 'COMMERCIAL' | 'INDIVIDUAL', recent?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CampaignOverviewResponse>;
-    public getCampaignOverview(audienceType?: 'COMMERCIAL' | 'INDIVIDUAL', recent?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CampaignOverviewResponse>>;
-    public getCampaignOverview(audienceType?: 'COMMERCIAL' | 'INDIVIDUAL', recent?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CampaignOverviewResponse>>;
-    public getCampaignOverview(audienceType?: 'COMMERCIAL' | 'INDIVIDUAL', recent?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getCampaignOverview(audienceType?: string, recent?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CampaignOverviewResponse>;
+    public getCampaignOverview(audienceType?: string, recent?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CampaignOverviewResponse>>;
+    public getCampaignOverview(audienceType?: string, recent?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CampaignOverviewResponse>>;
+    public getCampaignOverview(audienceType?: string, recent?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 

@@ -7,18 +7,18 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Counts } from './counts';
 import { RecentCampaign } from './recentCampaign';
 import { Booked90d } from './booked90d';
-import { OverviewCounts } from './overviewCounts';
 
 
 /**
  * Campaign overview for the Customers home page
  */
 export interface CampaignOverviewResponse {
-    booked90d: Booked90d;
-    counts: OverviewCounts;
-    recent: Array<RecentCampaign>;
+    booked90d?: Booked90d;
+    counts?: Counts;
+    recent?: Array<RecentCampaign>;
 }
 
 function isOptionalCampaignOverviewResponsePropertyOfType(
@@ -59,7 +59,7 @@ export function instanceOfCampaignOverviewResponse(value: object): value is Camp
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCampaignOverviewResponsePropertyNames('booked90d', 'counts', 'recent', );
+    const requiredProperties = createCampaignOverviewResponsePropertyNames();
     const optionalStringProperties = createCampaignOverviewResponseOptionalProperties();
     const optionalNumberProperties = createCampaignOverviewResponseOptionalProperties();
     const optionalBooleanProperties = createCampaignOverviewResponseOptionalProperties();

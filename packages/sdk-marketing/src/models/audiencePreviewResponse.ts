@@ -24,40 +24,40 @@ export interface AudiencePreviewResponse {
      */
     campaignId?: string;
     /**
-     * Members refused on every selected channel
-     */
-    optedOutAllChannels: number;
-    /**
-     * Deduplicated members eligible on at least one selected channel
-     */
-    reachableAny: number;
-    /**
-     * Whether the asynchronous snapshot is ready
-     */
-    status: AudiencePreviewResponseStatusEnum;
-    smsSendWindow: SmsSendWindow;
-    /**
-     * Per-channel reach after consent, account gate, and suppression
+     * Per-channel eligibility
      */
     channels: Array<ChannelPreview>;
     /**
-     * When the CRM resolved this snapshot; null if none has arrived yet. Membership replicates asynchronously, so these counts are as of this moment, not live.
+     * Members refused on every selected channel; null while PENDING
+     */
+    optedOutAllChannels?: number;
+    /**
+     * Deduplicated members eligible on at least one selected channel; null while PENDING
+     */
+    reachableAny?: number;
+    /**
+     * Resolution time, or null while PENDING
      */
     resolvedAt?: string;
     /**
-     * Bound segment
+     * Segment being previewed
      */
     segmentId?: string;
     /**
-     * Parties in the current audience snapshot, before consent filtering; null while PENDING
+     * Snapshot members before eligibility; null while PENDING
      */
     segmentMatched?: number;
+    smsSendWindow: SmsSendWindow;
     /**
-     * Whether the segment resolution hit its candidate ceiling and is partial; when true the real audience is larger than segmentMatched
+     * Whether the snapshot is ready
+     */
+    status: AudiencePreviewResponseStatusEnum;
+    /**
+     * Whether the snapshot was truncated
      */
     truncated: boolean;
     /**
-     * Validation warnings that would block scheduling, e.g. an expired offer
+     * Warnings
      */
     warnings: Array<string>;
 }
@@ -111,8 +111,8 @@ export function instanceOfAudiencePreviewResponse(value: object): value is Audie
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAudiencePreviewResponsePropertyNames('audienceType', 'optedOutAllChannels', 'reachableAny', 'status', 'smsSendWindow', 'channels', 'truncated', 'warnings', );
-    const optionalStringProperties = createAudiencePreviewResponseOptionalProperties({ name: 'audienceType', nullable: false }, { name: 'campaignId', nullable: false }, { name: 'status', nullable: false }, { name: 'resolvedAt', nullable: false }, { name: 'segmentId', nullable: false }, );
+    const requiredProperties = createAudiencePreviewResponsePropertyNames('audienceType', 'channels', 'smsSendWindow', 'status', 'truncated', 'warnings', );
+    const optionalStringProperties = createAudiencePreviewResponseOptionalProperties({ name: 'audienceType', nullable: false }, { name: 'campaignId', nullable: false }, { name: 'resolvedAt', nullable: false }, { name: 'segmentId', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createAudiencePreviewResponseOptionalProperties({ name: 'optedOutAllChannels', nullable: false }, { name: 'reachableAny', nullable: false }, { name: 'segmentMatched', nullable: false }, );
     const optionalBooleanProperties = createAudiencePreviewResponseOptionalProperties({ name: 'truncated', nullable: false }, );
 
