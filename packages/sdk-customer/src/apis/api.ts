@@ -1,6 +1,7 @@
 export * from './cRMAccounts.service';
 export * from './cRMCommunicationPreferences.service';
 export * from './cRMContacts.service';
+export * from './cRMCustomerLookup.service';
 export * from './cRMFollowUps.service';
 export * from './cRMInquiries.service';
 export * from './cRMInteractions.service';
