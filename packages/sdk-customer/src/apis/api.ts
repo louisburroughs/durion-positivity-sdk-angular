@@ -4,6 +4,7 @@ export * from './cRMContacts.service';
 export * from './cRMCustomerLookup.service';
 export * from './cRMFollowUps.service';
 export * from './cRMInquiries.service';
+export * from './cRMInsights.service';
 export * from './cRMInteractions.service';
 export * from './cRMMarketingConsent.service';
 export * from './cRMPartyRelationships.service';
