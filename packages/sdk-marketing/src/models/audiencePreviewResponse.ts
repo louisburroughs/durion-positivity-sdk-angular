@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { SmsSendWindow } from './smsSendWindow';
 import { ChannelPreview } from './channelPreview';
 
 
@@ -19,9 +20,22 @@ export interface AudiencePreviewResponse {
      */
     audienceType: AudiencePreviewResponseAudienceTypeEnum;
     /**
-     * Campaign previewed
+     * Campaign previewed; null for a campaign-less preview
      */
-    campaignId: string;
+    campaignId?: string;
+    /**
+     * Members refused on every selected channel
+     */
+    optedOutAllChannels: number;
+    /**
+     * Deduplicated members eligible on at least one selected channel
+     */
+    reachableAny: number;
+    /**
+     * Whether the asynchronous snapshot is ready
+     */
+    status: AudiencePreviewResponseStatusEnum;
+    smsSendWindow: SmsSendWindow;
     /**
      * Per-channel reach after consent, account gate, and suppression
      */
@@ -35,9 +49,9 @@ export interface AudiencePreviewResponse {
      */
     segmentId?: string;
     /**
-     * Parties in the current audience snapshot, before consent filtering
+     * Parties in the current audience snapshot, before consent filtering; null while PENDING
      */
-    segmentMatched: number;
+    segmentMatched?: number;
     /**
      * Whether the segment resolution hit its candidate ceiling and is partial; when true the real audience is larger than segmentMatched
      */
@@ -49,7 +63,12 @@ export interface AudiencePreviewResponse {
 }
 export enum AudiencePreviewResponseAudienceTypeEnum {
     Commercial = 'COMMERCIAL',
-    Individual = 'INDIVIDUAL'
+    Individual = 'INDIVIDUAL',
+    Both = 'BOTH'
+};
+export enum AudiencePreviewResponseStatusEnum {
+    Ready = 'READY',
+    Pending = 'PENDING'
 };
 
 
@@ -92,9 +111,9 @@ export function instanceOfAudiencePreviewResponse(value: object): value is Audie
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAudiencePreviewResponsePropertyNames('audienceType', 'campaignId', 'channels', 'segmentMatched', 'truncated', 'warnings', );
-    const optionalStringProperties = createAudiencePreviewResponseOptionalProperties({ name: 'audienceType', nullable: false }, { name: 'campaignId', nullable: false }, { name: 'resolvedAt', nullable: false }, { name: 'segmentId', nullable: false }, );
-    const optionalNumberProperties = createAudiencePreviewResponseOptionalProperties({ name: 'segmentMatched', nullable: false }, );
+    const requiredProperties = createAudiencePreviewResponsePropertyNames('audienceType', 'optedOutAllChannels', 'reachableAny', 'status', 'smsSendWindow', 'channels', 'truncated', 'warnings', );
+    const optionalStringProperties = createAudiencePreviewResponseOptionalProperties({ name: 'audienceType', nullable: false }, { name: 'campaignId', nullable: false }, { name: 'status', nullable: false }, { name: 'resolvedAt', nullable: false }, { name: 'segmentId', nullable: false }, );
+    const optionalNumberProperties = createAudiencePreviewResponseOptionalProperties({ name: 'optedOutAllChannels', nullable: false }, { name: 'reachableAny', nullable: false }, { name: 'segmentMatched', nullable: false }, );
     const optionalBooleanProperties = createAudiencePreviewResponseOptionalProperties({ name: 'truncated', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

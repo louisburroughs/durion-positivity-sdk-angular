@@ -13,6 +13,7 @@ export * from './cRMPersonLinkReconciliation.service';
 export * from './cRMPersons.service';
 export * from './cRMPublicInquiry.service';
 export * from './cRMSegments.service';
+export * from './cRMServiceAgreements.service';
 export * from './cRMSnapshots.service';
 export * from './cRMSuppression.service';
 export * from './cRMTags.service';

@@ -41,6 +41,10 @@ export interface CampaignStatsResponse {
      */
     channels: Array<ChannelFunnel>;
     /**
+     * Opened divided by delivered; null when nothing was delivered
+     */
+    openRate?: number;
+    /**
      * Campaign code
      */
     code: string;

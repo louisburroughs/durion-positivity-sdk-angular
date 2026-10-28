@@ -10,32 +10,12 @@
 
 
 /**
- * Request to preview a segment audience before a campaign exists
+ * Preview a segment audience before a campaign exists
  */
 export interface AudiencePreviewRequest {
-    /**
-     * Targeted party kind
-     */
     audienceType: AudiencePreviewRequestAudienceTypeEnum;
-    /**
-     * Channels to evaluate
-     */
     channels: Set<AudiencePreviewRequestChannelsEnum>;
-    /**
-     * Optional email template used only to report attachment in the preview
-     */
-    emailTemplateId?: string;
-    /**
-     * Segment id to preview; either this or starterKey is required
-     */
     segmentId?: string;
-    /**
-     * Optional SMS template used only to report attachment in the preview
-     */
-    smsTemplateId?: string;
-    /**
-     * Optional catalog starter key. When supplied, it resolves to the current segment replica
-     */
     starterKey?: string;
 }
 export enum AudiencePreviewRequestAudienceTypeEnum {
@@ -89,7 +69,7 @@ export function instanceOfAudiencePreviewRequest(value: object): value is Audien
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAudiencePreviewRequestPropertyNames('audienceType', 'channels', );
-    const optionalStringProperties = createAudiencePreviewRequestOptionalProperties({ name: 'audienceType', nullable: false }, { name: 'emailTemplateId', nullable: false }, { name: 'segmentId', nullable: false }, { name: 'smsTemplateId', nullable: false }, { name: 'starterKey', nullable: false }, );
+    const optionalStringProperties = createAudiencePreviewRequestOptionalProperties({ name: 'audienceType', nullable: false }, { name: 'segmentId', nullable: false }, { name: 'starterKey', nullable: false }, );
     const optionalNumberProperties = createAudiencePreviewRequestOptionalProperties();
     const optionalBooleanProperties = createAudiencePreviewRequestOptionalProperties();
 
