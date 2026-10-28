@@ -23,6 +23,8 @@ import { ContactPointDto } from '../models/contactPointDto';
 // @ts-ignore
 import { Person } from '../models/person';
 // @ts-ignore
+import { PersonFactReplayResultDto } from '../models/personFactReplayResultDto';
+// @ts-ignore
 import { ResolvePersonRequest } from '../models/resolvePersonRequest';
 // @ts-ignore
 import { ResolvePersonResponse } from '../models/resolvePersonResponse';
@@ -491,6 +493,95 @@ export class PeopleAPIService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: contactPointDto,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Re-emit Person Facts for Replica Consumers
+     * Re-publishes people-contact.person.updated facts for one bounded page of persons so that event-fed replicas in other modules can be seeded or repaired, returning what it emitted and a cursor for the next page. Use this endpoint after a replica\&#39;s first deployment or after an outage longer than broker retention; do not use it to fix one person, which republishes itself on its next ordinary update. Preconditions: fact publication must be enabled — a replay with it off is refused rather than reported as a successful no-op; replayed facts are indistinguishable from live ones, so consumers apply them through their normal path and their stale guard prevents newer state from regressing. Required inputs: none; afterPersonId resumes a previous page, updatedSince restricts to persons changed at or after an instant, and limit bounds the page — it is clamped into 1..1000 rather than rejected. Emits a PEOPLE_CONTACT_PERSON_FACT_REPLAY event and queues one person fact per person in the page; no people-contact state changes. Returns 200 with complete&#x3D;true and a null cursor once the person base end is reached, 400 when a parameter is malformed, and 422 when fact publication is disabled.
+     * @endpoint post /v1/people/facts/replay
+     * @param afterPersonId Resume cursor from a previous call; omit to start at the beginning.
+     * @param updatedSince Restrict to persons changed at or after this instant; omit to replay all.
+     * @param limit Maximum facts to emit in this call; clamped into 1–1000.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public replayPersonFacts(afterPersonId?: string, updatedSince?: string, limit?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PersonFactReplayResultDto>;
+    public replayPersonFacts(afterPersonId?: string, updatedSince?: string, limit?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PersonFactReplayResultDto>>;
+    public replayPersonFacts(afterPersonId?: string, updatedSince?: string, limit?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PersonFactReplayResultDto>>;
+    public replayPersonFacts(afterPersonId?: string, updatedSince?: string, limit?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'afterPersonId',
+            <any>afterPersonId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'updatedSince',
+            <any>updatedSince,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'limit',
+            <any>limit,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/people/facts/replay`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PersonFactReplayResultDto>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

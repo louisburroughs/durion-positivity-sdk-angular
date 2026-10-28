@@ -20,6 +20,7 @@ export * from './mechanicAssignmentItem';
 export * from './mechanicRosterEntryResponse';
 export * from './opening';
 export * from './openingSearchResponse';
+export * from './outboxReplayResponse';
 export * from './overrideEntry';
 export * from './pageMetadata';
 export * from './pagedModelLocationTechnicianRosterEntryResponse';

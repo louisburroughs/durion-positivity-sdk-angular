@@ -5,6 +5,7 @@ export * from './createUserLinkRequest';
 export * from './fieldError';
 export * from './linkUserToPersonRequest';
 export * from './person';
+export * from './personFactReplayResultDto';
 export * from './personResponse';
 export * from './personRoleAssignmentRequest';
 export * from './postalAddressDto';
