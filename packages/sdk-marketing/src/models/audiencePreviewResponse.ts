@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { SmsSendWindow } from './smsSendWindow';
 import { ChannelPreview } from './channelPreview';
 
 
@@ -19,37 +20,55 @@ export interface AudiencePreviewResponse {
      */
     audienceType: AudiencePreviewResponseAudienceTypeEnum;
     /**
-     * Campaign previewed
+     * Campaign previewed; null for a campaign-less preview
      */
-    campaignId: string;
+    campaignId?: string;
     /**
-     * Per-channel reach after consent, account gate, and suppression
+     * Per-channel eligibility
      */
     channels: Array<ChannelPreview>;
     /**
-     * When the CRM resolved this snapshot; null if none has arrived yet. Membership replicates asynchronously, so these counts are as of this moment, not live.
+     * Members refused on every selected channel; null while PENDING
+     */
+    optedOutAllChannels?: number;
+    /**
+     * Deduplicated members eligible on at least one selected channel; null while PENDING
+     */
+    reachableAny?: number;
+    /**
+     * Resolution time, or null while PENDING
      */
     resolvedAt?: string;
     /**
-     * Bound segment
+     * Segment being previewed
      */
     segmentId?: string;
     /**
-     * Parties in the current audience snapshot, before consent filtering
+     * Snapshot members before eligibility; null while PENDING
      */
-    segmentMatched: number;
+    segmentMatched?: number;
+    smsSendWindow: SmsSendWindow;
     /**
-     * Whether the segment resolution hit its candidate ceiling and is partial; when true the real audience is larger than segmentMatched
+     * Whether the snapshot is ready
+     */
+    status: AudiencePreviewResponseStatusEnum;
+    /**
+     * Whether the snapshot was truncated
      */
     truncated: boolean;
     /**
-     * Validation warnings that would block scheduling, e.g. an expired offer
+     * Warnings
      */
     warnings: Array<string>;
 }
 export enum AudiencePreviewResponseAudienceTypeEnum {
     Commercial = 'COMMERCIAL',
-    Individual = 'INDIVIDUAL'
+    Individual = 'INDIVIDUAL',
+    Both = 'BOTH'
+};
+export enum AudiencePreviewResponseStatusEnum {
+    Ready = 'READY',
+    Pending = 'PENDING'
 };
 
 
@@ -92,9 +111,9 @@ export function instanceOfAudiencePreviewResponse(value: object): value is Audie
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAudiencePreviewResponsePropertyNames('audienceType', 'campaignId', 'channels', 'segmentMatched', 'truncated', 'warnings', );
-    const optionalStringProperties = createAudiencePreviewResponseOptionalProperties({ name: 'audienceType', nullable: false }, { name: 'campaignId', nullable: false }, { name: 'resolvedAt', nullable: false }, { name: 'segmentId', nullable: false }, );
-    const optionalNumberProperties = createAudiencePreviewResponseOptionalProperties({ name: 'segmentMatched', nullable: false }, );
+    const requiredProperties = createAudiencePreviewResponsePropertyNames('audienceType', 'channels', 'smsSendWindow', 'status', 'truncated', 'warnings', );
+    const optionalStringProperties = createAudiencePreviewResponseOptionalProperties({ name: 'audienceType', nullable: false }, { name: 'campaignId', nullable: false }, { name: 'resolvedAt', nullable: false }, { name: 'segmentId', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalNumberProperties = createAudiencePreviewResponseOptionalProperties({ name: 'optedOutAllChannels', nullable: false }, { name: 'reachableAny', nullable: false }, { name: 'segmentMatched', nullable: false }, );
     const optionalBooleanProperties = createAudiencePreviewResponseOptionalProperties({ name: 'truncated', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

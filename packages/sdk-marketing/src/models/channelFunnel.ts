@@ -20,13 +20,17 @@ export interface ChannelFunnel {
     /**
      * Channel
      */
-    channel: ChannelFunnelChannelEnum;
+    channel: string;
+    /**
+     * Clicked messages; null for SMS
+     */
+    clicked?: number;
     /**
      * Spam complaints
      */
     complained: number;
     /**
-     * Messages the provider confirmed delivered
+     * Messages delivered
      */
     delivered: number;
     /**
@@ -34,11 +38,15 @@ export interface ChannelFunnel {
      */
     failed: number;
     /**
-     * Messages dispatched to the provider
+     * Opened messages; null for SMS
+     */
+    opened?: number;
+    /**
+     * Messages dispatched
      */
     sent: number;
     /**
-     * Recipients blocked at dispatch by consent, account gate, or suppression
+     * Recipients blocked at dispatch
      */
     suppressed: number;
     /**
@@ -46,12 +54,6 @@ export interface ChannelFunnel {
      */
     targeted: number;
 }
-export enum ChannelFunnelChannelEnum {
-    Email = 'EMAIL',
-    Sms = 'SMS'
-};
-
-
 
 function isOptionalChannelFunnelPropertyOfType(
     value: Record<string, unknown>,
@@ -93,7 +95,7 @@ export function instanceOfChannelFunnel(value: object): value is ChannelFunnel {
 
     const requiredProperties = createChannelFunnelPropertyNames('bounced', 'channel', 'complained', 'delivered', 'failed', 'sent', 'suppressed', 'targeted', );
     const optionalStringProperties = createChannelFunnelOptionalProperties({ name: 'channel', nullable: false }, );
-    const optionalNumberProperties = createChannelFunnelOptionalProperties({ name: 'bounced', nullable: false }, { name: 'complained', nullable: false }, { name: 'delivered', nullable: false }, { name: 'failed', nullable: false }, { name: 'sent', nullable: false }, { name: 'suppressed', nullable: false }, { name: 'targeted', nullable: false }, );
+    const optionalNumberProperties = createChannelFunnelOptionalProperties({ name: 'bounced', nullable: false }, { name: 'clicked', nullable: false }, { name: 'complained', nullable: false }, { name: 'delivered', nullable: false }, { name: 'failed', nullable: false }, { name: 'opened', nullable: false }, { name: 'sent', nullable: false }, { name: 'suppressed', nullable: false }, { name: 'targeted', nullable: false }, );
     const optionalBooleanProperties = createChannelFunnelOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

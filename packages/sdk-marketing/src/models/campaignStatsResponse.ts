@@ -12,7 +12,7 @@ import { ChannelFunnel } from './channelFunnel';
 
 
 /**
- * Campaign reach funnel and attribution
+ * Campaign reach funnel, engagement, and attribution
  */
 export interface CampaignStatsResponse {
     /**
@@ -22,7 +22,7 @@ export interface CampaignStatsResponse {
     /**
      * Targeted party kind
      */
-    audienceType: CampaignStatsResponseAudienceTypeEnum;
+    audienceType: string;
     /**
      * Bookings credited to this campaign
      */
@@ -45,16 +45,14 @@ export interface CampaignStatsResponse {
      */
     code: string;
     /**
+     * Opened divided by delivered; null when no email was delivered
+     */
+    openRate?: number;
+    /**
      * Redemptions credited to this campaign
      */
     redeemed: number;
 }
-export enum CampaignStatsResponseAudienceTypeEnum {
-    Commercial = 'COMMERCIAL',
-    Individual = 'INDIVIDUAL'
-};
-
-
 
 function isOptionalCampaignStatsResponsePropertyOfType(
     value: Record<string, unknown>,

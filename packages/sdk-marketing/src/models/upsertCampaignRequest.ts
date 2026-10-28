@@ -76,7 +76,8 @@ export interface UpsertCampaignRequest {
 }
 export enum UpsertCampaignRequestAudienceTypeEnum {
     Commercial = 'COMMERCIAL',
-    Individual = 'INDIVIDUAL'
+    Individual = 'INDIVIDUAL',
+    Both = 'BOTH'
 };
 export enum UpsertCampaignRequestChannelsEnum {
     Email = 'EMAIL',
