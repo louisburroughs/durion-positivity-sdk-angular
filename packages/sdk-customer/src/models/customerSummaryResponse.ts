@@ -9,6 +9,7 @@
  */
 import { ContactableBy } from './contactableBy';
 import { Money } from './money';
+import { ActiveAgreement } from './activeAgreement';
 import { LastVisit } from './lastVisit';
 import { PrimaryContact } from './primaryContact';
 
@@ -17,6 +18,7 @@ import { PrimaryContact } from './primaryContact';
  * Key facts of one customer for the picked-customer card
  */
 export interface CustomerSummaryResponse {
+    activeAgreement?: ActiveAgreement;
     contactableBy: ContactableBy;
     creditLimit?: Money;
     /**

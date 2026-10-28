@@ -19,7 +19,7 @@ export interface ChannelPreview {
      */
     channel: ChannelPreviewChannelEnum;
     /**
-     * Of those, how many may actually be sent to
+     * Of those, how many may actually be sent to; null while PENDING
      */
     eligible: number;
     /**
@@ -27,7 +27,7 @@ export interface ChannelPreview {
      */
     sample: Array<SampleRecipient>;
     /**
-     * Parties targeted on this channel
+     * Parties targeted on this channel; null while PENDING
      */
     targeted: number;
     /**

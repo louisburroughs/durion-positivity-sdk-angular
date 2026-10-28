@@ -39,17 +39,17 @@ export class MarketingStartersService extends BaseService {
 
     /**
      * List Marketing Starters
-     * Lists the tenant\&#39;s campaign starter cards with the segment each one targets and its current audience size, ready for the Customers home page. Use this tool to render the starter row; do not use it to read an arbitrary segment, which the campaign-less audience preview exposes instead. Preconditions: the starter catalog and its message templates must have been seeded for this tenant, and a starter whose segment was deleted is omitted rather than returned empty. Required inputs: none; audienceType optionally filters the cards to COMMERCIAL or INDIVIDUAL. No events are emitted; the endpoint only reads the starter catalog and the replicated segment metadata. Returns 403 when the caller lacks marketing:campaign:view. An audienceCount of null means the CRM has not resolved that segment yet, and a refresh has already been requested.
+     * Lists the tenant\&#39;s campaign starter cards with the segment each one targets and its current audience size, ready for the Customers home page. Use this tool to render the starter row; do not use it to read an arbitrary segment, which the campaign-less audience preview exposes instead. Preconditions: the starter catalog and its message templates must have been seeded for this tenant, and a starter whose segment was deleted is omitted rather than returned empty. Required inputs: none; audienceType optionally filters the cards to COMMERCIAL or INDIVIDUAL. Emits a MARKETING_STARTERS_LIST audit event per call, and enqueues a segment-resolve refresh command through the outbox for each starter row that has no snapshot. Returns 403 when the caller lacks marketing:campaign:view. An audienceCount of null means the CRM has not resolved that segment yet, and a refresh has already been requested.
      * @endpoint get /v1/marketing/starters
      * @param audienceType
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listMarketingStarters(audienceType?: 'COMMERCIAL' | 'INDIVIDUAL' | 'BOTH', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<StarterResponse>>;
-    public listMarketingStarters(audienceType?: 'COMMERCIAL' | 'INDIVIDUAL' | 'BOTH', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<StarterResponse>>>;
-    public listMarketingStarters(audienceType?: 'COMMERCIAL' | 'INDIVIDUAL' | 'BOTH', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<StarterResponse>>>;
-    public listMarketingStarters(audienceType?: 'COMMERCIAL' | 'INDIVIDUAL' | 'BOTH', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listMarketingStarters(audienceType?: 'COMMERCIAL' | 'INDIVIDUAL', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<StarterResponse>>;
+    public listMarketingStarters(audienceType?: 'COMMERCIAL' | 'INDIVIDUAL', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<StarterResponse>>>;
+    public listMarketingStarters(audienceType?: 'COMMERCIAL' | 'INDIVIDUAL', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<StarterResponse>>>;
+    public listMarketingStarters(audienceType?: 'COMMERCIAL' | 'INDIVIDUAL', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 

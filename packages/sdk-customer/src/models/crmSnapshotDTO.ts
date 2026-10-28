@@ -8,6 +8,7 @@
  * Do not edit the class manually.
  */
 import { AccountSummary } from './accountSummary';
+import { ActiveAgreement } from './activeAgreement';
 import { ContactSummary } from './contactSummary';
 import { MarketingConsentSummaryResponse } from './marketingConsentSummaryResponse';
 import { SnapshotMetadata } from './snapshotMetadata';
@@ -22,6 +23,7 @@ import { VehicleSummary } from './vehicleSummary';
  */
 export interface CrmSnapshotDTO {
     account: AccountSummary;
+    activeAgreement?: ActiveAgreement;
     billingRules?: BillingRuleRef;
     /**
      * Contacts associated with the account

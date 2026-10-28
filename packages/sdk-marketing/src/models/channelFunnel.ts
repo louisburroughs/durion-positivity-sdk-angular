@@ -34,6 +34,14 @@ export interface ChannelFunnel {
      */
     failed: number;
     /**
+     * Opened messages; null for SMS
+     */
+    opened?: number;
+    /**
+     * Clicked messages; null for SMS
+     */
+    clicked?: number;
+    /**
      * Messages dispatched to the provider
      */
     sent: number;
@@ -93,7 +101,7 @@ export function instanceOfChannelFunnel(value: object): value is ChannelFunnel {
 
     const requiredProperties = createChannelFunnelPropertyNames('bounced', 'channel', 'complained', 'delivered', 'failed', 'sent', 'suppressed', 'targeted', );
     const optionalStringProperties = createChannelFunnelOptionalProperties({ name: 'channel', nullable: false }, );
-    const optionalNumberProperties = createChannelFunnelOptionalProperties({ name: 'bounced', nullable: false }, { name: 'complained', nullable: false }, { name: 'delivered', nullable: false }, { name: 'failed', nullable: false }, { name: 'sent', nullable: false }, { name: 'suppressed', nullable: false }, { name: 'targeted', nullable: false }, );
+    const optionalNumberProperties = createChannelFunnelOptionalProperties({ name: 'bounced', nullable: false }, { name: 'complained', nullable: false }, { name: 'delivered', nullable: false }, { name: 'failed', nullable: false }, { name: 'opened', nullable: false }, { name: 'clicked', nullable: false }, { name: 'sent', nullable: false }, { name: 'suppressed', nullable: false }, { name: 'targeted', nullable: false }, );
     const optionalBooleanProperties = createChannelFunnelOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
