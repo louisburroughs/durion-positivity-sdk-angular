@@ -20,9 +20,9 @@ export interface CustomerSummaryResponse {
     contactableBy: ContactableBy;
     creditLimit?: Money;
     /**
-     * Month the party became a customer (its creation month, YYYY-MM)
+     * Month the party became a customer (its creation month, YYYY-MM); null for a party with no recorded creation time
      */
-    customerSince: string;
+    customerSince?: string;
     /**
      * Name to show
      */
@@ -93,7 +93,7 @@ export function instanceOfCustomerSummaryResponse(value: object): value is Custo
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCustomerSummaryResponsePropertyNames('contactableBy', 'customerSince', 'displayName', 'flags', 'partyId', 'partyType', 'vehicleCount', );
+    const requiredProperties = createCustomerSummaryResponsePropertyNames('contactableBy', 'displayName', 'flags', 'partyId', 'partyType', 'vehicleCount', );
     const optionalStringProperties = createCustomerSummaryResponseOptionalProperties({ name: 'customerSince', nullable: false }, { name: 'displayName', nullable: false }, { name: 'partyId', nullable: false }, { name: 'partyType', nullable: false }, );
     const optionalNumberProperties = createCustomerSummaryResponseOptionalProperties({ name: 'vehicleCount', nullable: false }, );
     const optionalBooleanProperties = createCustomerSummaryResponseOptionalProperties();
