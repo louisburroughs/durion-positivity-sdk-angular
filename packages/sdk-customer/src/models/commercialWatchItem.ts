@@ -27,7 +27,7 @@ export interface CommercialWatchItem {
     /**
      * The account\'s other reasons, in priority order
      */
-    otherReasons: Array<string>;
+    otherReasons: Array<CommercialWatchItemOtherReasonsEnum>;
     /**
      * Party identifier
      */
@@ -46,6 +46,13 @@ export interface CommercialWatchItem {
      */
     vehicleCount: number;
 }
+export enum CommercialWatchItemOtherReasonsEnum {
+    OverCreditLimit = 'OVER_CREDIT_LIMIT',
+    AgreementRenewal = 'AGREEMENT_RENEWAL',
+    InspectionsDue = 'INSPECTIONS_DUE',
+    SpendDeclining = 'SPEND_DECLINING',
+    Lapsed = 'LAPSED'
+};
 export enum CommercialWatchItemReasonEnum {
     OverCreditLimit = 'OVER_CREDIT_LIMIT',
     AgreementRenewal = 'AGREEMENT_RENEWAL',
