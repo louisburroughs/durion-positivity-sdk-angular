@@ -18,9 +18,9 @@ export interface Money {
      */
     amount: number;
     /**
-     * ISO 4217 currency code
+     * ISO 4217 currency code; null when the source states none (a credit limit with no billing currency and no balance fact to take it from)
      */
-    currencyCode: string;
+    currencyCode?: string;
 }
 
 function isOptionalMoneyPropertyOfType(
@@ -61,7 +61,7 @@ export function instanceOfMoney(value: object): value is Money {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createMoneyPropertyNames('amount', 'currencyCode', );
+    const requiredProperties = createMoneyPropertyNames('amount', );
     const optionalStringProperties = createMoneyOptionalProperties({ name: 'currencyCode', nullable: false }, );
     const optionalNumberProperties = createMoneyOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createMoneyOptionalProperties();
