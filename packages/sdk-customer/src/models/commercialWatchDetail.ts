@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { CommercialWatchInspectionsDueDetail } from './commercialWatchInspectionsDueDetail';
 import { CommercialWatchCreditDetail } from './commercialWatchCreditDetail';
 import { CommercialWatchSpendDetail } from './commercialWatchSpendDetail';
 import { CommercialWatchLapsedDetail } from './commercialWatchLapsedDetail';
@@ -16,6 +17,7 @@ import { CommercialWatchLapsedDetail } from './commercialWatchLapsedDetail';
  * The facts behind each reason that applies
  */
 export interface CommercialWatchDetail {
+    inspectionsDue?: CommercialWatchInspectionsDueDetail;
     lapsed?: CommercialWatchLapsedDetail;
     overCreditLimit?: CommercialWatchCreditDetail;
     spendDeclining?: CommercialWatchSpendDetail;

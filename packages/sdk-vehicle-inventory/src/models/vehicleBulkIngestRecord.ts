@@ -22,6 +22,14 @@ export interface VehicleBulkIngestRecord {
      */
     description: string;
     /**
+     * Emissions test due date
+     */
+    emissionsDueOn?: string;
+    /**
+     * State inspection due date
+     */
+    inspectionDueOn?: string;
+    /**
      * License plate number
      */
     licensePlate?: string;
@@ -37,6 +45,10 @@ export interface VehicleBulkIngestRecord {
      * Model of the vehicle
      */
     model?: string;
+    /**
+     * Registration renewal due date
+     */
+    registrationDueOn?: string;
     /**
      * Trim level of the vehicle
      */
@@ -94,7 +106,7 @@ export function instanceOfVehicleBulkIngestRecord(value: object): value is Vehic
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createVehicleBulkIngestRecordPropertyNames('accountId', 'description', 'unitNumber', 'vin', );
-    const optionalStringProperties = createVehicleBulkIngestRecordOptionalProperties({ name: 'accountId', nullable: false }, { name: 'description', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'licensePlateJurisdiction', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'trim', nullable: false }, { name: 'unitNumber', nullable: false }, { name: 'vin', nullable: false }, );
+    const optionalStringProperties = createVehicleBulkIngestRecordOptionalProperties({ name: 'accountId', nullable: false }, { name: 'description', nullable: false }, { name: 'emissionsDueOn', nullable: false }, { name: 'inspectionDueOn', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'licensePlateJurisdiction', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'registrationDueOn', nullable: false }, { name: 'trim', nullable: false }, { name: 'unitNumber', nullable: false }, { name: 'vin', nullable: false }, );
     const optionalNumberProperties = createVehicleBulkIngestRecordOptionalProperties({ name: 'year', nullable: false }, );
     const optionalBooleanProperties = createVehicleBulkIngestRecordOptionalProperties();
 
