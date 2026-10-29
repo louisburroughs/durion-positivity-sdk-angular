@@ -19,6 +19,10 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 // @ts-ignore
 import { ApiError } from '../models/apiError';
 // @ts-ignore
+import { TaxProviderBindingRequest } from '../models/taxProviderBindingRequest';
+// @ts-ignore
+import { TaxProviderBindingResponse } from '../models/taxProviderBindingResponse';
+// @ts-ignore
 import { TenantCreateRequest } from '../models/tenantCreateRequest';
 // @ts-ignore
 import { TenantReEmitResponse } from '../models/tenantReEmitResponse';
@@ -408,6 +412,80 @@ export class PlatformTenantAPIService extends BaseService {
         return this.httpClient.request<TenantResponse>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Set a Tenant\&#39;s Tax-Provider Binding
+     * Sets the plug-in that prices one tenant\&#39;s documents in one country from a date in pos-tax\&#39;s registry, through this module\&#39;s operator front door (ADR-0071 step 1, #2629); the binding that begins on the same day is replaced, and the change is recorded in pos-tax\&#39;s binding history under the operator\&#39;s id. Use this tool as the platform operator to bind a tenant to a plug-in; do not use it to price a document, which reads the binding in pos-tax, and do not expect a tax:* authority, which does not exist. Preconditions: the caller is bound to the platform tenant (403 otherwise) and holds platform:tenant_tax_provider:manage. Required inputs: tenantId (path), countryCode, providerId, effectiveFrom and requestId; providerProfile and effectiveTo are optional, and effectiveTo is inclusive. The target tenant comes only from the path and the actor only from the authenticated principal; neither is read from the body. Emits a TENANT_TAX_PROVIDER_BINDING_SET event and returns 200 with the binding pos-tax stored, also for a replayed requestId. pos-tax\&#39;s 400 VALIDATION_ERROR, 409 TAX_PROVIDER_BINDING_OVERLAP or IDEMPOTENCY_CONFLICT and 422 TAX_PROVIDER_NOT_REGISTERED are relayed unchanged. Returns 503 SERVICE_UNAVAILABLE with Retry-After when pos-tax cannot be reached; nothing is stored here.
+     * @endpoint put /v1/platform/tenants/{tenantId}/tax-provider-bindings
+     * @param tenantId The tenant whose binding changes
+     * @param taxProviderBindingRequest The country, the plug-in that serves it and the dates it applies to
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public setTenantTaxProviderBinding(tenantId: string, taxProviderBindingRequest: TaxProviderBindingRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxProviderBindingResponse>;
+    public setTenantTaxProviderBinding(tenantId: string, taxProviderBindingRequest: TaxProviderBindingRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxProviderBindingResponse>>;
+    public setTenantTaxProviderBinding(tenantId: string, taxProviderBindingRequest: TaxProviderBindingRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxProviderBindingResponse>>;
+    public setTenantTaxProviderBinding(tenantId: string, taxProviderBindingRequest: TaxProviderBindingRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (tenantId === null || tenantId === undefined) {
+            throw new Error('Required parameter tenantId was null or undefined when calling setTenantTaxProviderBinding.');
+        }
+        if (taxProviderBindingRequest === null || taxProviderBindingRequest === undefined) {
+            throw new Error('Required parameter taxProviderBindingRequest was null or undefined when calling setTenantTaxProviderBinding.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/platform/tenants/${this.configuration.encodeParam({name: "tenantId", value: tenantId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/tax-provider-bindings`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<TaxProviderBindingResponse>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: taxProviderBindingRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
