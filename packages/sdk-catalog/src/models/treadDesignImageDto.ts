@@ -7,12 +7,17 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { TreadDesignImageAltTextDto } from './treadDesignImageAltTextDto';
 
 
 /**
  * Vendor-supplied artwork reference.
  */
 export interface TreadDesignImageDto {
+    /**
+     * Alt text per language, derived from the vendor\'s per-language product name and a localized label for imageType. A language is absent when the design has no product name in it; empty for an unresolved image. Never an empty string.
+     */
+    altTexts?: Array<TreadDesignImageAltTextDto>;
     /**
      * pos-image identifier for the stored bytes; absent when unresolved.
      */
