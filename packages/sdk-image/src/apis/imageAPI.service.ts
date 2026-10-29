@@ -49,10 +49,10 @@ export class ImageAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getImageByFilename(filename: string, ifNoneMatch?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<Blob>;
-    public getImageByFilename(filename: string, ifNoneMatch?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Blob>>;
-    public getImageByFilename(filename: string, ifNoneMatch?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Blob>>;
-    public getImageByFilename(filename: string, ifNoneMatch?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getImageByFilename(filename: string, ifNoneMatch?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'image/gif' | 'image/jpeg' | 'image/png' | 'image/webp', context?: HttpContext, transferCache?: boolean}): Observable<Blob>;
+    public getImageByFilename(filename: string, ifNoneMatch?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'image/gif' | 'image/jpeg' | 'image/png' | 'image/webp', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Blob>>;
+    public getImageByFilename(filename: string, ifNoneMatch?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'image/gif' | 'image/jpeg' | 'image/png' | 'image/webp', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Blob>>;
+    public getImageByFilename(filename: string, ifNoneMatch?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'image/gif' | 'image/jpeg' | 'image/png' | 'image/webp', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (filename === null || filename === undefined) {
             throw new Error('Required parameter filename was null or undefined when calling getImageByFilename.');
         }
@@ -63,7 +63,10 @@ export class ImageAPIService extends BaseService {
         }
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
+            'image/gif',
+            'image/jpeg',
+            'image/png',
+            'image/webp'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -99,10 +102,10 @@ export class ImageAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getImageById(id: number, ifNoneMatch?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<Blob>;
-    public getImageById(id: number, ifNoneMatch?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Blob>>;
-    public getImageById(id: number, ifNoneMatch?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Blob>>;
-    public getImageById(id: number, ifNoneMatch?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getImageById(id: number, ifNoneMatch?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'image/gif' | 'image/jpeg' | 'image/png' | 'image/webp', context?: HttpContext, transferCache?: boolean}): Observable<Blob>;
+    public getImageById(id: number, ifNoneMatch?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'image/gif' | 'image/jpeg' | 'image/png' | 'image/webp', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Blob>>;
+    public getImageById(id: number, ifNoneMatch?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'image/gif' | 'image/jpeg' | 'image/png' | 'image/webp', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Blob>>;
+    public getImageById(id: number, ifNoneMatch?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'image/gif' | 'image/jpeg' | 'image/png' | 'image/webp', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling getImageById.');
         }
@@ -113,7 +116,10 @@ export class ImageAPIService extends BaseService {
         }
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*'
+            'image/gif',
+            'image/jpeg',
+            'image/png',
+            'image/webp'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
