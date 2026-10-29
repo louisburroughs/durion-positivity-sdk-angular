@@ -88,6 +88,7 @@ export * from './supplierPriceEntryDto';
 export * from './supplierPriceImportStatusDto';
 export * from './treadDesignCandidateDto';
 export * from './treadDesignDto';
+export * from './treadDesignImageAltTextDto';
 export * from './treadDesignImageDto';
 export * from './treadDesignResolveRequest';
 export * from './treadDesignTextDto';

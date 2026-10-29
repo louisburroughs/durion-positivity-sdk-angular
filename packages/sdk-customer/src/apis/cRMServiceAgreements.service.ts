@@ -258,9 +258,9 @@ export class CRMServiceAgreementsService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listServiceAgreementRenewals(withinDays?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ServiceAgreementRenewalResponse>;
-    public listServiceAgreementRenewals(withinDays?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ServiceAgreementRenewalResponse>>;
-    public listServiceAgreementRenewals(withinDays?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ServiceAgreementRenewalResponse>>;
+    public listServiceAgreementRenewals(withinDays?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ServiceAgreementRenewalResponse>>;
+    public listServiceAgreementRenewals(withinDays?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ServiceAgreementRenewalResponse>>>;
+    public listServiceAgreementRenewals(withinDays?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ServiceAgreementRenewalResponse>>>;
     public listServiceAgreementRenewals(withinDays?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
@@ -304,7 +304,7 @@ export class CRMServiceAgreementsService extends BaseService {
 
         let localVarPath = `/v1/crm/service-agreements/renewals`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<ServiceAgreementRenewalResponse>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<ServiceAgreementRenewalResponse>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),
@@ -328,9 +328,9 @@ export class CRMServiceAgreementsService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listServiceAgreements(partyId: string, status?: 'DRAFT' | 'ACTIVE' | 'EXPIRED' | 'TERMINATED' | 'RENEWED', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ServiceAgreementResponse>;
-    public listServiceAgreements(partyId: string, status?: 'DRAFT' | 'ACTIVE' | 'EXPIRED' | 'TERMINATED' | 'RENEWED', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ServiceAgreementResponse>>;
-    public listServiceAgreements(partyId: string, status?: 'DRAFT' | 'ACTIVE' | 'EXPIRED' | 'TERMINATED' | 'RENEWED', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ServiceAgreementResponse>>;
+    public listServiceAgreements(partyId: string, status?: 'DRAFT' | 'ACTIVE' | 'EXPIRED' | 'TERMINATED' | 'RENEWED', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ServiceAgreementResponse>>;
+    public listServiceAgreements(partyId: string, status?: 'DRAFT' | 'ACTIVE' | 'EXPIRED' | 'TERMINATED' | 'RENEWED', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ServiceAgreementResponse>>>;
+    public listServiceAgreements(partyId: string, status?: 'DRAFT' | 'ACTIVE' | 'EXPIRED' | 'TERMINATED' | 'RENEWED', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ServiceAgreementResponse>>>;
     public listServiceAgreements(partyId: string, status?: 'DRAFT' | 'ACTIVE' | 'EXPIRED' | 'TERMINATED' | 'RENEWED', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (partyId === null || partyId === undefined) {
             throw new Error('Required parameter partyId was null or undefined when calling listServiceAgreements.');
@@ -377,7 +377,7 @@ export class CRMServiceAgreementsService extends BaseService {
 
         let localVarPath = `/v1/crm/parties/${this.configuration.encodeParam({name: "partyId", value: partyId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/service-agreements`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<ServiceAgreementResponse>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<ServiceAgreementResponse>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),
