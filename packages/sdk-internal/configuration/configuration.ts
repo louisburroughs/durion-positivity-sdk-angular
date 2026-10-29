@@ -111,6 +111,17 @@ constructor({ accessToken, apiKeys, basePath, credentials, encodeParam, encoder,
                     : this.accessToken;
             };
         }
+
+        // init default tenantFrontDoorSecret credential
+        if (!this.credentials['tenantFrontDoorSecret']) {
+            this.credentials['tenantFrontDoorSecret'] = () => {
+                if (this.apiKeys === null || this.apiKeys === undefined) {
+                    return undefined;
+                } else {
+                    return this.apiKeys['tenantFrontDoorSecret'] || this.apiKeys['X-Pos-Tax-Front-Door-Secret'];
+                }
+            };
+        }
     }
 
     /**
