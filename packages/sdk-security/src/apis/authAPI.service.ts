@@ -31,6 +31,12 @@ import { SelfRegistrationResponse } from '../models/selfRegistrationResponse';
 // @ts-ignore
 import { TenantSearchResponse } from '../models/tenantSearchResponse';
 // @ts-ignore
+import { TenantSignupRequest } from '../models/tenantSignupRequest';
+// @ts-ignore
+import { TenantSignupResponse } from '../models/tenantSignupResponse';
+// @ts-ignore
+import { TenantSignupStatusResponse } from '../models/tenantSignupStatusResponse';
+// @ts-ignore
 import { TokenPairResponse } from '../models/tokenPairResponse';
 
 // @ts-ignore
@@ -188,6 +194,63 @@ export class AuthAPIService extends BaseService {
     }
 
     /**
+     * Read a Self-Service Signup\&#39;s Status
+     * Answers the signup\&#39;s lifecycle status (PENDING, ACTIVE or FAILED), its id and its slug, and nothing else: it never says whether a slug or organization name exists, and a FAILED row carries no failure code — that code went to the request that failed. Use this tool on the signup page to learn when provisioning has completed and the person can sign in; do not use it to read the tenant, which is getTenant, or to poll login. Preconditions: the deployment switch pos.security.tenant-signup.enabled must be on (off answers 404 TENANT_SIGNUP_DISABLED). Required inputs: signupId (UUID) as a path parameter. Emits a SECURITY_AUTH_REGISTER_TENANT_STATUS event. Returns 200 with the status and slug; 404 TENANT_SIGNUP_NOT_FOUND for an unknown id.
+     * @endpoint get /v1/auth/register-tenant/{signupId}
+     * @param signupId
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getTenantSignup(signupId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TenantSignupStatusResponse>;
+    public getTenantSignup(signupId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TenantSignupStatusResponse>>;
+    public getTenantSignup(signupId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TenantSignupStatusResponse>>;
+    public getTenantSignup(signupId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (signupId === null || signupId === undefined) {
+            throw new Error('Required parameter signupId was null or undefined when calling getTenantSignup.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/auth/register-tenant/${this.configuration.encodeParam({name: "signupId", value: signupId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<TenantSignupStatusResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Authenticate User and Issue Tokens
      * Authenticates a user with username and password and returns a JWT access token (1-hour) and refresh token (7-day) carrying uid, roles, perm_bits, and perm_ver claims. Use this tool when a person signs in with credentials; do not use refreshTokenPair, which exchanges an existing refresh token, and do not use issueInternalToken, which mints tokens for trusted internal callers without a password. Preconditions: the user account must exist, be enabled, non-expired, hold unexpired credentials, and not be inside an active failed-login lockout window. Required inputs: username and password, both non-blank. Emits a SECURITY_AUTH_LOGIN event, resets the failed-attempt counter on success, and persists the issued token pair for later validation and revocation. Returns 401 with code ACCOUNT_LOCKED while the lockout window is active, INVALID_CREDENTIALS on a bad password, and ACCOUNT_DISABLED, ACCOUNT_EXPIRED, or CREDENTIALS_EXPIRED for the matching account states; and 403 with USER_HAS_NO_ROLES when the credentials are valid but the account currently has no roles assigned.
      * @endpoint post /v1/auth/login
@@ -244,6 +307,73 @@ export class AuthAPIService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: loginRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Create a Tenant and Its First Administrator from a Self-Service Signup
+     * Creates the customer account, the tenant in PENDING and the person\&#39;s own administrator login in one anonymous request: the password chosen here is hashed before anything is written, stored only until provisioning applies it to the ADMIN user, and never carried on an event. Use this tool when a person starts a new business on Durion with no account yet; do not use it to add a tenant to an existing account, which is an operator action (createTenant), and do not use selfRegisterUser, which creates a customer account inside an existing tenant. Preconditions: the deployment switch pos.security.tenant-signup.enabled must be on (off answers 404 TENANT_SIGNUP_DISABLED before any validation), the signup secret must be configured, the slug and the account\&#39;s legal name must be free, and the locale, currency and country must be valid. Required inputs: organizationName, slug, locale, functionalCurrency, homeCountry, firstName, lastName, email and password; idempotencyKey is optional and replays the stored response instead of creating a second account and tenant. Emits a SECURITY_AUTH_REGISTER_TENANT event; on success the tenant is PENDING until provisioning completes, and its status is read with getTenantSignup. Returns 202 with the signup id, the tenant id and status PENDING; 400 VALIDATION_ERROR with fieldErrors; 404 TENANT_SIGNUP_DISABLED; 409 TENANT_SLUG_TAKEN, ACCOUNT_LEGAL_NAME_TAKEN or IDEMPOTENCY_KEY_REUSED; 503 TENANT_SIGNUP_UNAVAILABLE when pos-tenant cannot create the tenant, which is retryable with a new idempotency key.
+     * @endpoint post /v1/auth/register-tenant
+     * @param tenantSignupRequest The organization, the first administrator\&#39;s identity and the password they chose.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public registerTenant(tenantSignupRequest: TenantSignupRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TenantSignupResponse>;
+    public registerTenant(tenantSignupRequest: TenantSignupRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TenantSignupResponse>>;
+    public registerTenant(tenantSignupRequest: TenantSignupRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TenantSignupResponse>>;
+    public registerTenant(tenantSignupRequest: TenantSignupRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (tenantSignupRequest === null || tenantSignupRequest === undefined) {
+            throw new Error('Required parameter tenantSignupRequest was null or undefined when calling registerTenant.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/auth/register-tenant`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<TenantSignupResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: tenantSignupRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
