@@ -26,7 +26,7 @@ export interface TenantSignupResponse {
      */
     status: TenantSignupResponseStatusEnum;
     /**
-     * Id of the created tenant, when pos-tenant has answered
+     * Id of the created tenant, when pos-tenant has answered; null while the signup is PENDING and its tenant.created fact has not been matched yet
      */
     tenantId?: string;
 }
