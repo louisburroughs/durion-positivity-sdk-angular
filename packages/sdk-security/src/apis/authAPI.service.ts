@@ -23,6 +23,8 @@ import { ActivateWithStarterRequest } from '../models/activateWithStarterRequest
 // @ts-ignore
 import { ApiError } from '../models/apiError';
 // @ts-ignore
+import { AuthCapabilitiesResponse } from '../models/authCapabilitiesResponse';
+// @ts-ignore
 import { LoginRequest } from '../models/loginRequest';
 // @ts-ignore
 import { SelfRegistrationRequest } from '../models/selfRegistrationRequest';
@@ -183,6 +185,59 @@ export class AuthAPIService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: activateWithStarterRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Read Which Self-Service Auth Entry Points This Deployment Serves
+     * Answers the deployment-wide self-service capabilities — the anonymous tenant signup, the password reset and the username reminder — plus the locale allow-list a self-service signup may name. Use this tool on the sign-in and signup pages before rendering the \&quot;new to Positivity?\&quot; divider, the new-user button, the forgot-password link or the forgot-username link, so a deployment that switched one of them off shows no dead link; do not use it to ask about the caller, who is anonymous here, and do not use it to learn a tenant\&#39;s configuration, which is deliberately never part of this answer. The read is tenant-blind: it takes no X-Tenant-Id and no bearer token, and the response is cacheable for 60 seconds (Cache-Control: public, max-age&#x3D;60). Preconditions: none — the path is public on the anonymous /v1/auth/_** chain and needs no headers. Required inputs: none; the read takes no path or query parameter, no bearer token and no X-Tenant-Id, because it is deployment-wide and tenant-blind. Emits a SECURITY_AUTH_CAPABILITIES_READ event. Returns 200 with tenantSignupEnabled, passwordResetEnabled, usernameReminderEnabled and supportedLocales; it never answers 4xx or 5xx by design, and an absent or blank property reads as false.
+     * @endpoint get /v1/auth/capabilities
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getAuthCapabilities(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AuthCapabilitiesResponse>;
+    public getAuthCapabilities(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AuthCapabilitiesResponse>>;
+    public getAuthCapabilities(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AuthCapabilitiesResponse>>;
+    public getAuthCapabilities(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/auth/capabilities`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<AuthCapabilitiesResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
