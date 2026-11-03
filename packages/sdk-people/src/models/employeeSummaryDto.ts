@@ -9,6 +9,7 @@
  */
 import { EmployeeLocationDto } from './employeeLocationDto';
 import { EmployeeRoleAssignmentDto } from './employeeRoleAssignmentDto';
+import { PeriodTimeDto } from './periodTimeDto';
 import { EmployeeContactInfoDto } from './employeeContactInfoDto';
 import { EmployeePropagationDto } from './employeePropagationDto';
 import { EmployeeJobRoleDto } from './employeeJobRoleDto';
@@ -48,6 +49,7 @@ export interface EmployeeSummaryDto {
      * Count of the person\'s other active staffing assignments beyond primaryLocation (\"Charlotte Main · +1 more\"); null unless `include=LOCATION` was requested, 0 when requested but the person has no other active assignment
      */
     otherLocationCount?: number | null;
+    periodTime?: PeriodTimeDto;
     /**
      * Stable person identifier the employee maps to
      */

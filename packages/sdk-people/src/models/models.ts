@@ -33,6 +33,7 @@ export * from './jobRoleDto';
 export * from './pagedResponseEmployeeSummaryDto';
 export * from './pagedResponseTimeEntrySummary';
 export * from './peopleAvailabilityResponse';
+export * from './periodTimeDto';
 export * from './personBulkIngestRecord';
 export * from './personCredentialBulkIngestRecord';
 export * from './personCredentialResponse';
