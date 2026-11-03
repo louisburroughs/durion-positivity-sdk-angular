@@ -47,6 +47,8 @@ import { ProductLifecycleResponse } from '../models/productLifecycleResponse';
 // @ts-ignore
 import { ProductLifecycleUpdateRequest } from '../models/productLifecycleUpdateRequest';
 // @ts-ignore
+import { ProductListPage } from '../models/productListPage';
+// @ts-ignore
 import { ProductReplacementRequest } from '../models/productReplacementRequest';
 // @ts-ignore
 import { ProductTrackingLevelUpdateRequestDto } from '../models/productTrackingLevelUpdateRequestDto';
@@ -1037,6 +1039,145 @@ export class ProductsAPIService extends BaseService {
         return this.httpClient.request<NonInventoryProductDto>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List Products for the Command Center
+     * Returns one offset-paged page of products with the commercial and stock numbers the Products tab renders: name, SKU, category, the chosen current supplier, cost, the current MSRP price, margin, summed on-hand, minimum and a derived stock state. Use this tool to render or page the product list; use searchCatalogProducts instead for cursor-paged free-text search over description and brand, and getProductById when the id is already known. Preconditions: none; nothing is written and no other service is called, so every column comes from pos-catalog\&#39;s own tables and replicas. Required inputs: all parameters are optional. page defaults to 0; size defaults to 25 and must be 10, 25 or 50; sort defaults to name and is one of name, category, supplier, cost, price, margin or onHand with dir asc or desc (default asc); q filters name or SKU case-insensitively (trimmed, at most 100 characters); category is a category id or an exact case-insensitive category name; supplierIds is repeatable and matches a product that has a current supplier price entry from any listed vendor; stock is one of IN, LOW, OUT or DISCONTINUED. Emits a CATALOG_PRODUCT_LIST_SEARCH event; the read changes no state. Returns 200 with an empty items array when nothing matches. summary counts the filtered set with the stock filter ignored, so the summary bar keeps reading for the caller\&#39;s other filters while the table shows one state. Returns 400 VALIDATION_ERROR for a size other than 10, 25 or 50, a bad sort, dir or stock value, a negative page, or a q longer than 100 characters.
+     * @endpoint get /v1/products/list
+     * @param page Zero-based page number
+     * @param size Page size; one of 10, 25 or 50
+     * @param sort Sort key: name, category, supplier, cost, price, margin or onHand
+     * @param dir Sort direction: asc or desc
+     * @param q Case-insensitive contains filter over product name or SKU; trimmed, at most 100 characters
+     * @param category Category id or exact case-insensitive category name
+     * @param supplierIds Repeatable vendor profile ids; a product matches when it has a current supplier price entry from any of them
+     * @param stock Stock state filter: IN, LOW, OUT or DISCONTINUED
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listProductCommandCenter(page?: number, size?: 10 | 25 | 50, sort?: 'name' | 'category' | 'supplier' | 'cost' | 'price' | 'margin' | 'onHand', dir?: 'asc' | 'desc', q?: string, category?: string, supplierIds?: Array<string>, stock?: 'IN' | 'LOW' | 'OUT' | 'DISCONTINUED', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ProductListPage>;
+    public listProductCommandCenter(page?: number, size?: 10 | 25 | 50, sort?: 'name' | 'category' | 'supplier' | 'cost' | 'price' | 'margin' | 'onHand', dir?: 'asc' | 'desc', q?: string, category?: string, supplierIds?: Array<string>, stock?: 'IN' | 'LOW' | 'OUT' | 'DISCONTINUED', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProductListPage>>;
+    public listProductCommandCenter(page?: number, size?: 10 | 25 | 50, sort?: 'name' | 'category' | 'supplier' | 'cost' | 'price' | 'margin' | 'onHand', dir?: 'asc' | 'desc', q?: string, category?: string, supplierIds?: Array<string>, stock?: 'IN' | 'LOW' | 'OUT' | 'DISCONTINUED', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProductListPage>>;
+    public listProductCommandCenter(page?: number, size?: 10 | 25 | 50, sort?: 'name' | 'category' | 'supplier' | 'cost' | 'price' | 'margin' | 'onHand', dir?: 'asc' | 'desc', q?: string, category?: string, supplierIds?: Array<string>, stock?: 'IN' | 'LOW' | 'OUT' | 'DISCONTINUED', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'sort',
+            <any>sort,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'dir',
+            <any>dir,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'q',
+            <any>q,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'category',
+            <any>category,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'supplierIds',
+            <any>supplierIds,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'stock',
+            <any>stock,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/products/list`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ProductListPage>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

@@ -7,17 +7,30 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { PrimaryContactDto } from './primaryContactDto';
 import { TaxRegistrationDto } from './taxRegistrationDto';
 
 
 /**
- * Replaces a vendor\'s settable fields. vendorNumber, remitTo and status are changed elsewhere.
+ * Replaces a vendor\'s settable fields. vendorNumber, remitTo and status are changed elsewhere. The presentation fields are optional and fully replaced: omitting one clears it.
  */
 export interface VendorUpdateRequest {
+    /**
+     * Vendor public catalogue; https only, at most 2048 characters; null clears it.
+     */
+    catalogUrl?: string;
+    /**
+     * Free-text categories; at most 10 entries of 1-60 characters, deduplicated.
+     */
+    categories?: Array<string>;
     /**
      * ISO 4217 currency code, upper case.
      */
     defaultCurrency?: string;
+    /**
+     * Vendor\'s general lead time in days, 0 to 365; null clears it.
+     */
+    defaultLeadTimeDays?: number;
     /**
      * DUE_ON_RECEIPT or NET<n> with n from 1 to 120.
      */
@@ -30,6 +43,7 @@ export interface VendorUpdateRequest {
      * Legal name. Never blank.
      */
     legalName?: string;
+    primaryContact?: PrimaryContactDto;
     /**
      * Tax registrations, replacing the stored list; omit or leave empty for none.
      */
@@ -38,6 +52,10 @@ export interface VendorUpdateRequest {
      * Vendor version the caller read; a stale version is refused with 409 CONFLICT.
      */
     version?: number;
+    /**
+     * Vendor website; https only, at most 2048 characters; null clears it.
+     */
+    websiteUrl?: string;
 }
 
 function isOptionalVendorUpdateRequestPropertyOfType(
@@ -79,8 +97,8 @@ export function instanceOfVendorUpdateRequest(value: object): value is VendorUpd
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createVendorUpdateRequestPropertyNames();
-    const optionalStringProperties = createVendorUpdateRequestOptionalProperties({ name: 'defaultCurrency', nullable: false }, { name: 'defaultPaymentTerms', nullable: false }, { name: 'displayName', nullable: false }, { name: 'legalName', nullable: false }, );
-    const optionalNumberProperties = createVendorUpdateRequestOptionalProperties({ name: 'version', nullable: false }, );
+    const optionalStringProperties = createVendorUpdateRequestOptionalProperties({ name: 'catalogUrl', nullable: false }, { name: 'defaultCurrency', nullable: false }, { name: 'defaultPaymentTerms', nullable: false }, { name: 'displayName', nullable: false }, { name: 'legalName', nullable: false }, { name: 'websiteUrl', nullable: false }, );
+    const optionalNumberProperties = createVendorUpdateRequestOptionalProperties({ name: 'defaultLeadTimeDays', nullable: false }, { name: 'version', nullable: false }, );
     const optionalBooleanProperties = createVendorUpdateRequestOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

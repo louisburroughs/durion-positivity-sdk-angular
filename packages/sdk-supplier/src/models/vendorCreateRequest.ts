@@ -8,17 +8,30 @@
  * Do not edit the class manually.
  */
 import { RemitToDto } from './remitToDto';
+import { PrimaryContactDto } from './primaryContactDto';
 import { TaxRegistrationDto } from './taxRegistrationDto';
 
 
 /**
- * Creates a vendor. vendorNumber is allocated when omitted and never changes afterwards.
+ * Creates a vendor. vendorNumber is allocated when omitted and never changes afterwards. The presentation fields (websiteUrl, catalogUrl, categories, defaultLeadTimeDays, primaryContact) are optional. logoImageId is set only by POST /{vendorId}/logo, never here.
  */
 export interface VendorCreateRequest {
+    /**
+     * Vendor public catalogue; https only, at most 2048 characters.
+     */
+    catalogUrl?: string;
+    /**
+     * Free-text categories; at most 10 entries of 1-60 characters, deduplicated.
+     */
+    categories?: Array<string>;
     /**
      * ISO 4217 currency code, upper case.
      */
     defaultCurrency?: string;
+    /**
+     * Vendor\'s general lead time in days, 0 to 365; omit for unknown.
+     */
+    defaultLeadTimeDays?: number;
     /**
      * DUE_ON_RECEIPT or NET<n> with n from 1 to 120.
      */
@@ -31,6 +44,7 @@ export interface VendorCreateRequest {
      * Legal name. Never blank.
      */
     legalName?: string;
+    primaryContact?: PrimaryContactDto;
     remitTo?: RemitToDto;
     /**
      * Idempotency key the client mints (UUID). Reuse it only for an identical payload: a retry after a timeout or 5xx then answers the original 201 body instead of creating a second vendor; the same key with another payload is 409 IDEMPOTENCY_CONFLICT. Omit for no idempotency.
@@ -44,6 +58,10 @@ export interface VendorCreateRequest {
      * Number people quote; omit to allocate V-000001, V-000002, ... Upper case, letters, digits and hyphens, at most 30, unique in the tenant.
      */
     vendorNumber?: string;
+    /**
+     * Vendor website; https only, at most 2048 characters.
+     */
+    websiteUrl?: string;
 }
 
 function isOptionalVendorCreateRequestPropertyOfType(
@@ -85,8 +103,8 @@ export function instanceOfVendorCreateRequest(value: object): value is VendorCre
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createVendorCreateRequestPropertyNames();
-    const optionalStringProperties = createVendorCreateRequestOptionalProperties({ name: 'defaultCurrency', nullable: false }, { name: 'defaultPaymentTerms', nullable: false }, { name: 'displayName', nullable: false }, { name: 'legalName', nullable: false }, { name: 'requestId', nullable: false }, { name: 'vendorNumber', nullable: false }, );
-    const optionalNumberProperties = createVendorCreateRequestOptionalProperties();
+    const optionalStringProperties = createVendorCreateRequestOptionalProperties({ name: 'catalogUrl', nullable: false }, { name: 'defaultCurrency', nullable: false }, { name: 'defaultPaymentTerms', nullable: false }, { name: 'displayName', nullable: false }, { name: 'legalName', nullable: false }, { name: 'requestId', nullable: false }, { name: 'vendorNumber', nullable: false }, { name: 'websiteUrl', nullable: false }, );
+    const optionalNumberProperties = createVendorCreateRequestOptionalProperties({ name: 'defaultLeadTimeDays', nullable: false }, );
     const optionalBooleanProperties = createVendorCreateRequestOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

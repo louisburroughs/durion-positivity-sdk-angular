@@ -12,8 +12,8 @@ import { MechanicRosterEntryResponse } from './mechanicRosterEntryResponse';
 
 
 export interface PagedModelMechanicRosterEntryResponse {
-    content?: Array<MechanicRosterEntryResponse>;
-    page?: PageMetadata;
+    content: Array<MechanicRosterEntryResponse>;
+    page: PageMetadata;
 }
 
 function isOptionalPagedModelMechanicRosterEntryResponsePropertyOfType(
@@ -54,7 +54,7 @@ export function instanceOfPagedModelMechanicRosterEntryResponse(value: object): 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPagedModelMechanicRosterEntryResponsePropertyNames();
+    const requiredProperties = createPagedModelMechanicRosterEntryResponsePropertyNames('content', 'page', );
     const optionalStringProperties = createPagedModelMechanicRosterEntryResponseOptionalProperties();
     const optionalNumberProperties = createPagedModelMechanicRosterEntryResponseOptionalProperties();
     const optionalBooleanProperties = createPagedModelMechanicRosterEntryResponseOptionalProperties();

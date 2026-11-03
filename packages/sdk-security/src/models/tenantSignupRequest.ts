@@ -26,9 +26,9 @@ export interface TenantSignupRequest {
      */
     functionalCurrency: string;
     /**
-     * The account\'s home country, ISO 3166-1 alpha-2
+     * The account\'s home country, ISO 3166-1 alpha-2. Optional: when omitted it is derived from the region of locale (fr-CA -> CA); when sent it wins. Never derived from functionalCurrency. A locale with no region is rejected by @SupportedLocale as an unsupported locale (400 fieldErrors[locale]); this branch is defensive for a configured supported locale whose region is not alpha-2 (for example es-419), in which case fieldErrors[homeCountry] \"required when the locale names no region\" applies.
      */
-    homeCountry: string;
+    homeCountry?: string;
     /**
      * Optional idempotency key: the same key with the same request replays the stored response instead of creating a second account and tenant; a different request for the same key is 409 IDEMPOTENCY_KEY_REUSED
      */
@@ -93,7 +93,7 @@ export function instanceOfTenantSignupRequest(value: object): value is TenantSig
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTenantSignupRequestPropertyNames('email', 'firstName', 'functionalCurrency', 'homeCountry', 'lastName', 'locale', 'organizationName', 'password', 'slug', );
+    const requiredProperties = createTenantSignupRequestPropertyNames('email', 'firstName', 'functionalCurrency', 'lastName', 'locale', 'organizationName', 'password', 'slug', );
     const optionalStringProperties = createTenantSignupRequestOptionalProperties({ name: 'email', nullable: false }, { name: 'firstName', nullable: false }, { name: 'functionalCurrency', nullable: false }, { name: 'homeCountry', nullable: false }, { name: 'idempotencyKey', nullable: false }, { name: 'lastName', nullable: false }, { name: 'locale', nullable: false }, { name: 'organizationName', nullable: false }, { name: 'password', nullable: false }, { name: 'slug', nullable: false }, );
     const optionalNumberProperties = createTenantSignupRequestOptionalProperties();
     const optionalBooleanProperties = createTenantSignupRequestOptionalProperties();

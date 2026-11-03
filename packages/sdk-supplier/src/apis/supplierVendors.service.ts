@@ -21,6 +21,8 @@ import { ApiError } from '../models/apiError';
 // @ts-ignore
 import { PagedResponseTaxIdRevealRecordView } from '../models/pagedResponseTaxIdRevealRecordView';
 // @ts-ignore
+import { PagedResponseVendorDirectoryRow } from '../models/pagedResponseVendorDirectoryRow';
+// @ts-ignore
 import { PagedResponseVendorView } from '../models/pagedResponseVendorView';
 // @ts-ignore
 import { RemitApprovalRequest } from '../models/remitApprovalRequest';
@@ -40,6 +42,8 @@ import { TaxRegistrationSchemes } from '../models/taxRegistrationSchemes';
 import { VendorCreateRequest } from '../models/vendorCreateRequest';
 // @ts-ignore
 import { VendorFactReplayResult } from '../models/vendorFactReplayResult';
+// @ts-ignore
+import { VendorLogoRequest } from '../models/vendorLogoRequest';
 // @ts-ignore
 import { VendorStatusChangeRequest } from '../models/vendorStatusChangeRequest';
 // @ts-ignore
@@ -143,7 +147,7 @@ export class SupplierVendorsService extends BaseService {
 
     /**
      * Create vendor
-     * Creates an ACTIVE vendor, with or without a supplier connection, and publishes supplier.vendor.updated. Use this tool to add a party the shop buys from or pays; do not use it to change a vendor, which is updateSupplierVendor, or to connect a supplier, which is a vendor profile naming this vendor. Preconditions: a vendorNumber, when given, must not be used by another vendor of the tenant. Required inputs: legalName, displayName, defaultPaymentTerms (DUE_ON_RECEIPT or NET1 to NET120) and defaultCurrency (ISO 4217); vendorNumber is optional and allocated as V-000001, V-000002 and so on when omitted, and never changes afterwards; taxRegistrations and remitTo are optional, and each new registration needs its number, which is encrypted at once and never returned (the response shows last4), and a listed scheme (#2623): a code of listSupplierVendorTaxRegistrationSchemes (stored as that code), with region required and listed where the scheme is regional and absent otherwise. Emits a SUPPLIER_VENDOR_CREATE audit event and queues one supplier.vendor.updated fact in the same transaction; a remitTo given here is stored as version 1 without approval. Send a requestId (a UUID the client mints) to make the create idempotent: a retry after a timeout or 5xx with the same requestId and the same payload answers the original 201 body and creates nothing; the same requestId with another payload is refused, so reuse a requestId only for an identical payload. Returns 201 with the vendor, 400 VALIDATION_ERROR when a field is missing or malformed or a registration\&#39;s scheme or region is not listed (fieldErrors names taxRegistrations[i].scheme or .region; every violation is reported), 409 SUPPLIER_VENDOR_NUMBER_TAKEN when the number is in use, 409 IDEMPOTENCY_CONFLICT when the requestId was used with a different payload or is in use by a concurrent create, and 503 SERVICE_UNAVAILABLE when a registration carries a number and pos-tax\&#39;s scheme list cannot be read (nothing is stored).
+     * Creates an ACTIVE vendor, with or without a supplier connection, and publishes supplier.vendor.updated. Use this tool to add a party the shop buys from or pays; do not use it to change a vendor, which is updateSupplierVendor, or to connect a supplier, which is a vendor profile naming this vendor. Preconditions: a vendorNumber, when given, must not be used by another vendor of the tenant. Required inputs: legalName, displayName, defaultPaymentTerms (DUE_ON_RECEIPT or NET1 to NET120) and defaultCurrency (ISO 4217); vendorNumber is optional and allocated as V-000001, V-000002 and so on when omitted, and never changes afterwards; taxRegistrations and remitTo are optional, and each new registration needs its number, which is encrypted at once and never returned (the response shows last4), and a listed scheme (#2623): a code of listSupplierVendorTaxRegistrationSchemes (stored as that code), with region required and listed where the scheme is regional and absent otherwise. Optional presentation fields (#3073): websiteUrl and catalogUrl (https only, normalised, at most 2048 characters), categories (at most 10 free-text labels of 1-60 characters, trimmed and deduplicated case-insensitively), defaultLeadTimeDays (0 to 365) and primaryContact (the sales rep as free text on the vendor, not a pos-people-contact person); every one is optional and reads back null when absent, and the logo is not writable here — it is set only by POST /{vendorId}/logo. Emits a SUPPLIER_VENDOR_CREATE audit event and queues one supplier.vendor.updated fact in the same transaction; a remitTo given here is stored as version 1 without approval. Send a requestId (a UUID the client mints) to make the create idempotent: a retry after a timeout or 5xx with the same requestId and the same payload answers the original 201 body and creates nothing; the same requestId with another payload is refused, so reuse a requestId only for an identical payload. Returns 201 with the vendor, 400 VALIDATION_ERROR when a field is missing or malformed or a registration\&#39;s scheme or region is not listed (fieldErrors names taxRegistrations[i].scheme or .region; the presentation fields answer the same way as websiteUrl, catalogUrl, categories, defaultLeadTimeDays or primaryContact.name/email/phone; every violation is reported), 409 SUPPLIER_VENDOR_NUMBER_TAKEN when the number is in use, 409 IDEMPOTENCY_CONFLICT when the requestId was used with a different payload or is in use by a concurrent create, and 503 SERVICE_UNAVAILABLE when a registration carries a number and pos-tax\&#39;s scheme list cannot be read (nothing is stored).
      * @endpoint post /v1/supplier/vendors
      * @param vendorCreateRequest Vendor to create.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -287,7 +291,7 @@ export class SupplierVendorsService extends BaseService {
 
     /**
      * Get vendor
-     * Returns one vendor with its masked tax registrations (registrationId, scheme, region and last4, never the number), approved remit-to and version, default terms and currency, and status. Use this tool when the vendorId is known, for example from a bill, a purchase order or a profile; use listSupplierVendors instead to search by number or name. Preconditions: the vendor must exist in the caller\&#39;s tenant. Required inputs: vendorId (UUIDv7) path parameter; there is no request body. Emits a SUPPLIER_VENDOR_GET audit event; nothing is changed. A remit-to change waiting for approval is not shown here; read it with listSupplierVendorRemitChanges. Returns 404 SUPPLIER_VENDOR_NOT_FOUND when the tenant has no vendor with that id.
+     * Returns one vendor with its masked tax registrations (registrationId, scheme, region and last4, never the number), approved remit-to and version, default terms and currency, status, and presentation fields (#3073): read-only logoImageId (set through POST /{vendorId}/logo), websiteUrl, catalogUrl, categories, defaultLeadTimeDays and primaryContact. Every presentation field is null when it was never set. Use this tool when the vendorId is known, for example from a bill, a purchase order or a profile; use listSupplierVendors instead to search by number or name. Preconditions: the vendor must exist in the caller\&#39;s tenant. Required inputs: vendorId (UUIDv7) path parameter; there is no request body. Emits a SUPPLIER_VENDOR_GET audit event; nothing is changed. A remit-to change waiting for approval is not shown here; read it with listSupplierVendorRemitChanges. Returns 404 SUPPLIER_VENDOR_NOT_FOUND when the tenant has no vendor with that id.
      * @endpoint get /v1/supplier/vendors/{vendorId}
      * @param vendorId Vendor identifier (UUIDv7). Must reference a vendor of the caller\&#39;s tenant.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -572,7 +576,7 @@ export class SupplierVendorsService extends BaseService {
 
     /**
      * List vendors
-     * Returns one page of the tenant\&#39;s vendors ordered by vendorNumber, each with its approved remit-to, default terms, status and masked tax registrations (scheme, region, last4). Use this tool to find a vendor by number or name, or to list active or inactive vendors; use getSupplierVendor instead when the vendorId is already known. Preconditions: none; only the caller\&#39;s tenant\&#39;s vendors are visible. Required inputs: none. q matches vendorNumber, displayName or legalName (case-insensitive, contains); status narrows to ACTIVE or INACTIVE; page is zero-based and size is 1 to 200 (default 50). Emits a SUPPLIER_VENDOR_LIST audit event; nothing is changed. Returns 200 with an empty page when nothing matches, and 400 when page or size is out of range.
+     * Returns one page of the tenant\&#39;s vendors ordered by vendorNumber, each with its approved remit-to, default terms, status, masked tax registrations (scheme, region, last4) and presentation fields (#3073): read-only logoImageId (set through POST /{vendorId}/logo), websiteUrl, catalogUrl, categories, defaultLeadTimeDays and primaryContact. Every presentation field is null when it was never set. Use this tool to find a vendor by number or name, or to list active or inactive vendors; use getSupplierVendor instead when the vendorId is already known. Preconditions: none; only the caller\&#39;s tenant\&#39;s vendors are visible. Required inputs: none. q matches vendorNumber, displayName or legalName (case-insensitive, contains); status narrows to ACTIVE or INACTIVE; page is zero-based and size is 1 to 200 (default 50). Emits a SUPPLIER_VENDOR_LIST audit event; nothing is changed. Returns 200 with an empty page when nothing matches, and 400 when page or size is out of range.
      * @endpoint get /v1/supplier/vendors
      * @param q Text matched against vendorNumber, displayName and legalName.
      * @param status Only vendors in this status.
@@ -656,6 +660,125 @@ export class SupplierVendorsService extends BaseService {
         let localVarPath = `/v1/supplier/vendors`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<PagedResponseVendorView>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List the vendor directory: vendors with their connection state and buy list
+     * Returns one page of the tenant\&#39;s vendors, each with how the shop is connected to the vendor and what it is authorized to buy from the vendor — both derived at read time from this service\&#39;s own tables and nothing is stored; no other service is called. The connection state is derived from the vendor\&#39;s profile: MANUAL when the vendor has no profile, a disabled profile or no enabled binding; ERROR when an enabled profile\&#39;s latest exchange inside the error window failed (connectionDetail LAST_EXCHANGE_FAILED) or its price catalog is stale (connectionDetail PRICE_CATALOG_STALE, which needs an enabled PRICE_CATALOG binding and at least one staged import — a feed that never imported is EDI or FEED, never an error); EDI when an enabled ORDER_CREATE binding exists; FEED otherwise. The buy list is the distinct matched products of the profile\&#39;s latest completed vendor import plus its completed re-applications, with that import\&#39;s completion time, and is null when there are none — the UI\&#39;s \&quot;Create buy list\&quot; action is triggering an import, which is triggerSupplierPriceCatalogImport. Use this tool to render the Suppliers tab in one request; use listSupplierVendors instead for the plain vendor master, or listSupplierPriceCatalogEntries to open one vendor\&#39;s buy list. Preconditions: none; only the caller\&#39;s tenant\&#39;s vendors are visible. Required inputs: none. q matches the vendor\&#39;s number, display name and legal name case-insensitively (categories and sales representative join the match when the vendor-record enrichment story lands; those fields are null until then); catalog defaults to ANY and may be HAS_BUY_LIST, NO_BUY_LIST or HAS_CATALOG_URL (which matches nothing until that story supplies the catalog URL); status defaults to ACTIVE; sort accepts only name; page is zero-based and size is 1 to 200 (default 50). Emits a SUPPLIER_VENDOR_DIRECTORY_SEARCH audit event; nothing is changed and no vendor is called. Returns 200 with an empty page when nothing matches, and 400 when catalog, sort, page or size is out of range.
+     * @endpoint get /v1/supplier/vendors/directory
+     * @param q Text matched against the vendor number, display name and legal name.
+     * @param catalog Catalog narrowing: ANY (default), HAS_BUY_LIST, HAS_CATALOG_URL or NO_BUY_LIST.
+     * @param status Only vendors in this status; defaults to ACTIVE.
+     * @param sort Result order; name is the only accepted value.
+     * @param page Zero-based page index.
+     * @param size Page size, 1 to 200.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listVendorDirectory(q?: string, catalog?: 'ANY' | 'HAS_BUY_LIST' | 'HAS_CATALOG_URL' | 'NO_BUY_LIST', status?: 'ACTIVE' | 'INACTIVE', sort?: string, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponseVendorDirectoryRow>;
+    public listVendorDirectory(q?: string, catalog?: 'ANY' | 'HAS_BUY_LIST' | 'HAS_CATALOG_URL' | 'NO_BUY_LIST', status?: 'ACTIVE' | 'INACTIVE', sort?: string, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponseVendorDirectoryRow>>;
+    public listVendorDirectory(q?: string, catalog?: 'ANY' | 'HAS_BUY_LIST' | 'HAS_CATALOG_URL' | 'NO_BUY_LIST', status?: 'ACTIVE' | 'INACTIVE', sort?: string, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponseVendorDirectoryRow>>;
+    public listVendorDirectory(q?: string, catalog?: 'ANY' | 'HAS_BUY_LIST' | 'HAS_CATALOG_URL' | 'NO_BUY_LIST', status?: 'ACTIVE' | 'INACTIVE', sort?: string, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'q',
+            <any>q,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'catalog',
+            <any>catalog,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'status',
+            <any>status,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'sort',
+            <any>sort,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/supplier/vendors/directory`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PagedResponseVendorDirectoryRow>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),
@@ -1054,7 +1177,7 @@ export class SupplierVendorsService extends BaseService {
 
     /**
      * Update vendor
-     * Replaces a vendor\&#39;s legal and display names, tax registrations, default payment terms and default currency, and publishes supplier.vendor.updated. Use this tool to correct or complete a vendor; do not use it for the remit-to, which needs a remit-to change a second person approves, or for the status, which is deactivation and reactivation, and the vendorNumber never changes. Preconditions: the vendor must exist, and version must be the version the caller read. Required inputs: vendorId (UUIDv7) path parameter plus the full body, because every field is replaced; omitting taxRegistrations clears them; send a stored registration\&#39;s registrationId without number to keep it (its scheme and region must be unchanged), with number to replace the number, and send a new registration without registrationId and with its number. Emits a SUPPLIER_VENDOR_UPDATE audit event and queues one supplier.vendor.updated fact in the same transaction. A registration entered or re-keyed with a number is filed under a listed scheme (#2623): a code of listSupplierVendorTaxRegistrationSchemes, with a region exactly where the scheme is regional; a kept registration (registrationId without number) is not re-checked. Returns 200 with the vendor, 400 VALIDATION_ERROR for a malformed field or a refused registration (fieldErrors names taxRegistrations[i].number, .registrationId, .scheme or .region; every scheme or region violation is reported), 404 SUPPLIER_VENDOR_NOT_FOUND, 409 CONFLICT when version is stale, and 503 SERVICE_UNAVAILABLE when a registration carries a number and pos-tax\&#39;s scheme list cannot be read (nothing is stored).
+     * Replaces a vendor\&#39;s legal and display names, tax registrations, default payment terms, default currency and presentation fields (#3073), and publishes supplier.vendor.updated. Use this tool to correct or complete a vendor; do not use it for the remit-to, which needs a remit-to change a second person approves, or for the status, which is deactivation and reactivation, and the vendorNumber never changes. Preconditions: the vendor must exist, and version must be the version the caller read. Required inputs: vendorId (UUIDv7) path parameter plus the full body, because every field is replaced; omitting taxRegistrations clears them; send a stored registration\&#39;s registrationId without number to keep it (its scheme and region must be unchanged), with number to replace the number, and send a new registration without registrationId and with its number. The optional presentation fields (#3073) are fully replaced too: websiteUrl and catalogUrl (https only, normalised), categories (at most 10 free-text labels of 1-60 characters, deduplicated), defaultLeadTimeDays (0 to 365) and primaryContact (the sales rep as free text); omitting or nulling any of them clears the stored value, while the logo is read-only here and is set only by POST /{vendorId}/logo, so a PUT leaves it untouched. Emits a SUPPLIER_VENDOR_UPDATE audit event and queues one supplier.vendor.updated fact in the same transaction. A registration entered or re-keyed with a number is filed under a listed scheme (#2623): a code of listSupplierVendorTaxRegistrationSchemes, with a region exactly where the scheme is regional; a kept registration (registrationId without number) is not re-checked. Returns 200 with the vendor, 400 VALIDATION_ERROR for a malformed field or a refused registration (fieldErrors names taxRegistrations[i].number, .registrationId, .scheme or .region, or the presentation fields websiteUrl, catalogUrl, categories, defaultLeadTimeDays or primaryContact.name/email/phone; every violation is reported), 404 SUPPLIER_VENDOR_NOT_FOUND, 409 CONFLICT when version is stale, and 503 SERVICE_UNAVAILABLE when a registration carries a number and pos-tax\&#39;s scheme list cannot be read (nothing is stored).
      * @endpoint put /v1/supplier/vendors/{vendorId}
      * @param vendorId Vendor identifier (UUIDv7). Must reference a vendor of the caller\&#39;s tenant.
      * @param vendorUpdateRequest Replacement values and the version the caller read.
@@ -1116,6 +1239,80 @@ export class SupplierVendorsService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: vendorUpdateRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Upload vendor logo
+     * Uploads a vendor logo: validates the base64 bytes as a PNG or WebP of at most 512 KiB, at least 96 px on the shorter side and roughly square (aspect 0.95 to 1.05), stores them in pos-image under the vendor-logo context, and sets the returned image id on the vendor. Use this tool to give a vendor a logo; do not use it to change any other vendor field, which is updateSupplierVendor — the logo is read-only there and this endpoint changes nothing else. Preconditions: the vendor must exist in the caller\&#39;s tenant, and version must be the version the caller read. Required inputs: vendorId (UUIDv7) path parameter plus filename, contentType, base64 content and version; the bytes are validated here, never trusting the caller\&#39;s MIME claim. Emits a SUPPLIER_VENDOR_LOGO_UPLOAD audit event and queues one supplier.vendor.updated fact in the transaction that sets the id, after the store; a store that succeeds but cannot be set leaves an orphan image, which is accepted. Returns 200 with the vendor carrying logoImageId, 400 VALIDATION_ERROR for a malformed body, 404 SUPPLIER_VENDOR_NOT_FOUND, 409 CONFLICT when version is stale, 422 LOGO_IMAGE_INVALID when the bytes are not an acceptable logo or pos-image refuses them, and 503 SERVICE_UNAVAILABLE with Retry-After when pos-image cannot be reached (nothing is written to the vendor).
+     * @endpoint post /v1/supplier/vendors/{vendorId}/logo
+     * @param vendorId Vendor identifier (UUIDv7). Must reference a vendor of the caller\&#39;s tenant.
+     * @param vendorLogoRequest Logo bytes and the vendor version the caller read.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public uploadSupplierVendorLogo(vendorId: string, vendorLogoRequest: VendorLogoRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VendorView>;
+    public uploadSupplierVendorLogo(vendorId: string, vendorLogoRequest: VendorLogoRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VendorView>>;
+    public uploadSupplierVendorLogo(vendorId: string, vendorLogoRequest: VendorLogoRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VendorView>>;
+    public uploadSupplierVendorLogo(vendorId: string, vendorLogoRequest: VendorLogoRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (vendorId === null || vendorId === undefined) {
+            throw new Error('Required parameter vendorId was null or undefined when calling uploadSupplierVendorLogo.');
+        }
+        if (vendorLogoRequest === null || vendorLogoRequest === undefined) {
+            throw new Error('Required parameter vendorLogoRequest was null or undefined when calling uploadSupplierVendorLogo.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/supplier/vendors/${this.configuration.encodeParam({name: "vendorId", value: vendorId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/logo`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<VendorView>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: vendorLogoRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
