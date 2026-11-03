@@ -12,8 +12,8 @@ import { LocationTechnicianRosterEntryResponse } from './locationTechnicianRoste
 
 
 export interface PagedModelLocationTechnicianRosterEntryResponse {
-    content?: Array<LocationTechnicianRosterEntryResponse>;
-    page?: PageMetadata;
+    content: Array<LocationTechnicianRosterEntryResponse>;
+    page: PageMetadata;
 }
 
 function isOptionalPagedModelLocationTechnicianRosterEntryResponsePropertyOfType(
@@ -54,7 +54,7 @@ export function instanceOfPagedModelLocationTechnicianRosterEntryResponse(value:
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPagedModelLocationTechnicianRosterEntryResponsePropertyNames();
+    const requiredProperties = createPagedModelLocationTechnicianRosterEntryResponsePropertyNames('content', 'page', );
     const optionalStringProperties = createPagedModelLocationTechnicianRosterEntryResponseOptionalProperties();
     const optionalNumberProperties = createPagedModelLocationTechnicianRosterEntryResponseOptionalProperties();
     const optionalBooleanProperties = createPagedModelLocationTechnicianRosterEntryResponseOptionalProperties();

@@ -10,5 +10,6 @@ export * from './supplierPriceCatalog.service';
 export * from './supplierStockAvailability.service';
 export * from './supplierStockInquiry.service';
 export * from './supplierStockSnapshots.service';
+export * from './supplierVendorFavorites.service';
 export * from './supplierVendorProfiles.service';
 export * from './supplierVendors.service';

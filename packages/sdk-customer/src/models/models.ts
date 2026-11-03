@@ -78,6 +78,7 @@ export * from './monthlyPoint';
 export * from './not';
 export * from './notAllOfNode';
 export * from './or';
+export * from './orAllOfNodes';
 export * from './pageCustomerDTO';
 export * from './pageableObject';
 export * from './pagedResponse';

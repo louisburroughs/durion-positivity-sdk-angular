@@ -102,6 +102,109 @@ export class SupplierPriceCatalogService extends BaseService {
     }
 
     /**
+     * List a vendor\&#39;s authorized buy list: the matched entries of a price-catalog import
+     * Returns a page of the matched lines of a vendor profile\&#39;s authorized buy list — its latest completed PRICAT vendor import plus every completed quarantine re-application of that import, the list the Suppliers tab opens — each with the product it matched, the vendor\&#39;s identifiers, the match method, net and gross prices, the suggested retail price, the market currency and the date the price applies from. Only matched lines are served: an unmatched line is quarantine material and is read through listSupplierPriceCatalogUnmatchedLines; product names are not part of the contract, and the client resolves them from the catalog by matchedProductId, because this service holds catalog codes only. Use this tool to answer \&quot;what may we buy from this vendor, at what net price\&quot;: it is the read behind the Authorized buy list button, and the counterpart of a vendor\&#39;s buy-list itemCount in the directory. Do not use it for a vendor\&#39;s import run history, which is listSupplierPriceCatalogImports. Preconditions: the caller must hold supplier:pricecatalog:read; the profile need not have imported anything, in which case the page is empty rather than an error — the UI\&#39;s \&quot;Create buy list\&quot; action is triggerSupplierPriceCatalogImport. Required inputs: vendorProfileId (UUIDv7) path parameter; page defaults to 0 and size defaults to 50 with a maximum of 200; optionally, importManifestId pins one completed import instead of the derived buy list (an id that is not a completed import of this profile is 404), and q is a case-insensitive contains-match over the vendor article code, the EAN and the cross-reference code, with LIKE metacharacters treated literally. Emits a SUPPLIER_PRICECATALOG_ENTRIES_SEARCH event; no state changes and no vendor call is made. Returns 200 with an empty items array when the profile has never completed an import or nothing matches, 400 when the page size is outside the permitted range, and 404 when the profile does not exist (SUPPLIER_UNKNOWN) or the pinned import is not a completed import of the profile (SUPPLIER_PRICECATALOG_IMPORT_NOT_FOUND).
+     * @endpoint get /v1/supplier/admin/price-catalog/{vendorProfileId}/entries
+     * @param vendorProfileId Vendor profile whose buy list to read (UUIDv7).
+     * @param importManifestId Pin one completed import instead of the latest (UUIDv7). An id that is not a completed import of this profile is 404.
+     * @param q Case-insensitive contains-match over the vendor article code, EAN and cross-reference code. LIKE metacharacters are treated literally.
+     * @param page Zero-based page index.
+     * @param size Page size, 1–200.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listSupplierPriceCatalogEntries(vendorProfileId: string, importManifestId?: string, q?: string, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponse>;
+    public listSupplierPriceCatalogEntries(vendorProfileId: string, importManifestId?: string, q?: string, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponse>>;
+    public listSupplierPriceCatalogEntries(vendorProfileId: string, importManifestId?: string, q?: string, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponse>>;
+    public listSupplierPriceCatalogEntries(vendorProfileId: string, importManifestId?: string, q?: string, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (vendorProfileId === null || vendorProfileId === undefined) {
+            throw new Error('Required parameter vendorProfileId was null or undefined when calling listSupplierPriceCatalogEntries.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'importManifestId',
+            <any>importManifestId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'q',
+            <any>q,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/supplier/admin/price-catalog/${this.configuration.encodeParam({name: "vendorProfileId", value: vendorProfileId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/entries`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PagedResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * List vendor price-catalog imports
      * Returns a page of PRICAT import runs for one vendor profile, newest first, including failed and empty runs with their line counters. Use this tool to answer whether a catalog feed is healthy and how much of it matched; do not use it to see which specific lines are waiting on catalog work, which is listSupplierPriceCatalogUnmatchedLines instead. Preconditions: the caller must hold supplier:pricecatalog:read; the profile need not have imported anything, in which case the page is empty. Required inputs: vendorProfileId (UUIDv7) path parameter; page defaults to 0 and size defaults to 50 with a maximum of 200. Optional filters: bindingId narrows a profile\&#39;s history to one endpoint binding (runs recorded before binding ids were persisted carry none and never match), status keeps one run status, and dateFrom/dateTo bound fetchedAt as a half-open window — dateFrom inclusive, dateTo exclusive. Emits a SUPPLIER_PRICECATALOG_IMPORT_LIST event; no state changes and no vendor call is made. Returns 200 with an empty items array when the profile has never imported or nothing matches the filters, so an empty result is not an error, and 400 when the page size is outside the permitted range or a filter value does not parse.
      * @endpoint get /v1/supplier/admin/price-catalog/{vendorProfileId}/imports

@@ -9,12 +9,21 @@
  */
 import { TaxRegistrationView } from './taxRegistrationView';
 import { RemitToDto } from './remitToDto';
+import { PrimaryContactDto } from './primaryContactDto';
 
 
 /**
  * A vendor. remitTo is the approved remit-to; pending changes are listed separately.
  */
 export interface VendorView {
+    /**
+     * Vendor public catalogue, normalised https URL.
+     */
+    catalogUrl?: string;
+    /**
+     * Free-text categories, deduplicated case-insensitively; null when none.
+     */
+    categories?: Array<string>;
     /**
      * Creation time.
      */
@@ -28,6 +37,10 @@ export interface VendorView {
      */
     defaultCurrency?: string;
     /**
+     * Vendor\'s general lead time in days, 0 to 365; null when unknown.
+     */
+    defaultLeadTimeDays?: number;
+    /**
      * DUE_ON_RECEIPT or NET<n>.
      */
     defaultPaymentTerms?: string;
@@ -39,6 +52,11 @@ export interface VendorView {
      * Legal name.
      */
     legalName?: string;
+    /**
+     * pos-image id of the vendor\'s logo; null when it has none.
+     */
+    logoImageId?: number;
+    primaryContact?: PrimaryContactDto;
     remitTo?: RemitToDto;
     /**
      * Who approved the current remit-to; null when given at creation.
@@ -92,6 +110,10 @@ export interface VendorView {
      * Optimistic-lock version; send it back on update.
      */
     version?: number;
+    /**
+     * Vendor website, normalised https URL.
+     */
+    websiteUrl?: string;
 }
 export enum VendorViewStatusEnum {
     Active = 'ACTIVE',
@@ -139,8 +161,8 @@ export function instanceOfVendorView(value: object): value is VendorView {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createVendorViewPropertyNames();
-    const optionalStringProperties = createVendorViewOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'defaultCurrency', nullable: false }, { name: 'defaultPaymentTerms', nullable: false }, { name: 'displayName', nullable: false }, { name: 'legalName', nullable: false }, { name: 'remitToApprovedBy', nullable: false }, { name: 'remitToChangedAt', nullable: false }, { name: 'remitToRequestedBy', nullable: false }, { name: 'status', nullable: false }, { name: 'statusChangedAt', nullable: false }, { name: 'statusReason', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'updatedBy', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorNumber', nullable: false }, );
-    const optionalNumberProperties = createVendorViewOptionalProperties({ name: 'remitToVersion', nullable: false }, { name: 'version', nullable: false }, );
+    const optionalStringProperties = createVendorViewOptionalProperties({ name: 'catalogUrl', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'defaultCurrency', nullable: false }, { name: 'defaultPaymentTerms', nullable: false }, { name: 'displayName', nullable: false }, { name: 'legalName', nullable: false }, { name: 'remitToApprovedBy', nullable: false }, { name: 'remitToChangedAt', nullable: false }, { name: 'remitToRequestedBy', nullable: false }, { name: 'status', nullable: false }, { name: 'statusChangedAt', nullable: false }, { name: 'statusReason', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'updatedBy', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorNumber', nullable: false }, { name: 'websiteUrl', nullable: false }, );
+    const optionalNumberProperties = createVendorViewOptionalProperties({ name: 'defaultLeadTimeDays', nullable: false }, { name: 'logoImageId', nullable: false }, { name: 'remitToVersion', nullable: false }, { name: 'version', nullable: false }, );
     const optionalBooleanProperties = createVendorViewOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

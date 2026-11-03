@@ -10,10 +10,10 @@
 
 
 export interface PageMetadata {
-    number?: number;
-    size?: number;
-    totalElements?: number;
-    totalPages?: number;
+    number: number;
+    size: number;
+    totalElements: number;
+    totalPages: number;
 }
 
 function isOptionalPageMetadataPropertyOfType(
@@ -54,7 +54,7 @@ export function instanceOfPageMetadata(value: object): value is PageMetadata {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPageMetadataPropertyNames();
+    const requiredProperties = createPageMetadataPropertyNames('number', 'size', 'totalElements', 'totalPages', );
     const optionalStringProperties = createPageMetadataOptionalProperties();
     const optionalNumberProperties = createPageMetadataOptionalProperties({ name: 'number', nullable: false }, { name: 'size', nullable: false }, { name: 'totalElements', nullable: false }, { name: 'totalPages', nullable: false }, );
     const optionalBooleanProperties = createPageMetadataOptionalProperties();

@@ -12,6 +12,7 @@ import { Or } from './or';
 import { Comparison } from './comparison';
 import { NotAllOfNode } from './notAllOfNode';
 import { And } from './and';
+import { OrAllOfNodes } from './orAllOfNodes';
 
 
 /**

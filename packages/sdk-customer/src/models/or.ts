@@ -8,13 +8,17 @@
  * Do not edit the class manually.
  */
 import { SegmentPredicate } from './segmentPredicate';
+import { OrAllOfNodes } from './orAllOfNodes';
 
 
 /**
  * At least one child predicate must match
  */
 export interface Or extends SegmentPredicate {
-    nodes?: any | null;
+    /**
+     * Child predicates
+     */
+    nodes?: Array<OrAllOfNodes>;
 }
 
 function isOptionalOrPropertyOfType(
