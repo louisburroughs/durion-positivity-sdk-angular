@@ -79,4 +79,5 @@ export * from './userBulkIngestRecord';
 export * from './userDto';
 export * from './userPersonLinkBulkIngestRecord';
 export * from './userUpdateRequest';
+export * from './usernameReminderRequest';
 export * from './validateResponse';

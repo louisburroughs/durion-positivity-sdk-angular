@@ -40,6 +40,8 @@ import { TenantSignupResponse } from '../models/tenantSignupResponse';
 import { TenantSignupStatusResponse } from '../models/tenantSignupStatusResponse';
 // @ts-ignore
 import { TokenPairResponse } from '../models/tokenPairResponse';
+// @ts-ignore
+import { UsernameReminderRequest } from '../models/usernameReminderRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -429,6 +431,73 @@ export class AuthAPIService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: tenantSignupRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Mail the Usernames Linked to an Email Address
+     * Requests that the usernames linked to an email address be mailed to that same address (issue #3060). Use this tool when a person has forgotten their username and wants it by email; do not use it to discover whether an address has an account, because every answer is the same 202, and do not use loginUser, which needs a password the person no longer knows. Preconditions: the deployment switch pos.security.username-reminder.enabled is on, and the organization is resolved exactly as loginUser resolves it (the request host, else tenantSlug, else the transitional default); an unknown or inactive organization is answered like a miss. Required inputs: email, the address to mail; tenantSlug is optional when the request host already names the organization. Emits a SECURITY_AUTH_USERNAME_REMINDER_REQUEST event; when the address matches enabled accounts under the resolved organization, one localized message listing their usernames is sent to the submitted address through pos-platform-sender, at most once per configured interval per address and organization. Returns 202 with an empty body for every outcome, including an unknown organization, no match, a throttled address and a mail failure; 400 VALIDATION_ERROR when email is blank, malformed or longer than 320 characters; and 404 USERNAME_REMINDER_DISABLED when the deployment switch is off.
+     * @endpoint post /v1/auth/username-reminder
+     * @param usernameReminderRequest The address to mail the linked usernames to, and the optional organization.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public requestUsernameReminder(usernameReminderRequest: UsernameReminderRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public requestUsernameReminder(usernameReminderRequest: UsernameReminderRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public requestUsernameReminder(usernameReminderRequest: UsernameReminderRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public requestUsernameReminder(usernameReminderRequest: UsernameReminderRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (usernameReminderRequest === null || usernameReminderRequest === undefined) {
+            throw new Error('Required parameter usernameReminderRequest was null or undefined when calling requestUsernameReminder.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/auth/username-reminder`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: usernameReminderRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
