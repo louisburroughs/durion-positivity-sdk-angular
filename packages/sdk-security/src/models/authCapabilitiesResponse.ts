@@ -7,14 +7,16 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { PasswordPolicyResponse } from './passwordPolicyResponse';
 
 
 /**
  * Self-service authentication entry points this deployment serves
  */
 export interface AuthCapabilitiesResponse {
+    passwordPolicy: PasswordPolicyResponse;
     /**
-     * Whether the anonymous password reset answers on this deployment; false until that story lands. The field ships from the first release so the client shape is stable
+     * Whether the anonymous password reset answers on this deployment (POST /v1/auth/password-reset and /confirm); true only while its switch is on (absent follows the platform-sender secret) AND a reset link base is configured
      */
     passwordResetEnabled: boolean;
     /**
@@ -69,7 +71,7 @@ export function instanceOfAuthCapabilitiesResponse(value: object): value is Auth
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAuthCapabilitiesResponsePropertyNames('passwordResetEnabled', 'supportedLocales', 'tenantSignupEnabled', 'usernameReminderEnabled', );
+    const requiredProperties = createAuthCapabilitiesResponsePropertyNames('passwordPolicy', 'passwordResetEnabled', 'supportedLocales', 'tenantSignupEnabled', 'usernameReminderEnabled', );
     const optionalStringProperties = createAuthCapabilitiesResponseOptionalProperties();
     const optionalNumberProperties = createAuthCapabilitiesResponseOptionalProperties();
     const optionalBooleanProperties = createAuthCapabilitiesResponseOptionalProperties({ name: 'passwordResetEnabled', nullable: false }, { name: 'tenantSignupEnabled', nullable: false }, { name: 'usernameReminderEnabled', nullable: false }, );

@@ -46,7 +46,7 @@ export interface TenantSignupRequest {
      */
     organizationName: string;
     /**
-     * Password the first administrator signs in with. Hashed before anything is written; never stored or logged in plaintext
+     * Password the first administrator signs in with. Hashed before anything is written; never stored or logged in plaintext. Must meet the password policy GET /v1/auth/capabilities publishes as passwordPolicy (12 to 64 characters by default, not a common password, not containing the slug, organization name, email local part or administrator\'s name); a refusal is 400 VALIDATION_ERROR with fieldErrors[password] starting PASSWORD_POLICY_VIOLATION and no signup row is written
      */
     password: string;
     /**
