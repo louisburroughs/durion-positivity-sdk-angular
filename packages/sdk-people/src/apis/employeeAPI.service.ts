@@ -33,6 +33,8 @@ import { EnableEmployeeRequestDto } from '../models/enableEmployeeRequestDto';
 // @ts-ignore
 import { PagedResponseEmployeeSummaryDto } from '../models/pagedResponseEmployeeSummaryDto';
 // @ts-ignore
+import { SetEmployeePhotoRequest } from '../models/setEmployeePhotoRequest';
+// @ts-ignore
 import { UpdateEmployeeRequest } from '../models/updateEmployeeRequest';
 
 // @ts-ignore
@@ -49,6 +51,66 @@ export class EmployeeAPIService extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
+    }
+
+    /**
+     * Clear An Employee Profile Photo
+     * Clears the employee\&#39;s photo reference (durion#3092): photoImageId becomes null and the profile\&#39;s photoUrl with it. The image itself stays in pos-image, unreferenced -- pos-image has no delete API. Use this tool to remove a photo; do not use setEmployeePhoto, which requires bytes. Preconditions: an employee row must exist for employeeId and must not be TERMINATED -- a terminated employee is read-only (DECISION-PEOPLE-025), even when it has no photo, so the 409 comes before the idempotency shortcut. Required inputs: employeeId (UUID) path parameter; there is no request body. Idempotent: an employee with no photo answers 204 and publishes nothing, so a repeated DELETE is safe. Emits a PEOPLE_EMPLOYEE_PHOTO_CLEAR event and publishes a people.employee.updated fact in the same transaction that nulls the id -- only when a photo was actually set. Returns 404 when the employee does not exist and 409 when it is TERMINATED.
+     * @endpoint delete /v1/people/employees/{employeeId}/photo
+     * @param employeeId
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public clearEmployeePhoto(employeeId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public clearEmployeePhoto(employeeId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public clearEmployeePhoto(employeeId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public clearEmployeePhoto(employeeId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (employeeId === null || employeeId === undefined) {
+            throw new Error('Required parameter employeeId was null or undefined when calling clearEmployeePhoto.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/people/employees/${this.configuration.encodeParam({name: "employeeId", value: employeeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/photo`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
     }
 
     /**
@@ -457,22 +519,22 @@ export class EmployeeAPIService extends BaseService {
 
     /**
      * Search Employees By Name Or Number
-     * Returns a paged list of slim employee rows matching a case-insensitive substring search across first name, last name, preferred name, and employee number, optionally narrowed to one or more employment statuses and sorted. Use this tool when listing, filtering, sorting, or typeahead-filtering employees; do not use getEmployee, which requires the person id already be known, or getEmployeeByNumber, which resolves one exact employee number rather than searching, and use getEmployeeStatusCounts instead of this endpoint to render the register\&#39;s stat tiles. Preconditions: none; an empty result set is returned rather than an error when nothing matches. Required inputs: none are mandatory -- q defaults to blank and lists every employee, status defaults to no filter, sort defaults to lastName,asc, page defaults to 0, and size defaults to 20 with a maximum of 100; the repeatable include parameter (durion#2155, plus ALLOWED_ACTIONS from durion#2159 and PERIOD_TIME from durion#3094) adds one extra field group per token (USERNAME, CONTACT_INFO, ROLE_ASSIGNMENTS, LOCATION, JOB_ROLE, ALLOWED_ACTIONS, PROPAGATION, PERIOD_TIME) to the returned rows, with CONTACT_INFO gated by people:employee_pii:view (#1898) and ROLE_ASSIGNMENTS gated by people-contact:role:view, each silently omitted rather than returning 403 when the caller lacks that permission, and ALLOWED_ACTIONS is a rendering hint computed by EmployeeActionPolicy that never substitutes for the @PreAuthorize and service-level guards those actions still enforce independently. PERIOD_TIME also carries a permission gate -- people:timeEntry:view -- and with a location-scoped grant is omitted on rows outside the caller\&#39;s reach; when the caller may see it but the tenant has no current pay period the key is present and JSON null, so absent and null are different answers. Emits a PEOPLE_EMPLOYEE_SEARCH audit event but changes no state, merging local employment rows with the pos-people-contact identity replica in memory, with every requested include category resolved only against the page actually returned so response cost stays flat as the tenant grows. Returns 200 with an empty items list and correct totals when the page, query, or status filter matches nothing, and returns 400 for an unsupported sort field or direction.
+     * Returns a paged list of slim employee rows matching a case-insensitive substring search across first name, last name, preferred name, and employee number, optionally narrowed to one or more employment statuses and sorted. Use this tool when listing, filtering, sorting, or typeahead-filtering employees; do not use getEmployee, which requires the person id already be known, or getEmployeeByNumber, which resolves one exact employee number rather than searching, and use getEmployeeStatusCounts instead of this endpoint to render the register\&#39;s stat tiles. Preconditions: none; an empty result set is returned rather than an error when nothing matches. Required inputs: none are mandatory -- q defaults to blank and lists every employee, status defaults to no filter, sort defaults to lastName,asc, page defaults to 0, and size defaults to 20 with a maximum of 100; the repeatable include parameter (durion#2155, plus ALLOWED_ACTIONS from durion#2159, PERIOD_TIME from durion#3094 and PHOTO from durion#3092) adds one extra field group per token (USERNAME, CONTACT_INFO, ROLE_ASSIGNMENTS, LOCATION, JOB_ROLE, ALLOWED_ACTIONS, PROPAGATION, PERIOD_TIME, PHOTO) to the returned rows, with CONTACT_INFO gated by people:employee_pii:view (#1898) and ROLE_ASSIGNMENTS gated by people-contact:role:view, each silently omitted rather than returning 403 when the caller lacks that permission, and ALLOWED_ACTIONS is a rendering hint computed by EmployeeActionPolicy that never substitutes for the @PreAuthorize and service-level guards those actions still enforce independently. PERIOD_TIME also carries a permission gate -- people:timeEntry:view -- and with a location-scoped grant is omitted on rows outside the caller\&#39;s reach; when the caller may see it but the tenant has no current pay period the key is present and JSON null, so absent and null are different answers. Emits a PEOPLE_EMPLOYEE_SEARCH audit event but changes no state, merging local employment rows with the pos-people-contact identity replica in memory, with every requested include category resolved only against the page actually returned so response cost stays flat as the tenant grows. Returns 200 with an empty items list and correct totals when the page, query, or status filter matches nothing, and returns 400 for an unsupported sort field or direction.
      * @endpoint get /v1/people/employees
      * @param q Case-insensitive substring match on name or employee number; blank lists all
      * @param status Employment status filter; repeatable (?status&#x3D;ACTIVE&amp;status&#x3D;DISABLED). Omitted or empty applies no status filter and lists every status.
      * @param sort Sort field with optional direction, e.g. \&#39;lastName,desc\&#39;. Only lastName is supported today. Direction defaults to asc.
      * @param page Zero-based page index
      * @param size Page size, up to 100
-     * @param include Register-enrichment categories (durion#2155, plus ALLOWED_ACTIONS from durion#2159 and PERIOD_TIME from durion#3094); repeatable (?include&#x3D;USERNAME&amp;include&#x3D;ROLE_ASSIGNMENTS), matching how &#x60;status&#x60; above is passed. PROPAGATION adds local offboarding status only for DISABLED/TERMINATED rows; otherwise its key is absent. PERIOD_TIME adds &#x60;periodTime&#x60; (hours and pending approvals in the tenant\&#39;s current pay period): it requires people:timeEntry:view (absent without it, never a 403), is absent on rows outside a location-scoped grant\&#39;s reach, and is JSON null when the tenant has no OPEN or SUBMISSION_CLOSED period containing today. &#x60;workedMinutes&#x60; counts SUBMITTED, PENDING_APPROVAL and APPROVED entries over the period\&#39;s UTC day boundaries, less breaks, floored at 0, with a still-open entry measured to now; &#x60;approvedMinutes&#x60; counts APPROVED entries with a clock-out only; &#x60;pendingApprovalCount&#x60; counts PENDING_APPROVAL entries. DRAFT and REJECTED never count. Omitted or empty returns the thin pre-#2155 row: username, contactInfo, roleAssignments, primaryLocation, otherLocationCount, jobRole, allowedActions, periodTime and propagation are all null. CONTACT_INFO additionally requires people:employee_pii:view (#1898) and ROLE_ASSIGNMENTS additionally requires people-contact:role:view; without the relevant permission that field is simply absent, never a 403. ALLOWED_ACTIONS is a rendering hint only -- see EmployeeSummaryDto.allowedActions.
+     * @param include Register-enrichment categories (durion#2155, plus ALLOWED_ACTIONS from durion#2159 and PERIOD_TIME from durion#3094); repeatable (?include&#x3D;USERNAME&amp;include&#x3D;ROLE_ASSIGNMENTS), matching how &#x60;status&#x60; above is passed. PROPAGATION adds local offboarding status only for DISABLED/TERMINATED rows; otherwise its key is absent. PERIOD_TIME adds &#x60;periodTime&#x60; (hours and pending approvals in the tenant\&#39;s current pay period): it requires people:timeEntry:view (absent without it, never a 403), is absent on rows outside a location-scoped grant\&#39;s reach, and is JSON null when the tenant has no OPEN or SUBMISSION_CLOSED period containing today. &#x60;workedMinutes&#x60; counts SUBMITTED, PENDING_APPROVAL and APPROVED entries over the period\&#39;s UTC day boundaries, less breaks, floored at 0, with a still-open entry measured to now; &#x60;approvedMinutes&#x60; counts APPROVED entries with a clock-out only; &#x60;pendingApprovalCount&#x60; counts PENDING_APPROVAL entries. DRAFT and REJECTED never count. Omitted or empty returns the thin pre-#2155 row: username, contactInfo, roleAssignments, primaryLocation, otherLocationCount, jobRole, allowedActions, periodTime and propagation are all null. CONTACT_INFO additionally requires people:employee_pii:view (#1898) and ROLE_ASSIGNMENTS additionally requires people-contact:role:view; without the relevant permission that field is simply absent, never a 403. ALLOWED_ACTIONS is a rendering hint only -- see EmployeeSummaryDto.allowedActions. PHOTO adds photoImageId and photoUrl and is the one category with an absent-vs-null contract (ADR-0064): without it both keys are absent from the row, with it both are present and null when the employee has no photo. It is gated on people:employee:view only, the permission this endpoint already requires.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public searchEmployees(q?: string, status?: Array<'ACTIVE' | 'ON_LEAVE' | 'SUSPENDED' | 'TERMINATED' | 'DISABLED'>, sort?: string, page?: number, size?: number, include?: Array<'USERNAME' | 'CONTACT_INFO' | 'ROLE_ASSIGNMENTS' | 'LOCATION' | 'JOB_ROLE' | 'PROPAGATION' | 'ALLOWED_ACTIONS' | 'PERIOD_TIME'>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponseEmployeeSummaryDto>;
-    public searchEmployees(q?: string, status?: Array<'ACTIVE' | 'ON_LEAVE' | 'SUSPENDED' | 'TERMINATED' | 'DISABLED'>, sort?: string, page?: number, size?: number, include?: Array<'USERNAME' | 'CONTACT_INFO' | 'ROLE_ASSIGNMENTS' | 'LOCATION' | 'JOB_ROLE' | 'PROPAGATION' | 'ALLOWED_ACTIONS' | 'PERIOD_TIME'>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponseEmployeeSummaryDto>>;
-    public searchEmployees(q?: string, status?: Array<'ACTIVE' | 'ON_LEAVE' | 'SUSPENDED' | 'TERMINATED' | 'DISABLED'>, sort?: string, page?: number, size?: number, include?: Array<'USERNAME' | 'CONTACT_INFO' | 'ROLE_ASSIGNMENTS' | 'LOCATION' | 'JOB_ROLE' | 'PROPAGATION' | 'ALLOWED_ACTIONS' | 'PERIOD_TIME'>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponseEmployeeSummaryDto>>;
-    public searchEmployees(q?: string, status?: Array<'ACTIVE' | 'ON_LEAVE' | 'SUSPENDED' | 'TERMINATED' | 'DISABLED'>, sort?: string, page?: number, size?: number, include?: Array<'USERNAME' | 'CONTACT_INFO' | 'ROLE_ASSIGNMENTS' | 'LOCATION' | 'JOB_ROLE' | 'PROPAGATION' | 'ALLOWED_ACTIONS' | 'PERIOD_TIME'>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public searchEmployees(q?: string, status?: Array<'ACTIVE' | 'ON_LEAVE' | 'SUSPENDED' | 'TERMINATED' | 'DISABLED'>, sort?: string, page?: number, size?: number, include?: Array<'USERNAME' | 'CONTACT_INFO' | 'ROLE_ASSIGNMENTS' | 'LOCATION' | 'JOB_ROLE' | 'PROPAGATION' | 'ALLOWED_ACTIONS' | 'PHOTO' | 'PERIOD_TIME'>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponseEmployeeSummaryDto>;
+    public searchEmployees(q?: string, status?: Array<'ACTIVE' | 'ON_LEAVE' | 'SUSPENDED' | 'TERMINATED' | 'DISABLED'>, sort?: string, page?: number, size?: number, include?: Array<'USERNAME' | 'CONTACT_INFO' | 'ROLE_ASSIGNMENTS' | 'LOCATION' | 'JOB_ROLE' | 'PROPAGATION' | 'ALLOWED_ACTIONS' | 'PHOTO' | 'PERIOD_TIME'>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponseEmployeeSummaryDto>>;
+    public searchEmployees(q?: string, status?: Array<'ACTIVE' | 'ON_LEAVE' | 'SUSPENDED' | 'TERMINATED' | 'DISABLED'>, sort?: string, page?: number, size?: number, include?: Array<'USERNAME' | 'CONTACT_INFO' | 'ROLE_ASSIGNMENTS' | 'LOCATION' | 'JOB_ROLE' | 'PROPAGATION' | 'ALLOWED_ACTIONS' | 'PHOTO' | 'PERIOD_TIME'>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponseEmployeeSummaryDto>>;
+    public searchEmployees(q?: string, status?: Array<'ACTIVE' | 'ON_LEAVE' | 'SUSPENDED' | 'TERMINATED' | 'DISABLED'>, sort?: string, page?: number, size?: number, include?: Array<'USERNAME' | 'CONTACT_INFO' | 'ROLE_ASSIGNMENTS' | 'LOCATION' | 'JOB_ROLE' | 'PROPAGATION' | 'ALLOWED_ACTIONS' | 'PHOTO' | 'PERIOD_TIME'>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -564,6 +626,80 @@ export class EmployeeAPIService extends BaseService {
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Set Or Replace An Employee Profile Photo
+     * Stores the submitted photo bytes in pos-image, records pos-image\&#39;s numeric image id on the employee and returns the refreshed profile with photoImageId and photoUrl set (durion#3092). Use this tool to set or replace a photo, as Add photo / Change photo does; do not use updateEmployee, which carries no image bytes, and there is no GET counterpart here, because the bytes are served by pos-image itself at photoUrl, the gateway path /image/v1/images/id/{photoImageId}. Preconditions: an employee row must exist for employeeId (the person id at this API surface) and must not be TERMINATED -- a terminated employee is read-only (DECISION-PEOPLE-025), even when it has no photo. Required inputs: employeeId (UUID) path parameter plus a JSON body with contentType (a claim only) and content (base64); the detected type is authoritative, JPEG, PNG or WebP only, and the decoded size must be at most pos.people.photo.max-bytes (5 MiB by default). Replacing a photo overwrites photoImageId; the superseded image is left in pos-image, unreferenced, because pos-image has no delete API. The bytes are stored with pos-people\&#39;s own service identity and the employee-photo tag, so an editor needs only people:employee:edit; the write emits PEOPLE_EMPLOYEE_PHOTO_SET and publishes a people.employee.updated fact in the same transaction that records the id. Returns 404 when the employee does not exist, 409 when it is TERMINATED, 422 PHOTO_UNSUPPORTED_TYPE or PHOTO_TOO_LARGE when the bytes are refused (nothing is stored in either case), and 503 IMAGE_SERVICE_UNAVAILABLE when pos-image cannot be reached or answers 5xx (nothing is recorded, so a retry is safe).
+     * @endpoint put /v1/people/employees/{employeeId}/photo
+     * @param employeeId
+     * @param setEmployeePhotoRequest Photo bytes to store: a contentType claim and base64 content.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public setEmployeePhoto(employeeId: string, setEmployeePhotoRequest: SetEmployeePhotoRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<EmployeeProfileDto>;
+    public setEmployeePhoto(employeeId: string, setEmployeePhotoRequest: SetEmployeePhotoRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EmployeeProfileDto>>;
+    public setEmployeePhoto(employeeId: string, setEmployeePhotoRequest: SetEmployeePhotoRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EmployeeProfileDto>>;
+    public setEmployeePhoto(employeeId: string, setEmployeePhotoRequest: SetEmployeePhotoRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (employeeId === null || employeeId === undefined) {
+            throw new Error('Required parameter employeeId was null or undefined when calling setEmployeePhoto.');
+        }
+        if (setEmployeePhotoRequest === null || setEmployeePhotoRequest === undefined) {
+            throw new Error('Required parameter setEmployeePhotoRequest was null or undefined when calling setEmployeePhoto.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/people/employees/${this.configuration.encodeParam({name: "employeeId", value: employeeId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/photo`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<EmployeeProfileDto>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: setEmployeePhotoRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
