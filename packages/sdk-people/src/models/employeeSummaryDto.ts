@@ -9,6 +9,7 @@
  */
 import { EmployeeLocationDto } from './employeeLocationDto';
 import { EmployeeRoleAssignmentDto } from './employeeRoleAssignmentDto';
+import { EmployeeClockStateDto } from './employeeClockStateDto';
 import { PeriodTimeDto } from './periodTimeDto';
 import { EmployeeContactInfoDto } from './employeeContactInfoDto';
 import { EmployeePropagationDto } from './employeePropagationDto';
@@ -27,6 +28,7 @@ export interface EmployeeSummaryDto {
      * Actions the calling user may take on this row (durion#2159); null unless `include=ALLOWED_ACTIONS` was requested. Computed from the caller\'s permissions and the row\'s status by EmployeeActionPolicy, the single place this transition table lives -- see EmployeeProfileDto.allowedActions for the full rendering-hint and location-scope caveats, which apply identically here.
      */
     allowedActions?: Array<EmployeeSummaryDtoAllowedActionsEnum> | null;
+    clock?: EmployeeClockStateDto;
     contactInfo?: EmployeeContactInfoDto;
     /**
      * Employee record identifier
@@ -40,6 +42,10 @@ export interface EmployeeSummaryDto {
      * First (given) name, from the identity replica; null when the replica has not caught up
      */
     firstName?: string;
+    /**
+     * Hire date (yyyy-MM-dd). This key is absent (not null) unless `include=EMPLOYMENT` was requested; it is never withheld for permission reasons, since it is an employment attribute and not the personal contact detail `include=CONTACT_INFO` gates.
+     */
+    hireDate?: string;
     jobRole?: EmployeeJobRoleDto;
     /**
      * Last (family) name, from the identity replica; null when the replica has not caught up
@@ -77,6 +83,14 @@ export interface EmployeeSummaryDto {
      */
     status?: string;
     /**
+     * When the current employment status took effect. Absent unless `include=EMPLOYMENT` was requested, and also absent for an employment row that predates the column.
+     */
+    statusEffectiveAt?: string;
+    /**
+     * Termination date (yyyy-MM-dd). Absent unless `include=EMPLOYMENT` was requested, and also absent (not null) for a still-employed row, which is the module\'s existing absent-key convention for an optional value (see `propagation`).
+     */
+    terminationDate?: string;
+    /**
      * Login username, from the identity replica; null unless `include=USERNAME` was requested or the person has no linked user account
      */
     username?: string | null;
@@ -85,7 +99,9 @@ export enum EmployeeSummaryDtoAllowedActionsEnum {
     ViewPii = 'VIEW_PII',
     Update = 'UPDATE',
     Disable = 'DISABLE',
-    Enable = 'ENABLE'
+    Enable = 'ENABLE',
+    StartWorkSession = 'START_WORK_SESSION',
+    StopWorkSession = 'STOP_WORK_SESSION'
 };
 
 
@@ -129,7 +145,7 @@ export function instanceOfEmployeeSummaryDto(value: object): value is EmployeeSu
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createEmployeeSummaryDtoPropertyNames('active', 'employeeId', 'personId', );
-    const optionalStringProperties = createEmployeeSummaryDtoOptionalProperties({ name: 'employeeId', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'personId', nullable: false }, { name: 'photoUrl', nullable: true }, { name: 'preferredName', nullable: false }, { name: 'status', nullable: false }, { name: 'username', nullable: true }, );
+    const optionalStringProperties = createEmployeeSummaryDtoOptionalProperties({ name: 'employeeId', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'firstName', nullable: false }, { name: 'hireDate', nullable: false }, { name: 'lastName', nullable: false }, { name: 'personId', nullable: false }, { name: 'photoUrl', nullable: true }, { name: 'preferredName', nullable: false }, { name: 'status', nullable: false }, { name: 'statusEffectiveAt', nullable: false }, { name: 'terminationDate', nullable: false }, { name: 'username', nullable: true }, );
     const optionalNumberProperties = createEmployeeSummaryDtoOptionalProperties({ name: 'otherLocationCount', nullable: true }, { name: 'photoImageId', nullable: true }, );
     const optionalBooleanProperties = createEmployeeSummaryDtoOptionalProperties({ name: 'active', nullable: false }, );
 

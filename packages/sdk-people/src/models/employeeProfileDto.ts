@@ -84,7 +84,9 @@ export enum EmployeeProfileDtoAllowedActionsEnum {
     ViewPii = 'VIEW_PII',
     Update = 'UPDATE',
     Disable = 'DISABLE',
-    Enable = 'ENABLE'
+    Enable = 'ENABLE',
+    StartWorkSession = 'START_WORK_SESSION',
+    StopWorkSession = 'STOP_WORK_SESSION'
 };
 export enum EmployeeProfileDtoStatusEnum {
     Active = 'ACTIVE',

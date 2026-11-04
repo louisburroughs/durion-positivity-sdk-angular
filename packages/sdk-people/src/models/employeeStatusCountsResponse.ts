@@ -14,6 +14,10 @@
  */
 export interface EmployeeStatusCountsResponse {
     /**
+     * Count of employees currently clocked in (CLOCKED_IN or ON_BREAK) over the same q/location-filtered set; null when the caller lacks people:timekeeping:view.
+     */
+    clockedInCount?: number | null;
+    /**
      * Employee count per status name (plus the UNKNOWN bucket for a row with no status recorded), for the register\'s stat tiles. Computed over the q-filtered set — the same `q` match searchEmployees applies, before any status filter — so a tile for a status the caller has not selected on searchEmployees still shows what selecting it would return, and the counts always sum to the q-filtered total.
      */
     counts: { [key: string]: number; };
@@ -59,7 +63,7 @@ export function instanceOfEmployeeStatusCountsResponse(value: object): value is 
 
     const requiredProperties = createEmployeeStatusCountsResponsePropertyNames('counts', );
     const optionalStringProperties = createEmployeeStatusCountsResponseOptionalProperties();
-    const optionalNumberProperties = createEmployeeStatusCountsResponseOptionalProperties();
+    const optionalNumberProperties = createEmployeeStatusCountsResponseOptionalProperties({ name: 'clockedInCount', nullable: true }, );
     const optionalBooleanProperties = createEmployeeStatusCountsResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
