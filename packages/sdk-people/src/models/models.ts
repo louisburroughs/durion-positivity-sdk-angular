@@ -39,6 +39,7 @@ export * from './personCredentialBulkIngestRecord';
 export * from './personCredentialResponse';
 export * from './primaryLocationResponse';
 export * from './rejectTimePeriodRequest';
+export * from './setEmployeePhotoRequest';
 export * from './skillDto';
 export * from './staffingAssignmentBulkIngestRecord';
 export * from './staffingAssignmentResponse';
