@@ -16,6 +16,7 @@ export * from './createTimePeriodRequest';
 export * from './decision';
 export * from './disableEmployeeRequestDto';
 export * from './employeeAddressDto';
+export * from './employeeClockStateDto';
 export * from './employeeContactInfoDto';
 export * from './employeeEmergencyContactDto';
 export * from './employeeIdentityDto';
