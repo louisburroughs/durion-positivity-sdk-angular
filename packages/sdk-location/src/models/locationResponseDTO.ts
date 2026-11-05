@@ -50,6 +50,10 @@ export interface LocationResponseDTO {
      */
     city?: string;
     /**
+     * LAST day the location operates, in the location\'s own timezone; null when no closing is scheduled. The closing job deactivates the location at the start of the following local day, so this date itself is still an operating day (DECISION-LOCATION-030).
+     */
+    closesOn?: string | null;
+    /**
      * Unique business code of the location
      */
     code?: string;
@@ -57,6 +61,10 @@ export interface LocationResponseDTO {
      * Country of the location
      */
     country?: string;
+    /**
+     * When the system made this location inactive (DELETE, the closing job, PATCH status INACTIVE or PUT active=false); null when it was never deactivated, which includes rows that went inactive before the field existed. Cleared on reactivation (DECISION-LOCATION-030).
+     */
+    deactivatedAt?: string | null;
     /**
      * Unit this location\'s forms show and accept for a distance value (DECISION-LOCATION-028); every distance in a request or response for this location is expressed in this unit. Storage of a distance is always canonical kilometres regardless of this setting.
      */
@@ -78,6 +86,10 @@ export interface LocationResponseDTO {
      */
     id: string;
     /**
+     * Lifecycle state derived on every read in the location\'s own timezone: OPENING when active with opensOn still ahead, CLOSING when active with a closesOn on or after today, ACTIVE otherwise while active, INACTIVE when not active (or when a closesOn has passed but the closing job has not run yet).
+     */
+    lifecycleStatus: LocationResponseDTOLifecycleStatusEnum;
+    /**
      * Mailing address of the location
      */
     mailingAddress?: string;
@@ -89,6 +101,10 @@ export interface LocationResponseDTO {
      * Display name of the location
      */
     name: string;
+    /**
+     * First day the location operates, as a calendar date in the location\'s own timezone; null when no opening date is recorded. It is a statement about the site, not a switch: the location is ACTIVE from this date regardless of anyone flipping a flag (DECISION-LOCATION-030).
+     */
+    opensOn?: string | null;
     /**
      * Stored weekly operating hours, one entry per published day of the week, in the location\'s own timezone; null when hours have never been published
      */
@@ -132,6 +148,16 @@ export enum LocationResponseDTODistanceUnitEnum {
     Km = 'KM',
     Mi = 'MI'
 };
+export enum LocationResponseDTOLifecycleStatusEnum {
+    Opening = 'OPENING',
+    Closing = 'CLOSING',
+    Active = 'ACTIVE',
+    Inactive = 'INACTIVE',
+    Opening2 = 'OPENING',
+    Closing2 = 'CLOSING',
+    Active2 = 'ACTIVE',
+    Inactive2 = 'INACTIVE'
+};
 
 
 
@@ -173,8 +199,8 @@ export function instanceOfLocationResponseDTO(value: object): value is LocationR
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLocationResponseDTOPropertyNames('active', 'activeBayCount', 'activeMobileUnitCount', 'bayCount', 'childCount', 'distanceUnit', 'hasRepairCapability', 'id', 'mobileUnitCount', 'name', 'outOfServiceBayCount', 'outOfServiceMobileUnitCount', 'storageLocationCount', );
-    const optionalStringProperties = createLocationResponseDTOOptionalProperties({ name: 'addressLine1', nullable: false }, { name: 'addressLine2', nullable: false }, { name: 'city', nullable: false }, { name: 'code', nullable: false }, { name: 'country', nullable: false }, { name: 'distanceUnit', nullable: false }, { name: 'geographicalLocationId', nullable: false }, { name: 'id', nullable: false }, { name: 'mailingAddress', nullable: false }, { name: 'name', nullable: false }, { name: 'phoneNumber', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'responsiblePersonId', nullable: false }, { name: 'state', nullable: false }, { name: 'timezone', nullable: true }, );
+    const requiredProperties = createLocationResponseDTOPropertyNames('active', 'activeBayCount', 'activeMobileUnitCount', 'bayCount', 'childCount', 'distanceUnit', 'hasRepairCapability', 'id', 'lifecycleStatus', 'mobileUnitCount', 'name', 'outOfServiceBayCount', 'outOfServiceMobileUnitCount', 'storageLocationCount', );
+    const optionalStringProperties = createLocationResponseDTOOptionalProperties({ name: 'addressLine1', nullable: false }, { name: 'addressLine2', nullable: false }, { name: 'city', nullable: false }, { name: 'closesOn', nullable: true }, { name: 'code', nullable: false }, { name: 'country', nullable: false }, { name: 'deactivatedAt', nullable: true }, { name: 'distanceUnit', nullable: false }, { name: 'geographicalLocationId', nullable: false }, { name: 'id', nullable: false }, { name: 'lifecycleStatus', nullable: false }, { name: 'mailingAddress', nullable: false }, { name: 'name', nullable: false }, { name: 'opensOn', nullable: true }, { name: 'phoneNumber', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'responsiblePersonId', nullable: false }, { name: 'state', nullable: false }, { name: 'timezone', nullable: true }, );
     const optionalNumberProperties = createLocationResponseDTOOptionalProperties({ name: 'activeBayCount', nullable: false }, { name: 'activeMobileUnitCount', nullable: false }, { name: 'bayCount', nullable: false }, { name: 'childCount', nullable: false }, { name: 'mobileUnitCount', nullable: false }, { name: 'outOfServiceBayCount', nullable: false }, { name: 'outOfServiceMobileUnitCount', nullable: false }, { name: 'storageLocationCount', nullable: false }, );
     const optionalBooleanProperties = createLocationResponseDTOOptionalProperties({ name: 'active', nullable: false }, { name: 'hasRepairCapability', nullable: false }, );
 

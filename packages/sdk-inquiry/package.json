@@ -1,6 +1,6 @@
 {
   "name": "@durion-sdk/inquiry",
-  "version": "0.207.0-alpha",
+  "version": "0.208.0-alpha",
   "description": "OpenAPI client for @durion-sdk/inquiry",
   "author": "OpenAPI-Generator Contributors",
   "repository": {
