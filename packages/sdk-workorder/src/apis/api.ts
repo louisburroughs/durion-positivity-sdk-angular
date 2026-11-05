@@ -23,4 +23,5 @@ export * from './workorderPartAdjustments.service';
 export * from './workorderPartsUsage.service';
 export * from './workorderPickFacade.service';
 export * from './workorderPickedItems.service';
+export * from './workorderScheduledBlockers.service';
 export * from './workorderSearch.service';

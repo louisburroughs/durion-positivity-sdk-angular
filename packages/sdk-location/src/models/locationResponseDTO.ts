@@ -38,6 +38,10 @@ export interface LocationResponseDTO {
      */
     addressLine2?: string;
     /**
+     * Number of bays owned by the location whose status is not RETIRED, so ACTIVE and OUT_OF_SERVICE bays are both counted (it is a superset of outOfServiceBayCount, not a partition); unlike activeBayCount an inactive location still reports its on-record bays
+     */
+    bayCount: number;
+    /**
      * Number of direct HOME_OFFICE children of this location, whatever their status
      */
     childCount: number;
@@ -78,6 +82,10 @@ export interface LocationResponseDTO {
      */
     mailingAddress?: string;
     /**
+     * Number of mobile units based at the location whose status is not RETIRED, so ACTIVE and OUT_OF_SERVICE units are both counted (it is a superset of outOfServiceMobileUnitCount, not a partition); unlike activeMobileUnitCount an inactive location still reports its on-record units
+     */
+    mobileUnitCount: number;
+    /**
      * Display name of the location
      */
     name: string;
@@ -85,6 +93,14 @@ export interface LocationResponseDTO {
      * Stored weekly operating hours, one entry per published day of the week, in the location\'s own timezone; null when hours have never been published
      */
     operatingHours?: Array<OperatingHoursResponse> | null;
+    /**
+     * Number of bays owned by the location with status OUT_OF_SERVICE; reported for an inactive location too, since a closed site still shows which of its bays are out of service
+     */
+    outOfServiceBayCount: number;
+    /**
+     * Number of mobile units based at the location with status OUT_OF_SERVICE; reported for an inactive location too
+     */
+    outOfServiceMobileUnitCount: number;
     parent?: LocationParentSummary;
     /**
      * Primary phone number for the location
@@ -102,6 +118,10 @@ export interface LocationResponseDTO {
      * State or province of the location
      */
     state?: string;
+    /**
+     * Number of storage locations at the site with status ACTIVE, across every level of the topology. This is an ACTIVE-only count, not a total: MAINTENANCE, QUARANTINED and INACTIVE storage locations are excluded. Reported for an inactive location too, because the site still holds its storage
+     */
+    storageLocationCount: number;
     /**
      * IANA timezone identifier of the location; the zone every operating-hours and holiday closure entry below is expressed in, and the zone scheduling converts a booking into
      */
@@ -153,9 +173,9 @@ export function instanceOfLocationResponseDTO(value: object): value is LocationR
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLocationResponseDTOPropertyNames('active', 'activeBayCount', 'activeMobileUnitCount', 'childCount', 'distanceUnit', 'hasRepairCapability', 'id', 'name', );
+    const requiredProperties = createLocationResponseDTOPropertyNames('active', 'activeBayCount', 'activeMobileUnitCount', 'bayCount', 'childCount', 'distanceUnit', 'hasRepairCapability', 'id', 'mobileUnitCount', 'name', 'outOfServiceBayCount', 'outOfServiceMobileUnitCount', 'storageLocationCount', );
     const optionalStringProperties = createLocationResponseDTOOptionalProperties({ name: 'addressLine1', nullable: false }, { name: 'addressLine2', nullable: false }, { name: 'city', nullable: false }, { name: 'code', nullable: false }, { name: 'country', nullable: false }, { name: 'distanceUnit', nullable: false }, { name: 'geographicalLocationId', nullable: false }, { name: 'id', nullable: false }, { name: 'mailingAddress', nullable: false }, { name: 'name', nullable: false }, { name: 'phoneNumber', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'responsiblePersonId', nullable: false }, { name: 'state', nullable: false }, { name: 'timezone', nullable: true }, );
-    const optionalNumberProperties = createLocationResponseDTOOptionalProperties({ name: 'activeBayCount', nullable: false }, { name: 'activeMobileUnitCount', nullable: false }, { name: 'childCount', nullable: false }, );
+    const optionalNumberProperties = createLocationResponseDTOOptionalProperties({ name: 'activeBayCount', nullable: false }, { name: 'activeMobileUnitCount', nullable: false }, { name: 'bayCount', nullable: false }, { name: 'childCount', nullable: false }, { name: 'mobileUnitCount', nullable: false }, { name: 'outOfServiceBayCount', nullable: false }, { name: 'outOfServiceMobileUnitCount', nullable: false }, { name: 'storageLocationCount', nullable: false }, );
     const optionalBooleanProperties = createLocationResponseDTOOptionalProperties({ name: 'active', nullable: false }, { name: 'hasRepairCapability', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
