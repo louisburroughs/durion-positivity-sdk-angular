@@ -9,6 +9,7 @@
  */
 import { OperatingHoursResponse } from './operatingHoursResponse';
 import { LocationTypeDTO } from './locationTypeDTO';
+import { LocationParentSummary } from './locationParentSummary';
 import { HolidayClosureResponse } from './holidayClosureResponse';
 
 
@@ -36,6 +37,10 @@ export interface LocationResponseDTO {
      * Second line of the street address
      */
     addressLine2?: string;
+    /**
+     * Number of direct HOME_OFFICE children of this location, whatever their status
+     */
+    childCount: number;
     /**
      * City of the location
      */
@@ -80,6 +85,7 @@ export interface LocationResponseDTO {
      * Stored weekly operating hours, one entry per published day of the week, in the location\'s own timezone; null when hours have never been published
      */
     operatingHours?: Array<OperatingHoursResponse> | null;
+    parent?: LocationParentSummary;
     /**
      * Primary phone number for the location
      */
@@ -147,9 +153,9 @@ export function instanceOfLocationResponseDTO(value: object): value is LocationR
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLocationResponseDTOPropertyNames('active', 'activeBayCount', 'activeMobileUnitCount', 'distanceUnit', 'hasRepairCapability', 'id', 'name', );
+    const requiredProperties = createLocationResponseDTOPropertyNames('active', 'activeBayCount', 'activeMobileUnitCount', 'childCount', 'distanceUnit', 'hasRepairCapability', 'id', 'name', );
     const optionalStringProperties = createLocationResponseDTOOptionalProperties({ name: 'addressLine1', nullable: false }, { name: 'addressLine2', nullable: false }, { name: 'city', nullable: false }, { name: 'code', nullable: false }, { name: 'country', nullable: false }, { name: 'distanceUnit', nullable: false }, { name: 'geographicalLocationId', nullable: false }, { name: 'id', nullable: false }, { name: 'mailingAddress', nullable: false }, { name: 'name', nullable: false }, { name: 'phoneNumber', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'responsiblePersonId', nullable: false }, { name: 'state', nullable: false }, { name: 'timezone', nullable: true }, );
-    const optionalNumberProperties = createLocationResponseDTOOptionalProperties({ name: 'activeBayCount', nullable: false }, { name: 'activeMobileUnitCount', nullable: false }, );
+    const optionalNumberProperties = createLocationResponseDTOOptionalProperties({ name: 'activeBayCount', nullable: false }, { name: 'activeMobileUnitCount', nullable: false }, { name: 'childCount', nullable: false }, );
     const optionalBooleanProperties = createLocationResponseDTOOptionalProperties({ name: 'active', nullable: false }, { name: 'hasRepairCapability', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

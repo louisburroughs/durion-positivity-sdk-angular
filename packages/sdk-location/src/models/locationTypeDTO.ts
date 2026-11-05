@@ -18,6 +18,10 @@ export interface LocationTypeDTO {
      */
     description?: string;
     /**
+     * Display level of the location type (display-only; a location\'s level comes only from its type). Required when a request creates a new location type by name, optional when it names an existing type by id or by an already-seeded name.
+     */
+    displayLevel?: LocationTypeDTODisplayLevelEnum;
+    /**
      * Unique identifier of the location type
      */
     id?: string;
@@ -26,6 +30,17 @@ export interface LocationTypeDTO {
      */
     name?: string;
 }
+export enum LocationTypeDTODisplayLevelEnum {
+    Hq = 'HQ',
+    RegionHq = 'REGION_HQ',
+    Shop = 'SHOP',
+    Store = 'STORE',
+    Warehouse = 'WAREHOUSE',
+    DistributionCenter = 'DISTRIBUTION_CENTER',
+    MobileBase = 'MOBILE_BASE'
+};
+
+
 
 function isOptionalLocationTypeDTOPropertyOfType(
     value: Record<string, unknown>,
@@ -66,7 +81,7 @@ export function instanceOfLocationTypeDTO(value: object): value is LocationTypeD
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createLocationTypeDTOPropertyNames();
-    const optionalStringProperties = createLocationTypeDTOOptionalProperties({ name: 'description', nullable: false }, { name: 'id', nullable: false }, { name: 'name', nullable: false }, );
+    const optionalStringProperties = createLocationTypeDTOOptionalProperties({ name: 'description', nullable: false }, { name: 'displayLevel', nullable: false }, { name: 'id', nullable: false }, { name: 'name', nullable: false }, );
     const optionalNumberProperties = createLocationTypeDTOOptionalProperties();
     const optionalBooleanProperties = createLocationTypeDTOOptionalProperties();
 
