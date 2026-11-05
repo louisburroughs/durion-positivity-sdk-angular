@@ -39,6 +39,8 @@ import { PurchaseOrderResponse } from '../models/purchaseOrderResponse';
 // @ts-ignore
 import { PurchaseOrderSummaryResponse } from '../models/purchaseOrderSummaryResponse';
 // @ts-ignore
+import { PurchaseOrderUnitsBySkuResponse } from '../models/purchaseOrderUnitsBySkuResponse';
+// @ts-ignore
 import { PurchaseOrderVendorResponse } from '../models/purchaseOrderVendorResponse';
 // @ts-ignore
 import { ReopenPurchaseOrderLineRequest } from '../models/reopenPurchaseOrderLineRequest';
@@ -553,6 +555,95 @@ export class PurchaseOrdersService extends BaseService {
         let localVarPath = `/v1/orders/purchase-orders/${this.configuration.encodeParam({name: "poId", value: poId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/supplier-availability`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<ProcurementAvailability>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Rank Purchase Order SKUs by Units Ordered
+     * Returns every SKU that appears on a placed purchase order with its units ordered, units still open, line count and order count, ranked by units ordered (highest first, ties broken by SKU identifier), over the whole matching population rather than one page of orders. Use this tool to rank products by how much we ordered — for example the three SKUs with the most units ordered — and for any per-SKU purchase-order total; do not sum the rows of listPurchaseOrders, which returns only the first page, and do not use this endpoint for order or money totals, which getPurchaseOrderSummary returns. Ordered quantity is what we ordered, NOT usage or demand: replenishment orders to the policy maximum and rounds the quantity up to the vendor\&#39;s order multiple, so a high rank can reflect a generous maximum level or packaging rather than consumption (inventory ruling #1781). Lines with no SKU are not ranked. Preconditions: none; every input is optional and the population is every purchase order that matches. Required inputs: none. status is optional (repeatable, or comma-separated) and defaults to the placed set APPROVED, PARTIALLY_RECEIVED, FULLY_RECEIVED and CLOSED: DRAFT was never sent to a vendor and CANCELLED is void, so neither counts unless named explicitly. vendorId (UUID) restricts the population to one vendor\&#39;s orders, and limit (1 to 100, default 10) caps how many SKUs are returned. Emits an ORDER_PURCHASE_ORDER_UNITS_BY_SKU audit event; read-only, no stock state changes. Returns 200 with an empty skus list when nothing matches, 400 when a status is not a known lifecycle status or limit is outside 1 to 100, and 403 for a caller without the purchase-order view authority.
+     * @endpoint get /v1/orders/purchase-orders/units-by-sku
+     * @param vendorId
+     * @param status
+     * @param limit Maximum number of SKUs to return; default 10, minimum 1, maximum 100
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getPurchaseOrderUnitsBySku(vendorId?: string, status?: Array<'DRAFT' | 'APPROVED' | 'PARTIALLY_RECEIVED' | 'FULLY_RECEIVED' | 'CLOSED' | 'CANCELLED'>, limit?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PurchaseOrderUnitsBySkuResponse>;
+    public getPurchaseOrderUnitsBySku(vendorId?: string, status?: Array<'DRAFT' | 'APPROVED' | 'PARTIALLY_RECEIVED' | 'FULLY_RECEIVED' | 'CLOSED' | 'CANCELLED'>, limit?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PurchaseOrderUnitsBySkuResponse>>;
+    public getPurchaseOrderUnitsBySku(vendorId?: string, status?: Array<'DRAFT' | 'APPROVED' | 'PARTIALLY_RECEIVED' | 'FULLY_RECEIVED' | 'CLOSED' | 'CANCELLED'>, limit?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PurchaseOrderUnitsBySkuResponse>>;
+    public getPurchaseOrderUnitsBySku(vendorId?: string, status?: Array<'DRAFT' | 'APPROVED' | 'PARTIALLY_RECEIVED' | 'FULLY_RECEIVED' | 'CLOSED' | 'CANCELLED'>, limit?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'vendorId',
+            <any>vendorId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'status',
+            <any>status,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'limit',
+            <any>limit,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/orders/purchase-orders/units-by-sku`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PurchaseOrderUnitsBySkuResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),
