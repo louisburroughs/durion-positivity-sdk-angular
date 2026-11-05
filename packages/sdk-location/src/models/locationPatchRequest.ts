@@ -12,7 +12,7 @@ import { HolidayClosureRequest } from './holidayClosureRequest';
 
 
 /**
- * Partial update payload for a location; null fields are left unchanged
+ * Partial update payload for a location; absent fields are left unchanged. opensOn and closesOn are the exception: an absent key leaves the stored date unchanged, while an explicit JSON null clears it.
  */
 export interface LocationPatchRequest {
     /**
@@ -23,6 +23,10 @@ export interface LocationPatchRequest {
      * Buffer minutes reserved after appointments for cleanup
      */
     cleanupBufferMinutes?: number;
+    /**
+     * LAST day the location operates, in the location\'s own timezone; the location deactivates at the start of the following local day. Omit the field to keep the stored date, send JSON null to clear it, or send a date to set it. A date being set must be today or later in the location\'s timezone and not before opensOn, otherwise 400 VALIDATION_ERROR names closesOn (DECISION-LOCATION-030).
+     */
+    closesOn?: string | null;
     /**
      * Unit this location\'s forms show and accept for a distance value (DECISION-LOCATION-028); unchanged when omitted. Storage of a distance is always canonical kilometres regardless of this setting.
      */
@@ -35,6 +39,10 @@ export interface LocationPatchRequest {
      * Display name of the location
      */
     name?: string;
+    /**
+     * First day the location operates, as a calendar date in the location\'s own timezone. Omit the field to keep the stored date, send JSON null to clear it, or send a date to set it; past dates are accepted (DECISION-LOCATION-030).
+     */
+    opensOn?: string | null;
     /**
      * Weekly operating hours for the location
      */
@@ -94,7 +102,7 @@ export function instanceOfLocationPatchRequest(value: object): value is Location
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createLocationPatchRequestPropertyNames();
-    const optionalStringProperties = createLocationPatchRequestOptionalProperties({ name: 'distanceUnit', nullable: false }, { name: 'name', nullable: false }, { name: 'status', nullable: false }, { name: 'timezone', nullable: false }, );
+    const optionalStringProperties = createLocationPatchRequestOptionalProperties({ name: 'closesOn', nullable: true }, { name: 'distanceUnit', nullable: false }, { name: 'name', nullable: false }, { name: 'opensOn', nullable: true }, { name: 'status', nullable: false }, { name: 'timezone', nullable: false }, );
     const optionalNumberProperties = createLocationPatchRequestOptionalProperties({ name: 'checkInBufferMinutes', nullable: false }, { name: 'cleanupBufferMinutes', nullable: false }, );
     const optionalBooleanProperties = createLocationPatchRequestOptionalProperties();
 

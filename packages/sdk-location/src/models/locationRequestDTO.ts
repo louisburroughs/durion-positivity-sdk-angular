@@ -41,6 +41,10 @@ export interface LocationRequestDTO {
      */
     cleanupBufferMinutes?: number;
     /**
+     * LAST day the location operates, in the location\'s own timezone; the location deactivates at the start of the following local day. On update, omit the field to keep the stored date, send JSON null to clear it, or send a date to set it. A date being set must be today or later in the location\'s timezone and not before opensOn, otherwise 400 VALIDATION_ERROR names closesOn (DECISION-LOCATION-030).
+     */
+    closesOn?: string | null;
+    /**
      * Unique business code of the location
      */
     code: string;
@@ -68,6 +72,10 @@ export interface LocationRequestDTO {
      * Display name of the location
      */
     name: string;
+    /**
+     * First day the location operates, as a calendar date in the location\'s own timezone. On update, omit the field to keep the stored date, send JSON null to clear it, or send a date to set it; past dates are accepted (DECISION-LOCATION-030).
+     */
+    opensOn?: string | null;
     /**
      * Weekly operating hours for the location
      */
@@ -144,7 +152,7 @@ export function instanceOfLocationRequestDTO(value: object): value is LocationRe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createLocationRequestDTOPropertyNames('code', 'name', 'type', );
-    const optionalStringProperties = createLocationRequestDTOOptionalProperties({ name: 'addressLine1', nullable: false }, { name: 'addressLine2', nullable: false }, { name: 'city', nullable: false }, { name: 'code', nullable: false }, { name: 'country', nullable: false }, { name: 'distanceUnit', nullable: false }, { name: 'geographicalLocationId', nullable: false }, { name: 'mailingAddress', nullable: false }, { name: 'name', nullable: false }, { name: 'phoneNumber', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'responsiblePersonId', nullable: false }, { name: 'state', nullable: false }, { name: 'timezone', nullable: false }, );
+    const optionalStringProperties = createLocationRequestDTOOptionalProperties({ name: 'addressLine1', nullable: false }, { name: 'addressLine2', nullable: false }, { name: 'city', nullable: false }, { name: 'closesOn', nullable: true }, { name: 'code', nullable: false }, { name: 'country', nullable: false }, { name: 'distanceUnit', nullable: false }, { name: 'geographicalLocationId', nullable: false }, { name: 'mailingAddress', nullable: false }, { name: 'name', nullable: false }, { name: 'opensOn', nullable: true }, { name: 'phoneNumber', nullable: false }, { name: 'postalCode', nullable: false }, { name: 'responsiblePersonId', nullable: false }, { name: 'state', nullable: false }, { name: 'timezone', nullable: false }, );
     const optionalNumberProperties = createLocationRequestDTOOptionalProperties({ name: 'checkInBufferMinutes', nullable: false }, { name: 'cleanupBufferMinutes', nullable: false }, );
     const optionalBooleanProperties = createLocationRequestDTOOptionalProperties({ name: 'active', nullable: false }, );
 
