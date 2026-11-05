@@ -19,6 +19,7 @@ export * from './inventoryReferenceData.service';
 export * from './inventoryReservations.service';
 export * from './inventoryRevaluation.service';
 export * from './inventoryRollup.service';
+export * from './inventorySiteSummary.service';
 export * from './inventorySites.service';
 export * from './inventoryValuation.service';
 export * from './locationSync.service';

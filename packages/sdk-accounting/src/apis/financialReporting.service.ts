@@ -49,6 +49,8 @@ import { TaxLiabilitySnapshotVerification } from '../models/taxLiabilitySnapshot
 // @ts-ignore
 import { TrialBalanceReport } from '../models/trialBalanceReport';
 // @ts-ignore
+import { UnappliedReceivablesReport } from '../models/unappliedReceivablesReport';
+// @ts-ignore
 import { UnpaidWalkInSalesResponse } from '../models/unpaidWalkInSalesResponse';
 
 // @ts-ignore
@@ -1040,6 +1042,88 @@ export class FinancialReportingService extends BaseService {
         return this.httpClient.request<TaxLiabilitySnapshotResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get Unapplied Receivables
+     * Reads the money customers have paid or been credited that is not yet applied to an invoice: receivable payments with an unapplied remainder, customer credits with a usable remainder, per-customer subtotals of each and grand totals. Use this tool for \&quot;which accounts have unapplied payments or credits\&quot; and to find money to apply or refund; do not use generateAgedReceivables, which reports open invoice balances and has no unapplied column, and do not use getUnpaidWalkInSales, which reports the CASH walk-in house account this read leaves out. POSTED credit memos are never listed because they already reduce the invoice balance, and the CASH walk-in house account is excluded because it never holds credits and its unapplied payments are refund-pending excess reported by getUnpaidWalkInSales. Preconditions: the caller needs reporting:view:financial-statements authority; rows are empty when nothing is unapplied. Required inputs: asOfDate (ISO date) as a query parameter; customerId (UUID) is optional and narrows both lists and the totals. The as-of date is a CREATION CUT-OFF only: a payment cleared, or a credit created, after it did not exist yet and is excluded, while every amount is the CURRENT balance, not a reconstruction as of that date (balancesAreCurrent is always true). Amounts are in the ledger\&#39;s currency, rounded DOWN to its minor unit, and are never added across currencies. Emits an ACCOUNTING_UNAPPLIED_RECEIVABLES_VIEW event and changes no state, and returns 400 when asOfDate is missing or malformed or customerId is not a UUID, and 403 when the caller lacks the authority.
+     * @endpoint get /v1/accounting/receivables/unapplied
+     * @param asOfDate Creation cut-off date (YYYY-MM-DD); balances are always current
+     * @param customerId Optional customer (party) UUID to narrow both lists and the totals
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getUnappliedReceivables(asOfDate: string, customerId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<UnappliedReceivablesReport>;
+    public getUnappliedReceivables(asOfDate: string, customerId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UnappliedReceivablesReport>>;
+    public getUnappliedReceivables(asOfDate: string, customerId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UnappliedReceivablesReport>>;
+    public getUnappliedReceivables(asOfDate: string, customerId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (asOfDate === null || asOfDate === undefined) {
+            throw new Error('Required parameter asOfDate was null or undefined when calling getUnappliedReceivables.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'asOfDate',
+            <any>asOfDate,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'customerId',
+            <any>customerId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/receivables/unapplied`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<UnappliedReceivablesReport>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
