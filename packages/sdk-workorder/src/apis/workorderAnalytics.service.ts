@@ -19,6 +19,8 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 // @ts-ignore
 import { ApiError } from '../models/apiError';
 // @ts-ignore
+import { LaborOverrunAnalyticsResponse } from '../models/laborOverrunAnalyticsResponse';
+// @ts-ignore
 import { OpenWorkordersByCustomerResponse } from '../models/openWorkordersByCustomerResponse';
 // @ts-ignore
 import { ReopenedWorkorderAnalyticsResponse } from '../models/reopenedWorkorderAnalyticsResponse';
@@ -41,6 +43,121 @@ export class WorkorderAnalyticsService extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
+    }
+
+    /**
+     * Get Labor Overruns Against Guide Estimates By Service Type
+     * Returns one row per service line whose stopped labor time in the window ran strictly over its own guide estimate — job, service, estimate, actual and overrun — plus a per-service-type rollup of measured and overrun lines with the total and average overrun hours. Use this tool to answer which jobs overran their book time in a period and how that varies by service type; do NOT use it for hours per technician, which is getTechnicianLaborAnalytics, nor for one work order\&#39;s labor lines, which is searchWorkorders followed by getWorkorder. Preconditions: none beyond a valid window; the estimate is the guide baseline snapshotted on the service line (not the catalog service\&#39;s degraded default), the actual is the sum of stopped labor entries that STARTED inside the window, and a line without an estimate is counted in servicesWithoutEstimate rather than compared, while a line exactly on its estimate is measured, not over. Required inputs: from and to, ISO dates with to strictly after from — the window is half-open [from, to) on UTC day boundaries, so a calendar week starting Monday runs to the next Monday; locationId and serviceType are optional filters, and a supplied locationId outside the caller\&#39;s reach is refused with 403 LOCATION_SCOPE_DENIED. limit caps the returned overrun rows (default 100, max 500) and never the rollup, the without-estimate count or truncated. Emits a WORKORDER_ANALYTICS_LABOR_OVERRUNS_VIEW audit event; no state changes. Returns 400 WORKEXEC_INVALID_REQUEST when to is not after from, and truncated&#x3D;true when more lines ran over than limit allowed or an internal cap made the rollup partial. Advisory only: comparing reported time with the quoted estimate has no billing or payroll effect.
+     * @endpoint get /v1/workorders/analytics/labor-overruns
+     * @param from Window start date (YYYY-MM-DD), inclusive
+     * @param to Window end date (YYYY-MM-DD), exclusive — a week starting Monday runs to the next Monday
+     * @param locationId Narrow to one shop; omitted reports every location within the caller\&#39;s reach
+     * @param serviceType Narrow to one operation category, exactly as reported in byServiceType
+     * @param limit Maximum overrun rows to return (default 100, max 500)
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getLaborOverrunsByServiceType(from: string, to: string, locationId?: string, serviceType?: string, limit?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<LaborOverrunAnalyticsResponse>;
+    public getLaborOverrunsByServiceType(from: string, to: string, locationId?: string, serviceType?: string, limit?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LaborOverrunAnalyticsResponse>>;
+    public getLaborOverrunsByServiceType(from: string, to: string, locationId?: string, serviceType?: string, limit?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<LaborOverrunAnalyticsResponse>>;
+    public getLaborOverrunsByServiceType(from: string, to: string, locationId?: string, serviceType?: string, limit?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (from === null || from === undefined) {
+            throw new Error('Required parameter from was null or undefined when calling getLaborOverrunsByServiceType.');
+        }
+        if (to === null || to === undefined) {
+            throw new Error('Required parameter to was null or undefined when calling getLaborOverrunsByServiceType.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'from',
+            <any>from,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'to',
+            <any>to,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'locationId',
+            <any>locationId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'serviceType',
+            <any>serviceType,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'limit',
+            <any>limit,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/workorders/analytics/labor-overruns`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<LaborOverrunAnalyticsResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
     }
 
     /**
