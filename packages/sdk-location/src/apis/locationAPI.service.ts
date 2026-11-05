@@ -21,6 +21,8 @@ import { ApiError } from '../models/apiError';
 // @ts-ignore
 import { LocationDescendantResponseDTO } from '../models/locationDescendantResponseDTO';
 // @ts-ignore
+import { LocationParentReplaceRequest } from '../models/locationParentReplaceRequest';
+// @ts-ignore
 import { LocationParentResponseDTO } from '../models/locationParentResponseDTO';
 // @ts-ignore
 import { LocationPatchRequest } from '../models/locationPatchRequest';
@@ -868,6 +870,148 @@ export class LocationAPIService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: locationPatchRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Remove a Location\&#39;s Parent of One Type
+     * Removes the child\&#39;s parent edge of the requested type, answering 204 whether or not the child had one, so the call is idempotent. Use this tool to detach a location from a parent before or instead of moving it; use replaceLocationParent to point it at a different parent in one call. Only the parentType in the path is removed; every other parent edge of the child is kept. Preconditions: the child must exist; having no edge of that parentType is not an error. Required inputs: childId and parentType as path parameters; there is no request body. parentType is one of HOME_OFFICE, HEADQUARTERS, REGION, DISTRICT, PHYSICAL, ORGANIZATIONAL, FINANCIAL or SHIPPING. Emits a LOCATION_PARENT_REMOVE event and, only when an edge actually existed, republishes the child\&#39;s location fact so replica consumers drop the parent they derived from it. Returns 204 on success, 400 when parentType is not a recognized value, 403 LOCATION_SCOPE_DENIED when the caller\&#39;s location scope does not cover the child, and 404 LOCATION_NOT_FOUND when the child does not exist.
+     * @endpoint delete /v1/locations/{childId}/parents/{parentType}
+     * @param childId ID of the child location
+     * @param parentType Type of the parent relationship
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public removeLocationParent(childId: string, parentType: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public removeLocationParent(childId: string, parentType: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public removeLocationParent(childId: string, parentType: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public removeLocationParent(childId: string, parentType: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (childId === null || childId === undefined) {
+            throw new Error('Required parameter childId was null or undefined when calling removeLocationParent.');
+        }
+        if (parentType === null || parentType === undefined) {
+            throw new Error('Required parameter parentType was null or undefined when calling removeLocationParent.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/locations/${this.configuration.encodeParam({name: "childId", value: childId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/parents/${this.configuration.encodeParam({name: "parentType", value: parentType, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Create or Replace a Location\&#39;s Parent of One Type
+     * Creates the child\&#39;s parent edge of the requested type, or replaces the edge it already has of that type, so a location can be moved under a different parent in one call. Use this tool to reorganize the hierarchy; use addLocationParent instead to attach a parent of a type the child does not have yet, and listLocationParents or listLocationChildren to read the result. Only the parentType in the path changes: an existing FINANCIAL, PHYSICAL or other edge of the child is left exactly as it was. Preconditions: both locations must exist; the move must not put the child under itself or under one of its own descendants on that parentType, because ADR-0016 forbids cycles per dimension; and the pair must not already be linked on another parentType, because a (child, parent) pair holds a single edge. Required inputs: childId and parentType as path parameters and parentId in the body. parentType is one of HOME_OFFICE, HEADQUARTERS, REGION, DISTRICT, PHYSICAL, ORGANIZATIONAL, FINANCIAL or SHIPPING. Emits a LOCATION_PARENT_REPLACE event and republishes the child\&#39;s location fact, which carries its new parent edges to replica consumers; pointing at the parent the child already has is an idempotent success that publishes nothing. Returns 400 when parentType is not a recognized value or parentId is missing, 403 LOCATION_SCOPE_DENIED when the caller\&#39;s location scope does not cover the child, 404 LOCATION_NOT_FOUND when either location does not exist, and 409 LOCATION_PARENT_CYCLE when the move would close a cycle on that parentType.
+     * @endpoint put /v1/locations/{childId}/parents/{parentType}
+     * @param childId ID of the child location
+     * @param parentType Type of the parent relationship
+     * @param locationParentReplaceRequest The location that becomes the child\&#39;s parent on this parentType.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public replaceLocationParent(childId: string, parentType: string, locationParentReplaceRequest: LocationParentReplaceRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<LocationParentResponseDTO>;
+    public replaceLocationParent(childId: string, parentType: string, locationParentReplaceRequest: LocationParentReplaceRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LocationParentResponseDTO>>;
+    public replaceLocationParent(childId: string, parentType: string, locationParentReplaceRequest: LocationParentReplaceRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<LocationParentResponseDTO>>;
+    public replaceLocationParent(childId: string, parentType: string, locationParentReplaceRequest: LocationParentReplaceRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (childId === null || childId === undefined) {
+            throw new Error('Required parameter childId was null or undefined when calling replaceLocationParent.');
+        }
+        if (parentType === null || parentType === undefined) {
+            throw new Error('Required parameter parentType was null or undefined when calling replaceLocationParent.');
+        }
+        if (locationParentReplaceRequest === null || locationParentReplaceRequest === undefined) {
+            throw new Error('Required parameter locationParentReplaceRequest was null or undefined when calling replaceLocationParent.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/locations/${this.configuration.encodeParam({name: "childId", value: childId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/parents/${this.configuration.encodeParam({name: "parentType", value: parentType, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<LocationParentResponseDTO>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: locationParentReplaceRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
