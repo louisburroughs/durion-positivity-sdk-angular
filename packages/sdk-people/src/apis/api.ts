@@ -4,6 +4,7 @@ export * from './peopleAvailabilityAPI.service';
 export * from './peopleBulkIngestAPI.service';
 export * from './peopleComplianceAPI.service';
 export * from './peopleExceptions.service';
+export * from './peopleLocationReachAPI.service';
 export * from './peopleReportsAPI.service';
 export * from './peopleStaffingAssignments.service';
 export * from './peopleTimeEntries.service';

@@ -31,6 +31,8 @@ export * from './enableEmployeeRequestDto';
 export * from './fieldError';
 export * from './inactivePersonActiveUserResponse';
 export * from './jobRoleDto';
+export * from './locationReachItem';
+export * from './locationReachResponse';
 export * from './pagedResponseEmployeeSummaryDto';
 export * from './pagedResponseTimeEntrySummary';
 export * from './peopleAvailabilityResponse';
