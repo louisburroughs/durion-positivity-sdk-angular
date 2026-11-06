@@ -19,6 +19,8 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 // @ts-ignore
 import { ApiError } from '../models/apiError';
 // @ts-ignore
+import { LocationAttentionItemDTO } from '../models/locationAttentionItemDTO';
+// @ts-ignore
 import { LocationDescendantResponseDTO } from '../models/locationDescendantResponseDTO';
 // @ts-ignore
 import { LocationParentReplaceRequest } from '../models/locationParentReplaceRequest';
@@ -551,6 +553,95 @@ export class LocationAPIService extends BaseService {
         return this.httpClient.request<LocationResponseDTO>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List What Needs Attention Across a Branch
+     * Returns one list of what needs attention now and what is coming up across a branch of the location hierarchy, so a regional manager does not have to open every shop to find an out-of-service bay, an uncovered postal code or a closing next week. Use this tool for the Locations page\&#39;s coming-up-and-needs-attention feed; use listBays or listMobileUnits instead when one location\&#39;s bays or units are wanted in full, and listLocationDescendants when the branch\&#39;s shape is wanted rather than its problems. Preconditions: the requested root, when named, must exist and be within the caller\&#39;s location scope (ADR-0061). Required inputs: none are mandatory; locationId names the branch root and the read covers it plus its HOME_OFFICE descendants, without it the read covers every location in the caller\&#39;s reach, and from and to are ISO dates (yyyy-MM-dd) bounding the dated kinds and defaulting to each location\&#39;s local today through 60 days later. Each item carries kind, severity (PROBLEM or INFO), locationId, locationName, occursOn (dated kinds) or since (ongoing problems), and kind-specific refs for BAY_OUT_OF_SERVICE, MOBILE_UNIT_OUT_OF_SERVICE, COVERAGE_GAP, OPENING, CLOSING and HOLIDAY_CLOSURE, ordered problems first by oldest since, then dated items by occursOn, ties by location name. Emits a LOCATION_ATTENTION_GET event; no state changes, and inactive locations contribute nothing while the bay and mobile-unit kinds are omitted for a caller without location:bay:read or location:mobile-unit:read rather than failing the request. Returns 200 with the list (empty when nothing needs attention), 400 VALIDATION_ERROR with fieldErrors naming from or to when a date is not an ISO date, 400 INVALID_DATE_RANGE when from is after to, 403 LOCATION_SCOPE_DENIED when a location-scoped location:read grant does not cover the requested root (ADR-0061), and 404 LOCATION_NOT_FOUND when the requested root does not exist.
+     * @endpoint get /v1/locations/attention
+     * @param locationId Optional branch root; the read covers it and its HOME_OFFICE descendants. Omit it to read every location in the caller\&#39;s reach
+     * @param from First date of the window for dated kinds, as an ISO date (yyyy-MM-dd); defaults to each location\&#39;s local today
+     * @param to Last date of the window for dated kinds, as an ISO date (yyyy-MM-dd); defaults to from plus 60 days
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listLocationAttention(locationId?: string, from?: string, to?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<LocationAttentionItemDTO>>;
+    public listLocationAttention(locationId?: string, from?: string, to?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<LocationAttentionItemDTO>>>;
+    public listLocationAttention(locationId?: string, from?: string, to?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<LocationAttentionItemDTO>>>;
+    public listLocationAttention(locationId?: string, from?: string, to?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'locationId',
+            <any>locationId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'from',
+            <any>from,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'to',
+            <any>to,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/locations/attention`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<LocationAttentionItemDTO>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

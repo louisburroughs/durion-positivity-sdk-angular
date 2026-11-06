@@ -20,6 +20,8 @@ export * from './eligibleMobileUnitResponse';
 export * from './fieldError';
 export * from './holidayClosureRequest';
 export * from './holidayClosureResponse';
+export * from './locationAttentionItemDTO';
+export * from './locationAttentionRefsDTO';
 export * from './locationBulkIngestRecord';
 export * from './locationDescendantResponseDTO';
 export * from './locationParentReplaceRequest';
