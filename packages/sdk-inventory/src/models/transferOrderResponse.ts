@@ -83,6 +83,10 @@ export interface TransferOrderResponse {
      */
     transferOrderId?: string;
     /**
+     * Derived four-step display status (#3189): REQUESTED for DRAFT/APPROVED, IN_TRANSIT for DISPATCHED/PARTIALLY_RECEIVED, RECEIVED for RECEIVED/SHORT_CLOSED, CANCELLED for CANCELLED. Additive: the persisted lifecycle status above is unchanged
+     */
+    transferStatus?: TransferOrderResponseTransferStatusEnum;
+    /**
      * Last update timestamp
      */
     updatedAt?: string;
@@ -98,6 +102,12 @@ export enum TransferOrderResponseStatusEnum {
     PartiallyReceived = 'PARTIALLY_RECEIVED',
     Received = 'RECEIVED',
     ShortClosed = 'SHORT_CLOSED',
+    Cancelled = 'CANCELLED'
+};
+export enum TransferOrderResponseTransferStatusEnum {
+    Requested = 'REQUESTED',
+    InTransit = 'IN_TRANSIT',
+    Received = 'RECEIVED',
     Cancelled = 'CANCELLED'
 };
 
@@ -142,7 +152,7 @@ export function instanceOfTransferOrderResponse(value: object): value is Transfe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTransferOrderResponsePropertyNames();
-    const optionalStringProperties = createTransferOrderResponseOptionalProperties({ name: 'approvedBy', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'destinationLocationId', nullable: false }, { name: 'destinationStorageLocationId', nullable: false }, { name: 'dispatchedBy', nullable: false }, { name: 'notes', nullable: false }, { name: 'shortCloseDisposition', nullable: false }, { name: 'shortCloseNotes', nullable: false }, { name: 'shortCloseReason', nullable: false }, { name: 'shortClosedAt', nullable: false }, { name: 'shortClosedBy', nullable: false }, { name: 'sourceLocationId', nullable: false }, { name: 'sourceStorageLocationId', nullable: false }, { name: 'status', nullable: false }, { name: 'transferOrderId', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const optionalStringProperties = createTransferOrderResponseOptionalProperties({ name: 'approvedBy', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'destinationLocationId', nullable: false }, { name: 'destinationStorageLocationId', nullable: false }, { name: 'dispatchedBy', nullable: false }, { name: 'notes', nullable: false }, { name: 'shortCloseDisposition', nullable: false }, { name: 'shortCloseNotes', nullable: false }, { name: 'shortCloseReason', nullable: false }, { name: 'shortClosedAt', nullable: false }, { name: 'shortClosedBy', nullable: false }, { name: 'sourceLocationId', nullable: false }, { name: 'sourceStorageLocationId', nullable: false }, { name: 'status', nullable: false }, { name: 'transferOrderId', nullable: false }, { name: 'transferStatus', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createTransferOrderResponseOptionalProperties();
     const optionalBooleanProperties = createTransferOrderResponseOptionalProperties();
 
