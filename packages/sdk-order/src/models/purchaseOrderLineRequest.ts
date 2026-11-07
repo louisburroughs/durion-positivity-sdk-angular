@@ -49,6 +49,10 @@ export interface PurchaseOrderLineRequest {
      * Unit cost of the item in the smallest currency unit (e.g. cents)
      */
     unitCostMinor: number;
+    /**
+     * Opaque reference to the workorder this line was bought for (#3195), stored and published as given: it is not validated against pos-workorder (ADR-0044). Omit it to leave the line with no workorder; a revision replaces lines, so an omitted value clears the reference a line had
+     */
+    workorderId?: string | null;
 }
 
 function isOptionalPurchaseOrderLineRequestPropertyOfType(
@@ -90,7 +94,7 @@ export function instanceOfPurchaseOrderLineRequest(value: object): value is Purc
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPurchaseOrderLineRequestPropertyNames('description', 'lineNumber', 'unitCostMinor', );
-    const optionalStringProperties = createPurchaseOrderLineRequestOptionalProperties({ name: 'description', nullable: false }, { name: 'documentUom', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'skuId', nullable: false }, { name: 'taxCodeId', nullable: false }, );
+    const optionalStringProperties = createPurchaseOrderLineRequestOptionalProperties({ name: 'description', nullable: false }, { name: 'documentUom', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'skuId', nullable: false }, { name: 'taxCodeId', nullable: false }, { name: 'workorderId', nullable: true }, );
     const optionalNumberProperties = createPurchaseOrderLineRequestOptionalProperties({ name: 'documentQuantity', nullable: false }, { name: 'lineNumber', nullable: false }, { name: 'quantity', nullable: false }, { name: 'unitCostMinor', nullable: false }, );
     const optionalBooleanProperties = createPurchaseOrderLineRequestOptionalProperties();
 

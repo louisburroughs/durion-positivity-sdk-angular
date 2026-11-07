@@ -25,6 +25,8 @@ import { ReplenishmentNeedResponse } from '../models/replenishmentNeedResponse';
 // @ts-ignore
 import { ReplenishmentPolicyResponse } from '../models/replenishmentPolicyResponse';
 // @ts-ignore
+import { ReplenishmentQueuePageResponse } from '../models/replenishmentQueuePageResponse';
+// @ts-ignore
 import { ReplenishmentScanResultResponse } from '../models/replenishmentScanResultResponse';
 // @ts-ignore
 import { ReplenishmentTaskResponse } from '../models/replenishmentTaskResponse';
@@ -261,6 +263,95 @@ export class ReplenishmentService extends BaseService {
         let localVarPath = `/v1/inventory/replenishment/policies`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<string>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Replenishment suggestions queue
+     * Lists one row per bin that the replenishment engine puts below its minimum now or projects below it at the lead-time horizon, with the order quantity, on-order supply, coverage and best internal source. Use this tool to drive the Replenish queue; use listReplenishmentNeeds instead for the raw orderpoint report of every policy and listReplenishmentTasks for work already materialised. Each row follows the engine\&#39;s own routing, so a PURCHASE policy shows no internal source and falls back to purchasing, and any other policy whose SKU already has an open transfer order into its site shows no source, hint or fallback. Emits an INVENTORY_REPLENISHMENT_SUGGESTIONS_LIST event and creates nothing, because the queue is computed on every read and is therefore always current. Returns 200 with items and nextPageToken and no totalCount, 400 when scope, pageSize or pageToken is invalid, and 403 LOCATION_SCOPE_DENIED when a named scope lies outside the caller\&#39;s reach. Required inputs: none; scope is an optional site or bin id or the literal all, pageSize defaults to 50 (1-200) and pageToken carries the cursor from the previous page, so keep following nextPageToken until it is null because a page can hold fewer than pageSize items, or none. Preconditions: none; snoozed, inactive and zero-minimum zero-maximum reserve policies are excluded and a bin without a policy is never listed.
+     * @endpoint get /v1/inventory/replenishment
+     * @param scope Optional location scope: a site or bin UUID, or \&#39;all\&#39;. A bin resolves to its site and a named scope is gated against the caller\&#39;s reach; omitted or \&#39;all\&#39; narrows to the caller\&#39;s reach
+     * @param pageSize Maximum rows to return; 1-200, default 50. A page can hold fewer, or none, while nextPageToken is set
+     * @param pageToken Opaque cursor from the previous page\&#39;s nextPageToken; omit for the first page. Keep following it until it is null
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listReplenishmentSuggestions(scope?: string, pageSize?: number, pageToken?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ReplenishmentQueuePageResponse>;
+    public listReplenishmentSuggestions(scope?: string, pageSize?: number, pageToken?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ReplenishmentQueuePageResponse>>;
+    public listReplenishmentSuggestions(scope?: string, pageSize?: number, pageToken?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ReplenishmentQueuePageResponse>>;
+    public listReplenishmentSuggestions(scope?: string, pageSize?: number, pageToken?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'scope',
+            <any>scope,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'pageSize',
+            <any>pageSize,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'pageToken',
+            <any>pageToken,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/inventory/replenishment`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ReplenishmentQueuePageResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),

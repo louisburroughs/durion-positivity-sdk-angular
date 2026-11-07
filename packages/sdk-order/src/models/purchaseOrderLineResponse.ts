@@ -81,6 +81,10 @@ export interface PurchaseOrderLineResponse {
      * Unit cost of the item in the smallest currency unit (e.g. cents)
      */
     unitCostMinor?: number;
+    /**
+     * Opaque reference to the workorder this line was bought for (#3195), as stored; null when the line names none. Not validated against pos-workorder (ADR-0044)
+     */
+    workorderId?: string | null;
 }
 
 function isOptionalPurchaseOrderLineResponsePropertyOfType(
@@ -122,7 +126,7 @@ export function instanceOfPurchaseOrderLineResponse(value: object): value is Pur
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPurchaseOrderLineResponsePropertyNames('lineId', 'lineNumber', );
-    const optionalStringProperties = createPurchaseOrderLineResponseOptionalProperties({ name: 'description', nullable: false }, { name: 'documentUom', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'lineId', nullable: false }, { name: 'skuId', nullable: false }, { name: 'taxCodeId', nullable: false }, );
+    const optionalStringProperties = createPurchaseOrderLineResponseOptionalProperties({ name: 'description', nullable: false }, { name: 'documentUom', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'lineId', nullable: false }, { name: 'skuId', nullable: false }, { name: 'taxCodeId', nullable: false }, { name: 'workorderId', nullable: true }, );
     const optionalNumberProperties = createPurchaseOrderLineResponseOptionalProperties({ name: 'cancelledQuantityDecimal', nullable: false }, { name: 'conversionFactor', nullable: false }, { name: 'documentQuantity', nullable: false }, { name: 'lineNumber', nullable: false }, { name: 'lineTotalMinor', nullable: false }, { name: 'openQuantityDecimal', nullable: false }, { name: 'quantityDecimal', nullable: false }, { name: 'receivedQuantityDecimal', nullable: false }, { name: 'returnedQuantityDecimal', nullable: false }, { name: 'taxMinor', nullable: false }, { name: 'unitCostMinor', nullable: false }, );
     const optionalBooleanProperties = createPurchaseOrderLineResponseOptionalProperties();
 
