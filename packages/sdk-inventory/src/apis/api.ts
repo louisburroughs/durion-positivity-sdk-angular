@@ -23,6 +23,7 @@ export * from './inventoryRollup.service';
 export * from './inventorySiteSummary.service';
 export * from './inventorySites.service';
 export * from './inventoryStock.service';
+export * from './inventorySummary.service';
 export * from './inventoryValuation.service';
 export * from './locationSync.service';
 export * from './lots.service';
