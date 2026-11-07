@@ -42,6 +42,7 @@ export * from './serialUnits.service';
 export * from './shortageResolution.service';
 export * from './sourcingStrategies.service';
 export * from './stockMovements.service';
+export * from './stockingLevels.service';
 export * from './supplierStockHints.service';
 export * from './traceability.service';
 export * from './transferOrders.service';

@@ -22,12 +22,12 @@ export interface UpdateReplenishmentPolicyRequest {
      */
     leadTimeDaysOverride?: number;
     /**
-     * Maximum on-hand quantity replenishment aims to restock up to
+     * Maximum on-hand quantity replenishment aims to restock up to; must be at least minimumQuantity, and 0 with minimumQuantity 0 is a reserve bin
      */
     maximumQuantity: number;
-    minimumLessThanMaximum?: boolean;
+    minimumAtMostMaximum?: boolean;
     /**
-     * Minimum on-hand quantity that triggers replenishment when reached
+     * Minimum on-hand quantity that triggers replenishment when reached; 0 with maximumQuantity 0 marks a reserve bin that never triggers replenishment
      */
     minimumQuantity: number;
     /**
@@ -88,7 +88,7 @@ export function instanceOfUpdateReplenishmentPolicyRequest(value: object): value
     const requiredProperties = createUpdateReplenishmentPolicyRequestPropertyNames('maximumQuantity', 'minimumQuantity', );
     const optionalStringProperties = createUpdateReplenishmentPolicyRequestOptionalProperties({ name: 'preferredSourceType', nullable: false }, );
     const optionalNumberProperties = createUpdateReplenishmentPolicyRequestOptionalProperties({ name: 'leadTimeDaysOverride', nullable: false }, { name: 'maximumQuantity', nullable: false }, { name: 'minimumQuantity', nullable: false }, { name: 'orderMultiple', nullable: false }, );
-    const optionalBooleanProperties = createUpdateReplenishmentPolicyRequestOptionalProperties({ name: 'active', nullable: false }, { name: 'minimumLessThanMaximum', nullable: false }, );
+    const optionalBooleanProperties = createUpdateReplenishmentPolicyRequestOptionalProperties({ name: 'active', nullable: false }, { name: 'minimumAtMostMaximum', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalUpdateReplenishmentPolicyRequestPropertyOfType(_v, property.name, 'string', property.nullable))
