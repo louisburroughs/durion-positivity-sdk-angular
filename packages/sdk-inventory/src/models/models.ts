@@ -1,3 +1,4 @@
+export * from './adjustmentApprovalResponse';
 export * from './adjustmentRequestResponse';
 export * from './adjustmentResponse';
 export * from './apiError';
@@ -85,6 +86,8 @@ export * from './lotLocationOnHand';
 export * from './lotResponse';
 export * from './lotStatusUpdateRequest';
 export * from './lotTraceabilityResponse';
+export * from './moveStockRequest';
+export * from './moveStockResponse';
 export * from './movedItem';
 export * from './openingStockBulkIngestRecord';
 export * from './pickListResponse';

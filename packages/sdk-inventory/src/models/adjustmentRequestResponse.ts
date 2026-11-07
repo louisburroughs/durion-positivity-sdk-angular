@@ -18,9 +18,17 @@ export interface AdjustmentRequestResponse {
      */
     adjustmentRequestId: string;
     /**
+     * Ledger entry id when the adjustment posted immediately; null while pending approval
+     */
+    ledgerEntryId?: string;
+    /**
      * Identifier of the location where the adjustment applies
      */
     locationId: string;
+    /**
+     * True when the request is PENDING and needs approval; false when it posted immediately
+     */
+    pendingApproval?: boolean;
     /**
      * Stock-keeping unit of the product being adjusted
      */
@@ -34,7 +42,7 @@ export interface AdjustmentRequestResponse {
      */
     reasonCode: string;
     /**
-     * Current workflow status of the adjustment request
+     * Current workflow status of the adjustment request: APPROVED when it posted (immediately, or after approval) and PENDING when it awaits approval
      */
     status: string;
 }
@@ -78,9 +86,9 @@ export function instanceOfAdjustmentRequestResponse(value: object): value is Adj
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAdjustmentRequestResponsePropertyNames('adjustmentRequestId', 'locationId', 'productSku', 'quantity', 'reasonCode', 'status', );
-    const optionalStringProperties = createAdjustmentRequestResponseOptionalProperties({ name: 'adjustmentRequestId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'productSku', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createAdjustmentRequestResponseOptionalProperties({ name: 'adjustmentRequestId', nullable: false }, { name: 'ledgerEntryId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'productSku', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createAdjustmentRequestResponseOptionalProperties({ name: 'quantity', nullable: false }, );
-    const optionalBooleanProperties = createAdjustmentRequestResponseOptionalProperties();
+    const optionalBooleanProperties = createAdjustmentRequestResponseOptionalProperties({ name: 'pendingApproval', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalAdjustmentRequestResponsePropertyOfType(_v, property.name, 'string', property.nullable))
