@@ -36,6 +36,62 @@ export class InventoryReferenceDataService extends BaseService {
     }
 
     /**
+     * List manual-adjustment reason codes
+     * Returns the closed set of reason codes POST /v1/inventory/adjustments accepts: FOUND_STOCK (a positive quantity) and THEFT_OR_LOSS (a negative one). Use this tool to populate an adjustment-reason picker instead of hard-coding the list; the same set and sign rules are enforced by the adjustment endpoint, so do not duplicate them in the UI. Preconditions: none; the list is static and requires no lookup. Required inputs: none. Emits a fast-read INVENTORY_META_ADJUSTMENT_REASONS_VIEW event and changes no state. Returns 200 with both codes on every call.
+     * @endpoint get /v1/inventory/meta/adjustment-reasons
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listAdjustmentReasons(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<string>>;
+    public listAdjustmentReasons(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<string>>>;
+    public listAdjustmentReasons(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<string>>>;
+    public listAdjustmentReasons(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/inventory/meta/adjustment-reasons`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<string>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * List inventory location zones
      * Lists inventory location zones as a page; the current implementation is a placeholder that always returns an empty page until the pos-location client integration lands. Use this tool only to probe the future location-zone contract; use listInventoryLocations instead for reference data that is actually served. Preconditions: none. Required inputs: none; locationId and the page/size parameters (default size 20) are accepted but no data is served yet. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty page unconditionally in the current implementation.
      * @endpoint get /v1/inventory/location-zones
@@ -322,6 +378,62 @@ export class InventoryReferenceDataService extends BaseService {
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List bin-move reason codes
+     * Returns the closed set of reason codes POST /v1/inventory/moves accepts: PUTAWAY_TO_HOME_BIN, CONSOLIDATE_BINS, MOVE_TO_VAN_STOCK and DAMAGED_TO_QUARANTINE. Use this tool to populate a move-reason picker instead of hard-coding the list; the same set is enforced by the move endpoint. Preconditions: none; the list is static and requires no lookup. Required inputs: none. Emits a fast-read INVENTORY_META_MOVE_REASONS_VIEW event and changes no state. Returns 200 with all four codes on every call.
+     * @endpoint get /v1/inventory/meta/move-reasons
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listMoveReasons(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<string>>;
+    public listMoveReasons(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<string>>>;
+    public listMoveReasons(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<string>>>;
+    public listMoveReasons(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/inventory/meta/move-reasons`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<string>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

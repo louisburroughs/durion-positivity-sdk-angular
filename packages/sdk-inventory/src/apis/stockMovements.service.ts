@@ -17,13 +17,21 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { AdjustmentApprovalResponse } from '../models/adjustmentApprovalResponse';
+// @ts-ignore
 import { AdjustmentRequestResponse } from '../models/adjustmentRequestResponse';
 // @ts-ignore
 import { ApiError } from '../models/apiError';
 // @ts-ignore
 import { CreateAdjustmentRequestDto } from '../models/createAdjustmentRequestDto';
 // @ts-ignore
+import { MoveStockRequest } from '../models/moveStockRequest';
+// @ts-ignore
+import { MoveStockResponse } from '../models/moveStockResponse';
+// @ts-ignore
 import { RecordMovementRequest } from '../models/recordMovementRequest';
+// @ts-ignore
+import { RejectAdjustmentRequest } from '../models/rejectAdjustmentRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -42,17 +50,17 @@ export class StockMovementsService extends BaseService {
     }
 
     /**
-     * Approve adjustment request
-     * Approves a PENDING adjustment request and posts the resulting ADJUSTMENT_IN or ADJUSTMENT_OUT entry to the inventory ledger. Use this tool as the second step of the adjustment workflow, after createAdjustmentRequest; do not use createStockMovement to post corrections, and note approval needs the separate inventory:adjustment:approve authority. Preconditions: the adjustment request must exist and still be PENDING. Required inputs: adjustmentRequestId (UUID) path parameter; there is no request body. Emits an INVENTORY_ADJUSTMENT_REQUEST_APPROVE event; the request is stamped APPROVED with approver and timestamp, and the ledger posting updates the stock summary that availability reads. Returns 400 when the adjustment request id is unknown (the lookup failure maps to a validation error rather than 404), 403 with LOCATION_SCOPE_DENIED when the caller holds inventory:adjustment:approve but the token scopes it to locations that do not cover the request\&#39;s locationId (ADR-0061; nothing is posted), 409 when the request is no longer PENDING, and 422 with ADJUSTMENT_QUANTITY_ZERO when the request\&#39;s quantity is zero (the request is marked REJECTED and nothing is posted).
+     * Approve and post a pending adjustment request
+     * Approves a PENDING adjustment request and posts the resulting ADJUSTMENT_IN or ADJUSTMENT_OUT entry to the inventory ledger, returning its id. Use this tool as the second step only when createAdjustmentRequest answered pendingApproval&#x3D;true; do not use it on a below-threshold adjustment that already posted, which answers 409 ADJUSTMENT_NOT_PENDING instead. Preconditions: the request must exist, be PENDING, and lie within the caller\&#39;s location scope; a manual adjustment requested by the approver refuses self-approval. Required inputs: adjustmentRequestId (UUID) path parameter; there is no request body. Emits an INVENTORY_ADJUSTMENT_REQUEST_APPROVE event. The request is stamped APPROVED with the approver and timestamp; the ledger row uses the approver as its user; inventory.adjustment.posted is emitted and availability moves with the stock summary. Returns 200 with ledgerEntryId, 403 with LOCATION_SCOPE_DENIED or SELF_APPROVAL_NOT_ALLOWED, 404 for an unknown id, 409 with ADJUSTMENT_NOT_PENDING, and 422 with ADJUSTMENT_QUANTITY_ZERO when a legacy request\&#39;s quantity is zero (it is marked REJECTED and nothing posts).
      * @endpoint post /v1/inventory/adjustments/{adjustmentRequestId}/approve
      * @param adjustmentRequestId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public approveAdjustmentRequest(adjustmentRequestId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public approveAdjustmentRequest(adjustmentRequestId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public approveAdjustmentRequest(adjustmentRequestId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public approveAdjustmentRequest(adjustmentRequestId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AdjustmentApprovalResponse>;
+    public approveAdjustmentRequest(adjustmentRequestId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AdjustmentApprovalResponse>>;
+    public approveAdjustmentRequest(adjustmentRequestId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AdjustmentApprovalResponse>>;
     public approveAdjustmentRequest(adjustmentRequestId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (adjustmentRequestId === null || adjustmentRequestId === undefined) {
             throw new Error('Required parameter adjustmentRequestId was null or undefined when calling approveAdjustmentRequest.');
@@ -88,7 +96,7 @@ export class StockMovementsService extends BaseService {
 
         let localVarPath = `/v1/inventory/adjustments/${this.configuration.encodeParam({name: "adjustmentRequestId", value: adjustmentRequestId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/approve`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<AdjustmentApprovalResponse>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -102,10 +110,10 @@ export class StockMovementsService extends BaseService {
     }
 
     /**
-     * Create adjustment request
-     * Creates a PENDING inventory adjustment request that must be approved before any stock change posts. Use this tool to propose a quantity correction, then post it with approveAdjustmentRequest; do not use createStockMovement, whose ADJUST type is rejected — this two-step workflow is the only correction path. Preconditions: none are checked at creation; the SKU, location and quantity are validated for shape only, not against on-hand. Required inputs: productSku, locationId (UUID), quantity (integer — positive adds stock, negative removes it) and reasonCode (at most 100 characters); unitOfMeasure is optional. Emits an INVENTORY_ADJUSTMENT_REQUEST_CREATE event; no ledger entry is written and availability is unchanged until approval. Returns 201 with the PENDING request, 400 when productSku, locationId, quantity or reasonCode is missing, quantity is zero or reasonCode is longer than 100 characters, and 403 with LOCATION_SCOPE_DENIED when the caller holds inventory:adjustment:create but the token scopes it to locations that do not cover locationId (ADR-0061).
+     * Create or post a manual inventory adjustment
+     * Applies a signed manual adjustment to one bin\&#39;s stock, or files it for approval when it crosses the tenant\&#39;s manual-adjustment threshold. Use this tool for the interactive Adjust action; do not use it for bulk loads, and use bulkIngestInventoryAdjustments or bulkIngestOpeningStock instead. Preconditions: the bin or site must exist and be ACTIVE, and a LOT- or SERIAL-tracked SKU is not supported. Required inputs: productSku, locationId (UUID), a non-zero quantity and reasonCode, with unitOfMeasure optional. For this endpoint the reasonCode must be FOUND_STOCK with a positive quantity or THEFT_OR_LOSS with a negative one, and a negative quantity may not take the bin below zero. The adjustment is costed with the method-derived unit cost and evaluated against the tenant\&#39;s MANUAL_ADJUSTMENT tier-1 threshold: below it the stock posts immediately and the response carries ledgerEntryId, while at or above it, or when the product is uncosted or the tenant has no row, the response carries pendingApproval&#x3D;true and the request id and nothing posts until approveAdjustmentRequest runs. Emits an INVENTORY_ADJUSTMENT_REQUEST_CREATE event, and an immediate post writes ADJUSTMENT_IN or ADJUSTMENT_OUT with the requester as user and emits inventory.adjustment.posted. Returns 201 with the request and either ledgerEntryId or pendingApproval&#x3D;true, 400 with field errors, 403 with LOCATION_SCOPE_DENIED, 404 for an unknown location and 422 for an inactive location, a tracked SKU, a fractional quantity or insufficient stock.
      * @endpoint post /v1/inventory/adjustments
-     * @param createAdjustmentRequestDto The proposed correction: SKU, location, signed quantity and the reason code justifying it.
+     * @param createAdjustmentRequestDto The correction: SKU, location, signed quantity and the reason code justifying it.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -173,7 +181,7 @@ export class StockMovementsService extends BaseService {
 
     /**
      * Record a stock movement
-     * Records a directional stock movement in the inventory ledger: RECEIVE posts GOODS_RECEIPT, PUT_AWAY posts PUTAWAY, PICK and ISSUE post GOODS_ISSUE, RETURN posts RETURN_TO_STOCK, and TRANSFER posts a paired TRANSFER_OUT and TRANSFER_IN. Use this tool for ledger-backed inventory changes; do not use updateInventoryAvailability, which always returns 501, and do not send movementType ADJUST here — quantity corrections go through createAdjustmentRequest and approveAdjustmentRequest. Preconditions: PICK and ISSUE require on-hand at fromLocationId to cover the quantity; TRANSFER is intra-site only — when both ends resolve to different sites the movement must go through a transfer order so in-transit stock is represented. Required inputs: productSku, fromLocationId (UUID), movementType and a positive quantity; toLocationId is required for TRANSFER, while unitOfMeasure and sourceTransactionId are optional. Emits an INVENTORY_STOCK_MOVEMENT_CREATE event and posts the entries through the ledger funnel, which updates the stock summary that availability reads. A RECEIVE carries no document cost: it enters at the product\&#39;s current average cost and leaves that average unchanged, so it never gives an uncosted product a cost — receive purchased stock with createGoodsReceipt or a receiving session instead, which price it from the purchase order. Returns 201 with no body, 422 with INSUFFICIENT_STOCK when a PICK or ISSUE exceeds on-hand at the source, 422 with CROSS_SITE_TRANSFER_REQUIRES_ORDER for a cross-site TRANSFER, and 400 when toLocationId is missing for TRANSFER or movementType is ADJUST.
+     * Records a directional stock movement in the inventory ledger: RECEIVE posts GOODS_RECEIPT, PUT_AWAY posts PUTAWAY, PICK and ISSUE post GOODS_ISSUE, RETURN posts RETURN_TO_STOCK, and TRANSFER posts a paired TRANSFER_OUT and TRANSFER_IN. Use this tool for ledger-backed inventory changes; for an ordinary bin-to-bin move use moveStock, which names both bins and a reason and returns the created ledger entry ids. Do not send movementType ADJUST here — quantity corrections go through the adjustment endpoints. Preconditions: PICK and ISSUE require on-hand at fromLocationId to cover the quantity; TRANSFER is intra-site only — when both ends resolve to different sites the movement must go through a transfer order so in-transit stock is represented. Required inputs: productSku, fromLocationId (UUID), movementType and a positive quantity; toLocationId is required for TRANSFER, while unitOfMeasure and sourceTransactionId are optional. Emits an INVENTORY_STOCK_MOVEMENT_CREATE event and posts the entries through the ledger funnel, which updates the stock summary that availability reads. Returns 201 with no body, 422 with INSUFFICIENT_STOCK when a PICK or ISSUE exceeds on-hand at the source, 422 with CROSS_SITE_TRANSFER_REQUIRES_ORDER for a cross-site TRANSFER, and 400 when toLocationId is missing for TRANSFER or movementType is ADJUST.
      * @endpoint post /v1/inventory/stock-movements
      * @param recordMovementRequest The directional movement to post: SKU, source location, movement type and quantity, plus a destination for transfers.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -231,6 +239,150 @@ export class StockMovementsService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: recordMovementRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Move stock between two bins of one site
+     * Moves a quantity of one product from one bin to another bin of the same site, posting a paired TRANSFER_OUT/TRANSFER_IN and returning both ledger entry ids plus the generated moveId that both rows carry as sourceTransactionId. Use this tool for the header, stock-list and part-panel Move action; do not use createStockMovement for bin-to-bin moves, which is for the other directional movement types instead, and use a transfer order when the two bins belong to different sites. Preconditions: both bins and their sites must be ACTIVE; the quantity must be 1 or more; the source bin must hold that much on hand, and the move may not take it below its located HARD allocated quantity. Required inputs: productSku, fromLocationId, toLocationId, quantity and reasonCode, where the reason is PUTAWAY_TO_HOME_BIN, CONSOLIDATE_BINS, MOVE_TO_VAN_STOCK or DAMAGED_TO_QUARANTINE; notes are optional and never logged. A STAGING destination is always refused; a QUARANTINE destination is refused unless the reason is DAMAGED_TO_QUARANTINE, which also requires a QUARANTINE destination, and MOVE_TO_VAN_STOCK requires a TRUCK destination. Emits an INVENTORY_MOVE_CREATE event, and both ledger rows record the reason code and the authenticated actor (never the body). Returns 201 with the move and ledger entry ids, 400 with field errors for a bad body or the same source and destination, 404 for an unknown bin, 403 with LOCATION_SCOPE_DENIED when a bin is outside the caller\&#39;s reach, and 422 with STORAGE_LOCATION_INACTIVE, MOVE_BELOW_ALLOCATED, INSUFFICIENT_STOCK, CROSS_SITE_TRANSFER_REQUIRES_ORDER, STORAGE_LOCATION_CLASS_NOT_ALLOWED or MOVE_REASON_DESTINATION_MISMATCH.
+     * @endpoint post /v1/inventory/moves
+     * @param moveStockRequest The bins, quantity and reason of the move
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public moveStock(moveStockRequest: MoveStockRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MoveStockResponse>;
+    public moveStock(moveStockRequest: MoveStockRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MoveStockResponse>>;
+    public moveStock(moveStockRequest: MoveStockRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MoveStockResponse>>;
+    public moveStock(moveStockRequest: MoveStockRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (moveStockRequest === null || moveStockRequest === undefined) {
+            throw new Error('Required parameter moveStockRequest was null or undefined when calling moveStock.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/inventory/moves`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<MoveStockResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: moveStockRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Reject a pending adjustment request
+     * Rejects (or withdraws) a PENDING adjustment request with a required reason, writing no ledger entry. Use this tool to decline a request that should not post; do not use approveAdjustmentRequest for that, because it posts stock instead. Preconditions: the request must exist, be PENDING and lie within the caller\&#39;s location scope. Required inputs: adjustmentRequestId (UUID) path parameter and a non-blank rejectionReason of at most 500 characters, and the rejector comes from the security context, never the body. Emits an INVENTORY_ADJUSTMENT_REQUEST_REJECT event and records REJECTED with the rejector, time and reason. Returns 200 with the rejected request, 403 with LOCATION_SCOPE_DENIED or FORBIDDEN, 404 for an unknown id and 409 with ADJUSTMENT_NOT_PENDING when the request is no longer pending.
+     * @endpoint post /v1/inventory/adjustments/{adjustmentRequestId}/reject
+     * @param adjustmentRequestId
+     * @param rejectAdjustmentRequest The rejection reason; required and at most 500 characters.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public rejectAdjustmentRequest(adjustmentRequestId: string, rejectAdjustmentRequest: RejectAdjustmentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AdjustmentRequestResponse>;
+    public rejectAdjustmentRequest(adjustmentRequestId: string, rejectAdjustmentRequest: RejectAdjustmentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AdjustmentRequestResponse>>;
+    public rejectAdjustmentRequest(adjustmentRequestId: string, rejectAdjustmentRequest: RejectAdjustmentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AdjustmentRequestResponse>>;
+    public rejectAdjustmentRequest(adjustmentRequestId: string, rejectAdjustmentRequest: RejectAdjustmentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (adjustmentRequestId === null || adjustmentRequestId === undefined) {
+            throw new Error('Required parameter adjustmentRequestId was null or undefined when calling rejectAdjustmentRequest.');
+        }
+        if (rejectAdjustmentRequest === null || rejectAdjustmentRequest === undefined) {
+            throw new Error('Required parameter rejectAdjustmentRequest was null or undefined when calling rejectAdjustmentRequest.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/inventory/adjustments/${this.configuration.encodeParam({name: "adjustmentRequestId", value: adjustmentRequestId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/reject`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<AdjustmentRequestResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: rejectAdjustmentRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
