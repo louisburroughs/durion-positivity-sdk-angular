@@ -41,18 +41,19 @@ export class OrderCancellationService extends BaseService {
 
     /**
      * Cancel a Sales Order
-     * Runs the order cancellation saga: transitions the order through CANCEL_REQUESTED, cancels a linked workorder at pos-workexec when workOrderId is supplied, reverses every net-settled payment as refunds through pos-invoice, and finishes at CANCELLED, publishing an order-cancelled fact. Use this tool for DRAFT or QUOTED orders and to re-drive CANCEL_FAILED_WORKEXEC or CANCEL_FAILED_BILLING orders from the start; do not use voidOrder, which is the terminal void for an unsettled PENDING_PAYMENT order, and do not use retryOrderCancellation, which re-runs only the billing leg from CANCEL_FAILED_BILLING. Preconditions: the order must be DRAFT, QUOTED, CANCEL_FAILED_WORKEXEC or CANCEL_FAILED_BILLING, and settled payments require an invoice reference to refund against. Required inputs: cancellationReason; workOrderId is optional and triggers the workorder-cancellation leg, and idempotencyKey is optional (one is generated when absent) — replaying it against an already CANCELLED order returns the original result. Emits an ORDER_CART_CANCEL_REQUEST event; refunds are idempotent per payment intent at pos-invoice, and a failed leg parks the order at CANCEL_FAILED_WORKEXEC or CANCEL_FAILED_BILLING. Returns 201 when the cancellation completes (or already had for the replayed key), 404 when the order does not exist, 409 when the current status is not cancellable or work execution reports the workorder non-cancellable, and 500 when a workorder or payment-reversal leg fails downstream — the order is still parked at CANCEL_FAILED_WORKEXEC or CANCEL_FAILED_BILLING either way, so the retry endpoint applies.
+     * Runs the order cancellation saga: transitions the order through CANCEL_REQUESTED, cancels a linked workorder at pos-workexec when workOrderId is supplied, reverses every net-settled payment as refunds through pos-invoice, and finishes at CANCELLED, publishing an order-cancelled fact. Use this tool for DRAFT or QUOTED orders and to re-drive CANCEL_FAILED_WORKEXEC or CANCEL_FAILED_BILLING orders from the start; do not use voidOrder, which is the terminal void for an unsettled PENDING_PAYMENT order, and do not use retryOrderCancellation, which re-runs only the billing leg from CANCEL_FAILED_BILLING. Preconditions: the order must be DRAFT, QUOTED, CANCEL_FAILED_WORKEXEC or CANCEL_FAILED_BILLING, and settled payments require an invoice reference to refund against. Required inputs: cancellationReason; workOrderId is optional and triggers the workorder-cancellation leg, and the optional Idempotency-Key header (a UUID) makes the drive replay-safe: the same key with the same body returns the original result. Refund and workorder-cancel references are derived from the order id, so a re-drive or a retry never refunds the same payment intent twice. Emits an ORDER_CART_CANCEL_REQUEST event; refunds are idempotent per payment intent at pos-invoice, and a failed leg parks the order at CANCEL_FAILED_WORKEXEC or CANCEL_FAILED_BILLING. Returns 201 when the cancellation completes, 400 when the Idempotency-Key is not a UUID (VALIDATION_ERROR), 404 when the order does not exist, 409 when the current status is not cancellable (or IDEMPOTENCY_CONFLICT when the key was used with a different request), and 500 when a workorder or payment-reversal leg fails downstream — the order is still parked at CANCEL_FAILED_WORKEXEC or CANCEL_FAILED_BILLING either way, so the retry endpoint applies.
      * @endpoint post /v1/orders/carts/{orderId}/cancel
      * @param orderId
-     * @param cancelOrderRequest Cancellation context: the business reason plus optional workorder linkage and replay key.
+     * @param cancelOrderRequest Cancellation context: the business reason plus optional workorder linkage.
+     * @param idempotencyKey Optional client idempotency key; a replay with the same key, order and body returns the original result with Idempotency-Replayed: true
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public cancelOrder(orderId: string, cancelOrderRequest: CancelOrderRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CancellationResponse>;
-    public cancelOrder(orderId: string, cancelOrderRequest: CancelOrderRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CancellationResponse>>;
-    public cancelOrder(orderId: string, cancelOrderRequest: CancelOrderRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CancellationResponse>>;
-    public cancelOrder(orderId: string, cancelOrderRequest: CancelOrderRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public cancelOrder(orderId: string, cancelOrderRequest: CancelOrderRequest, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CancellationResponse>;
+    public cancelOrder(orderId: string, cancelOrderRequest: CancelOrderRequest, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CancellationResponse>>;
+    public cancelOrder(orderId: string, cancelOrderRequest: CancelOrderRequest, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CancellationResponse>>;
+    public cancelOrder(orderId: string, cancelOrderRequest: CancelOrderRequest, idempotencyKey?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (orderId === null || orderId === undefined) {
             throw new Error('Required parameter orderId was null or undefined when calling cancelOrder.');
         }
@@ -61,6 +62,9 @@ export class OrderCancellationService extends BaseService {
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
@@ -115,35 +119,20 @@ export class OrderCancellationService extends BaseService {
 
     /**
      * Retry a Failed Cancellation
-     * Retries the billing leg of a failed order cancellation, re-running the settled-payment reversals and completing the transition to CANCELLED. Use this tool after a cancellation parked at CANCEL_FAILED_BILLING; do not use cancelOrder, which starts the saga from the beginning and re-checks the workorder leg as well. Preconditions: the order must be in CANCEL_FAILED_BILLING. Required inputs: orderId (UUID) as a path parameter and idempotencyKey as a query parameter — the original cancellation key, from which per-intent refund idempotency at pos-invoice is derived. Emits an ORDER_CART_CANCEL_RETRY event; a retry that fails again transitions the order to CANCEL_REQUIRES_MANUAL_REVIEW and publishes a review-required fact instead of looping. Returns 200 when the cancellation completes on retry, 404 when the order does not exist, 409 when the order is not in CANCEL_FAILED_BILLING, and 500 when the reversal fails again — which also parks the order at CANCEL_REQUIRES_MANUAL_REVIEW.
+     * Retries the billing leg of a failed order cancellation, re-running the settled-payment reversals and completing the transition to CANCELLED. Use this tool after a cancellation parked at CANCEL_FAILED_BILLING; do not use cancelOrder, which starts the saga from the beginning and re-checks the workorder leg as well. Preconditions: the order must be in CANCEL_FAILED_BILLING. Required inputs: orderId (UUID) as a path parameter; there is no body and no caller key — the per-intent refund reference is derived from the order id, so the retry cannot refund a payment intent twice. Emits an ORDER_CART_CANCEL_RETRY event; a retry that fails again transitions the order to CANCEL_REQUIRES_MANUAL_REVIEW and publishes a review-required fact instead of looping. Returns 200 when the cancellation completes on retry, 404 when the order does not exist, 409 when the order is not in CANCEL_FAILED_BILLING, and 500 when the reversal fails again — which also parks the order at CANCEL_REQUIRES_MANUAL_REVIEW.
      * @endpoint post /v1/orders/carts/{orderId}/cancel/retry
      * @param orderId
-     * @param idempotencyKey
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public retryOrderCancellation(orderId: string, idempotencyKey: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CancellationResponse>;
-    public retryOrderCancellation(orderId: string, idempotencyKey: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CancellationResponse>>;
-    public retryOrderCancellation(orderId: string, idempotencyKey: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CancellationResponse>>;
-    public retryOrderCancellation(orderId: string, idempotencyKey: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public retryOrderCancellation(orderId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CancellationResponse>;
+    public retryOrderCancellation(orderId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CancellationResponse>>;
+    public retryOrderCancellation(orderId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CancellationResponse>>;
+    public retryOrderCancellation(orderId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (orderId === null || orderId === undefined) {
             throw new Error('Required parameter orderId was null or undefined when calling retryOrderCancellation.');
         }
-        if (idempotencyKey === null || idempotencyKey === undefined) {
-            throw new Error('Required parameter idempotencyKey was null or undefined when calling retryOrderCancellation.');
-        }
-
-        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
-
-        localVarQueryParameters = this.addToHttpParams(
-            localVarQueryParameters,
-            'idempotencyKey',
-            <any>idempotencyKey,
-            QueryParamStyle.Form,
-            true,
-        );
-
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -178,7 +167,6 @@ export class OrderCancellationService extends BaseService {
         return this.httpClient.request<CancellationResponse>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

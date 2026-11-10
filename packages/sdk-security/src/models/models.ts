@@ -45,6 +45,7 @@ export * from './permissionHolders';
 export * from './permissionHoldersResponse';
 export * from './permissionRegistrationRequest';
 export * from './permissionRegistrationResponse';
+export * from './policyBlocker';
 export * from './pricingRuleTraceEntryDto';
 export * from './pricingRuleTraceEntryRequest';
 export * from './pricingSnapshotCreatedResponse';

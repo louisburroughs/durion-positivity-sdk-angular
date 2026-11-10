@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { PolicyBlocker } from './policyBlocker';
 import { Conflict } from './conflict';
 import { SuggestedAlternative } from './suggestedAlternative';
 import { FieldError } from './fieldError';
@@ -16,6 +17,10 @@ import { FieldError } from './fieldError';
  * Standard error response envelope returned by all Durion backend APIs
  */
 export interface ApiError {
+    /**
+     * Itemized blockers behind a 422 refused by documented domain policy (ADR-0017 §3, amended 2026-11-09). Present only on such a 422, never together with fieldErrors or conflicts/suggestedAlternatives, and omitted entirely when there are no items (never an empty array). ApiError.withBlockers(...) is the only supported way to populate this field: it enforces those rules and nulls the sibling fields, while the record\'s constructors apply no validation to it (the convenience constructors always leave it null)
+     */
+    blockers?: Array<PolicyBlocker>;
     /**
      * Machine-readable error code
      */

@@ -50,10 +50,19 @@ export interface CompletionPreconditionsResponse {
      */
     unresolvedApprovalGatedChangeRequests?: number;
     /**
+     * What the workorder is waiting on besides its own items; CUSTOMER while a required customer completion sign-off is outstanding (#3201). Null when it waits on nothing outside the workorder
+     */
+    waitingOn?: CompletionPreconditionsResponseWaitingOnEnum;
+    /**
      * Workorder identifier
      */
     workorderId: string;
 }
+export enum CompletionPreconditionsResponseWaitingOnEnum {
+    Customer = 'CUSTOMER'
+};
+
+
 
 function isOptionalCompletionPreconditionsResponsePropertyOfType(
     value: Record<string, unknown>,
@@ -94,7 +103,7 @@ export function instanceOfCompletionPreconditionsResponse(value: object): value 
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCompletionPreconditionsResponsePropertyNames('canComplete', 'currentStatus', 'workorderId', );
-    const optionalStringProperties = createCompletionPreconditionsResponseOptionalProperties({ name: 'currentStatus', nullable: false }, { name: 'workorderId', nullable: false }, );
+    const optionalStringProperties = createCompletionPreconditionsResponseOptionalProperties({ name: 'currentStatus', nullable: false }, { name: 'waitingOn', nullable: false }, { name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createCompletionPreconditionsResponseOptionalProperties({ name: 'nonTerminalPartItems', nullable: false }, { name: 'nonTerminalServiceItems', nullable: false }, { name: 'unresolvedApprovalGatedChangeRequests', nullable: false }, );
     const optionalBooleanProperties = createCompletionPreconditionsResponseOptionalProperties({ name: 'canComplete', nullable: false }, { name: 'emergencyDenialAcknowledged', nullable: false }, { name: 'hasBillableItems', nullable: false }, );
 

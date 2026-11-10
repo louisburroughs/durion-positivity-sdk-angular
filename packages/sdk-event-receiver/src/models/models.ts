@@ -7,4 +7,5 @@ export * from './eventTypeRequest';
 export * from './eventTypeResponse';
 export * from './fieldError';
 export * from './pagedResponseEmittedEventResponse';
+export * from './policyBlocker';
 export * from './suggestedAlternative';

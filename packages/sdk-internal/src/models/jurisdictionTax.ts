@@ -38,6 +38,10 @@ export interface JurisdictionTax {
      */
     jurisdictionType: JurisdictionTaxJurisdictionTypeEnum;
     /**
+     * Display label of this row\'s tax type from the country profile; null when the profile declares none — never the code
+     */
+    label?: string | null;
+    /**
      * Tax rate applied for this jurisdiction, expressed as a decimal fraction (e.g. 0.0725 for 7.25%)
      */
     rate: number;
@@ -104,7 +108,7 @@ export function instanceOfJurisdictionTax(value: object): value is JurisdictionT
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createJurisdictionTaxPropertyNames('amount', 'code', 'jurisdictionType', 'rate', );
-    const optionalStringProperties = createJurisdictionTaxOptionalProperties({ name: 'code', nullable: false }, { name: 'exemptionReasonCode', nullable: false }, { name: 'jurisdictionType', nullable: false }, { name: 'taxType', nullable: true }, );
+    const optionalStringProperties = createJurisdictionTaxOptionalProperties({ name: 'code', nullable: false }, { name: 'exemptionReasonCode', nullable: false }, { name: 'jurisdictionType', nullable: false }, { name: 'label', nullable: true }, { name: 'taxType', nullable: true }, );
     const optionalNumberProperties = createJurisdictionTaxOptionalProperties({ name: 'amount', nullable: false }, { name: 'rate', nullable: false }, );
     const optionalBooleanProperties = createJurisdictionTaxOptionalProperties({ name: 'exempt', nullable: false }, { name: 'inputTaxRecoverable', nullable: true }, );
 

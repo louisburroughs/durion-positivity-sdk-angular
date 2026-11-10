@@ -46,6 +46,10 @@ export interface InventoryLedgerEntryDto {
      */
     notes?: string;
     /**
+     * Business time the movement happened, when the posting path knows one: a picked-item consume replayed from an offline device carries the time the part was used. Never later than timestamp; null for postings that carry no business time
+     */
+    occurredAt?: string;
+    /**
      * Running quantity after this entry was applied
      */
     quantityAfter: number;
@@ -53,6 +57,10 @@ export interface InventoryLedgerEntryDto {
      * Reason code explaining the entry
      */
     reasonCode?: string;
+    /**
+     * How occurredAt relates to timestamp: OFFLINE_REPLAY when the business time is more than two minutes before the posting time; null otherwise
+     */
+    source?: string;
     /**
      * Identifier of the originating source transaction
      */
@@ -62,7 +70,7 @@ export interface InventoryLedgerEntryDto {
      */
     stockItemId: string;
     /**
-     * Business timestamp of the inventory event
+     * Posting timestamp of the inventory event: when this module applied the movement. Ordering and the running quantity are keyed to this instant, never to occurredAt
      */
     timestamp: string;
     /**
@@ -160,7 +168,7 @@ export function instanceOfInventoryLedgerEntryDto(value: object): value is Inven
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createInventoryLedgerEntryDtoPropertyNames('changeInQuantity', 'eventType', 'ledgerEntryId', 'quantityAfter', 'stockItemId', 'timestamp', );
-    const optionalStringProperties = createInventoryLedgerEntryDtoOptionalProperties({ name: 'adjustmentId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'eventType', nullable: false }, { name: 'fromLocationId', nullable: false }, { name: 'ledgerEntryId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'notes', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'sourceTransactionId', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'timestamp', nullable: false }, { name: 'toLocationId', nullable: false }, { name: 'transactionUserId', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderLineId', nullable: false }, );
+    const optionalStringProperties = createInventoryLedgerEntryDtoOptionalProperties({ name: 'adjustmentId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'eventType', nullable: false }, { name: 'fromLocationId', nullable: false }, { name: 'ledgerEntryId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'notes', nullable: false }, { name: 'occurredAt', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'source', nullable: false }, { name: 'sourceTransactionId', nullable: false }, { name: 'stockItemId', nullable: false }, { name: 'timestamp', nullable: false }, { name: 'toLocationId', nullable: false }, { name: 'transactionUserId', nullable: false }, { name: 'unitOfMeasure', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderLineId', nullable: false }, );
     const optionalNumberProperties = createInventoryLedgerEntryDtoOptionalProperties({ name: 'changeInQuantity', nullable: false }, { name: 'quantityAfter', nullable: false }, { name: 'unitCost', nullable: false }, );
     const optionalBooleanProperties = createInventoryLedgerEntryDtoOptionalProperties();
 

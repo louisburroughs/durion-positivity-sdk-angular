@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { CommunicationConsentInput } from './communicationConsentInput';
 import { EmailInput } from './emailInput';
 import { PhoneInput } from './phoneInput';
 
@@ -15,6 +16,7 @@ import { PhoneInput } from './phoneInput';
  * Request to create an individual person record
  */
 export interface CreatePersonRequest {
+    communicationConsent?: CommunicationConsentInput;
     /**
      * Customer number to assign to this person, if the caller already has one. It is the person\'s business key: a second create quoting a number already in use is refused as a duplicate rather than making a second party for the same customer. Omit it and the service generates one.
      */

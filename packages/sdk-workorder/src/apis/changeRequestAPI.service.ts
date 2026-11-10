@@ -315,18 +315,18 @@ export class ChangeRequestAPIService extends BaseService {
 
     /**
      * Create Change Request for Additional Work
-     * Creates a change request for work beyond the authorized scope, placing it in AWAITING_ADVISOR_REVIEW with its service and part items marked PENDING_APPROVAL. Use this tool when a technician finds additional work mid-job; do not use approveChangeRequest or declineChangeRequest, which are the advisor\&#39;s decision steps on an existing request. Preconditions: the workorder must exist and be in WORK_IN_PROGRESS status, and emergency exception requests must carry the required emergency documentation on their items. Required inputs: workorderId (UUID) as a path parameter, a non-blank description, and at least one entry in services or parts; an Idempotency-Key header is recommended — a repeated key returns the originally created request instead of a duplicate. Emits a WORKORDER_CHANGE_REQUEST_CREATE event and renders a supplemental estimate PDF via the documents service when items are present. Returns 400 when the description or items are missing, the workorder status is not WORK_IN_PROGRESS, or emergency documentation is incomplete, and 404 when the workorder does not exist.
+     * Creates a change request for work beyond the authorized scope, placing it in AWAITING_ADVISOR_REVIEW with its service and part items marked PENDING_APPROVAL. Use this tool when a technician finds additional work mid-job; do not use approveChangeRequest or declineChangeRequest, which are the advisor\&#39;s decision steps on an existing request. Preconditions: the workorder must exist and be in WORK_IN_PROGRESS status, and emergency exception requests must carry the required emergency documentation on their items. Required inputs: workorderId (UUID) as a path parameter, a non-blank description, and at least one entry in services or parts; an optional Idempotency-Key header (a UUID) makes a replay return the originally created request instead of a duplicate. Emits a WORKORDER_CHANGE_REQUEST_CREATE event and renders a supplemental estimate PDF via the documents service when items are present. Returns 400 when the description or items are missing, the workorder status is not WORK_IN_PROGRESS, or emergency documentation is incomplete, and 404 when the workorder does not exist.
      * @endpoint post /v1/workorders/{workorderId}/changeRequests
      * @param workorderId ID of the work order
      * @param createChangeRequestDTO Requested additional work: description plus the service and part items needing approval.
-     * @param idempotencyKey Optional idempotency key to prevent duplicate creation (recommended for retries)
+     * @param idempotencyKey Optional idempotency key (a UUID) to prevent duplicate creation (recommended for retries)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createChangeRequest(workorderId: string, createChangeRequestDTO: CreateChangeRequestDTO, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ChangeRequestResponse>;
-    public createChangeRequest(workorderId: string, createChangeRequestDTO: CreateChangeRequestDTO, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ChangeRequestResponse>>;
-    public createChangeRequest(workorderId: string, createChangeRequestDTO: CreateChangeRequestDTO, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ChangeRequestResponse>>;
+    public createChangeRequest(workorderId: string, createChangeRequestDTO: CreateChangeRequestDTO, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
+    public createChangeRequest(workorderId: string, createChangeRequestDTO: CreateChangeRequestDTO, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
+    public createChangeRequest(workorderId: string, createChangeRequestDTO: CreateChangeRequestDTO, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
     public createChangeRequest(workorderId: string, createChangeRequestDTO: CreateChangeRequestDTO, idempotencyKey?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (workorderId === null || workorderId === undefined) {
             throw new Error('Required parameter workorderId was null or undefined when calling createChangeRequest.');
@@ -377,7 +377,7 @@ export class ChangeRequestAPIService extends BaseService {
 
         let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/changeRequests`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<ChangeRequestResponse>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<object>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: createChangeRequestDTO,

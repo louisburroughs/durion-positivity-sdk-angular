@@ -53,6 +53,14 @@ export interface ServicePositionAssignmentRecord {
      * Kind of position
      */
     resourceType?: ServicePositionAssignmentRecordResourceTypeEnum;
+    /**
+     * End of the half-open slot; null means unbounded
+     */
+    slotEnd?: string;
+    /**
+     * Start of the half-open slot this placement was made for; null for HOLD and legacy rows
+     */
+    slotStart?: string;
 }
 export enum ServicePositionAssignmentRecordResourceTypeEnum {
     Bay = 'BAY',
@@ -101,7 +109,7 @@ export function instanceOfServicePositionAssignmentRecord(value: object): value 
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createServicePositionAssignmentRecordPropertyNames();
-    const optionalStringProperties = createServicePositionAssignmentRecordOptionalProperties({ name: 'assignedAt', nullable: false }, { name: 'assignedBy', nullable: false }, { name: 'locationId', nullable: false }, { name: 'reason', nullable: false }, { name: 'releasedAt', nullable: false }, { name: 'releasedBy', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'resourceType', nullable: false }, );
+    const optionalStringProperties = createServicePositionAssignmentRecordOptionalProperties({ name: 'assignedAt', nullable: false }, { name: 'assignedBy', nullable: false }, { name: 'locationId', nullable: false }, { name: 'reason', nullable: false }, { name: 'releasedAt', nullable: false }, { name: 'releasedBy', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'resourceType', nullable: false }, { name: 'slotEnd', nullable: false }, { name: 'slotStart', nullable: false }, );
     const optionalNumberProperties = createServicePositionAssignmentRecordOptionalProperties({ name: 'id', nullable: false }, );
     const optionalBooleanProperties = createServicePositionAssignmentRecordOptionalProperties({ name: 'current', nullable: false }, );
 

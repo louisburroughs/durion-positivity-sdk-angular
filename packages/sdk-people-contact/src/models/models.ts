@@ -8,6 +8,7 @@ export * from './person';
 export * from './personFactReplayResultDto';
 export * from './personResponse';
 export * from './personRoleAssignmentRequest';
+export * from './policyBlocker';
 export * from './postalAddressDto';
 export * from './resolvePersonRequest';
 export * from './resolvePersonResponse';

@@ -21,6 +21,8 @@ import { ApiError } from '../models/apiError';
 // @ts-ignore
 import { CountEntryResponse } from '../models/countEntryResponse';
 // @ts-ignore
+import { CycleCountQueueResponse } from '../models/cycleCountQueueResponse';
+// @ts-ignore
 import { CycleCountTaskResponse } from '../models/cycleCountTaskResponse';
 // @ts-ignore
 import { InterferingMovementResponse } from '../models/interferingMovementResponse';
@@ -39,6 +41,98 @@ export class CycleCountQueryService extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
+    }
+
+    /**
+     * Get a site\&#39;s counts queue
+     * Returns one cursor page of the counts due at a site plus the variances waiting for approval there — the Counts queue screen. Use this tool for that screen; do not use listCycleCountPlans, which lists plans regardless of due date, or listPendingCycleCountAdjustments, which lists variances across every site the caller covers. Preconditions: none beyond the caller\&#39;s site reach; everything is computed from the current rows — signing nothing, posting nothing and changing no on-hand. The dueCounts section holds one row per plan in PLANNED or STARTED whose due_date (else scheduled_date) is on or before today in the site\&#39;s time zone, and one row per open ad-hoc task (no plan, ASSIGNED) whose bin sits under the site; a plan row carries its zones, the bins of its ASSIGNED tasks with their count and the generating schedule\&#39;s skuCategory as class (null when it has none; no ABC class exists in this module), while an ad-hoc row carries its single bin, no zone and no class, and rows are overdue first, then by due date, kind and id. The variances section lists the PENDING_APPROVAL adjustments whose resolved location is the site or a bin beneath it, with the counted, expected and delta quantities, the value (delta x the cost the adjustment already captured, signed) and its required approval tier; it is omitted, with variancesVisible false, when the caller holds neither inventory:adjustment:view nor inventory:adjustment:approve or when the site lies outside the location reach attached to those alternates (a global reach covers every site), and FAILED adjustments stay on the list-by-status endpoint. Required inputs: locationId (the site, a UUID) plus optional pageSize (1 to 200, default 50) and pageToken (the previous nextPageToken). No events are emitted and no state changes. Returns 400 when pageSize or pageToken is invalid, and 403 with LOCATION_SCOPE_DENIED when the site is outside the caller\&#39;s reach (ADR-0061).
+     * @endpoint get /v1/inventory/cycleCount/queue
+     * @param locationId Site whose queue is read (the site, not a bin)
+     * @param pageSize Page width, 1 to 200 (default 50)
+     * @param pageToken nextPageToken of the previous page; omit for the first page
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getCycleCountQueue(locationId: string, pageSize?: number, pageToken?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CycleCountQueueResponse>;
+    public getCycleCountQueue(locationId: string, pageSize?: number, pageToken?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CycleCountQueueResponse>>;
+    public getCycleCountQueue(locationId: string, pageSize?: number, pageToken?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CycleCountQueueResponse>>;
+    public getCycleCountQueue(locationId: string, pageSize?: number, pageToken?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (locationId === null || locationId === undefined) {
+            throw new Error('Required parameter locationId was null or undefined when calling getCycleCountQueue.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'locationId',
+            <any>locationId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'pageSize',
+            <any>pageSize,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'pageToken',
+            <any>pageToken,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/inventory/cycleCount/queue`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<CycleCountQueueResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
     }
 
     /**

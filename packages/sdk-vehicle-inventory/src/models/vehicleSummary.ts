@@ -22,6 +22,10 @@ export interface VehicleSummary {
      */
     licensePlate?: string;
     /**
+     * Jurisdiction that issued the license plate, as stored (CAP:663, #3286)
+     */
+    licensePlateJurisdiction?: string;
+    /**
      * Manufacturer of the vehicle
      */
     make?: string;
@@ -86,7 +90,7 @@ export function instanceOfVehicleSummary(value: object): value is VehicleSummary
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createVehicleSummaryPropertyNames('vehicleId', 'vin', );
-    const optionalStringProperties = createVehicleSummaryOptionalProperties({ name: 'description', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'unitNumber', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'vin', nullable: false }, );
+    const optionalStringProperties = createVehicleSummaryOptionalProperties({ name: 'description', nullable: false }, { name: 'licensePlate', nullable: false }, { name: 'licensePlateJurisdiction', nullable: false }, { name: 'make', nullable: false }, { name: 'model', nullable: false }, { name: 'unitNumber', nullable: false }, { name: 'vehicleId', nullable: false }, { name: 'vin', nullable: false }, );
     const optionalNumberProperties = createVehicleSummaryOptionalProperties({ name: 'year', nullable: false }, );
     const optionalBooleanProperties = createVehicleSummaryOptionalProperties();
 

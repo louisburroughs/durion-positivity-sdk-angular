@@ -63,7 +63,7 @@ export interface EmployeeSummaryDto {
     /**
      * pos-image identifier of the employee\'s profile photo (durion#3092). This key is absent (not null) unless `include=PHOTO` was requested; when it was requested and the employee has no photo the key is present with value null (ADR-0064).
      */
-    photoImageId?: number | null;
+    photoImageId?: string | null;
     /**
      * Gateway path that serves the profile photo bytes, /image/v1/images/id/{photoImageId} (durion#3092). This key is absent (not null) unless `include=PHOTO` was requested; when it was requested and the employee has no photo the key is present with value null (ADR-0064).
      */
@@ -145,8 +145,8 @@ export function instanceOfEmployeeSummaryDto(value: object): value is EmployeeSu
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createEmployeeSummaryDtoPropertyNames('active', 'employeeId', 'personId', );
-    const optionalStringProperties = createEmployeeSummaryDtoOptionalProperties({ name: 'employeeId', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'firstName', nullable: false }, { name: 'hireDate', nullable: false }, { name: 'lastName', nullable: false }, { name: 'personId', nullable: false }, { name: 'photoUrl', nullable: true }, { name: 'preferredName', nullable: false }, { name: 'status', nullable: false }, { name: 'statusEffectiveAt', nullable: false }, { name: 'terminationDate', nullable: false }, { name: 'username', nullable: true }, );
-    const optionalNumberProperties = createEmployeeSummaryDtoOptionalProperties({ name: 'otherLocationCount', nullable: true }, { name: 'photoImageId', nullable: true }, );
+    const optionalStringProperties = createEmployeeSummaryDtoOptionalProperties({ name: 'employeeId', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'firstName', nullable: false }, { name: 'hireDate', nullable: false }, { name: 'lastName', nullable: false }, { name: 'personId', nullable: false }, { name: 'photoImageId', nullable: true }, { name: 'photoUrl', nullable: true }, { name: 'preferredName', nullable: false }, { name: 'status', nullable: false }, { name: 'statusEffectiveAt', nullable: false }, { name: 'terminationDate', nullable: false }, { name: 'username', nullable: true }, );
+    const optionalNumberProperties = createEmployeeSummaryDtoOptionalProperties({ name: 'otherLocationCount', nullable: true }, );
     const optionalBooleanProperties = createEmployeeSummaryDtoOptionalProperties({ name: 'active', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

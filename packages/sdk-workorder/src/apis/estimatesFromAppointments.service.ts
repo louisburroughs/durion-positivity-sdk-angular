@@ -20,8 +20,6 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 import { ApiError } from '../models/apiError';
 // @ts-ignore
 import { CreateEstimateFromAppointmentRequest } from '../models/createEstimateFromAppointmentRequest';
-// @ts-ignore
-import { CreateEstimateFromAppointmentResponse } from '../models/createEstimateFromAppointmentResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -41,22 +39,26 @@ export class EstimatesFromAppointmentsService extends BaseService {
 
     /**
      * Create Draft Estimate From Appointment
-     * Creates a DRAFT estimate seeded from a shop appointment, linking the appointment, customer, vehicle, and location ids onto the new estimate. Use this tool when an appointment arrives and needs an estimate started; do not use createEstimate, which builds an estimate from scratch without an appointment link or idempotency guarantee. Preconditions: the caller must hold workorder:estimate:create, and when that grant is location-scoped the body\&#39;s locationId must be within reach (ADR-0061); the appointment id is not verified against the scheduling service, and an estimate already linked to the appointmentId short-circuits creation. Required inputs: idempotencyKey, appointmentId, customerId, vehicleId, and locationId (all UUIDs); requestedServices is an optional list of free-text service descriptions. Emits a WORKORDER_ESTIMATE_CREATE_FROM_APPOINTMENT event; the call is idempotent on appointmentId, so retries never create duplicates. Returns 201 with created&#x3D;true when a new estimate is persisted, 200 with created&#x3D;false and the existing estimateId when the appointment already has one, and 403 LOCATION_SCOPE_DENIED when the caller\&#39;s location scope does not cover locationId.
+     * Creates a DRAFT estimate seeded from a shop appointment, linking the appointment, customer, vehicle, and location ids onto the new estimate. Use this tool when an appointment arrives and needs an estimate started; do not use createEstimate, which builds an estimate from scratch without an appointment link or idempotency guarantee. Preconditions: the caller must hold workorder:estimate:create, and when that grant is location-scoped the body\&#39;s locationId must be within reach (ADR-0061); the appointment id is not verified against the scheduling service, and an estimate already linked to the appointmentId short-circuits creation. Required inputs: appointmentId, customerId, vehicleId, and locationId (all UUIDs); an Idempotency-Key header makes a retry of the same request answer the original result, and requestedServices is an optional list of free-text service descriptions. Emits a WORKORDER_ESTIMATE_CREATE_FROM_APPOINTMENT event; the call is idempotent on appointmentId, so retries never create duplicates. Returns 201 with created&#x3D;true when a new estimate is persisted, 200 with created&#x3D;false and the existing estimateId when the appointment already has one, 403 LOCATION_SCOPE_DENIED when the caller\&#39;s location scope does not cover locationId, and 409 IDEMPOTENCY_CONFLICT when the key was used for a different request or by a different actor; a malformed Idempotency-Key is a 400 VALIDATION_ERROR naming the header.
      * @endpoint post /v1/workorders/estimates/from-appointment
      * @param createEstimateFromAppointmentRequest Appointment reference and party identifiers used to seed the new draft estimate.
+     * @param idempotencyKey Optional idempotency key (a UUID); a replay returns the original answer
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createEstimateFromAppointment(createEstimateFromAppointmentRequest: CreateEstimateFromAppointmentRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CreateEstimateFromAppointmentResponse>;
-    public createEstimateFromAppointment(createEstimateFromAppointmentRequest: CreateEstimateFromAppointmentRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CreateEstimateFromAppointmentResponse>>;
-    public createEstimateFromAppointment(createEstimateFromAppointmentRequest: CreateEstimateFromAppointmentRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CreateEstimateFromAppointmentResponse>>;
-    public createEstimateFromAppointment(createEstimateFromAppointmentRequest: CreateEstimateFromAppointmentRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createEstimateFromAppointment(createEstimateFromAppointmentRequest: CreateEstimateFromAppointmentRequest, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
+    public createEstimateFromAppointment(createEstimateFromAppointmentRequest: CreateEstimateFromAppointmentRequest, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
+    public createEstimateFromAppointment(createEstimateFromAppointmentRequest: CreateEstimateFromAppointmentRequest, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
+    public createEstimateFromAppointment(createEstimateFromAppointmentRequest: CreateEstimateFromAppointmentRequest, idempotencyKey?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (createEstimateFromAppointmentRequest === null || createEstimateFromAppointmentRequest === undefined) {
             throw new Error('Required parameter createEstimateFromAppointmentRequest was null or undefined when calling createEstimateFromAppointment.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
@@ -95,7 +97,7 @@ export class EstimatesFromAppointmentsService extends BaseService {
 
         let localVarPath = `/v1/workorders/estimates/from-appointment`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<CreateEstimateFromAppointmentResponse>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<object>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: createEstimateFromAppointmentRequest,

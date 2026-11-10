@@ -21,6 +21,10 @@ import { ApiError } from '../models/apiError';
 // @ts-ignore
 import { CountResponse } from '../models/countResponse';
 // @ts-ignore
+import { CreateAdHocCountTasksRequest } from '../models/createAdHocCountTasksRequest';
+// @ts-ignore
+import { CreateAdHocCountTasksResponse } from '../models/createAdHocCountTasksResponse';
+// @ts-ignore
 import { SubmitCountRequest } from '../models/submitCountRequest';
 // @ts-ignore
 import { SubmitRecountRequest } from '../models/submitRecountRequest';
@@ -39,6 +43,76 @@ export class CycleCountOperationsService extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
+    }
+
+    /**
+     * Create ad-hoc cycle count tasks
+     * Creates one cycle count task per requested bin for a SKU, outside any plan, and returns them with 201 — the part panel\&#39;s \&quot;Count now\&quot;. Use this tool to count a bin on demand; do not use generateCycleCountTasks, which creates the tasks a plan schedules, and do not use submitCycleCount, which records the count once the task exists. Preconditions: the SKU and every bin must exist, the bins must be ACTIVE and belong to the named site, and no open task — plan-generated or ad-hoc — may already count the same sku at the same bin. Each task is ASSIGNED with no plan, its bin as bin_location and the on-hand at that bin captured as its expected quantity (the same ledger aggregation plan generation snapshots); auditorId is recorded as given, else the authenticated caller (ADR-0018), so the task appears in the caller\&#39;s handheld work queue, and the count then runs through the existing submit, recount and adjustment-approval endpoints unchanged. Required inputs: locationId (the site, a UUID), sku (the ledger\&#39;s stock_item_id text, normally a SKU code) and storageLocationIds (1 to 50 bins); auditorId is optional. All or nothing: a request that fails any check records no task, and checks run in this order — the SKU and every bin must exist (404), the site must lie within the caller\&#39;s inventory:cycle_count:initiate reach (403), a repeated bin is a 400, a bin that is not ACTIVE is a 422 STORAGE_LOCATION_INACTIVE (DECISION-INVENTORY-009), a bin of another site is a 422 VALIDATION_ERROR (DECISION-INVENTORY-001), and an already-open task for the same sku and bin is a 409 CYCLE_COUNT_TASK_ALREADY_OPEN naming the existing task (referenceId) without echoing quantities. Emits an INVENTORY_CYCLE_COUNT_TASK_CREATE_ADHOC event with no ledger entry posted and no on-hand change, and returns 400 VALIDATION_ERROR for a blank sku, an empty or over-50 bin list or a repeated bin, 403 LOCATION_SCOPE_DENIED outside the caller\&#39;s reach, 404 for an unknown sku or bin, 409 CYCLE_COUNT_TASK_ALREADY_OPEN, and 422 STORAGE_LOCATION_INACTIVE or VALIDATION_ERROR.
+     * @endpoint post /v1/inventory/cycleCount/tasks
+     * @param createAdHocCountTasksRequest The site, stock reference and bins to count, with an optional auditor.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public createAdHocCountTasks(createAdHocCountTasksRequest: CreateAdHocCountTasksRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CreateAdHocCountTasksResponse>;
+    public createAdHocCountTasks(createAdHocCountTasksRequest: CreateAdHocCountTasksRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CreateAdHocCountTasksResponse>>;
+    public createAdHocCountTasks(createAdHocCountTasksRequest: CreateAdHocCountTasksRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CreateAdHocCountTasksResponse>>;
+    public createAdHocCountTasks(createAdHocCountTasksRequest: CreateAdHocCountTasksRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (createAdHocCountTasksRequest === null || createAdHocCountTasksRequest === undefined) {
+            throw new Error('Required parameter createAdHocCountTasksRequest was null or undefined when calling createAdHocCountTasks.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/inventory/cycleCount/tasks`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<CreateAdHocCountTasksResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: createAdHocCountTasksRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
     }
 
     /**

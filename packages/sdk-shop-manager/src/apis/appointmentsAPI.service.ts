@@ -25,6 +25,8 @@ import { AppointmentResponse } from '../models/appointmentResponse';
 // @ts-ignore
 import { CancelAppointmentRequest } from '../models/cancelAppointmentRequest';
 // @ts-ignore
+import { PagedModelAppointmentSummaryResponse } from '../models/pagedModelAppointmentSummaryResponse';
+// @ts-ignore
 import { RescheduleAppointmentRequest } from '../models/rescheduleAppointmentRequest';
 
 // @ts-ignore
@@ -249,6 +251,158 @@ export class AppointmentsAPIService extends BaseService {
         return this.httpClient.request<AppointmentResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List a Customer\&#39;s Appointments
+     * Returns one page of a customer\&#39;s appointments, so the workorder pane can list what the selected customer already has booked instead of asking the advisor for an appointment id. Use this tool when the customer, and possibly the vehicle, is already selected; use getAppointmentById for one appointment\&#39;s full detail and viewSchedule for one location\&#39;s date board grouped into resource lanes. Preconditions: crmCustomerId is mandatory, so the read is always customer-bounded and never an unbounded scan, and the caller must hold appointments:view or shop:schedule:view. Required inputs: crmCustomerId (UUID); optional filters, all combining with AND, are crmVehicleId and locationId (UUIDs), status (repeatable, one or more appointment statuses) and from/to (ISO-8601 instants bounding startAt, from inclusive and to exclusive, the half-open window convention). With no status the list carries only the open statuses — SCHEDULED, CHECKED_IN, WORK_IN_PROGRESS, WAITING_FOR_PARTS, QUALITY_CHECK, READY_FOR_PICKUP and REOPENED, deliberately this explicit list rather than a derived not-terminal predicate — so COMPLETED, CANCELLED and INVOICED appear only when asked for by name and a status added later stays out of the default until it is listed here. Rows are ordered startAt ascending with appointmentId as the tie-break by default, appointmentId is always appended as the final tie-break so offset pages are stable, sort accepts only startAt, endAt, status and appointmentId, size is capped at 100, and each row is the summary — appointmentId, status, locationId, startAt, endAt, crmCustomerId, crmVehicleId, the stored workorderLinkRef and hasUnresolvedConflicts, which is true while one of the appointment\&#39;s recorded scheduling conflicts has no override — rather than getAppointmentById\&#39;s full detail. A caller whose appointments:view or shop:schedule:view grant is location-scoped (ADR-0061) sees only rows at locations within its reach, including descendants of its assigned locations, and an explicit locationId outside that reach is refused, while a caller whose grant is not location-scoped is not narrowed. Emits a SHOPMGR_APPOINTMENT_LIST event and writes nothing; returns 400 VALIDATION_ERROR when crmCustomerId is missing, from is not before to, sort names an unsupported property or size exceeds 100 (a malformed parameter is instead 400 INVALID_REQUEST); returns 403 LOCATION_SCOPE_DENIED when an explicit locationId lies outside a location-scoped grant\&#39;s reach; and returns 200 with an empty page when the customer has no matching appointment.
+     * @endpoint get /v1/appointments
+     * @param crmCustomerId The customer whose appointments are listed; mandatory, so the read never scans the whole table
+     * @param crmVehicleId Narrow to one vehicle of the customer
+     * @param locationId Narrow to one location. A location-scoped caller must have it within reach (403 LOCATION_SCOPE_DENIED otherwise); omit it to list every location in the caller\&#39;s reach
+     * @param status Narrow to one or more statuses, repeated (status&#x3D;SCHEDULED&amp;status&#x3D;REOPENED). Omit it for the open statuses only: SCHEDULED, CHECKED_IN, WORK_IN_PROGRESS, WAITING_FOR_PARTS, QUALITY_CHECK, READY_FOR_PICKUP and REOPENED. COMPLETED, CANCELLED and INVOICED must be asked for by name.
+     * @param from Inclusive lower bound on startAt, as an ISO-8601 instant
+     * @param to Exclusive upper bound on startAt, as an ISO-8601 instant; it must be after from when both are given
+     * @param page Zero-based page index (0..N)
+     * @param size The size of the page to be returned
+     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listAppointments(crmCustomerId: string, crmVehicleId?: string, locationId?: string, status?: Array<'SCHEDULED' | 'CHECKED_IN' | 'WORK_IN_PROGRESS' | 'WAITING_FOR_PARTS' | 'QUALITY_CHECK' | 'READY_FOR_PICKUP' | 'COMPLETED' | 'CANCELLED' | 'INVOICED' | 'REOPENED'>, from?: string, to?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedModelAppointmentSummaryResponse>;
+    public listAppointments(crmCustomerId: string, crmVehicleId?: string, locationId?: string, status?: Array<'SCHEDULED' | 'CHECKED_IN' | 'WORK_IN_PROGRESS' | 'WAITING_FOR_PARTS' | 'QUALITY_CHECK' | 'READY_FOR_PICKUP' | 'COMPLETED' | 'CANCELLED' | 'INVOICED' | 'REOPENED'>, from?: string, to?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedModelAppointmentSummaryResponse>>;
+    public listAppointments(crmCustomerId: string, crmVehicleId?: string, locationId?: string, status?: Array<'SCHEDULED' | 'CHECKED_IN' | 'WORK_IN_PROGRESS' | 'WAITING_FOR_PARTS' | 'QUALITY_CHECK' | 'READY_FOR_PICKUP' | 'COMPLETED' | 'CANCELLED' | 'INVOICED' | 'REOPENED'>, from?: string, to?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedModelAppointmentSummaryResponse>>;
+    public listAppointments(crmCustomerId: string, crmVehicleId?: string, locationId?: string, status?: Array<'SCHEDULED' | 'CHECKED_IN' | 'WORK_IN_PROGRESS' | 'WAITING_FOR_PARTS' | 'QUALITY_CHECK' | 'READY_FOR_PICKUP' | 'COMPLETED' | 'CANCELLED' | 'INVOICED' | 'REOPENED'>, from?: string, to?: string, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (crmCustomerId === null || crmCustomerId === undefined) {
+            throw new Error('Required parameter crmCustomerId was null or undefined when calling listAppointments.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'crmCustomerId',
+            <any>crmCustomerId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'crmVehicleId',
+            <any>crmVehicleId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'locationId',
+            <any>locationId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'status',
+            <any>status,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'from',
+            <any>from,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'to',
+            <any>to,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'sort',
+            <any>sort,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/appointments`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PagedModelAppointmentSummaryResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

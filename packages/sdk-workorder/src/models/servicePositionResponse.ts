@@ -31,6 +31,14 @@ export interface ServicePositionResponse {
      */
     resourceType?: ServicePositionResponseResourceTypeEnum;
     /**
+     * End of the half-open slot; null means unbounded (held until the workorder closes) or, for HOLD, not applicable
+     */
+    slotEnd?: string;
+    /**
+     * Start of the half-open slot the position is booked for; null for HOLD and for a legacy placement that predates slots
+     */
+    slotStart?: string;
+    /**
      * Technician holding the workorder now; null when none is assigned
      */
     technicianId?: string;
@@ -90,7 +98,7 @@ export function instanceOfServicePositionResponse(value: object): value is Servi
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createServicePositionResponsePropertyNames('workorderId', );
-    const optionalStringProperties = createServicePositionResponseOptionalProperties({ name: 'locationId', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'resourceType', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderStatus', nullable: false }, );
+    const optionalStringProperties = createServicePositionResponseOptionalProperties({ name: 'locationId', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'resourceType', nullable: false }, { name: 'slotEnd', nullable: false }, { name: 'slotStart', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderStatus', nullable: false }, );
     const optionalNumberProperties = createServicePositionResponseOptionalProperties();
     const optionalBooleanProperties = createServicePositionResponseOptionalProperties();
 

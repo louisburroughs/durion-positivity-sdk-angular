@@ -45,25 +45,28 @@ export class WorkorderLaborAPIService extends BaseService {
 
     /**
      * Adjust Labor Entry Hours
-     * Manually corrects the hours on a stopped labor entry, preserving the immutable audit record and the authenticated adjusting user. This is a supervisor-only action; supervisors may adjust their own entries. Use this tool to correct a recorded entry after timesheet review; do not use stopLaborSession, which records elapsed time for a running entry. Preconditions: the entry belongs to workorderId and has an endTime; when location scope applies, an entry on a workorder outside the caller\&#39;s reach is denied. Required inputs: workorderId and entryId (UUIDs) in the path and hoursWorked and adjustmentReason in the body; an optional Idempotency-Key replays the first adjustment. Emits workorder.labor-adjustment.recorded.v1 keyed by laborEntryId. Returns 400 when the hours are invalid or the caller has no authenticated user id, 404 when no entry belongs to the named workorder, 409 when the entry has not stopped, and 422 when the adjusted hours do not change. COMPLETED or CANCELLED workorders succeed with a WORKORDER_CLOSED warning.
+     * Manually corrects the hours on a stopped labor entry, preserving the immutable audit record and the authenticated adjusting user. This is a supervisor-only action; supervisors may adjust their own entries. Use this tool to correct a recorded entry after timesheet review; do not use stopLaborSession, which records elapsed time for a running entry. Preconditions: the entry belongs to workorderId and has an endTime; when location scope applies, an entry on a workorder outside the caller\&#39;s reach is denied. Required inputs: workorderId and entryId (UUIDs) in the path, hoursWorked and adjustmentReason in the body, and the required Idempotency-Key header (a UUID); a replay returns the first adjustment with Idempotency-Replayed: true. Emits workorder.labor-adjustment.recorded.v1 keyed by laborEntryId. Returns 400 when the hours are invalid or the caller has no authenticated user id, 404 when no entry belongs to the named workorder, 409 when the entry has not stopped, and 422 when the adjusted hours do not change. COMPLETED or CANCELLED workorders succeed with a WORKORDER_CLOSED warning.
      * @endpoint put /v1/workorders/{workorderId}/labor/{entryId}/adjust
      * @param workorderId ID of the workorder
      * @param entryId ID of the labor entry to adjust
+     * @param idempotencyKey Required idempotency key (a UUID); a replay returns the original answer
      * @param adjustLaborRequest Corrected hours and the reason justifying the manual adjustment.
-     * @param idempotencyKey Optional idempotency key to prevent duplicate adjustments
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public adjustLaborHours(workorderId: string, entryId: string, adjustLaborRequest: AdjustLaborRequest, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkorderLaborEntryResponse>;
-    public adjustLaborHours(workorderId: string, entryId: string, adjustLaborRequest: AdjustLaborRequest, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkorderLaborEntryResponse>>;
-    public adjustLaborHours(workorderId: string, entryId: string, adjustLaborRequest: AdjustLaborRequest, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkorderLaborEntryResponse>>;
-    public adjustLaborHours(workorderId: string, entryId: string, adjustLaborRequest: AdjustLaborRequest, idempotencyKey?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public adjustLaborHours(workorderId: string, entryId: string, idempotencyKey: string, adjustLaborRequest: AdjustLaborRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkorderLaborEntryResponse>;
+    public adjustLaborHours(workorderId: string, entryId: string, idempotencyKey: string, adjustLaborRequest: AdjustLaborRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkorderLaborEntryResponse>>;
+    public adjustLaborHours(workorderId: string, entryId: string, idempotencyKey: string, adjustLaborRequest: AdjustLaborRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkorderLaborEntryResponse>>;
+    public adjustLaborHours(workorderId: string, entryId: string, idempotencyKey: string, adjustLaborRequest: AdjustLaborRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (workorderId === null || workorderId === undefined) {
             throw new Error('Required parameter workorderId was null or undefined when calling adjustLaborHours.');
         }
         if (entryId === null || entryId === undefined) {
             throw new Error('Required parameter entryId was null or undefined when calling adjustLaborHours.');
+        }
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling adjustLaborHours.');
         }
         if (adjustLaborRequest === null || adjustLaborRequest === undefined) {
             throw new Error('Required parameter adjustLaborRequest was null or undefined when calling adjustLaborHours.');
@@ -251,25 +254,28 @@ export class WorkorderLaborAPIService extends BaseService {
 
     /**
      * Start Labor Session on Service
-     * Starts a labor entry tracking a technician\&#39;s time against one workorder service line, stamping the start time and zero hours worked. Use this tool when a technician begins billable labor on a specific service; do not use startWorkexecWorkSession, which is the payroll timekeeping clock rather than per-service labor tracking. Preconditions: the workorder must be in ASSIGNED, WORK_IN_PROGRESS, AWAITING_PARTS, or AWAITING_APPROVAL status, the service must belong to that workorder, and the service must have no labor session still open. Required inputs: workorderId and serviceId (UUIDs) as path parameters and technicianId (UUID) in the body; notes are optional, and an Idempotency-Key header makes retries return the original entry with 200 instead of 201. Emits a WORKORDER_LABOR_START event. Returns 201 with the new entry (200 on an idempotent replay), 404 when the workorder or service cannot be found, and 400 when a session is already active or the status disallows labor.
+     * Starts a labor entry tracking a technician\&#39;s time against one workorder service line, stamping the start time and zero hours worked. Use this tool when a technician begins billable labor on a specific service; do not use startWorkexecWorkSession, which is the payroll timekeeping clock rather than per-service labor tracking. Preconditions: the workorder must be in ASSIGNED, WORK_IN_PROGRESS, AWAITING_PARTS, or AWAITING_APPROVAL status, the service must belong to that workorder, and the service must have no labor session still open. Required inputs: workorderId and serviceId (UUIDs) as path parameters, technicianId (UUID) in the body and the required Idempotency-Key header (a UUID); notes are optional, and a replay of the same request returns the original 201 answer with Idempotency-Replayed: true. Emits a WORKORDER_LABOR_START event. Returns 201 with the new entry (the same 201 on an idempotent replay), 404 when the workorder or service cannot be found, 409 IDEMPOTENCY_CONFLICT when the key was used for a different request or by a different actor, and 400 when a session is already active, the status disallows labor, or the Idempotency-Key is missing or not a UUID.
      * @endpoint post /v1/workorders/{workorderId}/services/{serviceId}/labor/start
      * @param workorderId ID of the workorder
      * @param serviceId ID of the service item
+     * @param idempotencyKey Required idempotency key (a UUID); a replay returns the original 201 answer
      * @param startLaborRequest Technician performing the labor and optional starting notes.
-     * @param idempotencyKey Optional idempotency key to prevent duplicate starts
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public startLaborSession(workorderId: string, serviceId: string, startLaborRequest: StartLaborRequest, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkorderLaborEntryResponse>;
-    public startLaborSession(workorderId: string, serviceId: string, startLaborRequest: StartLaborRequest, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkorderLaborEntryResponse>>;
-    public startLaborSession(workorderId: string, serviceId: string, startLaborRequest: StartLaborRequest, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkorderLaborEntryResponse>>;
-    public startLaborSession(workorderId: string, serviceId: string, startLaborRequest: StartLaborRequest, idempotencyKey?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public startLaborSession(workorderId: string, serviceId: string, idempotencyKey: string, startLaborRequest: StartLaborRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkorderLaborEntryResponse>;
+    public startLaborSession(workorderId: string, serviceId: string, idempotencyKey: string, startLaborRequest: StartLaborRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkorderLaborEntryResponse>>;
+    public startLaborSession(workorderId: string, serviceId: string, idempotencyKey: string, startLaborRequest: StartLaborRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkorderLaborEntryResponse>>;
+    public startLaborSession(workorderId: string, serviceId: string, idempotencyKey: string, startLaborRequest: StartLaborRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (workorderId === null || workorderId === undefined) {
             throw new Error('Required parameter workorderId was null or undefined when calling startLaborSession.');
         }
         if (serviceId === null || serviceId === undefined) {
             throw new Error('Required parameter serviceId was null or undefined when calling startLaborSession.');
+        }
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling startLaborSession.');
         }
         if (startLaborRequest === null || startLaborRequest === undefined) {
             throw new Error('Required parameter startLaborRequest was null or undefined when calling startLaborSession.');
@@ -333,24 +339,27 @@ export class WorkorderLaborAPIService extends BaseService {
 
     /**
      * Stop Active Labor Session
-     * Stops an open labor entry, stamping the end time and computing hours worked from the elapsed session time. Use this tool when a technician finishes labor on a service; do not use adjustLaborHours, which corrects the hours on an already-stopped entry. Preconditions: the labor entry must exist and still be open — an entry with an end time cannot be stopped again. Required inputs: workorderId and entryId (UUIDs) as path parameters; there is no request body, and an Idempotency-Key header makes retried stops return the already-stopped entry. Emits a WORKORDER_LABOR_STOP event. Returns 404 when no labor entry exists for the id, and 400 when the session is already stopped.
+     * Stops an open labor entry, stamping the end time and computing hours worked from the elapsed session time. Use this tool when a technician finishes labor on a service; do not use adjustLaborHours, which corrects the hours on an already-stopped entry. Preconditions: the labor entry must exist and still be open — an entry with an end time cannot be stopped again. Required inputs: workorderId and entryId (UUIDs) as path parameters and the required Idempotency-Key header (a UUID); there is no request body, and a replay returns the already-stopped entry with Idempotency-Replayed: true. Emits a WORKORDER_LABOR_STOP event. Returns 404 when no labor entry exists for the id, 409 IDEMPOTENCY_CONFLICT when the key was used for a different request or by a different actor, and 400 when the session is already stopped or the Idempotency-Key is missing or not a UUID.
      * @endpoint post /v1/workorders/{workorderId}/labor/{entryId}/stop
      * @param workorderId ID of the workorder
      * @param entryId ID of the labor entry to stop
-     * @param idempotencyKey Optional idempotency key to prevent duplicate stops
+     * @param idempotencyKey Required idempotency key (a UUID); a replay returns the original answer
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public stopLaborSession(workorderId: string, entryId: string, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkorderLaborEntryResponse>;
-    public stopLaborSession(workorderId: string, entryId: string, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkorderLaborEntryResponse>>;
-    public stopLaborSession(workorderId: string, entryId: string, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkorderLaborEntryResponse>>;
-    public stopLaborSession(workorderId: string, entryId: string, idempotencyKey?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public stopLaborSession(workorderId: string, entryId: string, idempotencyKey: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkorderLaborEntryResponse>;
+    public stopLaborSession(workorderId: string, entryId: string, idempotencyKey: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkorderLaborEntryResponse>>;
+    public stopLaborSession(workorderId: string, entryId: string, idempotencyKey: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkorderLaborEntryResponse>>;
+    public stopLaborSession(workorderId: string, entryId: string, idempotencyKey: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (workorderId === null || workorderId === undefined) {
             throw new Error('Required parameter workorderId was null or undefined when calling stopLaborSession.');
         }
         if (entryId === null || entryId === undefined) {
             throw new Error('Required parameter entryId was null or undefined when calling stopLaborSession.');
+        }
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling stopLaborSession.');
         }
 
         let localVarHeaders = this.defaultHeaders;

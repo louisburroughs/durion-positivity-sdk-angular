@@ -34,8 +34,6 @@ import { EstimateSnapshotResponse } from '../models/estimateSnapshotResponse';
 import { EstimateSummaryResponse } from '../models/estimateSummaryResponse';
 // @ts-ignore
 import { UpdateEstimateItemRequest } from '../models/updateEstimateItemRequest';
-// @ts-ignore
-import { WorkorderResponse } from '../models/workorderResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -266,7 +264,7 @@ export class EstimateAPIService extends BaseService {
      * Creates an estimate in DRAFT status for a customer and vehicle, generating a unique estimate number and applying defaults for location and currency when omitted. Use this tool for a from-scratch estimate; do not use createEstimateFromAppointment, which seeds the estimate from a scheduled appointment and is idempotent on the appointment id. Preconditions: none beyond the caller holding workorder:estimate:create; when financial fields are supplied, subtotal plus taxAmount must equal total and none may be negative. Required inputs: customerId and vehicleId (UUIDs), crmPartyId, crmVehicleId, and crmContactIds; locationId, currencyUomId, and the financial fields are optional, and an Idempotency-Key header replays the originally created estimate. Emits a WORKORDER_ESTIMATE_CREATE event. Returns 201 with the estimate, 400 with code VALIDATION_ERROR when required fields are missing or negative, 409 with code CONFLICT when totals are inconsistent or an integrity constraint fails, and 409 with code DOCUMENT_NUMBER_CONFLICT and a Retry-After header when a concurrent create took the estimate number — re-send the same request.
      * @endpoint post /v1/workorders/estimates
      * @param createEstimateRequest Customer, vehicle, and CRM references the draft estimate is opened for.
-     * @param idempotencyKey Optional idempotency key for safe retries
+     * @param idempotencyKey Optional idempotency key (a UUID) for safe retries
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -1090,14 +1088,14 @@ export class EstimateAPIService extends BaseService {
      * Promotes an APPROVED estimate into a new DRAFT workorder that inherits the estimate\&#39;s customer, location, and CRM references. Use this tool after approveEstimate succeeds; do not use createWorkorder, which builds a workorder from an estimate id without the promotion validations. Preconditions: the estimate must be APPROVED with a valid, unexpired approval, have approved items, and not already be promoted — a prior promotion is answered with the existing workorder instead of a duplicate. Required inputs: estimateId (UUID) as a path parameter; an Idempotency-Key header collapses retries onto the originally created workorder. Emits a WORKORDER_ESTIMATE_PROMOTE event. Returns 200 with the workorder (also on ALREADY_PROMOTED replays that can resolve the existing workorder), 404 when the estimate does not exist, 409 when a promotion precondition or the customer\&#39;s requirements verdict refuses it, 409 with code DOCUMENT_NUMBER_CONFLICT and a Retry-After header when a concurrent create took the workorder number, and 503 when the requirements verdict has not replicated yet. Those last two are the only answers worth retrying. Every non-2xx answer carries the ApiError envelope with a machine-readable code and the correlation id that also appears in the server log line.
      * @endpoint post /v1/workorders/estimates/{estimateId}/promote
      * @param estimateId ID of the estimate to promote
-     * @param idempotencyKey Idempotency-Key header for safe retries
+     * @param idempotencyKey Optional idempotency key (a UUID) for safe retries
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public promoteEstimate(estimateId: string, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkorderResponse>;
-    public promoteEstimate(estimateId: string, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkorderResponse>>;
-    public promoteEstimate(estimateId: string, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkorderResponse>>;
+    public promoteEstimate(estimateId: string, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
+    public promoteEstimate(estimateId: string, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
+    public promoteEstimate(estimateId: string, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
     public promoteEstimate(estimateId: string, idempotencyKey?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (estimateId === null || estimateId === undefined) {
             throw new Error('Required parameter estimateId was null or undefined when calling promoteEstimate.');
@@ -1136,7 +1134,7 @@ export class EstimateAPIService extends BaseService {
 
         let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/promote`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<WorkorderResponse>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<object>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

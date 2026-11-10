@@ -75,10 +75,6 @@ export interface CashMovementResponse {
      */
     recordedByName?: string | null;
     /**
-     * The register\'s idempotency key; null on a movement recorded before the fixed reasons
-     */
-    requestId?: string;
-    /**
      * Session the movement belongs to
      */
     sessionId?: string;
@@ -164,7 +160,7 @@ export function instanceOfCashMovementResponse(value: object): value is CashMove
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCashMovementResponsePropertyNames();
-    const optionalStringProperties = createCashMovementResponseOptionalProperties({ name: 'approvedBy', nullable: false }, { name: 'approvedByName', nullable: true }, { name: 'bagNumber', nullable: false }, { name: 'categoryCode', nullable: false }, { name: 'clerkId', nullable: false }, { name: 'clerkUserId', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'movementId', nullable: false }, { name: 'movementType', nullable: false }, { name: 'note', nullable: false }, { name: 'occurredAt', nullable: false }, { name: 'reason', nullable: false }, { name: 'receiptReference', nullable: false }, { name: 'recordedByName', nullable: true }, { name: 'requestId', nullable: false }, { name: 'sessionId', nullable: false }, { name: 'supplierName', nullable: false }, { name: 'taxPlausibility', nullable: true }, { name: 'vendorId', nullable: false }, );
+    const optionalStringProperties = createCashMovementResponseOptionalProperties({ name: 'approvedBy', nullable: false }, { name: 'approvedByName', nullable: true }, { name: 'bagNumber', nullable: false }, { name: 'categoryCode', nullable: false }, { name: 'clerkId', nullable: false }, { name: 'clerkUserId', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'movementId', nullable: false }, { name: 'movementType', nullable: false }, { name: 'note', nullable: false }, { name: 'occurredAt', nullable: false }, { name: 'reason', nullable: false }, { name: 'receiptReference', nullable: false }, { name: 'recordedByName', nullable: true }, { name: 'sessionId', nullable: false }, { name: 'supplierName', nullable: false }, { name: 'taxPlausibility', nullable: true }, { name: 'vendorId', nullable: false }, );
     const optionalNumberProperties = createCashMovementResponseOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createCashMovementResponseOptionalProperties({ name: 'supplierRegistrationNumberProvided', nullable: false }, { name: 'supplierRegistrationRequired', nullable: true }, );
 

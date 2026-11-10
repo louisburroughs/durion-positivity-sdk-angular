@@ -47,10 +47,6 @@ export interface CashMovementRequest {
      */
     receiptReference?: string;
     /**
-     * The register\'s idempotency key (UUIDv7): a retry with the same id returns the first result
-     */
-    requestId: string;
-    /**
      * Tax stated on the receipt, one entry per regime the category offers, for PETTY_EXPENSE only; absent and empty both mean none. The drawer still counts the movement\'s whole amount
      */
     statedTaxes?: Array<CashMovementStatedTax>;
@@ -115,8 +111,8 @@ export function instanceOfCashMovementRequest(value: object): value is CashMovem
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCashMovementRequestPropertyNames('amount', 'currencyCode', 'reason', 'requestId', );
-    const optionalStringProperties = createCashMovementRequestOptionalProperties({ name: 'approvalToken', nullable: false }, { name: 'bagNumber', nullable: false }, { name: 'categoryCode', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'note', nullable: false }, { name: 'reason', nullable: false }, { name: 'receiptReference', nullable: false }, { name: 'requestId', nullable: false }, { name: 'supplierName', nullable: false }, { name: 'supplierRegistrationNumber', nullable: false }, { name: 'vendorId', nullable: false }, );
+    const requiredProperties = createCashMovementRequestPropertyNames('amount', 'currencyCode', 'reason', );
+    const optionalStringProperties = createCashMovementRequestOptionalProperties({ name: 'approvalToken', nullable: false }, { name: 'bagNumber', nullable: false }, { name: 'categoryCode', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'note', nullable: false }, { name: 'reason', nullable: false }, { name: 'receiptReference', nullable: false }, { name: 'supplierName', nullable: false }, { name: 'supplierRegistrationNumber', nullable: false }, { name: 'vendorId', nullable: false }, );
     const optionalNumberProperties = createCashMovementRequestOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createCashMovementRequestOptionalProperties();
 

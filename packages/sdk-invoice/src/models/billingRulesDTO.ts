@@ -14,6 +14,10 @@
  */
 export interface BillingRulesDTO {
     /**
+     * Whether a completed workorder for this party needs a customer contact\'s sign-off recorded before it may be invoiced
+     */
+    completionSignOffRequired: boolean;
+    /**
      * Timestamp when the record was created
      */
     createdAt: string;
@@ -105,10 +109,10 @@ export function instanceOfBillingRulesDTO(value: object): value is BillingRulesD
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createBillingRulesDTOPropertyNames('createdAt', 'invoiceDeliveryMethod', 'invoiceGroupingStrategy', 'partyId', 'paymentTermsCode', 'purchaseOrderRequired', 'updatedAt', 'updatedBy', 'version', );
+    const requiredProperties = createBillingRulesDTOPropertyNames('completionSignOffRequired', 'createdAt', 'invoiceDeliveryMethod', 'invoiceGroupingStrategy', 'partyId', 'paymentTermsCode', 'purchaseOrderRequired', 'updatedAt', 'updatedBy', 'version', );
     const optionalStringProperties = createBillingRulesDTOOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'id', nullable: false }, { name: 'invoiceDeliveryMethod', nullable: false }, { name: 'invoiceGroupingStrategy', nullable: false }, { name: 'partyId', nullable: false }, { name: 'paymentTermsCode', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'updatedBy', nullable: false }, );
     const optionalNumberProperties = createBillingRulesDTOOptionalProperties({ name: 'version', nullable: false }, );
-    const optionalBooleanProperties = createBillingRulesDTOOptionalProperties({ name: 'purchaseOrderRequired', nullable: false }, );
+    const optionalBooleanProperties = createBillingRulesDTOOptionalProperties({ name: 'completionSignOffRequired', nullable: false }, { name: 'purchaseOrderRequired', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalBillingRulesDTOPropertyOfType(_v, property.name, 'string', property.nullable))

@@ -13,6 +13,7 @@ export * from './hintResponse';
 export * from './makeResponse';
 export * from './manufacturerResponse';
 export * from './modelResponse';
+export * from './policyBlocker';
 export * from './suggestedAlternative';
 export * from './updateHintRequest';
 export * from './vehicleTypeResponse';

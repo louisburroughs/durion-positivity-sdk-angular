@@ -8,7 +8,9 @@
  * Do not edit the class manually.
  */
 import { InvoiceAdjustmentResponse } from './invoiceAdjustmentResponse';
+import { InvoiceTaxBreakdownRow } from './invoiceTaxBreakdownRow';
 import { InvoiceItemResponse } from './invoiceItemResponse';
+import { SellerTaxRegistration } from './sellerTaxRegistration';
 
 
 /**
@@ -24,13 +26,25 @@ export interface InvoiceDetailsResponse {
      */
     adjustments?: number;
     /**
+     * Settlement figure: captured payments minus every non-FAILED refund anchored to this invoice. It is not the accounts-receivable balance and not ADR-0057 collected: credit memos, customer-credit applications and payments applied in accounting are not reflected here
+     */
+    amountPaid?: number;
+    /**
      * Identifier of the approval record
      */
     approvalId?: string;
     /**
+     * Settlement figure: total minus amountPaid minus depositCreditsApplied. Signed and never clamped, so a negative value is an overpayment. It is pos-invoice\'s own settlement balance, not the accounts-receivable balance
+     */
+    balanceDue?: number;
+    /**
      * Timestamp when the invoice was created
      */
     createdAt?: string;
+    /**
+     * Settlement figure: deposit-credit draw-downs applied to this invoice. Carried separately from amountPaid and fed only by pos-invoice\'s own deposit-credit records, so it is not a complete non-cash settlement figure
+     */
+    depositCreditsApplied?: number;
     /**
      * Identifier of the source estimate
      */
@@ -60,6 +74,10 @@ export interface InvoiceDetailsResponse {
      */
     partyId?: string;
     /**
+     * Settlement status derived from the balance: UNPAID, PARTIALLY_PAID, PAID (settled at the counter, not necessarily cash in hand), OVERPAID, or NOT_APPLICABLE for a CANCELLED or ERROR invoice. Not the accounts-receivable status
+     */
+    paymentStatus?: InvoiceDetailsResponsePaymentStatusEnum;
+    /**
      * Whether finalizing this invoice requires a manager approval code (DRAFT total exceeds the service-advisor threshold)
      */
     requiresManagerApproval?: boolean;
@@ -76,6 +94,10 @@ export interface InvoiceDetailsResponse {
      */
     revertedBy?: string;
     /**
+     * Seller tax registrations frozen at finalization; empty on a draft. The number is INTERNAL per ADR-0072 Decision 1: readable and printable, never logged
+     */
+    sellerTaxRegistrations?: Array<SellerTaxRegistration>;
+    /**
      * Current lifecycle status of the invoice
      */
     status?: InvoiceDetailsResponseStatusEnum;
@@ -87,6 +109,14 @@ export interface InvoiceDetailsResponse {
      * Total tax applied to the invoice
      */
     tax?: number;
+    /**
+     * Summary-level tax breakdown, one row per (jurisdiction, tax type); absent or empty when the invoice stores none, and tax equals the sum of the row amounts when present
+     */
+    taxBreakdown?: Array<InvoiceTaxBreakdownRow>;
+    /**
+     * Layout the tax is shown in (CAP:550 #2630): SINGLE_TOTAL is today\'s one tax total; BY_TAX_TYPE lists tax per jurisdiction and tax type with configured labels
+     */
+    taxDisplayLayout?: InvoiceDetailsResponseTaxDisplayLayoutEnum;
     /**
      * Grand total payable on the invoice
      */
@@ -104,12 +134,23 @@ export interface InvoiceDetailsResponse {
      */
     workorderNumber?: string;
 }
+export enum InvoiceDetailsResponsePaymentStatusEnum {
+    Unpaid = 'UNPAID',
+    PartiallyPaid = 'PARTIALLY_PAID',
+    Paid = 'PAID',
+    Overpaid = 'OVERPAID',
+    NotApplicable = 'NOT_APPLICABLE'
+};
 export enum InvoiceDetailsResponseStatusEnum {
     Draft = 'DRAFT',
     Finalized = 'FINALIZED',
     Posted = 'POSTED',
     Error = 'ERROR',
     Cancelled = 'CANCELLED'
+};
+export enum InvoiceDetailsResponseTaxDisplayLayoutEnum {
+    SingleTotal = 'SINGLE_TOTAL',
+    ByTaxType = 'BY_TAX_TYPE'
 };
 
 
@@ -153,8 +194,8 @@ export function instanceOfInvoiceDetailsResponse(value: object): value is Invoic
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createInvoiceDetailsResponsePropertyNames('adjustmentEntries', 'items', );
-    const optionalStringProperties = createInvoiceDetailsResponseOptionalProperties({ name: 'approvalId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'finalizedAt', nullable: false }, { name: 'finalizedBy', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'invoiceNumber', nullable: false }, { name: 'partyId', nullable: false }, { name: 'reversionReason', nullable: false }, { name: 'revertedAt', nullable: false }, { name: 'revertedBy', nullable: false }, { name: 'status', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderNumber', nullable: false }, );
-    const optionalNumberProperties = createInvoiceDetailsResponseOptionalProperties({ name: 'adjustments', nullable: false }, { name: 'subtotal', nullable: false }, { name: 'tax', nullable: false }, { name: 'total', nullable: false }, );
+    const optionalStringProperties = createInvoiceDetailsResponseOptionalProperties({ name: 'approvalId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'finalizedAt', nullable: false }, { name: 'finalizedBy', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'invoiceNumber', nullable: false }, { name: 'partyId', nullable: false }, { name: 'paymentStatus', nullable: false }, { name: 'reversionReason', nullable: false }, { name: 'revertedAt', nullable: false }, { name: 'revertedBy', nullable: false }, { name: 'status', nullable: false }, { name: 'taxDisplayLayout', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderNumber', nullable: false }, );
+    const optionalNumberProperties = createInvoiceDetailsResponseOptionalProperties({ name: 'adjustments', nullable: false }, { name: 'amountPaid', nullable: false }, { name: 'balanceDue', nullable: false }, { name: 'depositCreditsApplied', nullable: false }, { name: 'subtotal', nullable: false }, { name: 'tax', nullable: false }, { name: 'total', nullable: false }, );
     const optionalBooleanProperties = createInvoiceDetailsResponseOptionalProperties({ name: 'requiresManagerApproval', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

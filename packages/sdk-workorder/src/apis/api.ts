@@ -13,6 +13,7 @@ export * from './travelSegmentAPI.service';
 export * from './wIPDashboard.service';
 export * from './workOrderAPI.service';
 export * from './workSessionAPI.service';
+export * from './workexecOpenItems.service';
 export * from './workexecTimeTrackingAPI.service';
 export * from './workorderAnalytics.service';
 export * from './workorderDetail.service';

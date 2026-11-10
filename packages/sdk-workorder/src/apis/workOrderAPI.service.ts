@@ -27,11 +27,13 @@ import { CompleteWorkorderResponse } from '../models/completeWorkorderResponse';
 // @ts-ignore
 import { CompletionPreconditionsResponse } from '../models/completionPreconditionsResponse';
 // @ts-ignore
+import { CompletionSignOffResponse } from '../models/completionSignOffResponse';
+// @ts-ignore
 import { CountResponse } from '../models/countResponse';
 // @ts-ignore
 import { CreateWorkorderRequest } from '../models/createWorkorderRequest';
 // @ts-ignore
-import { InvoiceGenerationResponse } from '../models/invoiceGenerationResponse';
+import { RecordCompletionSignOffRequest } from '../models/recordCompletionSignOffRequest';
 // @ts-ignore
 import { ReopenWorkorderRequest } from '../models/reopenWorkorderRequest';
 // @ts-ignore
@@ -46,8 +48,6 @@ import { WorkorderSnapshotResponse } from '../models/workorderSnapshotResponse';
 import { WorkorderStateTransitionResponse } from '../models/workorderStateTransitionResponse';
 // @ts-ignore
 import { WorkorderTransferRequest } from '../models/workorderTransferRequest';
-// @ts-ignore
-import { WorkorderTransferResponse } from '../models/workorderTransferResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -425,14 +425,14 @@ export class WorkOrderAPIService extends BaseService {
      * Creates a DRAFT workorder from an estimate, copying the estimate\&#39;s customer, location, and CRM references and generating a workorder number. Use this tool when opening a workorder directly; do not use promoteEstimate, which is the estimate-side path that promotes an APPROVED estimate into a workorder. Preconditions: the referenced estimate must exist, and the caller must hold workorder:workorder:create; the location falls back to the caller\&#39;s primary location when the estimate carries none. Required inputs: estimateId and customerId (UUIDs); an Idempotency-Key header is recommended — a repeated key returns the originally created workorder instead of a duplicate. Emits a WORKORDER_CREATE event and marks the workorder fact changed for downstream replication. Returns 200 with the created or replayed workorder, 400 when the estimate cannot be found, and 409 with code DOCUMENT_NUMBER_CONFLICT and a Retry-After header when a concurrent create took the workorder number — re-send the same request.
      * @endpoint post /v1/workorders
      * @param createWorkorderRequest Estimate and customer the new workorder is created from.
-     * @param idempotencyKey Optional idempotency key to prevent duplicate creation (recommended for retries)
+     * @param idempotencyKey Optional idempotency key (a UUID) to prevent duplicate creation (recommended for retries)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createWorkorder(createWorkorderRequest: CreateWorkorderRequest, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkorderResponse>;
-    public createWorkorder(createWorkorderRequest: CreateWorkorderRequest, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkorderResponse>>;
-    public createWorkorder(createWorkorderRequest: CreateWorkorderRequest, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkorderResponse>>;
+    public createWorkorder(createWorkorderRequest: CreateWorkorderRequest, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
+    public createWorkorder(createWorkorderRequest: CreateWorkorderRequest, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
+    public createWorkorder(createWorkorderRequest: CreateWorkorderRequest, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
     public createWorkorder(createWorkorderRequest: CreateWorkorderRequest, idempotencyKey?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (createWorkorderRequest === null || createWorkorderRequest === undefined) {
             throw new Error('Required parameter createWorkorderRequest was null or undefined when calling createWorkorder.');
@@ -480,7 +480,7 @@ export class WorkOrderAPIService extends BaseService {
 
         let localVarPath = `/v1/workorders`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<WorkorderResponse>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<object>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: createWorkorderRequest,
@@ -555,17 +555,17 @@ export class WorkOrderAPIService extends BaseService {
 
     /**
      * Request Invoice Generation From Workorder
-     * Queues asynchronous invoice generation for a completed workorder over the Kafka command feed; the invoiceId appears on the workorder later, once the invoicing domain\&#39;s fact links it back. Use this tool after completeWorkorder succeeds; do not call it to fetch an invoice — poll getWorkorder for the linked invoiceId instead. Preconditions: the workorder must exist and be in COMPLETED status, and the Kafka event feed must be enabled; an already-invoiced workorder short-circuits to its linked invoice. Required inputs: workorderId (UUID) as a path parameter; an Idempotency-Key header collapses retries into one generation, defaulting to the workorderId itself. Emits a WORKORDER_INVOICE_GENERATE event and publishes an invoice-creation command; callers must treat a PENDING status as queued rather than generated. Returns 202 with status PENDING when generation is queued, 200 with the linked invoice on idempotent replay, 404 when the workorder does not exist, 409 when it is not COMPLETED, and 503 when the Kafka feed is disabled or the broker rejects the command.
+     * Queues asynchronous invoice generation for a completed workorder over the Kafka command feed; the invoiceId appears on the workorder later, once the invoicing domain\&#39;s fact links it back. Use this tool after completeWorkorder succeeds; do not call it to fetch an invoice — poll getWorkorder for the linked invoiceId instead. Preconditions: the workorder must exist and be in COMPLETED status, the payer\&#39;s billing rules must not set completionSignOffRequired (or a customer completion sign-off must already be recorded), and the Kafka event feed must be enabled; an already-invoiced workorder short-circuits to its linked invoice. Required inputs: workorderId (UUID) as a path parameter; an Idempotency-Key header collapses retries into one generation, defaulting to the workorderId itself. Emits a WORKORDER_INVOICE_GENERATE event and publishes an invoice-creation command; callers must treat a PENDING status as queued rather than generated. Returns 202 with status PENDING when generation is queued, 200 with the linked invoice on idempotent replay, 404 when the workorder does not exist, 409 when it is not COMPLETED or when a required customer completion sign-off is outstanding (COMPLETION_SIGN_OFF_REQUIRED), and 503 when the Kafka feed is disabled or the broker rejects the command.
      * @endpoint post /v1/workorders/{workorderId}/generate-invoice
      * @param workorderId ID of the completed work order
-     * @param idempotencyKey Optional idempotency key to prevent duplicate invoice generation (recommended for retries)
+     * @param idempotencyKey Optional idempotency key (a UUID) to prevent duplicate invoice generation (recommended for retries)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public generateWorkorderInvoice(workorderId: string, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<InvoiceGenerationResponse>;
-    public generateWorkorderInvoice(workorderId: string, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InvoiceGenerationResponse>>;
-    public generateWorkorderInvoice(workorderId: string, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InvoiceGenerationResponse>>;
+    public generateWorkorderInvoice(workorderId: string, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
+    public generateWorkorderInvoice(workorderId: string, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
+    public generateWorkorderInvoice(workorderId: string, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
     public generateWorkorderInvoice(workorderId: string, idempotencyKey?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (workorderId === null || workorderId === undefined) {
             throw new Error('Required parameter workorderId was null or undefined when calling generateWorkorderInvoice.');
@@ -604,7 +604,7 @@ export class WorkOrderAPIService extends BaseService {
 
         let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/generate-invoice`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<InvoiceGenerationResponse>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<object>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -619,7 +619,7 @@ export class WorkOrderAPIService extends BaseService {
 
     /**
      * Evaluate Workorder Completion Preconditions
-     * Evaluates whether a workorder can be completed, returning a canComplete flag, a checklist, blocking reasons, counts of unresolved approval-gated change requests and non-terminal items, the emergency-denial acknowledgment state, and whether billable items exist. Use this tool before completeWorkorder to surface blockers without attempting the transition; do not use checkWorkorderCanClose, which checks only the emergency-denial acknowledgment dimension. Preconditions: the workorder must exist. Required inputs: workorderId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only evaluation. Returns 404 when no workorder exists for the id.
+     * Evaluates whether a workorder can be completed, returning a canComplete flag, a checklist, blocking reasons, counts of unresolved approval-gated change requests and non-terminal items, the emergency-denial acknowledgment state, and whether billable items exist. It also reports waitingOn: CUSTOMER while a required customer completion sign-off is outstanding (#3201), null otherwise. waitingOn is not a blocking reason — the sign-off is recorded after completion, so it never refuses the completion it follows. Use this tool before completeWorkorder to surface blockers without attempting the transition; do not use checkWorkorderCanClose, which checks only the emergency-denial acknowledgment dimension. Preconditions: the workorder must exist. Required inputs: workorderId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only evaluation. Returns 404 when no workorder exists for the id.
      * @endpoint get /v1/workorders/{workorderId}/completion-preconditions
      * @param workorderId ID of the workorder to validate
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -665,6 +665,66 @@ export class WorkOrderAPIService extends BaseService {
         let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/completion-preconditions`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<CompletionPreconditionsResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Read a Workorder\&#39;s Customer Completion Sign-Off State
+     * Reports whether this workorder\&#39;s payer requires a customer completion sign-off before invoicing, and where the sign-off stands: NOT_REQUIRED when the payer\&#39;s billing rules do not ask for one, SIGNED_OFF when one is recorded, PENDING otherwise. Use this tool to drive the advisor\&#39;s sign-off prompt before generateWorkorderInvoice; use getCompletionPreconditions when the question is whether the workorder can be completed. Preconditions: the workorder must exist. Required inputs: workorderId (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 200 with the derived state and the sign-off\&#39;s evidence when one was recorded, and 404 when no workorder exists for the id.
+     * @endpoint get /v1/workorders/{workorderId}/completion-sign-off
+     * @param workorderId ID of the workorder whose completion sign-off state to read
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getCompletionSignOff(workorderId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CompletionSignOffResponse>;
+    public getCompletionSignOff(workorderId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CompletionSignOffResponse>>;
+    public getCompletionSignOff(workorderId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CompletionSignOffResponse>>;
+    public getCompletionSignOff(workorderId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (workorderId === null || workorderId === undefined) {
+            throw new Error('Required parameter workorderId was null or undefined when calling getCompletionSignOff.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/completion-sign-off`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<CompletionSignOffResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -914,6 +974,80 @@ export class WorkOrderAPIService extends BaseService {
     }
 
     /**
+     * Record a Customer\&#39;s Completion Sign-Off
+     * Records a customer contact\&#39;s sign-off on a COMPLETED workorder of an account whose billing rules require one before it may be invoiced. The service advisor records it on the customer\&#39;s behalf with a note as evidence; no customer signature is involved. Use this tool before generateWorkorderInvoice when getCompletionSignOff reports PENDING; do not use it to approve scope changes, which go through the change-request endpoints. Preconditions: the workorder must be COMPLETED, the payer\&#39;s billing rules must set completionSignOffRequired, and the workorder must not already carry a sign-off. Required inputs: workorderId (UUID) as a path parameter and a non-blank contactName and note in the body; contactId is optional; signedOffBy comes from the security context, never from the body. Emits a WORKORDER_COMPLETION_SIGN_OFF event. Returns 200 with the recorded state, 400 VALIDATION_ERROR for a blank contactName or note, 404 when the workorder does not exist, and 409 with COMPLETION_SIGN_OFF_WORKORDER_NOT_COMPLETED, COMPLETION_SIGN_OFF_NOT_REQUIRED or COMPLETION_SIGN_OFF_ALREADY_RECORDED when the workorder\&#39;s state refuses the sign-off.
+     * @endpoint post /v1/workorders/{workorderId}/completion-sign-off
+     * @param workorderId ID of the completed workorder to sign off
+     * @param recordCompletionSignOffRequest The customer contact who approved and the advisor\&#39;s note as evidence.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public recordCompletionSignOff(workorderId: string, recordCompletionSignOffRequest: RecordCompletionSignOffRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CompletionSignOffResponse>;
+    public recordCompletionSignOff(workorderId: string, recordCompletionSignOffRequest: RecordCompletionSignOffRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CompletionSignOffResponse>>;
+    public recordCompletionSignOff(workorderId: string, recordCompletionSignOffRequest: RecordCompletionSignOffRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CompletionSignOffResponse>>;
+    public recordCompletionSignOff(workorderId: string, recordCompletionSignOffRequest: RecordCompletionSignOffRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (workorderId === null || workorderId === undefined) {
+            throw new Error('Required parameter workorderId was null or undefined when calling recordCompletionSignOff.');
+        }
+        if (recordCompletionSignOffRequest === null || recordCompletionSignOffRequest === undefined) {
+            throw new Error('Required parameter recordCompletionSignOffRequest was null or undefined when calling recordCompletionSignOff.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/completion-sign-off`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<CompletionSignOffResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: recordCompletionSignOffRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Reopen a Completed Workorder
      * Reopens a COMPLETED workorder in a controlled way: the finalized billable scope is superseded via a new snapshot, and the workorder is flagged isReopened with the actor, reason, and timestamp recorded — the status itself remains COMPLETED. Use this tool when post-completion corrections are needed; do not use deleteWorkorder, which destroys the record instead of auditing a reopen. Preconditions: the workorder must exist and be in COMPLETED status, and the caller must hold workorder:workorder:reopen_completed. Required inputs: workorderId (UUID) as a path parameter and a non-blank reopenReason in the body; the acting user comes from the security context. Emits a WORKORDER_REOPEN event and captures a BILLABLE_SCOPE_SUPERSEDED snapshot. Returns 400 with the reason when the workorder is not COMPLETED or the reason is missing, and 404 when the workorder does not exist.
      * @endpoint post /v1/workorders/{workorderId}/reopen
@@ -993,14 +1127,14 @@ export class WorkOrderAPIService extends BaseService {
      * @endpoint post /v1/workorders/{workorderId}/transfer
      * @param workorderId
      * @param workorderTransferRequest Target location, the business reason for the transfer, and a note (required when the reason is OTHER).
-     * @param idempotencyKey
+     * @param idempotencyKey Optional idempotency key (a UUID); a replay returns the original answer
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public transferWorkorder(workorderId: string, workorderTransferRequest: WorkorderTransferRequest, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkorderTransferResponse>;
-    public transferWorkorder(workorderId: string, workorderTransferRequest: WorkorderTransferRequest, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkorderTransferResponse>>;
-    public transferWorkorder(workorderId: string, workorderTransferRequest: WorkorderTransferRequest, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkorderTransferResponse>>;
+    public transferWorkorder(workorderId: string, workorderTransferRequest: WorkorderTransferRequest, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
+    public transferWorkorder(workorderId: string, workorderTransferRequest: WorkorderTransferRequest, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
+    public transferWorkorder(workorderId: string, workorderTransferRequest: WorkorderTransferRequest, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
     public transferWorkorder(workorderId: string, workorderTransferRequest: WorkorderTransferRequest, idempotencyKey?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (workorderId === null || workorderId === undefined) {
             throw new Error('Required parameter workorderId was null or undefined when calling transferWorkorder.');
@@ -1051,7 +1185,7 @@ export class WorkOrderAPIService extends BaseService {
 
         let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/transfer`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<WorkorderTransferResponse>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<object>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: workorderTransferRequest,

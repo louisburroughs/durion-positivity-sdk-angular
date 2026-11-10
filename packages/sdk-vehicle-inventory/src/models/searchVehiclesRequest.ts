@@ -10,7 +10,7 @@
 
 
 /**
- * Request payload for searching vehicles by free-text query with optional pagination
+ * Request payload for searching vehicles by free-text query or by plate and jurisdiction, with optional pagination
  */
 export interface SearchVehiclesRequest {
     /**
@@ -22,13 +22,21 @@ export interface SearchVehiclesRequest {
      */
     enableContainsMatching?: boolean;
     /**
+     * Jurisdiction that narrows a plate search, as an ISO 3166-2 subdivision code (US-CA) or the stored code (CA); requires plate, and is a validation error without it. At most 50 characters, a bound enforced by the service
+     */
+    jurisdiction?: string;
+    /**
      * Maximum number of results to return; defaults to 25 when omitted
      */
     limit?: number;
     /**
-     * Free-text search query matched against VIN, unit number, plate, and description
+     * License plate matched exactly after normalisation (upper-cased, separators removed); when given, the search is a plate search and query is ignored. At most 50 characters, a bound enforced by the service
      */
-    query: string;
+    plate?: string;
+    /**
+     * Free-text search query matched against VIN, unit number, plate, and description; required unless plate is given, and ignored when plate is given
+     */
+    query?: string;
 }
 
 function isOptionalSearchVehiclesRequestPropertyOfType(
@@ -69,8 +77,8 @@ export function instanceOfSearchVehiclesRequest(value: object): value is SearchV
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createSearchVehiclesRequestPropertyNames('query', );
-    const optionalStringProperties = createSearchVehiclesRequestOptionalProperties({ name: 'cursor', nullable: false }, { name: 'query', nullable: false }, );
+    const requiredProperties = createSearchVehiclesRequestPropertyNames();
+    const optionalStringProperties = createSearchVehiclesRequestOptionalProperties({ name: 'cursor', nullable: false }, { name: 'jurisdiction', nullable: false }, { name: 'plate', nullable: false }, { name: 'query', nullable: false }, );
     const optionalNumberProperties = createSearchVehiclesRequestOptionalProperties({ name: 'limit', nullable: false }, );
     const optionalBooleanProperties = createSearchVehiclesRequestOptionalProperties({ name: 'enableContainsMatching', nullable: false }, );
 

@@ -34,6 +34,7 @@ export * from './locationPriceOverrideResponseDto';
 export * from './nonInventoryProductDto';
 export * from './page';
 export * from './pageableObject';
+export * from './policyBlocker';
 export * from './priceBookCreateRequestDto';
 export * from './priceBookDto';
 export * from './priceBookRuleCreateRequestDto';

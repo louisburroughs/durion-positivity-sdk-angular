@@ -9,6 +9,7 @@
  */
 import { TaxJurisdiction } from './taxJurisdiction';
 import { LineItemTax } from './lineItemTax';
+import { TaxDocumentRule } from './taxDocumentRule';
 
 
 /**
@@ -23,6 +24,14 @@ export interface TaxCalculationResponse {
      * Calculation direction echoed from the request: SALE or REFUND. REFUND amounts are positive; callers negate at posting.
      */
     calculationType?: TaxCalculationResponseCalculationTypeEnum;
+    /**
+     * ISO 3166-1 alpha-2 country whose profile priced this calculation; null when the pricing provider has no country profile
+     */
+    countryCode?: string | null;
+    /**
+     * The country profile\'s shipped document display rules; empty when the country declares none
+     */
+    documentRules?: Array<TaxDocumentRule>;
     /**
      * Effective tax rate: total tax divided by the exempt-filtered taxable base (the taxable amount remaining after tax-exempt lines are excluded), expressed as percentage points. This is NOT total tax divided by the raw subtotal (ADR-0042).
      */
@@ -123,7 +132,7 @@ export function instanceOfTaxCalculationResponse(value: object): value is TaxCal
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTaxCalculationResponsePropertyNames('calculatedAt', 'effectiveTaxRate', 'jurisdictions', 'lineItemTaxes', 'subtotal', 'testMode', 'total', 'totalTax', );
-    const optionalStringProperties = createTaxCalculationResponseOptionalProperties({ name: 'calculatedAt', nullable: false }, { name: 'calculationType', nullable: false }, { name: 'externalTransactionId', nullable: false }, { name: 'originalReferenceId', nullable: false }, { name: 'referenceId', nullable: false }, { name: 'referenceType', nullable: false }, );
+    const optionalStringProperties = createTaxCalculationResponseOptionalProperties({ name: 'calculatedAt', nullable: false }, { name: 'calculationType', nullable: false }, { name: 'countryCode', nullable: true }, { name: 'externalTransactionId', nullable: false }, { name: 'originalReferenceId', nullable: false }, { name: 'referenceId', nullable: false }, { name: 'referenceType', nullable: false }, );
     const optionalNumberProperties = createTaxCalculationResponseOptionalProperties({ name: 'effectiveTaxRate', nullable: false }, { name: 'subtotal', nullable: false }, { name: 'total', nullable: false }, { name: 'totalTax', nullable: false }, );
     const optionalBooleanProperties = createTaxCalculationResponseOptionalProperties({ name: 'testMode', nullable: false }, );
 

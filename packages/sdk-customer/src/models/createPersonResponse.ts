@@ -14,6 +14,10 @@
  */
 export interface CreatePersonResponse {
     /**
+     * Whether the supplied communicationConsent was persisted. Only true for a newly created person whose request carried communicationConsent
+     */
+    consentRecorded: boolean;
+    /**
      * Number of contact points created
      */
     contactPointsCreated: number;
@@ -29,6 +33,10 @@ export interface CreatePersonResponse {
      * Last name
      */
     lastName: string;
+    /**
+     * Whether the request resolved to a person party that already existed. On that path the request\'s contact points and communicationConsent are not written and the existing record is returned
+     */
+    matchedExisting: boolean;
     /**
      * Party id of the individual customer: the id getParty, vehicles, estimates and appointments key on (personId is the pos-people identity, not the party)
      */
@@ -89,10 +97,10 @@ export function instanceOfCreatePersonResponse(value: object): value is CreatePe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreatePersonResponsePropertyNames('contactPointsCreated', 'createdAt', 'firstName', 'lastName', 'partyId', 'personId', 'preferredContactMethod', );
+    const requiredProperties = createCreatePersonResponsePropertyNames('consentRecorded', 'contactPointsCreated', 'createdAt', 'firstName', 'lastName', 'matchedExisting', 'partyId', 'personId', 'preferredContactMethod', );
     const optionalStringProperties = createCreatePersonResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'partyId', nullable: false }, { name: 'personId', nullable: false }, { name: 'preferredContactMethod', nullable: false }, );
     const optionalNumberProperties = createCreatePersonResponseOptionalProperties({ name: 'contactPointsCreated', nullable: false }, );
-    const optionalBooleanProperties = createCreatePersonResponseOptionalProperties();
+    const optionalBooleanProperties = createCreatePersonResponseOptionalProperties({ name: 'consentRecorded', nullable: false }, { name: 'matchedExisting', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalCreatePersonResponsePropertyOfType(_v, property.name, 'string', property.nullable))

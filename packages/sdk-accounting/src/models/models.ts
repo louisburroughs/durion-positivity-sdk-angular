@@ -264,6 +264,7 @@ export * from './pettyExpenseCategoryResponse';
 export * from './pettyExpenseCategoryTaxRecoveryRequest';
 export * from './pettyExpenseCategoryTaxRecoveryResponse';
 export * from './pettyExpenseCategoryUpdateRequest';
+export * from './policyBlocker';
 export * from './posting';
 export * from './postingCategoryCreateRequest';
 export * from './postingCategoryListResponse';

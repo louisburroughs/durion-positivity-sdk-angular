@@ -41,7 +41,7 @@ export class VehicleSearchService extends BaseService {
 
     /**
      * Search vehicles
-     * Searches vehicle registry records with a single free-text query, ranking exact matches ahead of prefix matches ahead of optional contains matches. Use this tool for vehicle discovery from a JSON body; use searchVehiclesByQuery for the query-parameter variant, and use getVehicleByVin instead when the full 17-character VIN is already known. Preconditions: none beyond registry data existing; the match field is inferred from the query shape, with six or more alphanumeric characters searched as a VIN (seventeen as an exact VIN), shorter queries searched against license plates, and the remainder searched against unit number plus description. Required inputs: query (non-blank, at least 3 characters, or 6 when VIN-shaped); limit defaults to 25 and is capped at 50, enableContainsMatching defaults to false, and cursor is reserved and currently ignored. Emits a VEHICLE_SEARCH event; no vehicle state changes. Returns 200 with ranked results plus totalCount and hasMore, and 400 with a VALIDATION_ERROR ApiError when the query is empty or shorter than the minimum for its inferred type.
+     * Searches vehicle registry records with a single free-text query, ranking exact matches ahead of prefix matches ahead of optional contains matches. Use this tool for vehicle discovery from a JSON body; use searchVehiclesByQuery for the query-parameter variant, and use getVehicleByVin instead when the full 17-character VIN is already known. Preconditions: none beyond registry data existing; the match field is inferred from the query shape, with six or more alphanumeric characters searched as a VIN (seventeen as an exact VIN), shorter queries searched against license plates, and the remainder searched against unit number plus description. When plate is given the search is an exact plate search instead: the plate is normalised (upper-cased, separators removed, so 7klm-204 is 7KLM204) and must match the stored plate exactly, query is ignored, and jurisdiction optionally narrows the result to the jurisdiction that issued the plate (an ISO 3166-2 code such as US-CA, or the stored code such as CA; both sides are normalised the same way, so they are interchangeable). Required inputs: query (non-blank, at least 3 characters, or 6 when VIN-shaped) unless plate is given; limit defaults to 25 and is capped at 50, enableContainsMatching defaults to false, and cursor is reserved and currently ignored. Emits a VEHICLE_SEARCH event; no vehicle state changes. Returns 200 with ranked results plus totalCount and hasMore, and 400 with a VALIDATION_ERROR ApiError when the query is empty or shorter than the minimum for its inferred type, when jurisdiction is supplied without plate, or when plate contains no letters or digits.
      * @endpoint post /v1/vehicles/search
      * @param searchVehiclesRequest Free-text search criteria with an optional result limit and matching strategy flag.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -111,22 +111,21 @@ export class VehicleSearchService extends BaseService {
 
     /**
      * Search vehicles (query parameter)
-     * Searches vehicle registry records using query parameters, applying the same ranking as searchVehicles with exact matches first, then prefix matches, then optional contains matches. Use this tool for browser-friendly or link-style searches; use searchVehicles instead when the client can send a JSON body, and use getVehicleByVin when the full 17-character VIN is already known. Preconditions: none beyond registry data existing; the match field is inferred from the query shape exactly as in searchVehicles. Required inputs: q (non-blank, at least 3 characters, or 6 when VIN-shaped); limit defaults to 25 and is capped at 50, and enableContains defaults to false. Emits a VEHICLE_SEARCH event; no vehicle state changes. Returns 200 with ranked results plus totalCount and hasMore, and 400 with a VALIDATION_ERROR ApiError when q is empty or shorter than the minimum for its inferred type.
+     * Searches vehicle registry records using query parameters, applying the same ranking as searchVehicles with exact matches first, then prefix matches, then optional contains matches. Use this tool for browser-friendly or link-style searches; use searchVehicles instead when the client can send a JSON body, and use getVehicleByVin when the full 17-character VIN is already known. Preconditions: none beyond registry data existing; the match field is inferred from the query shape exactly as in searchVehicles. When plate is given the search is an exact plate search instead: the plate is normalised (upper-cased, separators removed, so 7klm-204 is 7KLM204) and must match the stored plate exactly, q is ignored, and jurisdiction optionally narrows the result to the jurisdiction that issued the plate (an ISO 3166-2 code such as US-CA, or the stored code such as CA; both sides are normalised the same way, so they are interchangeable). Required inputs: q (non-blank, at least 3 characters, or 6 when VIN-shaped) unless plate is given; limit defaults to 25 and is capped at 50, and enableContains defaults to false. Emits a VEHICLE_SEARCH event; no vehicle state changes. Returns 200 with ranked results plus totalCount and hasMore, and 400 with a VALIDATION_ERROR ApiError when q is empty or shorter than the minimum for its inferred type, when jurisdiction is supplied without plate, or when plate contains no letters or digits.
      * @endpoint get /v1/vehicles/search
-     * @param q Search query (VIN, license plate, unit number, or description)
+     * @param q Search query (VIN, license plate, unit number, or description); required unless plate is given, and ignored when plate is given
+     * @param plate License plate matched exactly after normalisation (upper-cased, separators removed); when given, the search is a plate search and q is ignored
+     * @param jurisdiction Jurisdiction that narrows a plate search, as an ISO 3166-2 subdivision code (US-CA) or the stored code (CA); requires plate
      * @param limit Result limit (default 25, max 50)
      * @param enableContains Enable contains matching (default false)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public searchVehiclesByQuery(q: string, limit?: number, enableContains?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SearchVehiclesResponse>;
-    public searchVehiclesByQuery(q: string, limit?: number, enableContains?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SearchVehiclesResponse>>;
-    public searchVehiclesByQuery(q: string, limit?: number, enableContains?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SearchVehiclesResponse>>;
-    public searchVehiclesByQuery(q: string, limit?: number, enableContains?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (q === null || q === undefined) {
-            throw new Error('Required parameter q was null or undefined when calling searchVehiclesByQuery.');
-        }
+    public searchVehiclesByQuery(q?: string, plate?: string, jurisdiction?: string, limit?: number, enableContains?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SearchVehiclesResponse>;
+    public searchVehiclesByQuery(q?: string, plate?: string, jurisdiction?: string, limit?: number, enableContains?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SearchVehiclesResponse>>;
+    public searchVehiclesByQuery(q?: string, plate?: string, jurisdiction?: string, limit?: number, enableContains?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SearchVehiclesResponse>>;
+    public searchVehiclesByQuery(q?: string, plate?: string, jurisdiction?: string, limit?: number, enableContains?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -134,6 +133,24 @@ export class VehicleSearchService extends BaseService {
             localVarQueryParameters,
             'q',
             <any>q,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'plate',
+            <any>plate,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'jurisdiction',
+            <any>jurisdiction,
             QueryParamStyle.Form,
             true,
         );

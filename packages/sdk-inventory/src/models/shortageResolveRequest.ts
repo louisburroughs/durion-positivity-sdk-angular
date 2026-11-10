@@ -18,10 +18,6 @@ export interface ShortageResolveRequest {
      */
     allocationId: string;
     /**
-     * Retry-safe idempotency key; a replay with the same key returns the original result. When omitted, defaults to \"<allocationId>:<optionType>\"
-     */
-    idempotencyKey?: string;
-    /**
      * Site the demand is short at (required for BACKORDER / TRANSFER_IN)
      */
     locationId?: string;
@@ -103,7 +99,7 @@ export function instanceOfShortageResolveRequest(value: object): value is Shorta
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createShortageResolveRequestPropertyNames('allocationId', 'optionType', );
-    const optionalStringProperties = createShortageResolveRequestOptionalProperties({ name: 'allocationId', nullable: false }, { name: 'idempotencyKey', nullable: false }, { name: 'locationId', nullable: false }, { name: 'notes', nullable: false }, { name: 'optionType', nullable: false }, { name: 'sku', nullable: false }, { name: 'sourceLocationId', nullable: false }, { name: 'substituteSku', nullable: false }, { name: 'workorderLineId', nullable: false }, );
+    const optionalStringProperties = createShortageResolveRequestOptionalProperties({ name: 'allocationId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'notes', nullable: false }, { name: 'optionType', nullable: false }, { name: 'sku', nullable: false }, { name: 'sourceLocationId', nullable: false }, { name: 'substituteSku', nullable: false }, { name: 'workorderLineId', nullable: false }, );
     const optionalNumberProperties = createShortageResolveRequestOptionalProperties({ name: 'shortQuantity', nullable: false }, );
     const optionalBooleanProperties = createShortageResolveRequestOptionalProperties();
 
