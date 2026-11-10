@@ -63,7 +63,7 @@ export function instanceOfPicksSummary(value: object): value is PicksSummary {
 
     const requiredProperties = createPicksSummaryPropertyNames();
     const optionalStringProperties = createPicksSummaryOptionalProperties();
-    const optionalNumberProperties = createPicksSummaryOptionalProperties({ name: 'count', nullable: true }, { name: '_short', nullable: true }, );
+    const optionalNumberProperties = createPicksSummaryOptionalProperties({ name: 'count', nullable: true }, { name: 'short', nullable: true }, );
     const optionalBooleanProperties = createPicksSummaryOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

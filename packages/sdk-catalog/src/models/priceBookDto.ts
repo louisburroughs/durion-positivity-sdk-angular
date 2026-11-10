@@ -100,7 +100,7 @@ export function instanceOfPriceBookDto(value: object): value is PriceBookDto {
     const requiredProperties = createPriceBookDtoPropertyNames('createdAt', 'name', 'priceBookId', 'scope', 'status', 'version', );
     const optionalStringProperties = createPriceBookDtoOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'name', nullable: false }, { name: 'priceBookId', nullable: false }, { name: 'scope', nullable: false }, { name: 'scopeId', nullable: false }, { name: 'status', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createPriceBookDtoOptionalProperties({ name: 'version', nullable: false }, );
-    const optionalBooleanProperties = createPriceBookDtoOptionalProperties({ name: '_default', nullable: false }, );
+    const optionalBooleanProperties = createPriceBookDtoOptionalProperties({ name: 'default', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalPriceBookDtoPropertyOfType(_v, property.name, 'string', property.nullable))

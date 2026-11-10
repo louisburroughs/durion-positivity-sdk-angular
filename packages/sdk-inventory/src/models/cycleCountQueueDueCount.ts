@@ -92,7 +92,7 @@ export function instanceOfCycleCountQueueDueCount(value: object): value is Cycle
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCycleCountQueueDueCountPropertyNames('binCount', 'bins', 'due', 'id', 'kind', 'overdue', 'zones', );
-    const optionalStringProperties = createCycleCountQueueDueCountOptionalProperties({ name: '_class', nullable: false }, { name: 'due', nullable: false }, { name: 'id', nullable: false }, { name: 'kind', nullable: false }, );
+    const optionalStringProperties = createCycleCountQueueDueCountOptionalProperties({ name: 'class', nullable: false }, { name: 'due', nullable: false }, { name: 'id', nullable: false }, { name: 'kind', nullable: false }, );
     const optionalNumberProperties = createCycleCountQueueDueCountOptionalProperties({ name: 'binCount', nullable: false }, );
     const optionalBooleanProperties = createCycleCountQueueDueCountOptionalProperties({ name: 'overdue', nullable: false }, );
 

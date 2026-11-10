@@ -97,8 +97,54 @@ describe('sdk-002 generation pipeline', () => {
     const bucket = /const optionalStringProperties = .*/.exec(template);
 
     expect(bucket).not.toBeNull();
-    expect(bucket![0]).toMatch(/\{\{#isDate\}\}\{ name: '\{\{name\}\}'/);
-    expect(bucket![0]).toMatch(/\{\{#isDateTime\}\}\{ name: '\{\{name\}\}'/);
+    expect(bucket![0]).toMatch(/\{\{#isDate\}\}\{ name: '/);
+    expect(bucket![0]).toMatch(/\{\{#isDateTime\}\}\{ name: '/);
+  });
+
+  it('modelGeneric.mustache names guard properties the way the interface declares them', () => {
+    // A property whose name is a reserved word (`class`, `default`, `short`) is
+    // declared on the interface under its quoted wire name, while `{{name}}` is the
+    // generator's sanitized `_class`. A guard built from `{{name}}` looks for a key
+    // no payload carries: an optional one is never type-checked and a required one
+    // rejects every real response.
+    const template = readFileSync(
+      join(ROOT, 'templates', 'typescript-angular', 'modelGeneric.mustache'),
+      'utf8',
+    );
+    const guard = template.slice(template.indexOf('export function instanceOf{{classname}}'));
+
+    expect(guard).not.toContain("'{{name}}'");
+    expect(guard).toContain('{{#hasSanitizedName}}{{{baseName}}}{{/hasSanitizedName}}');
+  });
+
+  it('generated guards only name properties the interface declares', () => {
+    const problems: string[] = [];
+
+    for (const packageName of readdirSync(PACKAGES_DIR)) {
+      const modelsDir = join(PACKAGES_DIR, packageName, 'src', 'models');
+      if (!existsSync(modelsDir) || !statSync(modelsDir).isDirectory()) continue;
+
+      for (const file of readdirSync(modelsDir).filter((f) => f.endsWith('.ts'))) {
+        const source = readFileSync(join(modelsDir, file), 'utf8');
+        const guardStart = source.indexOf('export function instanceOf');
+        const iface = /export interface \w+[^{]*\{([\s\S]*?)\n\}/.exec(source);
+        if (guardStart < 0 || !iface) continue;
+
+        const declared = new Set(
+          [...iface[1].matchAll(/^\s{4}(?:readonly\s+)?'?([^'\s?:]+)'?\??:/gm)].map((m) => m[1]),
+        );
+        const named = [
+          ...source
+            .slice(guardStart)
+            .matchAll(/(?:PropertyNames|OptionalProperties)\(([^;]*)\);/g),
+        ].flatMap((m) => [...m[1].matchAll(/'([^']+)'/g)].map((n) => n[1]));
+
+        const unknown = [...new Set(named)].filter((name) => !declared.has(name));
+        if (unknown.length > 0) problems.push(`${packageName}/${file}: ${unknown.join(', ')}`);
+      }
+    }
+
+    expect(problems).toEqual([]);
   });
 
   it('generated guards validate every string-typed property, including date-time fields', () => {
