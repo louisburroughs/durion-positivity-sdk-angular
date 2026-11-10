@@ -21,6 +21,8 @@ import { ApiError } from '../models/apiError';
 // @ts-ignore
 import { AssignServicePositionRequest } from '../models/assignServicePositionRequest';
 // @ts-ignore
+import { PositionAvailabilityResponse } from '../models/positionAvailabilityResponse';
+// @ts-ignore
 import { ServicePositionResponse } from '../models/servicePositionResponse';
 
 // @ts-ignore
@@ -41,7 +43,7 @@ export class ServicePositionAPIService extends BaseService {
 
     /**
      * Assign or Change a Workorder\&#39;s Service Position
-     * Places the workorder on a service position — a bay, a mobile unit, or the site\&#39;s HOLD (parking) position — recording who placed it, when and why, and releasing whatever position it held before in the same transaction. Use this tool to dispatch a workorder to a bay, move it between bays or mobile units, or park it; do not use releaseServicePosition, which leaves the workorder unplaced, and do not use overrideOperationalContext, which is the manager exception path and also rewrites mechanics and location. Preconditions: the workorder must exist and must not be COMPLETED or CANCELLED; a BAY or MOBILE_UNIT must be known to this module\&#39;s location replicas, belong to the workorder\&#39;s own site and hold no other open workorder, while HOLD has no capacity limit and accepts only the workorder\&#39;s own locationId; and a caller whose workorder:position:assign grant is location-scoped must have the workorder\&#39;s shop within reach (ADR-0061). Required inputs: workorderId (UUID) as a path parameter and a body with resourceType (BAY, MOBILE_UNIT or HOLD, required); resourceId is required for BAY and MOBILE_UNIT and optional for HOLD, reason is optional, and re-sending the placement already in force is a no-op that writes no history. Emits a WORKORDER_POSITION_ASSIGN event and marks the workorder fact changed. Returns 403 when the caller\&#39;s location scope does not cover the workorder\&#39;s shop, 404 when no workorder exists for the id, 409 RESOURCE_OCCUPIED when the position already holds another open workorder, 409 WORKORDER_CLOSED when the workorder is COMPLETED or CANCELLED, 422 SERVICE_POSITION_INVALID when the position is at another site or is the other resource kind, 422 SERVICE_POSITION_INACTIVE when the bay is out of service or the mobile unit is not deployed, 422 SERVICE_POSITION_DUTY_CLASS_EXCEEDED when the vehicle\&#39;s GVWR class is above the position\&#39;s maxDutyClass, and 503 LOCATION_REPLICATION_PENDING with a Retry-After header when neither location replica holds the position id yet; specialty capability is never checked here, only duty class (DECISION-SHOPMGMT-021 rule 3), and an unknown vehicle or ceiling class skips the check. Placing an APPROVED workorder that already has a technician on a BAY or MOBILE_UNIT moves it to ASSIGNED; a HOLD does not, because it is a parking space rather than somewhere work happens.
+     * Places the workorder on a service position — a bay, a mobile unit, or the site\&#39;s HOLD (parking) position — recording who placed it, when and why, and releasing whatever position it held before in the same transaction. Use this tool to dispatch a workorder to a bay, move it between bays or mobile units, or park it; do not use releaseServicePosition, which leaves the workorder unplaced, and do not use overrideOperationalContext, which is the manager exception path and also rewrites mechanics and location. Preconditions: the workorder must exist and must not be COMPLETED or CANCELLED; a BAY or MOBILE_UNIT must be known to this module\&#39;s location replicas, belong to the workorder\&#39;s own site and hold no other open workorder whose half-open slot [slotStart, slotEnd) overlaps, while HOLD has no capacity limit, carries no slot and accepts only the workorder\&#39;s own locationId; and a caller whose workorder:position:assign grant is location-scoped must have the workorder\&#39;s shop within reach (ADR-0061). Required inputs: workorderId (UUID) as a path parameter and a body with resourceType (BAY, MOBILE_UNIT or HOLD, required); resourceId is required for BAY and MOBILE_UNIT and optional for HOLD, reason is optional, and re-sending the placement already in force is a no-op that writes no history. slotStart and slotEnd are optional and half-open: [slotStart, slotEnd); omitted, the server stores a default slot of now until now plus the greater of 30 minutes and the workorder\&#39;s book time (the sum of its service lines\&#39; guideHours, else quantity); a lone slotStart gets that same default length, a slotEnd without a slotStart or an end not after the start is 400 INVALID_ARGUMENT, and HOLD ignores both; re-sending the same position with a different slot is a change and is refused if the new slot overlaps another open workorder\&#39;s slot. Emits a WORKORDER_POSITION_ASSIGN event and marks the workorder fact changed. Returns 403 when the caller\&#39;s location scope does not cover the workorder\&#39;s shop, 404 when no workorder exists for the id, 409 RESOURCE_OCCUPIED when the position already holds another open workorder, 409 WORKORDER_CLOSED when the workorder is COMPLETED or CANCELLED, 422 SERVICE_POSITION_INVALID when the position is at another site or is the other resource kind, 422 SERVICE_POSITION_INACTIVE when the bay is out of service or the mobile unit is not deployed, 422 SERVICE_POSITION_DUTY_CLASS_EXCEEDED when the vehicle\&#39;s GVWR class is above the position\&#39;s maxDutyClass, and 503 LOCATION_REPLICATION_PENDING with a Retry-After header when neither location replica holds the position id yet; specialty capability is never checked here, only duty class (DECISION-SHOPMGMT-021 rule 3), and an unknown vehicle or ceiling class skips the check. Placing an APPROVED workorder that already has a technician on a BAY or MOBILE_UNIT moves it to ASSIGNED; a HOLD does not, because it is a parking space rather than somewhere work happens.
      * @endpoint put /v1/workorders/{workorderId}/position
      * @param workorderId ID of the workorder
      * @param assignServicePositionRequest The position to place the workorder on, and why.
@@ -103,6 +105,114 @@ export class ServicePositionAPIService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: assignServicePositionRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Read Bay and Mobile-Unit Availability for a Window
+     * Returns every active bay and, unless narrowed, every active mobile unit at a site together with the open workorders whose half-open slot [slotStart, slotEnd) overlaps the requested window. Each occupant carries its workorder id and number, its current technician id and display name, and its slot; a slot bound of null means unbounded, which is how a legacy placement that predates slots occupies until the workorder closes. Use this tool to answer \&quot;is this bay free for a window\&quot; or to draw a booking board; do not use getServicePosition, which answers one workorder\&#39;s current position. It is the read counterpart of assignServicePosition\&#39;s overlap rule. Preconditions: locationId must be within the caller\&#39;s location scope (ADR-0061); from must be before to; resourceType may be BAY or MOBILE_UNIT, and HOLD is refused because a parking lot is not a bookable position. Required inputs: locationId, from and to as ISO-8601 instants; resourceType is optional and omitted means both kinds. No events are emitted and no state changes; this is a read-only projection of the location replicas and the open positions. Returns 400 INVALID_ARGUMENT when from is not before to or resourceType is HOLD, and 403 LOCATION_SCOPE_DENIED when the caller\&#39;s scope does not cover locationId.
+     * @endpoint get /v1/workorders/positions/availability
+     * @param locationId Site whose bays and mobile units are read
+     * @param from Inclusive start of the window, ISO-8601
+     * @param to Exclusive end of the window, ISO-8601
+     * @param resourceType Narrow to BAY or MOBILE_UNIT; omit for both
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getPositionAvailability(locationId: string, from: string, to: string, resourceType?: 'BAY' | 'MOBILE_UNIT' | 'HOLD', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PositionAvailabilityResponse>;
+    public getPositionAvailability(locationId: string, from: string, to: string, resourceType?: 'BAY' | 'MOBILE_UNIT' | 'HOLD', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PositionAvailabilityResponse>>;
+    public getPositionAvailability(locationId: string, from: string, to: string, resourceType?: 'BAY' | 'MOBILE_UNIT' | 'HOLD', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PositionAvailabilityResponse>>;
+    public getPositionAvailability(locationId: string, from: string, to: string, resourceType?: 'BAY' | 'MOBILE_UNIT' | 'HOLD', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (locationId === null || locationId === undefined) {
+            throw new Error('Required parameter locationId was null or undefined when calling getPositionAvailability.');
+        }
+        if (from === null || from === undefined) {
+            throw new Error('Required parameter from was null or undefined when calling getPositionAvailability.');
+        }
+        if (to === null || to === undefined) {
+            throw new Error('Required parameter to was null or undefined when calling getPositionAvailability.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'locationId',
+            <any>locationId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'from',
+            <any>from,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'to',
+            <any>to,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'resourceType',
+            <any>resourceType,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/workorders/positions/availability`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PositionAvailabilityResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

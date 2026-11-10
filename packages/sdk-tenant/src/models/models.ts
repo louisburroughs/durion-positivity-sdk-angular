@@ -10,6 +10,7 @@ export * from './conflict';
 export * from './fieldError';
 export * from './monthlyAllowanceDto';
 export * from './ownerContact';
+export * from './policyBlocker';
 export * from './readingTierCreateRequest';
 export * from './readingTierResponse';
 export * from './readingTierUpdateRequest';

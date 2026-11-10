@@ -23,9 +23,15 @@ import { ConvertPurchaseSuggestionsRequest } from '../models/convertPurchaseSugg
 // @ts-ignore
 import { ConvertPurchaseSuggestionsResponse } from '../models/convertPurchaseSuggestionsResponse';
 // @ts-ignore
+import { CreatePurchaseSuggestionRequest } from '../models/createPurchaseSuggestionRequest';
+// @ts-ignore
 import { DismissPurchaseSuggestionRequest } from '../models/dismissPurchaseSuggestionRequest';
 // @ts-ignore
+import { PurchaseSuggestionPageResponse } from '../models/purchaseSuggestionPageResponse';
+// @ts-ignore
 import { PurchaseSuggestionResponse } from '../models/purchaseSuggestionResponse';
+// @ts-ignore
+import { UpdatePurchaseSuggestionQuantityRequest } from '../models/updatePurchaseSuggestionQuantityRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -174,6 +180,76 @@ export class PurchaseSuggestionsService extends BaseService {
     }
 
     /**
+     * Create Manual Purchase Request
+     * Creates a manual purchase request for a SKU at a site: a SUGGESTED purchase suggestion with origin MANUAL, the caller in requestedBy, a per-tenant display number (PR-nnnn) and the requested quantity. It carries no replenishment policy and no vendor. Use this tool when a person wants to ask Purchasing for stock; do not use it to change an open request, use updatePurchaseSuggestion instead, and use acceptPurchaseSuggestion plus convertPurchaseSuggestions to turn an accepted request into a purchase order. Preconditions: createPurchaseRequests must be on at the site (else 422 PURCHASE_REQUESTS_DISABLED); no open request may already exist for the same SKU + site (else 409 PURCHASE_REQUEST_ALREADY_OPEN, whose referenceId names the existing request when the caller\&#39;s reach covers it). Required inputs: sku, locationId (a known site, or a known bin resolved to its site; else 422 PURCHASE_REQUEST_LOCATION_UNKNOWN), quantity greater than zero, and an optional binLocationId under the site. Emits an INVENTORY_PURCHASE_SUGGESTION_CREATE event; no purchase order is created and no spend is committed. Returns 201 with the created request, 400 when a field is invalid or the bin is not under the site, 403 when the caller lacks the permission or the location is outside their reach, 409 for a duplicate open request and 422 when the location is unknown or purchase requests are disabled at the site.
+     * @endpoint post /v1/inventory/purchase-suggestions
+     * @param createPurchaseSuggestionRequest The manual purchase request to raise.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public createPurchaseSuggestion(createPurchaseSuggestionRequest: CreatePurchaseSuggestionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PurchaseSuggestionResponse>;
+    public createPurchaseSuggestion(createPurchaseSuggestionRequest: CreatePurchaseSuggestionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PurchaseSuggestionResponse>>;
+    public createPurchaseSuggestion(createPurchaseSuggestionRequest: CreatePurchaseSuggestionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PurchaseSuggestionResponse>>;
+    public createPurchaseSuggestion(createPurchaseSuggestionRequest: CreatePurchaseSuggestionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (createPurchaseSuggestionRequest === null || createPurchaseSuggestionRequest === undefined) {
+            throw new Error('Required parameter createPurchaseSuggestionRequest was null or undefined when calling createPurchaseSuggestion.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/inventory/purchase-suggestions`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PurchaseSuggestionResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: createPurchaseSuggestionRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Dismiss Purchase Suggestion
      * Dismisses a purchase suggestion with a recorded reason, moving it to the terminal DISMISSED status. Use this tool to reject one specific proposal; dismissal is per-instance, so use the replenishment policy snooze instead to suppress future suggestions for the SKU, and do not use acceptPurchaseSuggestion, which approves the proposal. Preconditions: the suggestion must exist and be in SUGGESTED or ACCEPTED status. Required inputs: suggestionId (UUIDv7) path parameter and a body with reason, non-blank and at most 255 characters. Emits an INVENTORY_PURCHASE_SUGGESTION_DISMISS event and stores the dismissal reason on the suggestion; the replenishment scan may still raise a new suggestion later. Returns 404 when the suggestion does not exist, 409 when it is already CONVERTED or DISMISSED, and 400 when the reason is missing or blank.
      * @endpoint post /v1/inventory/purchase-suggestions/{suggestionId}/dismiss
@@ -308,24 +384,23 @@ export class PurchaseSuggestionsService extends BaseService {
     }
 
     /**
-     * List Purchase Suggestions
-     * Returns a page of replenishment purchase suggestions, newest first, with their lifecycle status, suggested quantity, vendor and pricing snapshot. Use this tool to discover suggestionIds or review what the replenishment scan proposed; use getPurchaseSuggestion instead when the id is already known. Preconditions: none; suggestions are created only by the replenishment scan, so an empty page means the scan proposed nothing matching the filters. Required inputs: none; status (SUGGESTED, ACCEPTED, CONVERTED or DISMISSED), sku and locationId are optional filters, and the page size defaults to 20. No events are emitted and no state changes; this is a read-only projection. Returns 400 when status is not a known lifecycle value, and 200 with an empty page when nothing matches.
+     * List Purchase Requests
+     * Returns one cursor page of purchase requests (the extended purchase suggestions), ordered ascending by their UUIDv7 key, with their derived display status, quantity, origin, display number, vendor and pricing snapshot. Use this tool to discover suggestionIds or review what the replenishment scan proposed and what people requested manually; use getPurchaseSuggestion instead when the id is already known. Preconditions: none; an empty page means nothing matches the filters. Required inputs: none; status (REQUESTED, ON_PO, RECEIVED, CANCELLED or the persisted SUGGESTED, ACCEPTED, CONVERTED, DISMISSED), sku, locationId and orderAttention are optional filters. pageSize defaults to 50 (max 200); pageToken is the opaque nextPageToken of the previous page. There is no totalCount. No events are emitted and no state changes; this is a read-only projection. Returns 400 when status, pageSize or pageToken is not valid, and 200 with an empty page when nothing matches.
      * @endpoint get /v1/inventory/purchase-suggestions
-     * @param status Lifecycle status filter (SUGGESTED, ACCEPTED, CONVERTED, DISMISSED)
+     * @param status Status filter: REQUESTED, ON_PO, RECEIVED, CANCELLED, or the persisted SUGGESTED, ACCEPTED, CONVERTED, DISMISSED (case-insensitive)
      * @param sku Stock item (SKU) filter
      * @param locationId Destination location filter
      * @param orderAttention CAP:550 S36: only CONVERTED suggestions whose order needs attention for this reason (ORDER_VENDOR_INACTIVE, ORDER_VENDOR_NOT_IN_COPY, ORDER_NOT_PLACED)
-     * @param page Zero-based page index (0..N)
-     * @param size The size of the page to be returned
-     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
+     * @param pageSize Page size, 1-200; defaults to 50
+     * @param pageToken Opaque cursor from the previous page\&#39;s nextPageToken
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listPurchaseSuggestions(status?: string, sku?: string, locationId?: string, orderAttention?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<string>;
-    public listPurchaseSuggestions(status?: string, sku?: string, locationId?: string, orderAttention?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<string>>;
-    public listPurchaseSuggestions(status?: string, sku?: string, locationId?: string, orderAttention?: string, page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<string>>;
-    public listPurchaseSuggestions(status?: string, sku?: string, locationId?: string, orderAttention?: string, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listPurchaseSuggestions(status?: string, sku?: string, locationId?: string, orderAttention?: string, pageSize?: number, pageToken?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PurchaseSuggestionPageResponse>;
+    public listPurchaseSuggestions(status?: string, sku?: string, locationId?: string, orderAttention?: string, pageSize?: number, pageToken?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PurchaseSuggestionPageResponse>>;
+    public listPurchaseSuggestions(status?: string, sku?: string, locationId?: string, orderAttention?: string, pageSize?: number, pageToken?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PurchaseSuggestionPageResponse>>;
+    public listPurchaseSuggestions(status?: string, sku?: string, locationId?: string, orderAttention?: string, pageSize?: number, pageToken?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -367,8 +442,8 @@ export class PurchaseSuggestionsService extends BaseService {
 
         localVarQueryParameters = this.addToHttpParams(
             localVarQueryParameters,
-            'page',
-            <any>page,
+            'pageSize',
+            <any>pageSize,
             QueryParamStyle.Form,
             true,
         );
@@ -376,17 +451,8 @@ export class PurchaseSuggestionsService extends BaseService {
 
         localVarQueryParameters = this.addToHttpParams(
             localVarQueryParameters,
-            'size',
-            <any>size,
-            QueryParamStyle.Form,
-            true,
-        );
-
-
-        localVarQueryParameters = this.addToHttpParams(
-            localVarQueryParameters,
-            'sort',
-            <any>sort,
+            'pageToken',
+            <any>pageToken,
             QueryParamStyle.Form,
             true,
         );
@@ -422,10 +488,84 @@ export class PurchaseSuggestionsService extends BaseService {
 
         let localVarPath = `/v1/inventory/purchase-suggestions`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<string>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<PurchaseSuggestionPageResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Update Purchase Request Quantity
+     * Changes the quantity of an open purchase request (persisted SUGGESTED or ACCEPTED). The edit is final: the replenishment scan\&#39;s refresh leaves the quantity alone, while still refreshing the vendor and lead-time fields it owns. Use this tool to adjust an existing request instead of raising a duplicate one; use dismissPurchaseSuggestion to reject it, and acceptPurchaseSuggestion to approve it. Preconditions: the request must exist and be SUGGESTED or ACCEPTED. Required inputs: suggestionId (UUIDv7) path parameter and a body with quantity greater than zero. Emits an INVENTORY_PURCHASE_SUGGESTION_UPDATE event and flags the row quantityEdited. Returns 404 when the request does not exist, 403 when the location is outside the caller\&#39;s reach, 409 PURCHASE_SUGGESTION_INVALID_STATE when it is CONVERTED or DISMISSED, and 400 when the quantity is not positive.
+     * @endpoint patch /v1/inventory/purchase-suggestions/{suggestionId}
+     * @param suggestionId Purchase suggestion identifier
+     * @param updatePurchaseSuggestionQuantityRequest The new quantity for the open purchase request.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public updatePurchaseSuggestion(suggestionId: string, updatePurchaseSuggestionQuantityRequest: UpdatePurchaseSuggestionQuantityRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PurchaseSuggestionResponse>;
+    public updatePurchaseSuggestion(suggestionId: string, updatePurchaseSuggestionQuantityRequest: UpdatePurchaseSuggestionQuantityRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PurchaseSuggestionResponse>>;
+    public updatePurchaseSuggestion(suggestionId: string, updatePurchaseSuggestionQuantityRequest: UpdatePurchaseSuggestionQuantityRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PurchaseSuggestionResponse>>;
+    public updatePurchaseSuggestion(suggestionId: string, updatePurchaseSuggestionQuantityRequest: UpdatePurchaseSuggestionQuantityRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (suggestionId === null || suggestionId === undefined) {
+            throw new Error('Required parameter suggestionId was null or undefined when calling updatePurchaseSuggestion.');
+        }
+        if (updatePurchaseSuggestionQuantityRequest === null || updatePurchaseSuggestionQuantityRequest === undefined) {
+            throw new Error('Required parameter updatePurchaseSuggestionQuantityRequest was null or undefined when calling updatePurchaseSuggestion.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/inventory/purchase-suggestions/${this.configuration.encodeParam({name: "suggestionId", value: suggestionId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PurchaseSuggestionResponse>('patch', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: updatePurchaseSuggestionQuantityRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

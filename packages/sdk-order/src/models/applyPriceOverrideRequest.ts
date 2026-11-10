@@ -14,10 +14,6 @@
  */
 export interface ApplyPriceOverrideRequest {
     /**
-     * Optional idempotency key for duplicate prevention
-     */
-    idempotencyKey?: string;
-    /**
      * Free-text justification supporting the price override
      */
     justification?: string;
@@ -86,7 +82,7 @@ export function instanceOfApplyPriceOverrideRequest(value: object): value is App
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createApplyPriceOverrideRequestPropertyNames('orderId', 'orderLineId', 'originalPrice', 'overridePrice', 'productId', 'reasonCode', );
-    const optionalStringProperties = createApplyPriceOverrideRequestOptionalProperties({ name: 'idempotencyKey', nullable: false }, { name: 'justification', nullable: false }, { name: 'orderId', nullable: false }, { name: 'orderLineId', nullable: false }, { name: 'productId', nullable: false }, { name: 'reasonCode', nullable: false }, );
+    const optionalStringProperties = createApplyPriceOverrideRequestOptionalProperties({ name: 'justification', nullable: false }, { name: 'orderId', nullable: false }, { name: 'orderLineId', nullable: false }, { name: 'productId', nullable: false }, { name: 'reasonCode', nullable: false }, );
     const optionalNumberProperties = createApplyPriceOverrideRequestOptionalProperties({ name: 'originalPrice', nullable: false }, { name: 'overridePrice', nullable: false }, );
     const optionalBooleanProperties = createApplyPriceOverrideRequestOptionalProperties();
 

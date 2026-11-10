@@ -40,6 +40,7 @@ export * from './periodTimeDto';
 export * from './personBulkIngestRecord';
 export * from './personCredentialBulkIngestRecord';
 export * from './personCredentialResponse';
+export * from './policyBlocker';
 export * from './primaryLocationResponse';
 export * from './rejectTimePeriodRequest';
 export * from './setEmployeePhotoRequest';

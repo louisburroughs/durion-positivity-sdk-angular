@@ -34,6 +34,7 @@ export * from './pagePurchaseOrderResponse';
 export * from './pagePurchaseOrderTransmissionEvent';
 export * from './pagePurchaseOrderVendorResponse';
 export * from './pageableObject';
+export * from './policyBlocker';
 export * from './priceOverrideDetail';
 export * from './priceOverrideResult';
 export * from './procurementAvailability';

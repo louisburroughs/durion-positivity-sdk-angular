@@ -8,6 +8,7 @@ export * from './fieldError';
 export * from './pageVehicleDueDateResponse';
 export * from './pageable';
 export * from './pageableObject';
+export * from './policyBlocker';
 export * from './preferencesMergeDto';
 export * from './preferencesUpsertDto';
 export * from './searchVehiclesRequest';

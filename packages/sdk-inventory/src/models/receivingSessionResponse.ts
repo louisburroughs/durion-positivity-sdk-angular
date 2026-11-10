@@ -39,11 +39,11 @@ export interface ReceivingSessionResponse {
      */
     shipmentReference?: string;
     /**
-     * Identifier of the source document the session receives against
+     * Identifier of the source document the session receives against; null for an unplanned receipt (#3187), which has no source document
      */
-    sourceDocumentId: string;
+    sourceDocumentId?: string;
     /**
-     * Type of the source document, such as PURCHASE_ORDER or WORKORDER
+     * Type of the source document: PO, ASN, or UNPLANNED for a receipt with no source document (#3187)
      */
     sourceDocumentType?: string;
     /**
@@ -94,7 +94,7 @@ export function instanceOfReceivingSessionResponse(value: object): value is Rece
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReceivingSessionResponsePropertyNames('createdAt', 'sessionId', 'sourceDocumentId', 'status', );
+    const requiredProperties = createReceivingSessionResponsePropertyNames('createdAt', 'sessionId', 'status', );
     const optionalStringProperties = createReceivingSessionResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'entryMethod', nullable: false }, { name: 'sessionId', nullable: false }, { name: 'shipmentReference', nullable: false }, { name: 'sourceDocumentId', nullable: false }, { name: 'sourceDocumentType', nullable: false }, { name: 'status', nullable: false }, { name: 'supplierId', nullable: false }, );
     const optionalNumberProperties = createReceivingSessionResponseOptionalProperties();
     const optionalBooleanProperties = createReceivingSessionResponseOptionalProperties();

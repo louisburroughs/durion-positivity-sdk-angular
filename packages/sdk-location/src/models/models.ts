@@ -44,6 +44,7 @@ export * from './pageMobileUnitResponse';
 export * from './pageStorageLocationResponse';
 export * from './pageableObject';
 export * from './personDTO';
+export * from './policyBlocker';
 export * from './postalCodeEntry';
 export * from './serviceAreaPostalCodesRequest';
 export * from './serviceAreaRequest';

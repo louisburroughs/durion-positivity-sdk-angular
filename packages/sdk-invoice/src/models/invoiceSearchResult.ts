@@ -14,13 +14,37 @@
  */
 export interface InvoiceSearchResult {
     /**
+     * Settlement figure: captured payments minus every non-FAILED refund anchored to this invoice. It is not the accounts-receivable balance and not ADR-0057 collected: credit memos, customer-credit applications and payments applied in accounting are not reflected here
+     */
+    amountPaid?: number;
+    /**
+     * Settlement figure: total minus amountPaid minus depositCreditsApplied. Signed and never clamped, so a negative value is an overpayment. It is pos-invoice\'s own settlement balance, not the accounts-receivable balance
+     */
+    balanceDue?: number;
+    /**
      * Creation timestamp
      */
     createdAt?: string;
     /**
+     * ISO 4217 code of the amounts on this row, from the tenant\'s functional currency (ADR-0067 R-5: new fields are named currencyCode, never currencyUomId)
+     */
+    currencyCode?: string;
+    /**
+     * Billed customer (party) identifier; absent when the invoice has no bill-to party
+     */
+    customerId?: string;
+    /**
      * Resolved customer display name
      */
     customerName?: string;
+    /**
+     * Settlement figure: deposit-credit draw-downs applied to this invoice. Carried separately from amountPaid and fed only by pos-invoice\'s own deposit-credit records, so it is not a complete non-cash settlement figure
+     */
+    depositCreditsApplied?: number;
+    /**
+     * Collections-aging due date frozen at finalization; null on a draft
+     */
+    dueDate?: string;
     /**
      * Invoice identifier
      */
@@ -29,6 +53,14 @@ export interface InvoiceSearchResult {
      * Human invoice number
      */
     invoiceNumber?: string;
+    /**
+     * Location the invoice was raised at; the value locationId filters and location scope act on
+     */
+    locationId?: string;
+    /**
+     * Settlement status derived from the balance: UNPAID, PARTIALLY_PAID, PAID (settled at the counter, not necessarily cash in hand), OVERPAID, or NOT_APPLICABLE for a CANCELLED or ERROR invoice. Not the accounts-receivable status
+     */
+    paymentStatus?: InvoiceSearchResultPaymentStatusEnum;
     /**
      * Current invoice status
      */
@@ -46,6 +78,13 @@ export interface InvoiceSearchResult {
      */
     workorderNumber?: string;
 }
+export enum InvoiceSearchResultPaymentStatusEnum {
+    Unpaid = 'UNPAID',
+    PartiallyPaid = 'PARTIALLY_PAID',
+    Paid = 'PAID',
+    Overpaid = 'OVERPAID',
+    NotApplicable = 'NOT_APPLICABLE'
+};
 export enum InvoiceSearchResultStatusEnum {
     Draft = 'DRAFT',
     Finalized = 'FINALIZED',
@@ -95,8 +134,8 @@ export function instanceOfInvoiceSearchResult(value: object): value is InvoiceSe
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createInvoiceSearchResultPropertyNames('invoiceId', 'status', );
-    const optionalStringProperties = createInvoiceSearchResultOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'customerName', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'invoiceNumber', nullable: false }, { name: 'status', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderNumber', nullable: false }, );
-    const optionalNumberProperties = createInvoiceSearchResultOptionalProperties({ name: 'total', nullable: false }, );
+    const optionalStringProperties = createInvoiceSearchResultOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'customerId', nullable: false }, { name: 'customerName', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'invoiceNumber', nullable: false }, { name: 'locationId', nullable: false }, { name: 'paymentStatus', nullable: false }, { name: 'status', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderNumber', nullable: false }, );
+    const optionalNumberProperties = createInvoiceSearchResultOptionalProperties({ name: 'amountPaid', nullable: false }, { name: 'balanceDue', nullable: false }, { name: 'depositCreditsApplied', nullable: false }, { name: 'total', nullable: false }, );
     const optionalBooleanProperties = createInvoiceSearchResultOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

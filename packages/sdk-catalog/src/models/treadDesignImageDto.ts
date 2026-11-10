@@ -21,7 +21,7 @@ export interface TreadDesignImageDto {
     /**
      * pos-image identifier for the stored bytes; absent when unresolved.
      */
-    imageId?: number;
+    imageId?: string;
     /**
      * Vendor\'s own classification of the image.
      */
@@ -71,8 +71,8 @@ export function instanceOfTreadDesignImageDto(value: object): value is TreadDesi
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTreadDesignImageDtoPropertyNames();
-    const optionalStringProperties = createTreadDesignImageDtoOptionalProperties({ name: 'imageType', nullable: false }, );
-    const optionalNumberProperties = createTreadDesignImageDtoOptionalProperties({ name: 'imageId', nullable: false }, );
+    const optionalStringProperties = createTreadDesignImageDtoOptionalProperties({ name: 'imageId', nullable: false }, { name: 'imageType', nullable: false }, );
+    const optionalNumberProperties = createTreadDesignImageDtoOptionalProperties();
     const optionalBooleanProperties = createTreadDesignImageDtoOptionalProperties({ name: 'unresolved', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

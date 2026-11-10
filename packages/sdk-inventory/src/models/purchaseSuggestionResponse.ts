@@ -10,9 +10,13 @@
 
 
 /**
- * A scan-generated suggestion to purchase stock for a PURCHASE-preferring replenishment policy. Lifecycle SUGGESTED → ACCEPTED → CONVERTED | DISMISSED; acceptance is human-mandatory and conversion produces a DRAFT purchase order subject to the normal approval workflow
+ * A purchase request (the extended purchase suggestion): either raised by the replenishment scan for a PURCHASE-preferring policy or created manually. Lifecycle SUGGESTED → ACCEPTED → CONVERTED | DISMISSED; acceptance is human-mandatory and conversion produces a DRAFT purchase order subject to the normal approval workflow. requestStatus is the derived display status
  */
 export interface PurchaseSuggestionResponse {
+    /**
+     * The bin a manual request names under its site; null when it names only the site
+     */
+    binLocationId?: string | null;
     /**
      * The DRAFT purchase order the suggestion was converted into
      */
@@ -25,6 +29,10 @@ export interface PurchaseSuggestionResponse {
      * Human-entered reason captured when the suggestion was dismissed
      */
     dismissalReason?: string;
+    /**
+     * Per-tenant display number, formatted PR- plus at least four digits; unique per tenant and never reused
+     */
+    displayNumber?: string | null;
     /**
      * Earliest date the purchase could plausibly arrive (suggestion date + lead time)
      */
@@ -42,6 +50,10 @@ export interface PurchaseSuggestionResponse {
      */
     leadTimeDays?: number;
     /**
+     * The purchase order the request was converted onto; the same value as convertedPurchaseOrderId
+     */
+    linkedPurchaseOrderId?: string | null;
+    /**
      * Destination location the purchased stock is for
      */
     locationId: string;
@@ -54,13 +66,33 @@ export interface PurchaseSuggestionResponse {
      */
     orderStatus?: string | null;
     /**
-     * Replenishment policy the suggestion was computed for
+     * How the request came to exist: MANUAL or REPLENISHMENT
      */
-    policyId: string;
+    origin: PurchaseSuggestionResponseOriginEnum;
+    /**
+     * True when the linked purchase order has received part of its line but is not fully received or short-closed
+     */
+    partiallyReceived: boolean;
+    /**
+     * Replenishment policy the request was computed for; null for a manual request, which no scan owns
+     */
+    policyId?: string | null;
+    /**
+     * Derived display status: REQUESTED (SUGGESTED/ACCEPTED), ON_PO (CONVERTED and the order is not fully received), RECEIVED (CONVERTED and the order is FULLY_RECEIVED or CLOSED) or CANCELLED (DISMISSED, or converted onto a cancelled order)
+     */
+    requestStatus: PurchaseSuggestionResponseRequestStatusEnum;
+    /**
+     * The authenticated username that raised a manual request; null for a scan row
+     */
+    requestedBy?: string | null;
     /**
      * Explainable record of the deterministic vendor-ranking inputs
      */
     selectionReason: string;
+    /**
+     * The site the destination belongs to
+     */
+    siteId: string;
     /**
      * Lifecycle status
      */
@@ -110,6 +142,16 @@ export interface PurchaseSuggestionResponse {
      */
     vendorStatus?: PurchaseSuggestionResponseVendorStatusEnum;
 }
+export enum PurchaseSuggestionResponseOriginEnum {
+    Manual = 'MANUAL',
+    Replenishment = 'REPLENISHMENT'
+};
+export enum PurchaseSuggestionResponseRequestStatusEnum {
+    Requested = 'REQUESTED',
+    OnPo = 'ON_PO',
+    Received = 'RECEIVED',
+    Cancelled = 'CANCELLED'
+};
 export enum PurchaseSuggestionResponseStatusEnum {
     Suggested = 'SUGGESTED',
     Accepted = 'ACCEPTED',
@@ -165,10 +207,10 @@ export function instanceOfPurchaseSuggestionResponse(value: object): value is Pu
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPurchaseSuggestionResponsePropertyNames('createdAt', 'itemSKU', 'locationId', 'policyId', 'selectionReason', 'status', 'suggestedQuantity', 'suggestionId', 'updatedAt', );
-    const optionalStringProperties = createPurchaseSuggestionResponseOptionalProperties({ name: 'convertedPurchaseOrderId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'dismissalReason', nullable: false }, { name: 'earliestExpectedDate', nullable: false }, { name: 'feedVendorRef', nullable: false }, { name: 'itemSKU', nullable: false }, { name: 'locationId', nullable: false }, { name: 'orderAttention', nullable: true }, { name: 'orderStatus', nullable: true }, { name: 'policyId', nullable: false }, { name: 'selectionReason', nullable: false }, { name: 'status', nullable: false }, { name: 'suggestedVendorType', nullable: false }, { name: 'suggestionId', nullable: false }, { name: 'unitCostCurrency', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'vendorDisplayName', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorNumber', nullable: false }, { name: 'vendorStatus', nullable: false }, );
+    const requiredProperties = createPurchaseSuggestionResponsePropertyNames('createdAt', 'itemSKU', 'locationId', 'origin', 'partiallyReceived', 'requestStatus', 'selectionReason', 'siteId', 'status', 'suggestedQuantity', 'suggestionId', 'updatedAt', );
+    const optionalStringProperties = createPurchaseSuggestionResponseOptionalProperties({ name: 'binLocationId', nullable: true }, { name: 'convertedPurchaseOrderId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'dismissalReason', nullable: false }, { name: 'displayNumber', nullable: true }, { name: 'earliestExpectedDate', nullable: false }, { name: 'feedVendorRef', nullable: false }, { name: 'itemSKU', nullable: false }, { name: 'linkedPurchaseOrderId', nullable: true }, { name: 'locationId', nullable: false }, { name: 'orderAttention', nullable: true }, { name: 'orderStatus', nullable: true }, { name: 'origin', nullable: false }, { name: 'policyId', nullable: true }, { name: 'requestStatus', nullable: false }, { name: 'requestedBy', nullable: true }, { name: 'selectionReason', nullable: false }, { name: 'siteId', nullable: false }, { name: 'status', nullable: false }, { name: 'suggestedVendorType', nullable: false }, { name: 'suggestionId', nullable: false }, { name: 'unitCostCurrency', nullable: false }, { name: 'updatedAt', nullable: false }, { name: 'vendorDisplayName', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorNumber', nullable: false }, { name: 'vendorStatus', nullable: false }, );
     const optionalNumberProperties = createPurchaseSuggestionResponseOptionalProperties({ name: 'leadTimeDays', nullable: false }, { name: 'suggestedQuantity', nullable: false }, { name: 'unitCostMinor', nullable: false }, { name: 'vendorPackSize', nullable: false }, );
-    const optionalBooleanProperties = createPurchaseSuggestionResponseOptionalProperties();
+    const optionalBooleanProperties = createPurchaseSuggestionResponseOptionalProperties({ name: 'partiallyReceived', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalPurchaseSuggestionResponsePropertyOfType(_v, property.name, 'string', property.nullable))

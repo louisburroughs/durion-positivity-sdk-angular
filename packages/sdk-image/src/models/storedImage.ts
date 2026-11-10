@@ -14,7 +14,7 @@ export interface StoredImage {
     contentHash?: string;
     contentType?: string;
     filename?: string;
-    imageId?: number;
+    imageId?: string;
     newlyStored?: boolean;
     sourceUri?: string;
 }
@@ -58,8 +58,8 @@ export function instanceOfStoredImage(value: object): value is StoredImage {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createStoredImagePropertyNames();
-    const optionalStringProperties = createStoredImageOptionalProperties({ name: 'contentHash', nullable: false }, { name: 'contentType', nullable: false }, { name: 'filename', nullable: false }, { name: 'sourceUri', nullable: false }, );
-    const optionalNumberProperties = createStoredImageOptionalProperties({ name: 'byteSize', nullable: false }, { name: 'imageId', nullable: false }, );
+    const optionalStringProperties = createStoredImageOptionalProperties({ name: 'contentHash', nullable: false }, { name: 'contentType', nullable: false }, { name: 'filename', nullable: false }, { name: 'imageId', nullable: false }, { name: 'sourceUri', nullable: false }, );
+    const optionalNumberProperties = createStoredImageOptionalProperties({ name: 'byteSize', nullable: false }, );
     const optionalBooleanProperties = createStoredImageOptionalProperties({ name: 'newlyStored', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

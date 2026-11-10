@@ -20,6 +20,7 @@ export * from './partReturnCreateRequest';
 export * from './partReturnResponse';
 export * from './partReturnUpdateRequest';
 export * from './partReturnView';
+export * from './policyBlocker';
 export * from './policyRequest';
 export * from './policyResponse';
 export * from './providerRequest';

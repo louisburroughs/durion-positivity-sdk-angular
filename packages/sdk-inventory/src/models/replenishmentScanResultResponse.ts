@@ -38,6 +38,10 @@ export interface ReplenishmentScanResultResponse {
      */
     suggestionsRefreshed: number;
     /**
+     * Number of purchase requests suppressed because createPurchaseRequests is off at the policy\'s site (#3190)
+     */
+    suggestionsSkippedBySetting: number;
+    /**
      * Number of new replenishment tasks created by the scan
      */
     tasksCreated: number;
@@ -85,9 +89,9 @@ export function instanceOfReplenishmentScanResultResponse(value: object): value 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReplenishmentScanResultResponsePropertyNames('policiesBelowMinimum', 'policiesEvaluated', 'policiesSkipped', 'scanAt', 'suggestionsCreated', 'suggestionsRefreshed', 'tasksCreated', 'tasksRefreshed', );
+    const requiredProperties = createReplenishmentScanResultResponsePropertyNames('policiesBelowMinimum', 'policiesEvaluated', 'policiesSkipped', 'scanAt', 'suggestionsCreated', 'suggestionsRefreshed', 'suggestionsSkippedBySetting', 'tasksCreated', 'tasksRefreshed', );
     const optionalStringProperties = createReplenishmentScanResultResponseOptionalProperties({ name: 'scanAt', nullable: false }, );
-    const optionalNumberProperties = createReplenishmentScanResultResponseOptionalProperties({ name: 'policiesBelowMinimum', nullable: false }, { name: 'policiesEvaluated', nullable: false }, { name: 'policiesSkipped', nullable: false }, { name: 'suggestionsCreated', nullable: false }, { name: 'suggestionsRefreshed', nullable: false }, { name: 'tasksCreated', nullable: false }, { name: 'tasksRefreshed', nullable: false }, );
+    const optionalNumberProperties = createReplenishmentScanResultResponseOptionalProperties({ name: 'policiesBelowMinimum', nullable: false }, { name: 'policiesEvaluated', nullable: false }, { name: 'policiesSkipped', nullable: false }, { name: 'suggestionsCreated', nullable: false }, { name: 'suggestionsRefreshed', nullable: false }, { name: 'suggestionsSkippedBySetting', nullable: false }, { name: 'tasksCreated', nullable: false }, { name: 'tasksRefreshed', nullable: false }, );
     const optionalBooleanProperties = createReplenishmentScanResultResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

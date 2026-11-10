@@ -27,6 +27,7 @@ export * from './laborRateRequest';
 export * from './laborRateResponse';
 export * from './lineItemContext';
 export * from './moneyAmount';
+export * from './policyBlocker';
 export * from './priceQuoteRequest';
 export * from './priceQuoteResponse';
 export * from './pricingAdjustment';

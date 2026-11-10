@@ -47,10 +47,6 @@ export interface VendorCreateRequest {
     primaryContact?: PrimaryContactDto;
     remitTo?: RemitToDto;
     /**
-     * Idempotency key the client mints (UUID). Reuse it only for an identical payload: a retry after a timeout or 5xx then answers the original 201 body instead of creating a second vendor; the same key with another payload is 409 IDEMPOTENCY_CONFLICT. Omit for no idempotency.
-     */
-    requestId?: string;
-    /**
      * Tax registrations; omit or leave empty for none.
      */
     taxRegistrations?: Array<TaxRegistrationDto>;
@@ -103,7 +99,7 @@ export function instanceOfVendorCreateRequest(value: object): value is VendorCre
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createVendorCreateRequestPropertyNames();
-    const optionalStringProperties = createVendorCreateRequestOptionalProperties({ name: 'catalogUrl', nullable: false }, { name: 'defaultCurrency', nullable: false }, { name: 'defaultPaymentTerms', nullable: false }, { name: 'displayName', nullable: false }, { name: 'legalName', nullable: false }, { name: 'requestId', nullable: false }, { name: 'vendorNumber', nullable: false }, { name: 'websiteUrl', nullable: false }, );
+    const optionalStringProperties = createVendorCreateRequestOptionalProperties({ name: 'catalogUrl', nullable: false }, { name: 'defaultCurrency', nullable: false }, { name: 'defaultPaymentTerms', nullable: false }, { name: 'displayName', nullable: false }, { name: 'legalName', nullable: false }, { name: 'vendorNumber', nullable: false }, { name: 'websiteUrl', nullable: false }, );
     const optionalNumberProperties = createVendorCreateRequestOptionalProperties({ name: 'defaultLeadTimeDays', nullable: false }, );
     const optionalBooleanProperties = createVendorCreateRequestOptionalProperties();
 

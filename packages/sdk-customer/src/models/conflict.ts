@@ -22,6 +22,10 @@ export interface Conflict {
      */
     code: string;
     /**
+     * Identifier of the entity holding the resource, when the service can name it — for RESOURCE_OCCUPIED, the occupying workorder id
+     */
+    holderId?: string;
+    /**
      * User-safe description of the conflict
      */
     message: string;
@@ -30,9 +34,21 @@ export interface Conflict {
      */
     overridable: boolean;
     /**
+     * Identifier of the resource the conflict is about, when it has one — for RESOURCE_OCCUPIED, the bay or mobile-unit id
+     */
+    resourceId?: string;
+    /**
      * Conflict severity (HARD or SOFT)
      */
     severity: string;
+    /**
+     * End of the holder\'s occupied window, ISO-8601. Null means unbounded
+     */
+    windowEnd?: string;
+    /**
+     * Start of the holder\'s occupied window, ISO-8601. Null means unbounded
+     */
+    windowStart?: string;
 }
 
 function isOptionalConflictPropertyOfType(
@@ -74,7 +90,7 @@ export function instanceOfConflict(value: object): value is Conflict {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createConflictPropertyNames('code', 'message', 'overridable', 'severity', );
-    const optionalStringProperties = createConflictOptionalProperties({ name: 'affectedResource', nullable: false }, { name: 'code', nullable: false }, { name: 'message', nullable: false }, { name: 'severity', nullable: false }, );
+    const optionalStringProperties = createConflictOptionalProperties({ name: 'affectedResource', nullable: false }, { name: 'code', nullable: false }, { name: 'holderId', nullable: false }, { name: 'message', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'severity', nullable: false }, { name: 'windowEnd', nullable: false }, { name: 'windowStart', nullable: false }, );
     const optionalNumberProperties = createConflictOptionalProperties();
     const optionalBooleanProperties = createConflictOptionalProperties({ name: 'overridable', nullable: false }, );
 

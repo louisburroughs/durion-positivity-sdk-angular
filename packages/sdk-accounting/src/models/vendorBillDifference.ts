@@ -73,8 +73,8 @@ export function instanceOfVendorBillDifference(value: object): value is VendorBi
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createVendorBillDifferencePropertyNames('_class', 'justification', );
-    const optionalStringProperties = createVendorBillDifferenceOptionalProperties({ name: '_class', nullable: false }, { name: 'expenseMappingKey', nullable: false }, { name: 'justification', nullable: false }, );
+    const requiredProperties = createVendorBillDifferencePropertyNames('class', 'justification', );
+    const optionalStringProperties = createVendorBillDifferenceOptionalProperties({ name: 'class', nullable: false }, { name: 'expenseMappingKey', nullable: false }, { name: 'justification', nullable: false }, );
     const optionalNumberProperties = createVendorBillDifferenceOptionalProperties();
     const optionalBooleanProperties = createVendorBillDifferenceOptionalProperties();
 

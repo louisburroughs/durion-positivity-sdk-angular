@@ -14,10 +14,6 @@
  */
 export interface CancellationResponse {
     /**
-     * Idempotency key associated with the cancellation request
-     */
-    cancellationIdempotencyKey?: string;
-    /**
      * Human-readable message describing the cancellation outcome
      */
     message?: string;
@@ -70,7 +66,7 @@ export function instanceOfCancellationResponse(value: object): value is Cancella
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCancellationResponsePropertyNames('orderId', 'status', );
-    const optionalStringProperties = createCancellationResponseOptionalProperties({ name: 'cancellationIdempotencyKey', nullable: false }, { name: 'message', nullable: false }, { name: 'orderId', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createCancellationResponseOptionalProperties({ name: 'message', nullable: false }, { name: 'orderId', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createCancellationResponseOptionalProperties();
     const optionalBooleanProperties = createCancellationResponseOptionalProperties();
 

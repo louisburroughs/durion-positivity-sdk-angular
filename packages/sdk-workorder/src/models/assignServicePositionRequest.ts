@@ -25,6 +25,14 @@ export interface AssignServicePositionRequest {
      * Kind of position: BAY and MOBILE_UNIT are pos-location resources and hold one open workorder each; HOLD is the site\'s parking lot and holds any number
      */
     resourceType: AssignServicePositionRequestResourceTypeEnum;
+    /**
+     * End of the half-open slot [slotStart, slotEnd). Requires slotStart and must be after it; omitted with a slotStart means slotStart plus the default length. Ignored for HOLD
+     */
+    slotEnd?: string;
+    /**
+     * Start of the half-open slot [slotStart, slotEnd) the position is booked for. Optional; omitted means the server default (now until now plus max(30 minutes, book time)). Ignored for HOLD
+     */
+    slotStart?: string;
 }
 export enum AssignServicePositionRequestResourceTypeEnum {
     Bay = 'BAY',
@@ -73,7 +81,7 @@ export function instanceOfAssignServicePositionRequest(value: object): value is 
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAssignServicePositionRequestPropertyNames('resourceType', );
-    const optionalStringProperties = createAssignServicePositionRequestOptionalProperties({ name: 'reason', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'resourceType', nullable: false }, );
+    const optionalStringProperties = createAssignServicePositionRequestOptionalProperties({ name: 'reason', nullable: false }, { name: 'resourceId', nullable: false }, { name: 'resourceType', nullable: false }, { name: 'slotEnd', nullable: false }, { name: 'slotStart', nullable: false }, );
     const optionalNumberProperties = createAssignServicePositionRequestOptionalProperties();
     const optionalBooleanProperties = createAssignServicePositionRequestOptionalProperties();
 

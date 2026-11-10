@@ -22,10 +22,6 @@ export interface CreateEstimateFromAppointmentRequest {
      */
     customerId: string;
     /**
-     * Idempotency key to prevent duplicate estimate creation
-     */
-    idempotencyKey: string;
-    /**
      * Location identifier
      */
     locationId: string;
@@ -77,8 +73,8 @@ export function instanceOfCreateEstimateFromAppointmentRequest(value: object): v
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateEstimateFromAppointmentRequestPropertyNames('appointmentId', 'customerId', 'idempotencyKey', 'locationId', 'vehicleId', );
-    const optionalStringProperties = createCreateEstimateFromAppointmentRequestOptionalProperties({ name: 'appointmentId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'idempotencyKey', nullable: false }, { name: 'locationId', nullable: false }, { name: 'vehicleId', nullable: false }, );
+    const requiredProperties = createCreateEstimateFromAppointmentRequestPropertyNames('appointmentId', 'customerId', 'locationId', 'vehicleId', );
+    const optionalStringProperties = createCreateEstimateFromAppointmentRequestOptionalProperties({ name: 'appointmentId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'vehicleId', nullable: false }, );
     const optionalNumberProperties = createCreateEstimateFromAppointmentRequestOptionalProperties();
     const optionalBooleanProperties = createCreateEstimateFromAppointmentRequestOptionalProperties();
 

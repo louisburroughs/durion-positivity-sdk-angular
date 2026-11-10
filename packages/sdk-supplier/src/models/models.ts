@@ -26,6 +26,7 @@ export * from './pagedResponseExchangeAuditSummary';
 export * from './pagedResponseTaxIdRevealRecordView';
 export * from './pagedResponseVendorDirectoryRow';
 export * from './pagedResponseVendorView';
+export * from './policyBlocker';
 export * from './priceCatalogBindingFreshness';
 export * from './priceCatalogFreshnessView';
 export * from './priceCatalogImportSummary';

@@ -49,7 +49,7 @@ export interface EmployeeProfileDto {
     /**
      * pos-image identifier of the employee\'s profile photo (durion#3092); null when the employee has no photo. The photo bytes are owned and served by pos-image, never stored here. A replaced photo overwrites this id; the superseded image stays in pos-image, unreferenced.
      */
-    photoImageId?: number | null;
+    photoImageId?: string | null;
     /**
      * Gateway path that serves the profile photo bytes, /image/v1/images/id/{photoImageId} (durion#3092); null when no photo is set. Computed from photoImageId on read, never stored.
      */
@@ -137,8 +137,8 @@ export function instanceOfEmployeeProfileDto(value: object): value is EmployeePr
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createEmployeeProfileDtoPropertyNames('allowedActions', 'employeeNumber', 'firstName', 'hireDate', 'id', 'lastName', 'status', );
-    const optionalStringProperties = createEmployeeProfileDtoOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'firstName', nullable: false }, { name: 'hireDate', nullable: false }, { name: 'id', nullable: false }, { name: 'lastName', nullable: false }, { name: 'photoUrl', nullable: true }, { name: 'preferredName', nullable: false }, { name: 'status', nullable: false }, { name: 'statusEffectiveAt', nullable: false }, { name: 'terminationDate', nullable: false }, { name: 'updatedAt', nullable: false }, );
-    const optionalNumberProperties = createEmployeeProfileDtoOptionalProperties({ name: 'photoImageId', nullable: true }, );
+    const optionalStringProperties = createEmployeeProfileDtoOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'firstName', nullable: false }, { name: 'hireDate', nullable: false }, { name: 'id', nullable: false }, { name: 'lastName', nullable: false }, { name: 'photoImageId', nullable: true }, { name: 'photoUrl', nullable: true }, { name: 'preferredName', nullable: false }, { name: 'status', nullable: false }, { name: 'statusEffectiveAt', nullable: false }, { name: 'terminationDate', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const optionalNumberProperties = createEmployeeProfileDtoOptionalProperties();
     const optionalBooleanProperties = createEmployeeProfileDtoOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
