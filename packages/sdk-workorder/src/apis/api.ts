@@ -9,6 +9,7 @@ export * from './operationalContext.service';
 export * from './servicePositionAPI.service';
 export * from './substituteLinkAPI.service';
 export * from './technicianAssignmentAPI.service';
+export * from './technicianLocationSettings.service';
 export * from './travelSegmentAPI.service';
 export * from './wIPDashboard.service';
 export * from './workOrderAPI.service';

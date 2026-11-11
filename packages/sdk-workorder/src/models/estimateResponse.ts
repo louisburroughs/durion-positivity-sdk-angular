@@ -14,9 +14,17 @@
  */
 export interface EstimateResponse {
     /**
+     * How the customer approved: CLICK_CONFIRM, SIGNATURE, ELECTRONIC_SIGNATURE or VERBAL_CONFIRMATION. Null on estimates approved before the field existed.
+     */
+    approvalMethod?: EstimateResponseApprovalMethodEnum;
+    /**
      * Additional notes provided at approval time
      */
     approvalNotes?: string;
+    /**
+     * Actor from the security context who recorded the approval (ADR-0018), never the payload
+     */
+    approvalRecordedBy?: string;
     /**
      * Date and time the estimate was approved
      */
@@ -122,6 +130,14 @@ export interface EstimateResponse {
      */
     version?: number;
 }
+export enum EstimateResponseApprovalMethodEnum {
+    ClickConfirm = 'CLICK_CONFIRM',
+    Signature = 'SIGNATURE',
+    ElectronicSignature = 'ELECTRONIC_SIGNATURE',
+    VerbalConfirmation = 'VERBAL_CONFIRMATION'
+};
+
+
 
 function isOptionalEstimateResponsePropertyOfType(
     value: Record<string, unknown>,
@@ -162,7 +178,7 @@ export function instanceOfEstimateResponse(value: object): value is EstimateResp
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createEstimateResponsePropertyNames('estimateNumber', 'id', 'status', );
-    const optionalStringProperties = createEstimateResponseOptionalProperties({ name: 'approvalNotes', nullable: false }, { name: 'approvedAt', nullable: false }, { name: 'approvedBy', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'crmPartyId', nullable: false }, { name: 'crmVehicleId', nullable: false }, { name: 'currencyUomId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'estimateNumber', nullable: false }, { name: 'expiresAt', nullable: false }, { name: 'id', nullable: false }, { name: 'locationId', nullable: false }, { name: 'purchaseOrderNumber', nullable: false }, { name: 'signatureData', nullable: false }, { name: 'signatureMimeType', nullable: false }, { name: 'signerName', nullable: false }, { name: 'status', nullable: false }, { name: 'submittedAt', nullable: false }, { name: 'submittedBy', nullable: false }, { name: 'vehicleId', nullable: false }, );
+    const optionalStringProperties = createEstimateResponseOptionalProperties({ name: 'approvalMethod', nullable: false }, { name: 'approvalNotes', nullable: false }, { name: 'approvalRecordedBy', nullable: false }, { name: 'approvedAt', nullable: false }, { name: 'approvedBy', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdByUserId', nullable: false }, { name: 'crmPartyId', nullable: false }, { name: 'crmVehicleId', nullable: false }, { name: 'currencyUomId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'estimateNumber', nullable: false }, { name: 'expiresAt', nullable: false }, { name: 'id', nullable: false }, { name: 'locationId', nullable: false }, { name: 'purchaseOrderNumber', nullable: false }, { name: 'signatureData', nullable: false }, { name: 'signatureMimeType', nullable: false }, { name: 'signerName', nullable: false }, { name: 'status', nullable: false }, { name: 'submittedAt', nullable: false }, { name: 'submittedBy', nullable: false }, { name: 'vehicleId', nullable: false }, );
     const optionalNumberProperties = createEstimateResponseOptionalProperties({ name: 'subtotal', nullable: false }, { name: 'taxAmount', nullable: false }, { name: 'total', nullable: false }, { name: 'version', nullable: false }, );
     const optionalBooleanProperties = createEstimateResponseOptionalProperties({ name: 'taxPending', nullable: false }, );
 
