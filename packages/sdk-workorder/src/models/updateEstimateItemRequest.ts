@@ -14,6 +14,10 @@
  */
 export interface UpdateEstimateItemRequest {
     /**
+     * Check-in concern this line answers. Omit to leave the line\'s grouping unchanged; send an id that is not a concern of this estimate\'s check-in to be rejected with 400.
+     */
+    concernId?: string;
+    /**
      * Updated description
      */
     description?: string;
@@ -74,7 +78,7 @@ export function instanceOfUpdateEstimateItemRequest(value: object): value is Upd
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createUpdateEstimateItemRequestPropertyNames();
-    const optionalStringProperties = createUpdateEstimateItemRequestOptionalProperties({ name: 'description', nullable: false }, { name: 'taxCode', nullable: false }, { name: 'uomCode', nullable: false }, );
+    const optionalStringProperties = createUpdateEstimateItemRequestOptionalProperties({ name: 'concernId', nullable: false }, { name: 'description', nullable: false }, { name: 'taxCode', nullable: false }, { name: 'uomCode', nullable: false }, );
     const optionalNumberProperties = createUpdateEstimateItemRequestOptionalProperties({ name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, );
     const optionalBooleanProperties = createUpdateEstimateItemRequestOptionalProperties();
 

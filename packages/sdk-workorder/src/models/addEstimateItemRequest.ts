@@ -14,6 +14,10 @@
  */
 export interface AddEstimateItemRequest {
     /**
+     * Check-in concern this line answers, or omit to leave the line ungrouped. Must be a concern of this estimate\'s check-in; setting it is gated by workorder:estimate_item:add, never by the check-in permission.
+     */
+    concernId?: string;
+    /**
      * Human-readable description when no catalog reference is provided
      */
     description?: string;
@@ -96,7 +100,7 @@ export function instanceOfAddEstimateItemRequest(value: object): value is AddEst
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAddEstimateItemRequestPropertyNames('itemType', );
-    const optionalStringProperties = createAddEstimateItemRequestOptionalProperties({ name: 'description', nullable: false }, { name: 'itemType', nullable: false }, { name: 'productId', nullable: false }, { name: 'serviceId', nullable: false }, { name: 'taxCode', nullable: false }, { name: 'uomCode', nullable: false }, );
+    const optionalStringProperties = createAddEstimateItemRequestOptionalProperties({ name: 'concernId', nullable: false }, { name: 'description', nullable: false }, { name: 'itemType', nullable: false }, { name: 'productId', nullable: false }, { name: 'serviceId', nullable: false }, { name: 'taxCode', nullable: false }, { name: 'uomCode', nullable: false }, );
     const optionalNumberProperties = createAddEstimateItemRequestOptionalProperties({ name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, );
     const optionalBooleanProperties = createAddEstimateItemRequestOptionalProperties();
 
