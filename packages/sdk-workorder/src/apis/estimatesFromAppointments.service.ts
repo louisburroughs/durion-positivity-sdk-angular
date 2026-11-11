@@ -20,6 +20,8 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 import { ApiError } from '../models/apiError';
 // @ts-ignore
 import { CreateEstimateFromAppointmentRequest } from '../models/createEstimateFromAppointmentRequest';
+// @ts-ignore
+import { CreateEstimateFromAppointmentResponse } from '../models/createEstimateFromAppointmentResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -47,9 +49,9 @@ export class EstimatesFromAppointmentsService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createEstimateFromAppointment(createEstimateFromAppointmentRequest: CreateEstimateFromAppointmentRequest, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
-    public createEstimateFromAppointment(createEstimateFromAppointmentRequest: CreateEstimateFromAppointmentRequest, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
-    public createEstimateFromAppointment(createEstimateFromAppointmentRequest: CreateEstimateFromAppointmentRequest, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
+    public createEstimateFromAppointment(createEstimateFromAppointmentRequest: CreateEstimateFromAppointmentRequest, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CreateEstimateFromAppointmentResponse>;
+    public createEstimateFromAppointment(createEstimateFromAppointmentRequest: CreateEstimateFromAppointmentRequest, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CreateEstimateFromAppointmentResponse>>;
+    public createEstimateFromAppointment(createEstimateFromAppointmentRequest: CreateEstimateFromAppointmentRequest, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CreateEstimateFromAppointmentResponse>>;
     public createEstimateFromAppointment(createEstimateFromAppointmentRequest: CreateEstimateFromAppointmentRequest, idempotencyKey?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (createEstimateFromAppointmentRequest === null || createEstimateFromAppointmentRequest === undefined) {
             throw new Error('Required parameter createEstimateFromAppointmentRequest was null or undefined when calling createEstimateFromAppointment.');
@@ -97,7 +99,7 @@ export class EstimatesFromAppointmentsService extends BaseService {
 
         let localVarPath = `/v1/workorders/estimates/from-appointment`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<object>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<CreateEstimateFromAppointmentResponse>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: createEstimateFromAppointmentRequest,
