@@ -17,10 +17,6 @@ export interface RemainderCreditRequest {
      * The payment\'s unapplied amount as the caller read it; must still match exactly
      */
     expectedAmount: number;
-    /**
-     * Idempotency key for this command; a replay returns the credit it issued, the same key on another payment is refused with IDEMPOTENCY_CONFLICT
-     */
-    requestId: string;
 }
 
 function isOptionalRemainderCreditRequestPropertyOfType(
@@ -61,8 +57,8 @@ export function instanceOfRemainderCreditRequest(value: object): value is Remain
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRemainderCreditRequestPropertyNames('expectedAmount', 'requestId', );
-    const optionalStringProperties = createRemainderCreditRequestOptionalProperties({ name: 'requestId', nullable: false }, );
+    const requiredProperties = createRemainderCreditRequestPropertyNames('expectedAmount', );
+    const optionalStringProperties = createRemainderCreditRequestOptionalProperties();
     const optionalNumberProperties = createRemainderCreditRequestOptionalProperties({ name: 'expectedAmount', nullable: false }, );
     const optionalBooleanProperties = createRemainderCreditRequestOptionalProperties();
 

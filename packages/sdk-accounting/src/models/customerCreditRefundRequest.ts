@@ -21,10 +21,6 @@ export interface CustomerCreditRefundRequest {
      * Optional audit note explaining why the credit is being refunded
      */
     note?: string;
-    /**
-     * Caller-supplied idempotency key. Replaying the same key returns the original refund instead of relieving the credit liability twice
-     */
-    requestId: string;
 }
 
 function isOptionalCustomerCreditRefundRequestPropertyOfType(
@@ -65,8 +61,8 @@ export function instanceOfCustomerCreditRefundRequest(value: object): value is C
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCustomerCreditRefundRequestPropertyNames('amount', 'requestId', );
-    const optionalStringProperties = createCustomerCreditRefundRequestOptionalProperties({ name: 'note', nullable: false }, { name: 'requestId', nullable: false }, );
+    const requiredProperties = createCustomerCreditRefundRequestPropertyNames('amount', );
+    const optionalStringProperties = createCustomerCreditRefundRequestOptionalProperties({ name: 'note', nullable: false }, );
     const optionalNumberProperties = createCustomerCreditRefundRequestOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createCustomerCreditRefundRequestOptionalProperties();
 

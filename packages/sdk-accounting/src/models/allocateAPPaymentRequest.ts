@@ -18,10 +18,6 @@ export interface AllocateAPPaymentRequest {
      * The bills to apply the payment to; the total may not exceed the unapplied amount
      */
     allocations: Array<AllocationLineRequest>;
-    /**
-     * Caller-minted idempotency key: a replay with the same lines answers the same payment; another body under the same id is 409 IDEMPOTENCY_CONFLICT
-     */
-    requestId: string;
 }
 
 function isOptionalAllocateAPPaymentRequestPropertyOfType(
@@ -62,8 +58,8 @@ export function instanceOfAllocateAPPaymentRequest(value: object): value is Allo
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAllocateAPPaymentRequestPropertyNames('allocations', 'requestId', );
-    const optionalStringProperties = createAllocateAPPaymentRequestOptionalProperties({ name: 'requestId', nullable: false }, );
+    const requiredProperties = createAllocateAPPaymentRequestPropertyNames('allocations', );
+    const optionalStringProperties = createAllocateAPPaymentRequestOptionalProperties();
     const optionalNumberProperties = createAllocateAPPaymentRequestOptionalProperties();
     const optionalBooleanProperties = createAllocateAPPaymentRequestOptionalProperties();
 

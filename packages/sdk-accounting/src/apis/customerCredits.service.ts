@@ -47,26 +47,33 @@ export class CustomerCreditsService extends BaseService {
 
     /**
      * Apply Customer Credit To Invoice
-     * Draws an open customer credit down against an outstanding invoice, posting debit Customer Credit Liability, credit Accounts Receivable for the applied amount. Use this tool to consume standing credit against an invoice; do not use refundCustomerCredit, which pays the credit back as cash, and do not use createCreditMemo, which issues new credit against an invoice. Preconditions: the credit must have sufficient open amount, the invoice must be AR-eligible and belong to the same customer, the amount must not exceed the invoice balance, and the accounting period must be open. Required inputs: creditId (UUID) as a path parameter, requestId (max 100 chars, the idempotency key), invoiceId (UUID) and amount (min 0.01). Emits an ACCOUNTING_CUSTOMER_CREDIT_APPLY event; replaying the same requestId returns the original application instead of double-applying. Returns 404 when the credit or invoice is not found, 409 for insufficient open credit, an ineligible or foreign invoice, an amount over the invoice balance, a closed period, or a requestId reused for a different operation, and 400 when the amount is missing or non-positive.
+     * Draws an open customer credit down against an outstanding invoice, posting debit Customer Credit Liability, credit Accounts Receivable for the applied amount. Use this tool to consume standing credit against an invoice; do not use refundCustomerCredit, which pays the credit back as cash, and do not use createCreditMemo, which issues new credit against an invoice. Preconditions: the credit must have sufficient open amount, the invoice must be AR-eligible and belong to the same customer, the amount must not exceed the invoice balance, and the accounting period must be open. Required inputs: creditId (UUID) as a path parameter, the Idempotency-Key header (UUID), invoiceId (UUID) and amount (min 0.01); the body declares no key. Emits an ACCOUNTING_CUSTOMER_CREDIT_APPLY event; a replay of the same key, payload and caller returns the original application, its status and body with Idempotency-Replayed: true, emits no second event and relieves nothing twice (an answer above the 64 KiB cap is not stored, and its replay renders the draw-down in its current state). Returns 400 VALIDATION_ERROR when the amount is missing or non-positive or the Idempotency-Key is absent or not a UUID, 404 when the credit or invoice is not found, 409 IDEMPOTENCY_CONFLICT when the key was used with another payload or by another caller, 409 for insufficient open credit, an ineligible or foreign invoice, an amount over the invoice balance or a closed period.
      * @endpoint post /v1/accounting/customer-credits/{creditId}/applications
      * @param creditId Credit identifier
+     * @param idempotencyKey Required idempotency key (a UUID); a replay returns the original answer
      * @param customerCreditApplicationRequest Idempotent draw-down of the credit against one outstanding invoice.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public applyCustomerCredit(creditId: string, customerCreditApplicationRequest: CustomerCreditApplicationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CustomerCreditTransactionResponse>;
-    public applyCustomerCredit(creditId: string, customerCreditApplicationRequest: CustomerCreditApplicationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CustomerCreditTransactionResponse>>;
-    public applyCustomerCredit(creditId: string, customerCreditApplicationRequest: CustomerCreditApplicationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CustomerCreditTransactionResponse>>;
-    public applyCustomerCredit(creditId: string, customerCreditApplicationRequest: CustomerCreditApplicationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public applyCustomerCredit(creditId: string, idempotencyKey: string, customerCreditApplicationRequest: CustomerCreditApplicationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CustomerCreditTransactionResponse>;
+    public applyCustomerCredit(creditId: string, idempotencyKey: string, customerCreditApplicationRequest: CustomerCreditApplicationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CustomerCreditTransactionResponse>>;
+    public applyCustomerCredit(creditId: string, idempotencyKey: string, customerCreditApplicationRequest: CustomerCreditApplicationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CustomerCreditTransactionResponse>>;
+    public applyCustomerCredit(creditId: string, idempotencyKey: string, customerCreditApplicationRequest: CustomerCreditApplicationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (creditId === null || creditId === undefined) {
             throw new Error('Required parameter creditId was null or undefined when calling applyCustomerCredit.');
+        }
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling applyCustomerCredit.');
         }
         if (customerCreditApplicationRequest === null || customerCreditApplicationRequest === undefined) {
             throw new Error('Required parameter customerCreditApplicationRequest was null or undefined when calling applyCustomerCredit.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
@@ -290,26 +297,33 @@ export class CustomerCreditsService extends BaseService {
 
     /**
      * Refund Customer Credit
-     * Refunds an open customer credit as cash back to the customer, posting debit Customer Credit Liability, credit Undeposited Funds for the refunded amount. Use this tool to pay standing credit out; do not use applyCustomerCredit, which consumes the credit against an invoice instead. Preconditions: the credit must have sufficient open amount and the accounting period must be open. Required inputs: creditId (UUID) as a path parameter, requestId (max 100 chars, the idempotency key) and amount (min 0.01); note (max 500 chars) is optional. Emits an ACCOUNTING_CUSTOMER_CREDIT_REFUND event; replaying the same requestId returns the original refund instead of double-paying. Returns 404 when the credit is not found, 409 for insufficient open credit, a closed period, or a requestId reused for a different operation, and 400 when the amount is missing or non-positive.
+     * Refunds an open customer credit as cash back to the customer, posting debit Customer Credit Liability, credit Undeposited Funds for the refunded amount. Use this tool to pay standing credit out; do not use applyCustomerCredit, which consumes the credit against an invoice instead. Preconditions: the credit must have sufficient open amount and the accounting period must be open. Required inputs: creditId (UUID) as a path parameter, the Idempotency-Key header (UUID) and amount (min 0.01); note (max 500 chars) is optional, and the body declares no key. Emits an ACCOUNTING_CUSTOMER_CREDIT_REFUND event; a replay of the same key, payload and caller returns the original refund, its status and body with Idempotency-Replayed: true, emits no second event and pays nothing twice (an answer above the 64 KiB cap is not stored, and its replay renders the draw-down in its current state). Returns 400 VALIDATION_ERROR when the amount is missing or non-positive or the Idempotency-Key is absent or not a UUID, 404 when the credit is not found, 409 IDEMPOTENCY_CONFLICT when the key was used with another payload or by another caller, 409 for insufficient open credit or a closed period.
      * @endpoint post /v1/accounting/customer-credits/{creditId}/refunds
      * @param creditId Credit identifier
+     * @param idempotencyKey Required idempotency key (a UUID); a replay returns the original answer
      * @param customerCreditRefundRequest Idempotent cash refund of part or all of the open credit.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public refundCustomerCredit(creditId: string, customerCreditRefundRequest: CustomerCreditRefundRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CustomerCreditTransactionResponse>;
-    public refundCustomerCredit(creditId: string, customerCreditRefundRequest: CustomerCreditRefundRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CustomerCreditTransactionResponse>>;
-    public refundCustomerCredit(creditId: string, customerCreditRefundRequest: CustomerCreditRefundRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CustomerCreditTransactionResponse>>;
-    public refundCustomerCredit(creditId: string, customerCreditRefundRequest: CustomerCreditRefundRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public refundCustomerCredit(creditId: string, idempotencyKey: string, customerCreditRefundRequest: CustomerCreditRefundRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CustomerCreditTransactionResponse>;
+    public refundCustomerCredit(creditId: string, idempotencyKey: string, customerCreditRefundRequest: CustomerCreditRefundRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CustomerCreditTransactionResponse>>;
+    public refundCustomerCredit(creditId: string, idempotencyKey: string, customerCreditRefundRequest: CustomerCreditRefundRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CustomerCreditTransactionResponse>>;
+    public refundCustomerCredit(creditId: string, idempotencyKey: string, customerCreditRefundRequest: CustomerCreditRefundRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (creditId === null || creditId === undefined) {
             throw new Error('Required parameter creditId was null or undefined when calling refundCustomerCredit.');
+        }
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling refundCustomerCredit.');
         }
         if (customerCreditRefundRequest === null || customerCreditRefundRequest === undefined) {
             throw new Error('Required parameter customerCreditRefundRequest was null or undefined when calling refundCustomerCredit.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
