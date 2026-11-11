@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { EstimateCheckInResponse } from './estimateCheckInResponse';
 
 
 /**
@@ -33,6 +34,7 @@ export interface EstimateResponse {
      * Customer UUID who approved the estimate
      */
     approvedBy?: string;
+    checkIn?: EstimateCheckInResponse;
     /**
      * Date and time the estimate was created
      */

@@ -25,6 +25,8 @@ import { ApproveEstimateRequest } from '../models/approveEstimateRequest';
 // @ts-ignore
 import { CreateEstimateRequest } from '../models/createEstimateRequest';
 // @ts-ignore
+import { EstimateCheckInRequest } from '../models/estimateCheckInRequest';
+// @ts-ignore
 import { EstimateItemResponse } from '../models/estimateItemResponse';
 // @ts-ignore
 import { EstimateResponse } from '../models/estimateResponse';
@@ -1139,6 +1141,80 @@ export class EstimateAPIService extends BaseService {
         return this.httpClient.request<WorkorderResponse>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Record Vehicle Check-In on an Estimate
+     * Records the vehicle intake on an estimate as an idempotent full replace: odometer reading and unit, up to ten customer concerns, up to twelve walkaround photo image ids, and whether the customer is waiting; checkedInAt and checkedInBy keep their first values. Use this tool to save or correct the intake on a DRAFT estimate, including after a reopen; do not use it to group a line on a concern, use addEstimateItem or updateEstimateItem with concernId instead. Preconditions: the estimate exists, is DRAFT, has no workorder, and names a vehicle. Required inputs: estimateId in the path and odometerValue, odometerUnit and customerWaiting in the body; an unknown photo image id is accepted, a concern id foreign to this check-in is rejected. Emits WORKORDER_ESTIMATE_CHECK_IN and, when the reading or unit changes, a vehicle.odometer.record-requested command through the outbox; odometerLowerThanLast is advisory. Returns 200 with the estimate and its checkIn, 400 on validation failures or a missing caller user id, 403 without workorder:estimate:check_in, 404 for an unknown estimate, 409 when the estimate is past DRAFT or has a workorder, and 422 when it names no vehicle.
+     * @endpoint put /v1/workorders/estimates/{estimateId}/check-in
+     * @param estimateId Estimate ID
+     * @param estimateCheckInRequest The full check-in; it replaces any previous one on this estimate.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public putEstimateCheckIn(estimateId: string, estimateCheckInRequest: EstimateCheckInRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<EstimateResponse>;
+    public putEstimateCheckIn(estimateId: string, estimateCheckInRequest: EstimateCheckInRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EstimateResponse>>;
+    public putEstimateCheckIn(estimateId: string, estimateCheckInRequest: EstimateCheckInRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EstimateResponse>>;
+    public putEstimateCheckIn(estimateId: string, estimateCheckInRequest: EstimateCheckInRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (estimateId === null || estimateId === undefined) {
+            throw new Error('Required parameter estimateId was null or undefined when calling putEstimateCheckIn.');
+        }
+        if (estimateCheckInRequest === null || estimateCheckInRequest === undefined) {
+            throw new Error('Required parameter estimateCheckInRequest was null or undefined when calling putEstimateCheckIn.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/check-in`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<EstimateResponse>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: estimateCheckInRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

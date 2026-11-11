@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { EstimateCheckInResponse } from './estimateCheckInResponse';
 import { WorkorderServiceResponse } from './workorderServiceResponse';
 import { WorkorderCapabilities } from './workorderCapabilities';
 import { WorkorderPartResponse } from './workorderPartResponse';
@@ -29,6 +30,7 @@ export interface WorkorderDetailResponse {
      */
     assignedTechnicianName?: string | null;
     capabilities: WorkorderCapabilities;
+    checkIn?: EstimateCheckInResponse;
     /**
      * Creation timestamp
      */

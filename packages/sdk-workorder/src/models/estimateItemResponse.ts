@@ -14,6 +14,10 @@
  */
 export interface EstimateItemResponse {
     /**
+     * Check-in concern this line answers (#3287), or null when the line is ungrouped
+     */
+    concernId?: string;
+    /**
      * Record creation timestamp
      */
     createdAt?: string;
@@ -108,7 +112,7 @@ export function instanceOfEstimateItemResponse(value: object): value is Estimate
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createEstimateItemResponsePropertyNames();
-    const optionalStringProperties = createEstimateItemResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'description', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'id', nullable: false }, { name: 'itemType', nullable: false }, { name: 'productId', nullable: false }, { name: 'serviceId', nullable: false }, { name: 'taxCode', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const optionalStringProperties = createEstimateItemResponseOptionalProperties({ name: 'concernId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'description', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'id', nullable: false }, { name: 'itemType', nullable: false }, { name: 'productId', nullable: false }, { name: 'serviceId', nullable: false }, { name: 'taxCode', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createEstimateItemResponseOptionalProperties({ name: 'lineTotal', nullable: false }, { name: 'quantity', nullable: false }, { name: 'unitPrice', nullable: false }, );
     const optionalBooleanProperties = createEstimateItemResponseOptionalProperties();
 
