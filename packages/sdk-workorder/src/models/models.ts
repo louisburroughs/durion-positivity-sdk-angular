@@ -14,6 +14,7 @@ export * from './assignmentHistoryEntry';
 export * from './bayStatus';
 export * from './breakSegmentResponse';
 export * from './changeRequestResponse';
+export * from './claimWorkorderRequest';
 export * from './completePickTaskRequest';
 export * from './completeWorkorderRequest';
 export * from './completeWorkorderResponse';

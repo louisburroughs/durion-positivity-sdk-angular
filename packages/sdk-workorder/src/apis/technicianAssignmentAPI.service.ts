@@ -21,7 +21,11 @@ import { ApiError } from '../models/apiError';
 // @ts-ignore
 import { AssignTechnicianRequest } from '../models/assignTechnicianRequest';
 // @ts-ignore
+import { ClaimWorkorderRequest } from '../models/claimWorkorderRequest';
+// @ts-ignore
 import { ReassignTechnicianRequest } from '../models/reassignTechnicianRequest';
+// @ts-ignore
+import { ServicePositionResponse } from '../models/servicePositionResponse';
 // @ts-ignore
 import { TechnicianAssignmentResponse } from '../models/technicianAssignmentResponse';
 
@@ -109,6 +113,87 @@ export class TechnicianAssignmentAPIService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: assignTechnicianRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Claim an Open Workorder Into a Position
+     * Assigns the calling technician to an open workorder and places it on a bay, a mobile unit or the site\&#39;s HOLD position, in one transaction: either both happen or neither does. Use this tool when a technician takes an unassigned workorder for themselves; do not use assignTechnician, which assigns somebody else and needs the advisor\&#39;s permission, and do not use assignServicePosition, which moves a workorder without changing who holds it. Preconditions: the caller\&#39;s login must have a linked person, who becomes the technician; the workorder must exist, be APPROVED and have no current technician; a caller whose workorder:workorder:claim grant is location-scoped must have the workorder\&#39;s shop within reach (ADR-0061); the position follows assignServicePosition\&#39;s rules (a known, active BAY or MOBILE_UNIT at the workorder\&#39;s site, within its duty class, with no other open workorder in an overlapping slot), and the technician follows assignTechnician\&#39;s rules (employed, and staffed at the site where they have any ACTIVE staffing). Required inputs: workorderId (UUID) as a path parameter, a body with resourceType (BAY, MOBILE_UNIT or HOLD; resourceId required for BAY and MOBILE_UNIT, optional for HOLD) and optional slotStart/slotEnd with assignServicePosition\&#39;s defaults, and the required Idempotency-Key header (a UUID). The body has no technician field: the technician is always the caller. A position the workorder already holds is replaced by the requested one, a BAY or MOBILE_UNIT claim leaves the workorder ASSIGNED, and a HOLD claim assigns the technician without a bay and the workorder stays APPROVED until it is placed. Emits a WORKORDER_CLAIM event on a fresh claim and none on a replay; a replay returns the original 200 answer with Idempotency-Replayed: true. Returns 400 when the body is invalid, the slot bounds are malformed, or the Idempotency-Key is missing or not a UUID; 403 NO_LINKED_PERSON when the caller has no linked person, and 403 LOCATION_SCOPE_DENIED outside the caller\&#39;s reach; 404 when the workorder does not exist; 409 TECHNICIAN_ALREADY_ASSIGNED, naming the current technician in the message with their id as referenceId, when someone holds the workorder; 409 RESOURCE_OCCUPIED with conflicts[] when the slot is taken, and nothing is assigned; 409 WORKORDER_NOT_CLAIMABLE when the workorder is not APPROVED; 409 IDEMPOTENCY_CONFLICT when the key was used for a different request or by a different actor; 422 TECHNICIAN_NOT_STAFFED_AT_SITE, TECHNICIAN_NOT_ACTIVE, SERVICE_POSITION_INVALID, SERVICE_POSITION_INACTIVE or SERVICE_POSITION_DUTY_CLASS_EXCEEDED; and 503 TECHNICIAN_REPLICATION_PENDING or LOCATION_REPLICATION_PENDING with a Retry-After header.
+     * @endpoint post /v1/workorders/{workorderId}/claim
+     * @param workorderId ID of the workorder
+     * @param idempotencyKey Required idempotency key (a UUID); a replay returns the original answer
+     * @param claimWorkorderRequest Where the technician takes the workorder.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public claimWorkorder(workorderId: string, idempotencyKey: string, claimWorkorderRequest: ClaimWorkorderRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ServicePositionResponse>;
+    public claimWorkorder(workorderId: string, idempotencyKey: string, claimWorkorderRequest: ClaimWorkorderRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ServicePositionResponse>>;
+    public claimWorkorder(workorderId: string, idempotencyKey: string, claimWorkorderRequest: ClaimWorkorderRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ServicePositionResponse>>;
+    public claimWorkorder(workorderId: string, idempotencyKey: string, claimWorkorderRequest: ClaimWorkorderRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (workorderId === null || workorderId === undefined) {
+            throw new Error('Required parameter workorderId was null or undefined when calling claimWorkorder.');
+        }
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling claimWorkorder.');
+        }
+        if (claimWorkorderRequest === null || claimWorkorderRequest === undefined) {
+            throw new Error('Required parameter claimWorkorderRequest was null or undefined when calling claimWorkorder.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/claim`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ServicePositionResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: claimWorkorderRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
