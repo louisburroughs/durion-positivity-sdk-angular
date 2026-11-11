@@ -26,8 +26,6 @@ import { BankAccountProfileRequest } from '../models/bankAccountProfileRequest';
 import { BankAccountProfileResponse } from '../models/bankAccountProfileResponse';
 // @ts-ignore
 import { BankOpeningBalanceRequest } from '../models/bankOpeningBalanceRequest';
-// @ts-ignore
-import { BankOpeningBalanceResponse } from '../models/bankOpeningBalanceResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -47,26 +45,33 @@ export class BankAccountsService extends BaseService {
 
     /**
      * Establish Bank Opening Balance
-     * Puts a bank account\&#39;s balance at cutover on the books, with the checks and deposits still in transit, against 3900 Opening Balance Equity. Posts one entry dated asOfDate: one bank line for statementBalance (a debit, a credit when overdrawn), one bank line per outstanding item carrying its reference and itemDate (an OUTSTANDING_CHECK credits the bank, a DEPOSIT_IN_TRANSIT debits it) and one 3900 line for the net, so the book balance is statement + deposits in transit − outstanding checks. Use this tool once per bank account, when a shop\&#39;s books move onto the platform; do not use createJournalEntry, which records no opening, and do not use it for cash not yet deposited at cutover (deposit it on or before asOfDate and list it as a deposit in transit); AR, AP, inventory and loan openings are out of scope. Preconditions: caller holds accounting:je:create and accounting:je:post; the account exists (404 GL_ACCOUNT_NOT_FOUND) and is an active BANK_CASH account in functional currency (422 BANK_OPENING_BALANCE_ACCOUNT_NOT_ELIGIBLE); currencyCode is its currency (422 CURRENCY_NOT_SUPPORTED) and no amount is finer than its minor unit (422 AMOUNT_PRECISION_EXCEEDS_CURRENCY, every such field in fieldErrors); it has no standing opening (409 BANK_OPENING_BALANCE_ALREADY_ESTABLISHED; correct a mistake by reversing the entry, dated on or before asOfDate, and running the opening again); the balance at the end of asOfDate holds no line and no committed statement starts on or before it (422 BANK_OPENING_BALANCE_NOT_FIRST; later lines are allowed); a zero balance needs at least one item (422 BANK_OPENING_BALANCE_EMPTY); asOfDate is not after today in the tenant\&#39;s accounting time zone and falls in an OPEN period, with no override path (422 PERIOD_CLOSED or PERIOD_HARD_LOCKED otherwise). Idempotent on requestId: a replay returns the first result with 200, another body with the same requestId is 409 IDEMPOTENCY_CONFLICT. Required inputs: glAccountId (path), asOfDate, statementBalance, currencyCode (ISO 4217, the code of every amount, ADR-0067), outstandingItems (type, reference, itemDate on or before asOfDate, amount more than zero; may be empty), justification (at least 10 characters), requestId. Emits an ACCOUNTING_BANK_OPENING_BALANCE_ESTABLISH event, writes a BANK_OPENING_BALANCE_ESTABLISH audit row naming the caller, and returns 201 with the balances and their currencyCode, the journal entry id and number and each item\&#39;s glLineId; the account\&#39;s first bank statement then starts on asOfDate + 1 with opening balance &#x3D; statementBalance and a gapAcknowledgement; registering each item\&#39;s glLineId as an outstanding item there leaves an opening difference of 0.00.
+     * Puts a bank account\&#39;s balance at cutover on the books, with the checks and deposits still in transit, against 3900 Opening Balance Equity. Posts one entry dated asOfDate: one bank line for statementBalance (a debit, a credit when overdrawn), one bank line per outstanding item carrying its reference and itemDate (an OUTSTANDING_CHECK credits the bank, a DEPOSIT_IN_TRANSIT debits it) and one 3900 line for the net, so the book balance is statement + deposits in transit − outstanding checks. Use this tool once per bank account, when a shop\&#39;s books move onto the platform; do not use createJournalEntry, which records no opening, and do not use it for cash not yet deposited at cutover (deposit it on or before asOfDate and list it as a deposit in transit); AR, AP, inventory and loan openings are out of scope. Preconditions: caller holds accounting:je:create and accounting:je:post; the account exists (404 GL_ACCOUNT_NOT_FOUND) and is an active BANK_CASH account in functional currency (422 BANK_OPENING_BALANCE_ACCOUNT_NOT_ELIGIBLE); currencyCode is its currency (422 CURRENCY_NOT_SUPPORTED) and no amount is finer than its minor unit (422 AMOUNT_PRECISION_EXCEEDS_CURRENCY, every such field in fieldErrors); it has no standing opening (409 BANK_OPENING_BALANCE_ALREADY_ESTABLISHED; correct a mistake by reversing the entry, dated on or before asOfDate, and running the opening again); the balance at the end of asOfDate holds no line and no committed statement starts on or before it (422 BANK_OPENING_BALANCE_NOT_FIRST; later lines are allowed); a zero balance needs at least one item (422 BANK_OPENING_BALANCE_EMPTY); asOfDate is not after today in the tenant\&#39;s accounting time zone and falls in an OPEN period, with no override path (422 PERIOD_CLOSED or PERIOD_HARD_LOCKED otherwise). Idempotent on the Idempotency-Key header (a UUID): a replay of the same key and payload returns the original status and body with Idempotency-Replayed: true and posts nothing; another payload or caller is 409 IDEMPOTENCY_CONFLICT. The replayed body is a snapshot of the first outcome, not the opening\&#39;s current state. Required inputs: glAccountId (path), the Idempotency-Key header and, in the body, asOfDate, statementBalance, currencyCode (ISO 4217, the code of every amount, ADR-0067), outstandingItems (type, reference, itemDate on or before asOfDate, amount more than zero; may be empty) and justification (at least 10 characters). Emits an ACCOUNTING_BANK_OPENING_BALANCE_ESTABLISH event, writes a BANK_OPENING_BALANCE_ESTABLISH audit row naming the caller, and returns 201 with the balances and their currencyCode, the journal entry id and number and each item\&#39;s glLineId; the account\&#39;s first bank statement then starts on asOfDate + 1 with opening balance &#x3D; statementBalance and a gapAcknowledgement; registering each item\&#39;s glLineId as an outstanding item there leaves an opening difference of 0.00.
      * @endpoint post /v1/accounting/bank-accounts/{glAccountId}/opening-balance
      * @param glAccountId The bank account (a BANK_CASH GL account)
+     * @param idempotencyKey Client idempotency key (a UUID): the same key with the same body replays the original opening with Idempotency-Replayed: true
      * @param bankOpeningBalanceRequest The bank\&#39;s balance at cutover, the items in transit and why
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public establishBankOpeningBalance(glAccountId: string, bankOpeningBalanceRequest: BankOpeningBalanceRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BankOpeningBalanceResponse>;
-    public establishBankOpeningBalance(glAccountId: string, bankOpeningBalanceRequest: BankOpeningBalanceRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BankOpeningBalanceResponse>>;
-    public establishBankOpeningBalance(glAccountId: string, bankOpeningBalanceRequest: BankOpeningBalanceRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BankOpeningBalanceResponse>>;
-    public establishBankOpeningBalance(glAccountId: string, bankOpeningBalanceRequest: BankOpeningBalanceRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public establishBankOpeningBalance(glAccountId: string, idempotencyKey: string, bankOpeningBalanceRequest: BankOpeningBalanceRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
+    public establishBankOpeningBalance(glAccountId: string, idempotencyKey: string, bankOpeningBalanceRequest: BankOpeningBalanceRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
+    public establishBankOpeningBalance(glAccountId: string, idempotencyKey: string, bankOpeningBalanceRequest: BankOpeningBalanceRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
+    public establishBankOpeningBalance(glAccountId: string, idempotencyKey: string, bankOpeningBalanceRequest: BankOpeningBalanceRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (glAccountId === null || glAccountId === undefined) {
             throw new Error('Required parameter glAccountId was null or undefined when calling establishBankOpeningBalance.');
+        }
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling establishBankOpeningBalance.');
         }
         if (bankOpeningBalanceRequest === null || bankOpeningBalanceRequest === undefined) {
             throw new Error('Required parameter bankOpeningBalanceRequest was null or undefined when calling establishBankOpeningBalance.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
@@ -105,7 +110,7 @@ export class BankAccountsService extends BaseService {
 
         let localVarPath = `/v1/accounting/bank-accounts/${this.configuration.encodeParam({name: "glAccountId", value: glAccountId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/opening-balance`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<BankOpeningBalanceResponse>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<object>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: bankOpeningBalanceRequest,

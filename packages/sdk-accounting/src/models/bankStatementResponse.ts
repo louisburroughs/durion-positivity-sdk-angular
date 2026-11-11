@@ -87,10 +87,6 @@ export interface BankStatementResponse {
      */
     reconciliations?: Array<BankStatementReconciliationLink>;
     /**
-     * True when this response replays an earlier request with the same requestId
-     */
-    replayed?: boolean;
-    /**
      * Where the statement came from
      */
     sourceKind?: BankStatementResponseSourceKindEnum;
@@ -172,7 +168,7 @@ export function instanceOfBankStatementResponse(value: object): value is BankSta
     const requiredProperties = createBankStatementResponsePropertyNames();
     const optionalStringProperties = createBankStatementResponseOptionalProperties({ name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'connectorCode', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'currency', nullable: false }, { name: 'endDate', nullable: false }, { name: 'gapAcknowledgedAt', nullable: false }, { name: 'gapAcknowledgedBy', nullable: false }, { name: 'gapAcknowledgement', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'sourceKind', nullable: false }, { name: 'sourceRef', nullable: false }, { name: 'startDate', nullable: false }, { name: 'statementId', nullable: false }, { name: 'statementRef', nullable: false }, { name: 'status', nullable: false }, { name: 'supersededByStatementId', nullable: false }, );
     const optionalNumberProperties = createBankStatementResponseOptionalProperties({ name: 'activityTotal', nullable: false }, { name: 'bankTransactionCount', nullable: false }, { name: 'closingBalance', nullable: false }, { name: 'modifiedCount', nullable: false }, { name: 'openingBalance', nullable: false }, { name: 'possibleDuplicateCount', nullable: false }, );
-    const optionalBooleanProperties = createBankStatementResponseOptionalProperties({ name: 'replayed', nullable: false }, );
+    const optionalBooleanProperties = createBankStatementResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalBankStatementResponsePropertyOfType(_v, property.name, 'string', property.nullable))

@@ -118,10 +118,6 @@ export interface BankReconciliationResponse {
      */
     reconciliationId?: string;
     /**
-     * True when this answers a replayed create command (same requestId and payload)
-     */
-    replayed?: boolean;
-    /**
      * Statement closing balance
      */
     statementClosingBalance?: number;
@@ -242,7 +238,7 @@ export function instanceOfBankReconciliationResponse(value: object): value is Ba
     const requiredProperties = createBankReconciliationResponsePropertyNames();
     const optionalStringProperties = createBankReconciliationResponseOptionalProperties({ name: 'accountCode', nullable: false }, { name: 'accountName', nullable: false }, { name: 'accountingPeriodCode', nullable: false }, { name: 'baselineDate', nullable: false }, { name: 'cancelReason', nullable: false }, { name: 'cancelledAt', nullable: false }, { name: 'cancelledBy', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'currency', nullable: false }, { name: 'finalizedAt', nullable: false }, { name: 'finalizedBy', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'invalidatedAt', nullable: false }, { name: 'invalidatedByJournalEntryId', nullable: false }, { name: 'invalidationReason', nullable: false }, { name: 'reconciliationId', nullable: false }, { name: 'statementEndDate', nullable: false }, { name: 'statementId', nullable: false }, { name: 'statementStartDate', nullable: false }, { name: 'status', nullable: false }, { name: 'submittedAt', nullable: false }, { name: 'submittedBy', nullable: false }, { name: 'supersededByReconciliationId', nullable: false }, { name: 'supersedesReconciliationId', nullable: false }, );
     const optionalNumberProperties = createBankReconciliationResponseOptionalProperties({ name: 'adjustedBankBalance', nullable: false }, { name: 'adjustedBookBalance', nullable: false }, { name: 'approvedGlEndingBalance', nullable: false }, { name: 'countUnexplainedBank', nullable: false }, { name: 'countUnexplainedLedger', nullable: false }, { name: 'difference', nullable: false }, { name: 'glEndingBalance', nullable: false }, { name: 'glOpeningBalance', nullable: false }, { name: 'openingDifference', nullable: false }, { name: 'statementClosingBalance', nullable: false }, { name: 'statementOpeningBalance', nullable: false }, { name: 'sumLateAdjustments', nullable: false }, { name: 'sumOpeningAdjustments', nullable: false }, { name: 'sumOutstandingBankItems', nullable: false }, { name: 'sumOutstandingLedgerItems', nullable: false }, { name: 'sumUnexplainedBank', nullable: false }, { name: 'sumUnexplainedLedger', nullable: false }, { name: 'version', nullable: false }, );
-    const optionalBooleanProperties = createBankReconciliationResponseOptionalProperties({ name: 'replayed', nullable: false }, );
+    const optionalBooleanProperties = createBankReconciliationResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalBankReconciliationResponsePropertyOfType(_v, property.name, 'string', property.nullable))

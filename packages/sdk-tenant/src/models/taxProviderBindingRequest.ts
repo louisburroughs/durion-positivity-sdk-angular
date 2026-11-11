@@ -33,10 +33,6 @@ export interface TaxProviderBindingRequest {
      * Non-secret provider profile name; optional
      */
     providerProfile?: string;
-    /**
-     * Request id; a replay with the same value returns the first result
-     */
-    requestId?: string;
 }
 
 function isOptionalTaxProviderBindingRequestPropertyOfType(
@@ -78,7 +74,7 @@ export function instanceOfTaxProviderBindingRequest(value: object): value is Tax
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTaxProviderBindingRequestPropertyNames();
-    const optionalStringProperties = createTaxProviderBindingRequestOptionalProperties({ name: 'countryCode', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, { name: 'providerId', nullable: false }, { name: 'providerProfile', nullable: false }, { name: 'requestId', nullable: false }, );
+    const optionalStringProperties = createTaxProviderBindingRequestOptionalProperties({ name: 'countryCode', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, { name: 'providerId', nullable: false }, { name: 'providerProfile', nullable: false }, );
     const optionalNumberProperties = createTaxProviderBindingRequestOptionalProperties();
     const optionalBooleanProperties = createTaxProviderBindingRequestOptionalProperties();
 

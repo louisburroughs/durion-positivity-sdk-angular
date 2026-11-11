@@ -22,10 +22,6 @@ export interface DepositReversalRequest {
      */
     reason: string;
     /**
-     * Caller-generated UUIDv7 naming this request; a replay returns the first result
-     */
-    requestId: string;
-    /**
      * The reversal entry\'s date; when omitted, the deposit\'s date if its period is open, else today
      */
     reversalDate?: string;
@@ -69,8 +65,8 @@ export function instanceOfDepositReversalRequest(value: object): value is Deposi
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createDepositReversalRequestPropertyNames('reason', 'requestId', );
-    const optionalStringProperties = createDepositReversalRequestOptionalProperties({ name: 'overrideJustification', nullable: false }, { name: 'reason', nullable: false }, { name: 'requestId', nullable: false }, { name: 'reversalDate', nullable: false }, );
+    const requiredProperties = createDepositReversalRequestPropertyNames('reason', );
+    const optionalStringProperties = createDepositReversalRequestOptionalProperties({ name: 'overrideJustification', nullable: false }, { name: 'reason', nullable: false }, { name: 'reversalDate', nullable: false }, );
     const optionalNumberProperties = createDepositReversalRequestOptionalProperties();
     const optionalBooleanProperties = createDepositReversalRequestOptionalProperties();
 

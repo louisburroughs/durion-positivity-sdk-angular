@@ -25,10 +25,6 @@ export interface ReconciliationMatchCreateRequest {
      * Required (at least 10 characters) when the match is not 1:1, uses the ±0.01 tolerance, spans dates beyond the window or includes a former possible duplicate
      */
     justification?: string;
-    /**
-     * Caller-generated UUIDv7; a replay with the same members returns the match
-     */
-    requestId: string;
 }
 
 function isOptionalReconciliationMatchCreateRequestPropertyOfType(
@@ -69,8 +65,8 @@ export function instanceOfReconciliationMatchCreateRequest(value: object): value
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReconciliationMatchCreateRequestPropertyNames('bankTransactionIds', 'glLineIds', 'requestId', );
-    const optionalStringProperties = createReconciliationMatchCreateRequestOptionalProperties({ name: 'justification', nullable: false }, { name: 'requestId', nullable: false }, );
+    const requiredProperties = createReconciliationMatchCreateRequestPropertyNames('bankTransactionIds', 'glLineIds', );
+    const optionalStringProperties = createReconciliationMatchCreateRequestOptionalProperties({ name: 'justification', nullable: false }, );
     const optionalNumberProperties = createReconciliationMatchCreateRequestOptionalProperties();
     const optionalBooleanProperties = createReconciliationMatchCreateRequestOptionalProperties();
 

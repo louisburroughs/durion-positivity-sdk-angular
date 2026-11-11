@@ -34,10 +34,6 @@ export interface DepositRecordRequest {
      */
     overrideJustification?: string;
     /**
-     * Caller-generated UUIDv7 naming this request; a replay returns the first result
-     */
-    requestId: string;
-    /**
      * The undeposited sessions the deposit takes, each whole: all its bank drops and its whole clearing net
      */
     sessionIds: Set<string>;
@@ -81,8 +77,8 @@ export function instanceOfDepositRecordRequest(value: object): value is DepositR
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createDepositRecordRequestPropertyNames('bankGlAccountId', 'currencyCode', 'depositDate', 'requestId', 'sessionIds', );
-    const optionalStringProperties = createDepositRecordRequestOptionalProperties({ name: 'bankGlAccountId', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'depositDate', nullable: false }, { name: 'depositSlipReference', nullable: false }, { name: 'overrideJustification', nullable: false }, { name: 'requestId', nullable: false }, );
+    const requiredProperties = createDepositRecordRequestPropertyNames('bankGlAccountId', 'currencyCode', 'depositDate', 'sessionIds', );
+    const optionalStringProperties = createDepositRecordRequestOptionalProperties({ name: 'bankGlAccountId', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'depositDate', nullable: false }, { name: 'depositSlipReference', nullable: false }, { name: 'overrideJustification', nullable: false }, );
     const optionalNumberProperties = createDepositRecordRequestOptionalProperties();
     const optionalBooleanProperties = createDepositRecordRequestOptionalProperties();
 

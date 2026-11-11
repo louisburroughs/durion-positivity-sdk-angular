@@ -68,10 +68,6 @@ export interface ReconciliationMatchResponse {
      */
     replacesMatchId?: string;
     /**
-     * True when this answers a replayed match command
-     */
-    replayed?: boolean;
-    /**
      * bankTotal − ledgerTotal: what a residual settlement posts
      */
     residual?: number;
@@ -151,7 +147,7 @@ export function instanceOfReconciliationMatchResponse(value: object): value is R
     const requiredProperties = createReconciliationMatchResponsePropertyNames();
     const optionalStringProperties = createReconciliationMatchResponseOptionalProperties({ name: 'acceptedAt', nullable: false }, { name: 'acceptedBy', nullable: false }, { name: 'justification', nullable: false }, { name: 'matchId', nullable: false }, { name: 'matchKind', nullable: false }, { name: 'origin', nullable: false }, { name: 'proposedAt', nullable: false }, { name: 'proposedBy', nullable: false }, { name: 'reconciliationId', nullable: false }, { name: 'rejectedAt', nullable: false }, { name: 'rejectedBy', nullable: false }, { name: 'replacesMatchId', nullable: false }, { name: 'state', nullable: false }, { name: 'unmatchReason', nullable: false }, { name: 'unmatchedAt', nullable: false }, { name: 'unmatchedBy', nullable: false }, );
     const optionalNumberProperties = createReconciliationMatchResponseOptionalProperties({ name: 'bankTotal', nullable: false }, { name: 'confidenceScore', nullable: false }, { name: 'ledgerTotal', nullable: false }, { name: 'residual', nullable: false }, { name: 'toleranceUsed', nullable: false }, );
-    const optionalBooleanProperties = createReconciliationMatchResponseOptionalProperties({ name: 'replayed', nullable: false }, );
+    const optionalBooleanProperties = createReconciliationMatchResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalReconciliationMatchResponsePropertyOfType(_v, property.name, 'string', property.nullable))

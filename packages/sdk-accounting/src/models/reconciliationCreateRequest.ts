@@ -26,10 +26,6 @@ export interface ReconciliationCreateRequest {
      */
     openingBalance?: number;
     /**
-     * Caller-generated UUIDv7; a replay with the same payload returns the original
-     */
-    requestId: string;
-    /**
      * The COMMITTED bank statement to reconcile (required in phase 1)
      */
     statementId?: string;
@@ -81,8 +77,8 @@ export function instanceOfReconciliationCreateRequest(value: object): value is R
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReconciliationCreateRequestPropertyNames('glAccountId', 'requestId', );
-    const optionalStringProperties = createReconciliationCreateRequestOptionalProperties({ name: 'glAccountId', nullable: false }, { name: 'requestId', nullable: false }, { name: 'statementId', nullable: false }, { name: 'windowEndDate', nullable: false }, { name: 'windowStartDate', nullable: false }, );
+    const requiredProperties = createReconciliationCreateRequestPropertyNames('glAccountId', );
+    const optionalStringProperties = createReconciliationCreateRequestOptionalProperties({ name: 'glAccountId', nullable: false }, { name: 'statementId', nullable: false }, { name: 'windowEndDate', nullable: false }, { name: 'windowStartDate', nullable: false }, );
     const optionalNumberProperties = createReconciliationCreateRequestOptionalProperties({ name: 'closingBalance', nullable: false }, { name: 'openingBalance', nullable: false }, );
     const optionalBooleanProperties = createReconciliationCreateRequestOptionalProperties();
 

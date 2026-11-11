@@ -77,10 +77,6 @@ export interface BankReconciliationAdjustmentResponse {
      * The reconciliation that owns the adjustment
      */
     reconciliationId?: string;
-    /**
-     * True when this answers a replayed command (same requestId and payload)
-     */
-    replayed?: boolean;
     reversalJournalEntryId?: string;
     reversalReason?: string;
     reversedAt?: string;
@@ -157,7 +153,7 @@ export function instanceOfBankReconciliationAdjustmentResponse(value: object): v
     const requiredProperties = createBankReconciliationAdjustmentResponsePropertyNames();
     const optionalStringProperties = createBankReconciliationAdjustmentResponseOptionalProperties({ name: 'adjustmentId', nullable: false }, { name: 'bankTransactionId', nullable: false }, { name: 'bridgesStatementId', nullable: false }, { name: 'counterGlAccountId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'description', nullable: false }, { name: 'entryNumber', nullable: false }, { name: 'journalEntryId', nullable: false }, { name: 'justification', nullable: false }, { name: 'matchId', nullable: false }, { name: 'overrideJustification', nullable: false }, { name: 'postedPeriodCode', nullable: false }, { name: 'reconciliationId', nullable: false }, { name: 'reversalJournalEntryId', nullable: false }, { name: 'reversalReason', nullable: false }, { name: 'reversedAt', nullable: false }, { name: 'reversedBy', nullable: false }, { name: 'settlesMatchId', nullable: false }, { name: 'status', nullable: false }, { name: 'transactionDate', nullable: false }, { name: 'type', nullable: false }, );
     const optionalNumberProperties = createBankReconciliationAdjustmentResponseOptionalProperties({ name: 'amount', nullable: false }, );
-    const optionalBooleanProperties = createBankReconciliationAdjustmentResponseOptionalProperties({ name: 'periodOverride', nullable: false }, { name: 'replayed', nullable: false }, );
+    const optionalBooleanProperties = createBankReconciliationAdjustmentResponseOptionalProperties({ name: 'periodOverride', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalBankReconciliationAdjustmentResponsePropertyOfType(_v, property.name, 'string', property.nullable))
