@@ -34,8 +34,6 @@ import { EstimateSnapshotResponse } from '../models/estimateSnapshotResponse';
 import { EstimateSummaryResponse } from '../models/estimateSummaryResponse';
 // @ts-ignore
 import { UpdateEstimateItemRequest } from '../models/updateEstimateItemRequest';
-// @ts-ignore
-import { WorkorderResponse } from '../models/workorderResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -1095,9 +1093,9 @@ export class EstimateAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public promoteEstimate(estimateId: string, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkorderResponse>;
-    public promoteEstimate(estimateId: string, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkorderResponse>>;
-    public promoteEstimate(estimateId: string, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkorderResponse>>;
+    public promoteEstimate(estimateId: string, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
+    public promoteEstimate(estimateId: string, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
+    public promoteEstimate(estimateId: string, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
     public promoteEstimate(estimateId: string, idempotencyKey?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (estimateId === null || estimateId === undefined) {
             throw new Error('Required parameter estimateId was null or undefined when calling promoteEstimate.');
@@ -1136,7 +1134,7 @@ export class EstimateAPIService extends BaseService {
 
         let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/promote`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<WorkorderResponse>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<object>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

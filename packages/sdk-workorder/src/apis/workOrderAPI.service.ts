@@ -33,8 +33,6 @@ import { CountResponse } from '../models/countResponse';
 // @ts-ignore
 import { CreateWorkorderRequest } from '../models/createWorkorderRequest';
 // @ts-ignore
-import { InvoiceGenerationResponse } from '../models/invoiceGenerationResponse';
-// @ts-ignore
 import { RecordCompletionSignOffRequest } from '../models/recordCompletionSignOffRequest';
 // @ts-ignore
 import { ReopenWorkorderRequest } from '../models/reopenWorkorderRequest';
@@ -50,8 +48,6 @@ import { WorkorderSnapshotResponse } from '../models/workorderSnapshotResponse';
 import { WorkorderStateTransitionResponse } from '../models/workorderStateTransitionResponse';
 // @ts-ignore
 import { WorkorderTransferRequest } from '../models/workorderTransferRequest';
-// @ts-ignore
-import { WorkorderTransferResponse } from '../models/workorderTransferResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -434,9 +430,9 @@ export class WorkOrderAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createWorkorder(createWorkorderRequest: CreateWorkorderRequest, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkorderResponse>;
-    public createWorkorder(createWorkorderRequest: CreateWorkorderRequest, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkorderResponse>>;
-    public createWorkorder(createWorkorderRequest: CreateWorkorderRequest, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkorderResponse>>;
+    public createWorkorder(createWorkorderRequest: CreateWorkorderRequest, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
+    public createWorkorder(createWorkorderRequest: CreateWorkorderRequest, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
+    public createWorkorder(createWorkorderRequest: CreateWorkorderRequest, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
     public createWorkorder(createWorkorderRequest: CreateWorkorderRequest, idempotencyKey?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (createWorkorderRequest === null || createWorkorderRequest === undefined) {
             throw new Error('Required parameter createWorkorderRequest was null or undefined when calling createWorkorder.');
@@ -484,7 +480,7 @@ export class WorkOrderAPIService extends BaseService {
 
         let localVarPath = `/v1/workorders`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<WorkorderResponse>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<object>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: createWorkorderRequest,
@@ -567,9 +563,9 @@ export class WorkOrderAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public generateWorkorderInvoice(workorderId: string, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<InvoiceGenerationResponse>;
-    public generateWorkorderInvoice(workorderId: string, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InvoiceGenerationResponse>>;
-    public generateWorkorderInvoice(workorderId: string, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InvoiceGenerationResponse>>;
+    public generateWorkorderInvoice(workorderId: string, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
+    public generateWorkorderInvoice(workorderId: string, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
+    public generateWorkorderInvoice(workorderId: string, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
     public generateWorkorderInvoice(workorderId: string, idempotencyKey?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (workorderId === null || workorderId === undefined) {
             throw new Error('Required parameter workorderId was null or undefined when calling generateWorkorderInvoice.');
@@ -608,7 +604,7 @@ export class WorkOrderAPIService extends BaseService {
 
         let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/generate-invoice`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<InvoiceGenerationResponse>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<object>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -1136,9 +1132,9 @@ export class WorkOrderAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public transferWorkorder(workorderId: string, workorderTransferRequest: WorkorderTransferRequest, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkorderTransferResponse>;
-    public transferWorkorder(workorderId: string, workorderTransferRequest: WorkorderTransferRequest, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkorderTransferResponse>>;
-    public transferWorkorder(workorderId: string, workorderTransferRequest: WorkorderTransferRequest, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkorderTransferResponse>>;
+    public transferWorkorder(workorderId: string, workorderTransferRequest: WorkorderTransferRequest, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
+    public transferWorkorder(workorderId: string, workorderTransferRequest: WorkorderTransferRequest, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
+    public transferWorkorder(workorderId: string, workorderTransferRequest: WorkorderTransferRequest, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
     public transferWorkorder(workorderId: string, workorderTransferRequest: WorkorderTransferRequest, idempotencyKey?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (workorderId === null || workorderId === undefined) {
             throw new Error('Required parameter workorderId was null or undefined when calling transferWorkorder.');
@@ -1189,7 +1185,7 @@ export class WorkOrderAPIService extends BaseService {
 
         let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/transfer`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<WorkorderTransferResponse>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<object>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: workorderTransferRequest,
