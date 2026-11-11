@@ -63,10 +63,6 @@ export interface DepositResponse {
      */
     recordedBy?: string;
     /**
-     * True when this answers a replayed requestId with the first result
-     */
-    replayed?: boolean;
-    /**
      * The reversal\'s date; null until reversed
      */
     reversalDate?: string;
@@ -147,7 +143,7 @@ export function instanceOfDepositResponse(value: object): value is DepositRespon
     const requiredProperties = createDepositResponsePropertyNames();
     const optionalStringProperties = createDepositResponseOptionalProperties({ name: 'bankAccountCode', nullable: false }, { name: 'bankGlAccountId', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'depositDate', nullable: false }, { name: 'depositId', nullable: false }, { name: 'depositSlipReference', nullable: false }, { name: 'journalEntryId', nullable: false }, { name: 'journalEntryNumber', nullable: false }, { name: 'recordedBy', nullable: false }, { name: 'reversalDate', nullable: false }, { name: 'reversalJournalEntryId', nullable: false }, { name: 'reversalJournalEntryNumber', nullable: false }, { name: 'reversalReason', nullable: false }, { name: 'reversedAt', nullable: false }, { name: 'reversedBy', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createDepositResponseOptionalProperties({ name: 'amount', nullable: false }, { name: 'clearingNet', nullable: false }, { name: 'expectedCash', nullable: false }, );
-    const optionalBooleanProperties = createDepositResponseOptionalProperties({ name: 'replayed', nullable: false }, );
+    const optionalBooleanProperties = createDepositResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalDepositResponsePropertyOfType(_v, property.name, 'string', property.nullable))

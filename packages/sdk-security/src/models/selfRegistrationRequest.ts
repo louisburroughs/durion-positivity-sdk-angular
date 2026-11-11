@@ -22,10 +22,6 @@ export interface SelfRegistrationRequest {
      */
     firstName: string;
     /**
-     * Optional idempotency key used to replay a completed registration attempt without creating duplicate side effects
-     */
-    idempotencyKey?: string;
-    /**
      * Optional external identity subject for future federation support
      */
     idpSubject?: string;
@@ -86,7 +82,7 @@ export function instanceOfSelfRegistrationRequest(value: object): value is SelfR
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createSelfRegistrationRequestPropertyNames('email', 'firstName', 'lastName', 'password', );
-    const optionalStringProperties = createSelfRegistrationRequestOptionalProperties({ name: 'email', nullable: false }, { name: 'firstName', nullable: false }, { name: 'idempotencyKey', nullable: false }, { name: 'idpSubject', nullable: false }, { name: 'lastName', nullable: false }, { name: 'password', nullable: false }, { name: 'phone', nullable: false }, { name: 'username', nullable: false }, );
+    const optionalStringProperties = createSelfRegistrationRequestOptionalProperties({ name: 'email', nullable: false }, { name: 'firstName', nullable: false }, { name: 'idpSubject', nullable: false }, { name: 'lastName', nullable: false }, { name: 'password', nullable: false }, { name: 'phone', nullable: false }, { name: 'username', nullable: false }, );
     const optionalNumberProperties = createSelfRegistrationRequestOptionalProperties();
     const optionalBooleanProperties = createSelfRegistrationRequestOptionalProperties();
 

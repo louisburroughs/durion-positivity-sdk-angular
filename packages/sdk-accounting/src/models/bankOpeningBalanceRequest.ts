@@ -31,10 +31,6 @@ export interface BankOpeningBalanceRequest {
      */
     outstandingItems?: Array<BankOpeningBalanceOutstandingItem>;
     /**
-     * Caller-generated UUIDv7 naming this request; a replay returns the first result
-     */
-    requestId: string;
-    /**
      * The bank\'s balance at the end of asOfDate, in functional currency; negative when the account was overdrawn
      */
     statementBalance: number;
@@ -78,8 +74,8 @@ export function instanceOfBankOpeningBalanceRequest(value: object): value is Ban
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createBankOpeningBalanceRequestPropertyNames('asOfDate', 'currencyCode', 'justification', 'requestId', 'statementBalance', );
-    const optionalStringProperties = createBankOpeningBalanceRequestOptionalProperties({ name: 'asOfDate', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'justification', nullable: false }, { name: 'requestId', nullable: false }, );
+    const requiredProperties = createBankOpeningBalanceRequestPropertyNames('asOfDate', 'currencyCode', 'justification', 'statementBalance', );
+    const optionalStringProperties = createBankOpeningBalanceRequestOptionalProperties({ name: 'asOfDate', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'justification', nullable: false }, );
     const optionalNumberProperties = createBankOpeningBalanceRequestOptionalProperties({ name: 'statementBalance', nullable: false }, );
     const optionalBooleanProperties = createBankOpeningBalanceRequestOptionalProperties();
 

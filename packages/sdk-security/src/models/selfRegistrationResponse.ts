@@ -16,10 +16,6 @@ import { CrmMatchSummaryDto } from './crmMatchSummaryDto';
 export interface SelfRegistrationResponse {
     crmMatchSummary?: CrmMatchSummaryDto;
     /**
-     * Idempotency key echoed back when the caller supplied one
-     */
-    idempotencyKey?: string;
-    /**
      * False for Phase 1 because follow-up login is required
      */
     issuedTokens: boolean;
@@ -84,7 +80,7 @@ export function instanceOfSelfRegistrationResponse(value: object): value is Self
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createSelfRegistrationResponsePropertyNames('issuedTokens', 'linkStatus', 'matchedExistingPerson', 'personId', 'userId', 'username', );
-    const optionalStringProperties = createSelfRegistrationResponseOptionalProperties({ name: 'idempotencyKey', nullable: false }, { name: 'linkStatus', nullable: false }, { name: 'personId', nullable: false }, { name: 'userId', nullable: false }, { name: 'username', nullable: false }, );
+    const optionalStringProperties = createSelfRegistrationResponseOptionalProperties({ name: 'linkStatus', nullable: false }, { name: 'personId', nullable: false }, { name: 'userId', nullable: false }, { name: 'username', nullable: false }, );
     const optionalNumberProperties = createSelfRegistrationResponseOptionalProperties();
     const optionalBooleanProperties = createSelfRegistrationResponseOptionalProperties({ name: 'issuedTokens', nullable: false }, { name: 'matchedExistingPerson', nullable: false }, );
 

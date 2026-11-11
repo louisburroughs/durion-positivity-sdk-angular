@@ -30,10 +30,6 @@ export interface TenantSignupRequest {
      */
     homeCountry?: string;
     /**
-     * Optional idempotency key: the same key with the same request replays the stored response instead of creating a second account and tenant; a different request for the same key is 409 IDEMPOTENCY_KEY_REUSED
-     */
-    idempotencyKey?: string;
-    /**
      * Family name of the first administrator
      */
     lastName: string;
@@ -94,7 +90,7 @@ export function instanceOfTenantSignupRequest(value: object): value is TenantSig
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTenantSignupRequestPropertyNames('email', 'firstName', 'functionalCurrency', 'lastName', 'locale', 'organizationName', 'password', 'slug', );
-    const optionalStringProperties = createTenantSignupRequestOptionalProperties({ name: 'email', nullable: false }, { name: 'firstName', nullable: false }, { name: 'functionalCurrency', nullable: false }, { name: 'homeCountry', nullable: false }, { name: 'idempotencyKey', nullable: false }, { name: 'lastName', nullable: false }, { name: 'locale', nullable: false }, { name: 'organizationName', nullable: false }, { name: 'password', nullable: false }, { name: 'slug', nullable: false }, );
+    const optionalStringProperties = createTenantSignupRequestOptionalProperties({ name: 'email', nullable: false }, { name: 'firstName', nullable: false }, { name: 'functionalCurrency', nullable: false }, { name: 'homeCountry', nullable: false }, { name: 'lastName', nullable: false }, { name: 'locale', nullable: false }, { name: 'organizationName', nullable: false }, { name: 'password', nullable: false }, { name: 'slug', nullable: false }, );
     const optionalNumberProperties = createTenantSignupRequestOptionalProperties();
     const optionalBooleanProperties = createTenantSignupRequestOptionalProperties();
 

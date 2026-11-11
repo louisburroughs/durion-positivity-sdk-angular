@@ -424,26 +424,33 @@ export class PlatformTenantAPIService extends BaseService {
 
     /**
      * Set a Tenant\&#39;s Tax-Provider Binding
-     * Sets the plug-in that prices one tenant\&#39;s documents in one country from a date in pos-tax\&#39;s registry, through this module\&#39;s operator front door (ADR-0071 step 1, #2629); the binding that begins on the same day is replaced, and the change is recorded in pos-tax\&#39;s binding history under the operator\&#39;s id. Use this tool as the platform operator to bind a tenant to a plug-in; do not use it to price a document, which reads the binding in pos-tax, and do not expect a tax:* authority, which does not exist. Preconditions: the caller is bound to the platform tenant (403 otherwise) and holds platform:tenant_tax_provider:manage. Required inputs: tenantId (path), countryCode, providerId, effectiveFrom and requestId; providerProfile and effectiveTo are optional, and effectiveTo is inclusive. The target tenant comes only from the path and the actor only from the authenticated principal; neither is read from the body. Emits a TENANT_TAX_PROVIDER_BINDING_SET event and returns 200 with the binding pos-tax stored, also for a replayed requestId. pos-tax\&#39;s 400 VALIDATION_ERROR, 409 TAX_PROVIDER_BINDING_OVERLAP or IDEMPOTENCY_CONFLICT and 422 TAX_PROVIDER_NOT_REGISTERED are relayed unchanged. Returns 503 SERVICE_UNAVAILABLE with Retry-After when pos-tax cannot be reached; nothing is stored here.
+     * Sets the plug-in that prices one tenant\&#39;s documents in one country from a date in pos-tax\&#39;s registry, through this module\&#39;s operator front door (ADR-0071 step 1, #2629); the binding that begins on the same day is replaced, and the change is recorded in pos-tax\&#39;s binding history under the operator\&#39;s id. Use this tool as the platform operator to bind a tenant to a plug-in; do not use it to price a document, which reads the binding in pos-tax, and do not expect a tax:* authority, which does not exist. Preconditions: the caller is bound to the platform tenant (403 otherwise) and holds platform:tenant_tax_provider:manage. Required inputs: tenantId (path), the Idempotency-Key header (a UUID), countryCode, providerId and effectiveFrom; providerProfile and effectiveTo are optional, and effectiveTo is inclusive. The target tenant comes only from the path and the actor only from the authenticated principal; neither is read from the body. Emits a TENANT_TAX_PROVIDER_BINDING_SET event and returns 200 with the binding pos-tax stored, also for a replayed Idempotency-Key, because pos-tax keeps the replay record and receives the header value as its requestId. A missing or non-UUID Idempotency-Key is 400 VALIDATION_ERROR with fieldErrors[Idempotency-Key] and nothing is sent to pos-tax. pos-tax\&#39;s 400 VALIDATION_ERROR, 409 TAX_PROVIDER_BINDING_OVERLAP or IDEMPOTENCY_CONFLICT and 422 TAX_PROVIDER_NOT_REGISTERED are relayed unchanged. Returns 503 SERVICE_UNAVAILABLE with Retry-After when pos-tax cannot be reached; nothing is stored here.
      * @endpoint put /v1/platform/tenants/{tenantId}/tax-provider-bindings
      * @param tenantId The tenant whose binding changes
+     * @param idempotencyKey Caller-generated idempotency key for this binding write, as a UUID. A retry with the same key and the same binding returns the first result; the key is forwarded to pos-tax, which keeps the replay record, and the same key with a different binding is relayed as 409 IDEMPOTENCY_CONFLICT. Required: a missing or non-UUID value is 400 VALIDATION_ERROR with fieldErrors[Idempotency-Key].
      * @param taxProviderBindingRequest The country, the plug-in that serves it and the dates it applies to
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public setTenantTaxProviderBinding(tenantId: string, taxProviderBindingRequest: TaxProviderBindingRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxProviderBindingResponse>;
-    public setTenantTaxProviderBinding(tenantId: string, taxProviderBindingRequest: TaxProviderBindingRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxProviderBindingResponse>>;
-    public setTenantTaxProviderBinding(tenantId: string, taxProviderBindingRequest: TaxProviderBindingRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxProviderBindingResponse>>;
-    public setTenantTaxProviderBinding(tenantId: string, taxProviderBindingRequest: TaxProviderBindingRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public setTenantTaxProviderBinding(tenantId: string, idempotencyKey: string, taxProviderBindingRequest: TaxProviderBindingRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxProviderBindingResponse>;
+    public setTenantTaxProviderBinding(tenantId: string, idempotencyKey: string, taxProviderBindingRequest: TaxProviderBindingRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxProviderBindingResponse>>;
+    public setTenantTaxProviderBinding(tenantId: string, idempotencyKey: string, taxProviderBindingRequest: TaxProviderBindingRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxProviderBindingResponse>>;
+    public setTenantTaxProviderBinding(tenantId: string, idempotencyKey: string, taxProviderBindingRequest: TaxProviderBindingRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (tenantId === null || tenantId === undefined) {
             throw new Error('Required parameter tenantId was null or undefined when calling setTenantTaxProviderBinding.');
+        }
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling setTenantTaxProviderBinding.');
         }
         if (taxProviderBindingRequest === null || taxProviderBindingRequest === undefined) {
             throw new Error('Required parameter taxProviderBindingRequest was null or undefined when calling setTenantTaxProviderBinding.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');

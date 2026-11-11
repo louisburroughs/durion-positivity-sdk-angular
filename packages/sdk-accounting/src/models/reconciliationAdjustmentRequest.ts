@@ -42,10 +42,6 @@ export interface ReconciliationAdjustmentRequest {
      */
     overrideJustification?: string;
     /**
-     * Caller-generated UUIDv7; a replay returns the original with replayed true
-     */
-    requestId: string;
-    /**
      * OTHER only: the ACCEPTED match whose residual this settles
      */
     settlesMatchId?: string;
@@ -106,8 +102,8 @@ export function instanceOfReconciliationAdjustmentRequest(value: object): value 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReconciliationAdjustmentRequestPropertyNames('requestId', 'type', );
-    const optionalStringProperties = createReconciliationAdjustmentRequestOptionalProperties({ name: 'bankTransactionId', nullable: false }, { name: 'bridgesStatementId', nullable: false }, { name: 'counterGlAccountId', nullable: false }, { name: 'description', nullable: false }, { name: 'justification', nullable: false }, { name: 'overrideJustification', nullable: false }, { name: 'requestId', nullable: false }, { name: 'settlesMatchId', nullable: false }, { name: 'transactionDate', nullable: false }, { name: 'type', nullable: false }, );
+    const requiredProperties = createReconciliationAdjustmentRequestPropertyNames('type', );
+    const optionalStringProperties = createReconciliationAdjustmentRequestOptionalProperties({ name: 'bankTransactionId', nullable: false }, { name: 'bridgesStatementId', nullable: false }, { name: 'counterGlAccountId', nullable: false }, { name: 'description', nullable: false }, { name: 'justification', nullable: false }, { name: 'overrideJustification', nullable: false }, { name: 'settlesMatchId', nullable: false }, { name: 'transactionDate', nullable: false }, { name: 'type', nullable: false }, );
     const optionalNumberProperties = createReconciliationAdjustmentRequestOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createReconciliationAdjustmentRequestOptionalProperties();
 

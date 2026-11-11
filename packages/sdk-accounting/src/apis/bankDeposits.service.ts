@@ -184,22 +184,29 @@ export class BankDepositsService extends BaseService {
 
     /**
      * Record Bank Deposit
-     * Records a bank deposit of whole closed register sessions\&#39; drawer cash in one step: posts one BANK_DEPOSIT entry dated depositDate, Dr the bank account by the sessions\&#39; bank drops (one line, the one bank reconciliation matches to the statement credit), Cr 1090 Undeposited Funds by their expected cash and Dr 1095 Register Cash Clearing when their clearing net is a credit (Cr when a debit) by its size, a zero line left out and every amount computed from the sessions; the sessions become DEPOSITED. Use this tool when the cash of one or more closed drawers reached the bank; do not use createJournalEntry, and never add a balancing line yourself: a deposit that does not balance is refused. To correct a deposit, reverse it and record it again. Preconditions: caller holds accounting:deposit:create and reaches every session\&#39;s location (403 LOCATION_SCOPE_DENIED); currencyCode is the functional currency (422 CURRENCY_NOT_SUPPORTED); bankGlAccountId is an active, reconcilable BANK_CASH account in functional currency (422 DEPOSIT_BANK_ACCOUNT_NOT_ELIGIBLE); every sessionId names a closed session waiting to be deposited (400 VALIDATION_ERROR when unknown, 409 DEPOSIT_SESSION_ALREADY_DEPOSITED when a deposit already took it); the selection\&#39;s drops equal its expected cash plus its clearing net (422 DEPOSIT_UNBALANCED naming the difference; list the sessions first to see it) and are more than zero (400 otherwise); no amount finer than the currency\&#39;s minor unit (422 AMOUNT_PRECISION_EXCEEDS_CURRENCY); depositDate is in an OPEN period, or in a CLOSED one with accounting:period:override and overrideJustification (422 PERIOD_CLOSED otherwise), never before the hard-lock date (422 PERIOD_HARD_LOCKED). Idempotent on requestId: a replay returns the first result with 200 and replayed true, another body with the same requestId is 409 IDEMPOTENCY_CONFLICT. Required inputs: bankGlAccountId, depositDate, currencyCode (ISO 4217, ADR-0067), sessionIds (1 to 200, distinct), requestId; optional depositSlipReference and overrideJustification. Emits an ACCOUNTING_DEPOSIT_CREATE event, writes a BANK_DEPOSIT_RECORD audit row naming the caller, queues accounting.deposit.recorded (status RECORDED) and returns 201 with the deposit id, journalEntryNumber, slip reference, amounts and currencyCode, the sessions with their bag numbers and replayed false.
+     * Records a bank deposit of whole closed register sessions\&#39; drawer cash in one step: posts one BANK_DEPOSIT entry dated depositDate, Dr the bank account by the sessions\&#39; bank drops (one line, the one bank reconciliation matches to the statement credit), Cr 1090 Undeposited Funds by their expected cash and Dr 1095 Register Cash Clearing when their clearing net is a credit (Cr when a debit) by its size, a zero line left out and every amount computed from the sessions; the sessions become DEPOSITED. Use this tool when the cash of one or more closed drawers reached the bank; do not use createJournalEntry, and never add a balancing line yourself: a deposit that does not balance is refused. To correct a deposit, reverse it and record it again. Preconditions: caller holds accounting:deposit:create and reaches every session\&#39;s location (403 LOCATION_SCOPE_DENIED); currencyCode is the functional currency (422 CURRENCY_NOT_SUPPORTED); bankGlAccountId is an active, reconcilable BANK_CASH account in functional currency (422 DEPOSIT_BANK_ACCOUNT_NOT_ELIGIBLE); every sessionId names a closed session waiting to be deposited (400 VALIDATION_ERROR when unknown, 409 DEPOSIT_SESSION_ALREADY_DEPOSITED when a deposit already took it); the selection\&#39;s drops equal its expected cash plus its clearing net (422 DEPOSIT_UNBALANCED naming the difference; list the sessions first to see it) and are more than zero (400 otherwise); no amount finer than the currency\&#39;s minor unit (422 AMOUNT_PRECISION_EXCEEDS_CURRENCY); depositDate is in an OPEN period, or in a CLOSED one with accounting:period:override and overrideJustification (422 PERIOD_CLOSED otherwise), never before the hard-lock date (422 PERIOD_HARD_LOCKED). Idempotent on the Idempotency-Key header (a UUID): a replay of the same key and payload returns the first result with Idempotency-Replayed: true and posts nothing; another body or caller with the same key is 409 IDEMPOTENCY_CONFLICT. The replayed body is a snapshot of the first result, not the deposit\&#39;s current state. Required inputs: the Idempotency-Key header and, in the body, bankGlAccountId, depositDate, currencyCode (ISO 4217, ADR-0067), sessionIds (1 to 200, distinct); optional depositSlipReference and overrideJustification. Emits an ACCOUNTING_DEPOSIT_CREATE event, writes a BANK_DEPOSIT_RECORD audit row naming the caller, queues accounting.deposit.recorded (status RECORDED) and returns 201 with the deposit id, journalEntryNumber, slip reference, amounts and currencyCode, the sessions with their bag numbers.
      * @endpoint post /v1/accounting/deposits
+     * @param idempotencyKey Client idempotency key (a UUID): the same key with the same body replays the original deposit with Idempotency-Replayed: true
      * @param depositRecordRequest The bank account, the date and the whole sessions deposited
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public recordBankDeposit(depositRecordRequest: DepositRecordRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DepositResponse>;
-    public recordBankDeposit(depositRecordRequest: DepositRecordRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DepositResponse>>;
-    public recordBankDeposit(depositRecordRequest: DepositRecordRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DepositResponse>>;
-    public recordBankDeposit(depositRecordRequest: DepositRecordRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public recordBankDeposit(idempotencyKey: string, depositRecordRequest: DepositRecordRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
+    public recordBankDeposit(idempotencyKey: string, depositRecordRequest: DepositRecordRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
+    public recordBankDeposit(idempotencyKey: string, depositRecordRequest: DepositRecordRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
+    public recordBankDeposit(idempotencyKey: string, depositRecordRequest: DepositRecordRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling recordBankDeposit.');
+        }
         if (depositRecordRequest === null || depositRecordRequest === undefined) {
             throw new Error('Required parameter depositRecordRequest was null or undefined when calling recordBankDeposit.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
@@ -238,7 +245,7 @@ export class BankDepositsService extends BaseService {
 
         let localVarPath = `/v1/accounting/deposits`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<DepositResponse>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<object>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: depositRecordRequest,
@@ -254,26 +261,33 @@ export class BankDepositsService extends BaseService {
 
     /**
      * Reverse Bank Deposit
-     * Reverses a bank deposit of drawer cash through the journal-entry reversal (ADR-0047): a reversing entry restores 1090 Undeposited Funds and 1095 Register Cash Clearing and takes the amount off the bank account, the deposit becomes REVERSED and its sessions wait to be deposited again. A reversed bank line matched in an approved bank reconciliation invalidates that reconciliation. Use this tool to correct a wrong deposit, then record it again; do not edit a deposit or post a correcting journal entry instead (reverseJournalEntry on the deposit\&#39;s entry has the same effect). Preconditions: caller holds accounting:deposit:reverse and reaches every location the deposit took cash from (403 LOCATION_SCOPE_DENIED); the deposit exists (404 DEPOSIT_NOT_FOUND) and is not already reversed (409 DEPOSIT_ALREADY_REVERSED); the reversal date (reversalDate, else the deposit\&#39;s date if its period is open, else today) is in an OPEN period, or in a CLOSED one with accounting:period:override and overrideJustification (422 PERIOD_CLOSED otherwise), never before the hard-lock date (422 PERIOD_HARD_LOCKED). Idempotent on requestId: a replay returns the first result with replayed true, another body with the same requestId is 409 IDEMPOTENCY_CONFLICT. Required inputs: depositId (path), reason (10 to 400 characters), requestId; optional reversalDate and overrideJustification. Emits an ACCOUNTING_DEPOSIT_REVERSE event, writes a BANK_DEPOSIT_REVERSE audit row naming the caller, queues accounting.deposit.recorded (status REVERSED) and returns 200 with the deposit, its reversal entry number, date and reason.
+     * Reverses a bank deposit of drawer cash through the journal-entry reversal (ADR-0047): a reversing entry restores 1090 Undeposited Funds and 1095 Register Cash Clearing and takes the amount off the bank account, the deposit becomes REVERSED and its sessions wait to be deposited again. A reversed bank line matched in an approved bank reconciliation invalidates that reconciliation. Use this tool to correct a wrong deposit, then record it again; do not edit a deposit or post a correcting journal entry instead (reverseJournalEntry on the deposit\&#39;s entry has the same effect). Preconditions: caller holds accounting:deposit:reverse and reaches every location the deposit took cash from (403 LOCATION_SCOPE_DENIED); the deposit exists (404 DEPOSIT_NOT_FOUND) and is not already reversed (409 DEPOSIT_ALREADY_REVERSED); the reversal date (reversalDate, else the deposit\&#39;s date if its period is open, else today) is in an OPEN period, or in a CLOSED one with accounting:period:override and overrideJustification (422 PERIOD_CLOSED otherwise), never before the hard-lock date (422 PERIOD_HARD_LOCKED). Idempotent on the Idempotency-Key header (a UUID): a replay of the same key and payload returns the first result with Idempotency-Replayed: true and reverses nothing twice; another body, caller or deposit with the same key is 409 IDEMPOTENCY_CONFLICT. The replayed body is a snapshot of the first result, not the deposit\&#39;s current state. Required inputs: depositId (path), the Idempotency-Key header and, in the body, reason (10 to 400 characters); optional reversalDate and overrideJustification. Emits an ACCOUNTING_DEPOSIT_REVERSE event, writes a BANK_DEPOSIT_REVERSE audit row naming the caller, queues accounting.deposit.recorded (status REVERSED) and returns 200 with the deposit, its reversal entry number, date and reason.
      * @endpoint post /v1/accounting/deposits/{depositId}/reversal
      * @param depositId The deposit
+     * @param idempotencyKey Client idempotency key (a UUID): the same key with the same body replays the original reversal with Idempotency-Replayed: true
      * @param depositReversalRequest Why the deposit is reversed
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public reverseBankDeposit(depositId: string, depositReversalRequest: DepositReversalRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<DepositResponse>;
-    public reverseBankDeposit(depositId: string, depositReversalRequest: DepositReversalRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<DepositResponse>>;
-    public reverseBankDeposit(depositId: string, depositReversalRequest: DepositReversalRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<DepositResponse>>;
-    public reverseBankDeposit(depositId: string, depositReversalRequest: DepositReversalRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public reverseBankDeposit(depositId: string, idempotencyKey: string, depositReversalRequest: DepositReversalRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
+    public reverseBankDeposit(depositId: string, idempotencyKey: string, depositReversalRequest: DepositReversalRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
+    public reverseBankDeposit(depositId: string, idempotencyKey: string, depositReversalRequest: DepositReversalRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
+    public reverseBankDeposit(depositId: string, idempotencyKey: string, depositReversalRequest: DepositReversalRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (depositId === null || depositId === undefined) {
             throw new Error('Required parameter depositId was null or undefined when calling reverseBankDeposit.');
+        }
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling reverseBankDeposit.');
         }
         if (depositReversalRequest === null || depositReversalRequest === undefined) {
             throw new Error('Required parameter depositReversalRequest was null or undefined when calling reverseBankDeposit.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
@@ -312,7 +326,7 @@ export class BankDepositsService extends BaseService {
 
         let localVarPath = `/v1/accounting/deposits/${this.configuration.encodeParam({name: "depositId", value: depositId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/reversal`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<DepositResponse>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<object>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: depositReversalRequest,

@@ -18,10 +18,6 @@ export interface ReconciliationJustificationRequest {
      */
     justification: string;
     /**
-     * Supersede only: caller-generated UUIDv7; a replay returns the successor it created
-     */
-    requestId?: string;
-    /**
      * The reconciliation version the caller read; a stale one answers 409 OPTIMISTIC_LOCK
      */
     version?: number;
@@ -66,7 +62,7 @@ export function instanceOfReconciliationJustificationRequest(value: object): val
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createReconciliationJustificationRequestPropertyNames('justification', );
-    const optionalStringProperties = createReconciliationJustificationRequestOptionalProperties({ name: 'justification', nullable: false }, { name: 'requestId', nullable: false }, );
+    const optionalStringProperties = createReconciliationJustificationRequestOptionalProperties({ name: 'justification', nullable: false }, );
     const optionalNumberProperties = createReconciliationJustificationRequestOptionalProperties({ name: 'version', nullable: false }, );
     const optionalBooleanProperties = createReconciliationJustificationRequestOptionalProperties();
 

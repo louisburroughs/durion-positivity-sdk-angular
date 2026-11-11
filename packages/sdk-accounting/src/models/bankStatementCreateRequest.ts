@@ -28,10 +28,6 @@ export interface BankStatementCreateRequest {
      */
     glAccountId: string;
     /**
-     * Caller-generated UUIDv7; a replay with the same payload returns the original statement
-     */
-    requestId: string;
-    /**
      * Start an IN_PROGRESS reconciliation of the committed statement in the same transaction; it appears in reconciliations (story S4)
      */
     startReconciliation?: boolean;
@@ -88,8 +84,8 @@ export function instanceOfBankStatementCreateRequest(value: object): value is Ba
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createBankStatementCreateRequestPropertyNames('glAccountId', 'requestId', 'statement', 'transactions', );
-    const optionalStringProperties = createBankStatementCreateRequestOptionalProperties({ name: 'currency', nullable: false }, { name: 'gapAcknowledgement', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'requestId', nullable: false }, { name: 'supersedesStatementId', nullable: false }, { name: 'supersessionJustification', nullable: false }, );
+    const requiredProperties = createBankStatementCreateRequestPropertyNames('glAccountId', 'statement', 'transactions', );
+    const optionalStringProperties = createBankStatementCreateRequestOptionalProperties({ name: 'currency', nullable: false }, { name: 'gapAcknowledgement', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'supersedesStatementId', nullable: false }, { name: 'supersessionJustification', nullable: false }, );
     const optionalNumberProperties = createBankStatementCreateRequestOptionalProperties();
     const optionalBooleanProperties = createBankStatementCreateRequestOptionalProperties({ name: 'startReconciliation', nullable: false }, );
 
