@@ -324,9 +324,9 @@ export class ChangeRequestAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createChangeRequest(workorderId: string, createChangeRequestDTO: CreateChangeRequestDTO, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
-    public createChangeRequest(workorderId: string, createChangeRequestDTO: CreateChangeRequestDTO, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
-    public createChangeRequest(workorderId: string, createChangeRequestDTO: CreateChangeRequestDTO, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
+    public createChangeRequest(workorderId: string, createChangeRequestDTO: CreateChangeRequestDTO, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ChangeRequestResponse>;
+    public createChangeRequest(workorderId: string, createChangeRequestDTO: CreateChangeRequestDTO, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ChangeRequestResponse>>;
+    public createChangeRequest(workorderId: string, createChangeRequestDTO: CreateChangeRequestDTO, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ChangeRequestResponse>>;
     public createChangeRequest(workorderId: string, createChangeRequestDTO: CreateChangeRequestDTO, idempotencyKey?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (workorderId === null || workorderId === undefined) {
             throw new Error('Required parameter workorderId was null or undefined when calling createChangeRequest.');
@@ -377,7 +377,7 @@ export class ChangeRequestAPIService extends BaseService {
 
         let localVarPath = `/v1/workorders/${this.configuration.encodeParam({name: "workorderId", value: workorderId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/changeRequests`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<object>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<ChangeRequestResponse>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: createChangeRequestDTO,
