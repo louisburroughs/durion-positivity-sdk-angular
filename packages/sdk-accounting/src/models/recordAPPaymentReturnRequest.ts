@@ -26,10 +26,6 @@ export interface RecordAPPaymentReturnRequest {
      */
     overrideJustification?: string;
     /**
-     * The caller\'s idempotency key (UUID): a replay with the same body answers the payment; a different body is 409 IDEMPOTENCY_CONFLICT
-     */
-    requestId: string;
-    /**
      * The date the bank or processor returned the charge; today when omitted. Not after today. The mirror entry is dated here when the period is open, else on the detection date
      */
     returnDate?: string;
@@ -73,8 +69,8 @@ export function instanceOfRecordAPPaymentReturnRequest(value: object): value is 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRecordAPPaymentReturnRequestPropertyNames('justification', 'requestId', );
-    const optionalStringProperties = createRecordAPPaymentReturnRequestOptionalProperties({ name: 'failureCode', nullable: false }, { name: 'justification', nullable: false }, { name: 'overrideJustification', nullable: false }, { name: 'requestId', nullable: false }, { name: 'returnDate', nullable: false }, );
+    const requiredProperties = createRecordAPPaymentReturnRequestPropertyNames('justification', );
+    const optionalStringProperties = createRecordAPPaymentReturnRequestOptionalProperties({ name: 'failureCode', nullable: false }, { name: 'justification', nullable: false }, { name: 'overrideJustification', nullable: false }, { name: 'returnDate', nullable: false }, );
     const optionalNumberProperties = createRecordAPPaymentReturnRequestOptionalProperties();
     const optionalBooleanProperties = createRecordAPPaymentReturnRequestOptionalProperties();
 

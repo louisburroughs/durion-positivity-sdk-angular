@@ -46,11 +46,7 @@ export interface CustomerCreditTransactionResponse {
      */
     invoiceId?: string;
     /**
-     * True when this response replays an already-processed request id rather than recording a new draw-down
-     */
-    replayed?: boolean;
-    /**
-     * Caller-supplied idempotency key this draw-down was recorded under
+     * The Idempotency-Key this draw-down was recorded under
      */
     requestId?: string;
     /**
@@ -106,7 +102,7 @@ export function instanceOfCustomerCreditTransactionResponse(value: object): valu
     const requiredProperties = createCustomerCreditTransactionResponsePropertyNames();
     const optionalStringProperties = createCustomerCreditTransactionResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'creditId', nullable: false }, { name: 'creditTransactionId', nullable: false }, { name: 'currency', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'requestId', nullable: false }, { name: 'transactionType', nullable: false }, );
     const optionalNumberProperties = createCustomerCreditTransactionResponseOptionalProperties({ name: 'amount', nullable: false }, { name: 'creditOpenAmountAfter', nullable: false }, { name: 'invoiceBalanceAfter', nullable: false }, );
-    const optionalBooleanProperties = createCustomerCreditTransactionResponseOptionalProperties({ name: 'replayed', nullable: false }, );
+    const optionalBooleanProperties = createCustomerCreditTransactionResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalCustomerCreditTransactionResponsePropertyOfType(_v, property.name, 'string', property.nullable))

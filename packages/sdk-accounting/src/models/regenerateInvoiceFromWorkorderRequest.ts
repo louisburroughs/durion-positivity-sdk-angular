@@ -14,10 +14,6 @@
  */
 export interface RegenerateInvoiceFromWorkorderRequest {
     /**
-     * Optional idempotency key to safely retry regeneration
-     */
-    idempotencyKey?: string;
-    /**
      * Identifier of the workorder to regenerate the invoice from
      */
     workorderId: string;
@@ -62,7 +58,7 @@ export function instanceOfRegenerateInvoiceFromWorkorderRequest(value: object): 
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createRegenerateInvoiceFromWorkorderRequestPropertyNames('workorderId', );
-    const optionalStringProperties = createRegenerateInvoiceFromWorkorderRequestOptionalProperties({ name: 'idempotencyKey', nullable: false }, { name: 'workorderId', nullable: false }, );
+    const optionalStringProperties = createRegenerateInvoiceFromWorkorderRequestOptionalProperties({ name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createRegenerateInvoiceFromWorkorderRequestOptionalProperties();
     const optionalBooleanProperties = createRegenerateInvoiceFromWorkorderRequestOptionalProperties();
 

@@ -57,26 +57,33 @@ export class PaymentApplicationsService extends BaseService {
 
     /**
      * Apply Payment To Invoices
-     * Applies a receivable payment to one or more invoices atomically, updating each invoice\&#39;s balance and status and reducing the payment\&#39;s unapplied amount. Use this tool to settle invoices from an available payment; do not use applyCustomerCredit, which draws down a standing credit rather than a payment. Preconditions: the payment must be AVAILABLE with sufficient unapplied funds, and every target invoice must be applicable (not paid in full, voided or cancelled); an overpayment creates a CustomerCredit for the excess, except on the CASH walk-in account, whose excess is refunded through pos-invoice instead. Required inputs: paymentId (UUID) as a path parameter, applicationRequestId (max 100 chars, the idempotency key) and a non-empty applications list of invoiceId plus amountToApply (min 0.01); allocationStrategy is optional, CALLER_ORDER when omitted or OLDEST_FIRST to allocate by ascending invoice date. Emits an ACCOUNTING_PAYMENT_APPLY event; the application is atomic across all invoices and idempotent on applicationRequestId. Returns 404 when the payment is not found, 400 for insufficient funds, 409 for an inapplicable invoice, 422 CURRENCY_NOT_SUPPORTED for a payment in a currency other than the ledger\&#39;s, 422 CASH_CUSTOMER_CREDIT_NOT_ALLOWED for an overpayment of a CASH walk-in payment (nothing is written in either case), and 503 when the invoice service is unreachable.
+     * Applies a receivable payment to one or more invoices atomically, updating each invoice\&#39;s balance and status and reducing the payment\&#39;s unapplied amount. Use this tool to settle invoices from an available payment; do not use applyCustomerCredit, which draws down a standing credit rather than a payment. Preconditions: the payment must be AVAILABLE with sufficient unapplied funds, and every target invoice must be applicable (not paid in full, voided or cancelled); an overpayment creates a CustomerCredit for the excess, except on the CASH walk-in account, whose excess is refunded through pos-invoice instead. Required inputs: paymentId (UUID) as a path parameter, the Idempotency-Key header (UUID), applicationRequestId (max 100 chars, the application\&#39;s business reference) and a non-empty applications list of invoiceId plus amountToApply (min 0.01); allocationStrategy is optional, CALLER_ORDER when omitted or OLDEST_FIRST to allocate by ascending invoice date. The body declares no deduplication key. Emits an ACCOUNTING_PAYMENT_APPLY event; the application is atomic across all invoices. A replay of the same key, payload and caller returns the original 201 answer and body with Idempotency-Replayed: true, emits no second event and applies nothing twice (an answer above the 64 KiB cap is not stored, and its replay renders the application in its current state); the same applicationRequestId reused for another payment, invoice set or amount is 409 IDEMPOTENCY_CONFLICT, and its GL posting key stays APPLY:&lt;applicationRequestId&gt;. Returns 404 when the payment is not found, 400 for insufficient funds or a missing or non-UUID Idempotency-Key, 409 IDEMPOTENCY_CONFLICT or an inapplicable invoice, 422 CURRENCY_NOT_SUPPORTED for a payment in a currency other than the ledger\&#39;s, 422 CASH_CUSTOMER_CREDIT_NOT_ALLOWED for an overpayment of a CASH walk-in payment (nothing is written in either case), and 503 when the invoice service is unreachable.
      * @endpoint post /v1/accounting/payments/{paymentId}/applications
      * @param paymentId Payment identifier
+     * @param idempotencyKey Required idempotency key (a UUID); a replay returns the original answer
      * @param paymentApplicationRequest Idempotent, atomic allocation of the payment across one or more invoices.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public applyPayment(paymentId: string, paymentApplicationRequest: PaymentApplicationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PaymentApplicationResponse>;
-    public applyPayment(paymentId: string, paymentApplicationRequest: PaymentApplicationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PaymentApplicationResponse>>;
-    public applyPayment(paymentId: string, paymentApplicationRequest: PaymentApplicationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PaymentApplicationResponse>>;
-    public applyPayment(paymentId: string, paymentApplicationRequest: PaymentApplicationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public applyPayment(paymentId: string, idempotencyKey: string, paymentApplicationRequest: PaymentApplicationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PaymentApplicationResponse>;
+    public applyPayment(paymentId: string, idempotencyKey: string, paymentApplicationRequest: PaymentApplicationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PaymentApplicationResponse>>;
+    public applyPayment(paymentId: string, idempotencyKey: string, paymentApplicationRequest: PaymentApplicationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PaymentApplicationResponse>>;
+    public applyPayment(paymentId: string, idempotencyKey: string, paymentApplicationRequest: PaymentApplicationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (paymentId === null || paymentId === undefined) {
             throw new Error('Required parameter paymentId was null or undefined when calling applyPayment.');
+        }
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling applyPayment.');
         }
         if (paymentApplicationRequest === null || paymentApplicationRequest === undefined) {
             throw new Error('Required parameter paymentApplicationRequest was null or undefined when calling applyPayment.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
@@ -131,26 +138,33 @@ export class PaymentApplicationsService extends BaseService {
 
     /**
      * Keep Payment Remainder As Customer Credit
-     * Converts the whole unapplied remainder of a receivable payment into a customer credit in one transaction: the credit is created, the Dr Undeposited Funds / Cr Customer Credit Liability issuance is enqueued, and the payment becomes FULLY_APPLIED. Use this tool after applyPayment when the customer keeps the leftover on account, or when the credit will be refunded next with refundCustomerCredit; do not use applyCustomerCredit, which draws down a credit that already exists. Preconditions: the payment must be AVAILABLE, in the ledger currency, and still carry exactly expectedAmount unapplied; a replay with the same requestId returns the credit it issued and writes nothing. Required inputs: paymentId (UUID) as a path parameter, requestId (max 100 chars, the idempotency key) and expectedAmount (the unapplied amount the caller read, min 0.01). Emits an ACCOUNTING_PAYMENT_REMAINDER_CREDIT event; the credit\&#39;s creator and the issuance entry\&#39;s actor come from the security context. Returns 201 with the credit, 404 PAYMENT_NOT_FOUND when the payment does not exist, 409 PAYMENT_NOT_AVAILABLE when it is already fully applied, 409 IDEMPOTENCY_CONFLICT when the requestId was used on another payment, 409 OPTIMISTIC_LOCK after a second concurrent update, 422 PAYMENT_REMAINDER_CHANGED when expectedAmount no longer matches (re-read the payment), 422 CURRENCY_NOT_SUPPORTED for a payment in another currency, and 422 CASH_CUSTOMER_CREDIT_NOT_ALLOWED for a payment of the CASH walk-in account, whose remainder is refunded instead.
+     * Converts the whole unapplied remainder of a receivable payment into a customer credit in one transaction: the credit is created, the Dr Undeposited Funds / Cr Customer Credit Liability issuance is enqueued, and the payment becomes FULLY_APPLIED. Use this tool after applyPayment when the customer keeps the leftover on account, or when the credit will be refunded next with refundCustomerCredit; do not use applyCustomerCredit, which draws down a credit that already exists. Preconditions: the payment must be AVAILABLE, in the ledger currency, and still carry exactly expectedAmount unapplied; a replay of the same Idempotency-Key, payload and caller returns the credit it issued, its status and body with Idempotency-Replayed: true, emits no second event and writes nothing (an answer above the 64 KiB cap is not stored, and its replay renders the credit in its current state). Required inputs: paymentId (UUID) as a path parameter, the Idempotency-Key header (UUID) and expectedAmount (the unapplied amount the caller read, min 0.01); the body declares no key. Emits an ACCOUNTING_PAYMENT_REMAINDER_CREDIT event; the credit\&#39;s creator and the issuance entry\&#39;s actor come from the security context. Returns 201 with the credit, 400 VALIDATION_ERROR when expectedAmount is missing or below 0.01 or the Idempotency-Key is missing or not a UUID, 404 PAYMENT_NOT_FOUND when the payment does not exist, 409 PAYMENT_NOT_AVAILABLE when it is already fully applied, 409 IDEMPOTENCY_CONFLICT when the key was used on another payment or with another payload, 409 OPTIMISTIC_LOCK after a second concurrent update, 422 PAYMENT_REMAINDER_CHANGED when expectedAmount no longer matches (re-read the payment), 422 CURRENCY_NOT_SUPPORTED for a payment in another currency, and 422 CASH_CUSTOMER_CREDIT_NOT_ALLOWED for a payment of the CASH walk-in account, whose remainder is refunded instead.
      * @endpoint post /v1/accounting/payments/{paymentId}/remainder-credit
      * @param paymentId Payment identifier
+     * @param idempotencyKey Required idempotency key (a UUID); a replay returns the original answer
      * @param remainderCreditRequest Idempotency key and the unapplied amount the caller expects to credit.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public creditPaymentRemainder(paymentId: string, remainderCreditRequest: RemainderCreditRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RemainderCreditResponse>;
-    public creditPaymentRemainder(paymentId: string, remainderCreditRequest: RemainderCreditRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RemainderCreditResponse>>;
-    public creditPaymentRemainder(paymentId: string, remainderCreditRequest: RemainderCreditRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RemainderCreditResponse>>;
-    public creditPaymentRemainder(paymentId: string, remainderCreditRequest: RemainderCreditRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public creditPaymentRemainder(paymentId: string, idempotencyKey: string, remainderCreditRequest: RemainderCreditRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RemainderCreditResponse>;
+    public creditPaymentRemainder(paymentId: string, idempotencyKey: string, remainderCreditRequest: RemainderCreditRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RemainderCreditResponse>>;
+    public creditPaymentRemainder(paymentId: string, idempotencyKey: string, remainderCreditRequest: RemainderCreditRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RemainderCreditResponse>>;
+    public creditPaymentRemainder(paymentId: string, idempotencyKey: string, remainderCreditRequest: RemainderCreditRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (paymentId === null || paymentId === undefined) {
             throw new Error('Required parameter paymentId was null or undefined when calling creditPaymentRemainder.');
+        }
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling creditPaymentRemainder.');
         }
         if (remainderCreditRequest === null || remainderCreditRequest === undefined) {
             throw new Error('Required parameter remainderCreditRequest was null or undefined when calling creditPaymentRemainder.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');

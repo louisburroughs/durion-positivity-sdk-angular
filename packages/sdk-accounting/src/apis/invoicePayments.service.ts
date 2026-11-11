@@ -165,22 +165,26 @@ export class InvoicePaymentsService extends BaseService {
 
     /**
      * Regenerate Invoice From Workorder
-     * Requests regeneration of an invoice from a completed workorder, either synchronously or via the asynchronous command path. Use this tool when an invoice must be rebuilt from its source workorder; do not use getInvoiceStatus, which only reads the current payment status. Preconditions: the workorder must exist and be in COMPLETED state. Required inputs: workorderId (UUID); idempotencyKey is optional and de-duplicates repeated regeneration commands. Emits an ACCOUNTING_INVOICE_REGENERATE event; on the async path the call returns 202 with status PENDING and the invoice arrives later via invoice.events.v1. Returns 202 when the command is accepted asynchronously, 404 when the workorder is not found, 409 when it is not COMPLETED, and 503 when the workorder service is unavailable.
+     * Requests regeneration of an invoice from a completed workorder, either synchronously or via the asynchronous command path. Use this tool when an invoice must be rebuilt from its source workorder; do not use getInvoiceStatus, which only reads the current payment status. Preconditions: the workorder must exist and be in COMPLETED state. Required inputs: workorderId (UUID) in the body; the Idempotency-Key header (a UUID) is optional and de-duplicates repeated regeneration commands. Emits an ACCOUNTING_INVOICE_REGENERATE event; on the async path the call returns 202 with status PENDING and the invoice arrives later via invoice.events.v1. A repeat carrying the same Idempotency-Key, body and caller publishes nothing again, emits no second event and answers the original 202 PENDING body with Idempotency-Replayed: true: an asynchronous 202 is a success and is replayed like any other answer (ADR-0075 §5), so a client polls the invoice or the workorder for the outcome instead of resending the key (an answer above the 64 KiB cap is not stored, and its replay renders the request in its current state). Without a key the request is not de-duplicated, and every such request answers and emits as a new one. Returns 202 when the command is accepted asynchronously, 400 VALIDATION_ERROR when the Idempotency-Key is not a UUID, 404 when the workorder is not found, 409 IDEMPOTENCY_CONFLICT when the key was used with another workorder or by another caller, 409 when the workorder is not COMPLETED, and 503 when the workorder service is unavailable.
      * @endpoint post /v1/accounting/invoice/invoices
-     * @param regenerateInvoiceFromWorkorderRequest Workorder to rebuild the invoice from, with an optional idempotency key.
+     * @param regenerateInvoiceFromWorkorderRequest Workorder to rebuild the invoice from.
+     * @param idempotencyKey Optional idempotency key (a UUID); a replay returns the original answer
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public regenerateInvoiceFromWorkorder(regenerateInvoiceFromWorkorderRequest: RegenerateInvoiceFromWorkorderRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<InvoiceGenerationResponse>;
-    public regenerateInvoiceFromWorkorder(regenerateInvoiceFromWorkorderRequest: RegenerateInvoiceFromWorkorderRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InvoiceGenerationResponse>>;
-    public regenerateInvoiceFromWorkorder(regenerateInvoiceFromWorkorderRequest: RegenerateInvoiceFromWorkorderRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InvoiceGenerationResponse>>;
-    public regenerateInvoiceFromWorkorder(regenerateInvoiceFromWorkorderRequest: RegenerateInvoiceFromWorkorderRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public regenerateInvoiceFromWorkorder(regenerateInvoiceFromWorkorderRequest: RegenerateInvoiceFromWorkorderRequest, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<InvoiceGenerationResponse>;
+    public regenerateInvoiceFromWorkorder(regenerateInvoiceFromWorkorderRequest: RegenerateInvoiceFromWorkorderRequest, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<InvoiceGenerationResponse>>;
+    public regenerateInvoiceFromWorkorder(regenerateInvoiceFromWorkorderRequest: RegenerateInvoiceFromWorkorderRequest, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<InvoiceGenerationResponse>>;
+    public regenerateInvoiceFromWorkorder(regenerateInvoiceFromWorkorderRequest: RegenerateInvoiceFromWorkorderRequest, idempotencyKey?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (regenerateInvoiceFromWorkorderRequest === null || regenerateInvoiceFromWorkorderRequest === undefined) {
             throw new Error('Required parameter regenerateInvoiceFromWorkorderRequest was null or undefined when calling regenerateInvoiceFromWorkorder.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');

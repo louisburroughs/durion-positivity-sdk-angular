@@ -21,10 +21,6 @@ export interface CustomerCreditApplicationRequest {
      * Invoice the credit settles. Must exist in the invoice replica, be AR-eligible, and have a positive balance
      */
     invoiceId: string;
-    /**
-     * Caller-supplied idempotency key. Replaying the same key returns the original application instead of relieving the credit liability twice
-     */
-    requestId: string;
 }
 
 function isOptionalCustomerCreditApplicationRequestPropertyOfType(
@@ -65,8 +61,8 @@ export function instanceOfCustomerCreditApplicationRequest(value: object): value
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCustomerCreditApplicationRequestPropertyNames('amount', 'invoiceId', 'requestId', );
-    const optionalStringProperties = createCustomerCreditApplicationRequestOptionalProperties({ name: 'invoiceId', nullable: false }, { name: 'requestId', nullable: false }, );
+    const requiredProperties = createCustomerCreditApplicationRequestPropertyNames('amount', 'invoiceId', );
+    const optionalStringProperties = createCustomerCreditApplicationRequestOptionalProperties({ name: 'invoiceId', nullable: false }, );
     const optionalNumberProperties = createCustomerCreditApplicationRequestOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createCustomerCreditApplicationRequestOptionalProperties();
 
