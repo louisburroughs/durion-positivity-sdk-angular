@@ -11,9 +11,13 @@ import { LineItemApprovalDto } from './lineItemApprovalDto';
 
 
 /**
- * Approval request with customer ID, signature capture, and optional selective line item approvals
+ * Approval request with customer ID, approval method, signature capture, and optional selective line item approvals
  */
 export interface ApproveEstimateRequest {
+    /**
+     * How the customer approved. SIGNATURE requires signatureData and signerName; VERBAL_CONFIRMATION requires signerName and notes (how and when consent was obtained), and must not carry signatureData. Required: the method is evidence, not something the server infers from which fields happen to be present.
+     */
+    approvalMethod: ApproveEstimateRequestApprovalMethodEnum;
     /**
      * Customer ID who is approving the estimate
      */
@@ -23,7 +27,7 @@ export interface ApproveEstimateRequest {
      */
     lineItemApprovals?: Array<LineItemApprovalDto>;
     /**
-     * Additional notes or comments
+     * Additional notes or comments. For VERBAL_CONFIRMATION this is required, must not be blank and is at most 500 characters: it is the only evidence of how and when consent was obtained.
      */
     notes?: string;
     /**
@@ -31,7 +35,7 @@ export interface ApproveEstimateRequest {
      */
     purchaseOrderNumber?: string;
     /**
-     * Base64-encoded signature image data (PNG format recommended)
+     * Base64-encoded signature image data (PNG format recommended). Required for approvalMethod SIGNATURE; must be absent for VERBAL_CONFIRMATION.
      */
     signatureData?: string;
     /**
@@ -39,10 +43,18 @@ export interface ApproveEstimateRequest {
      */
     signatureMimeType?: string;
     /**
-     * Name of person providing signature
+     * Name of the person who provided the approval: the signer for SIGNATURE, or the person who consented for VERBAL_CONFIRMATION. Required for both.
      */
     signerName?: string;
 }
+export enum ApproveEstimateRequestApprovalMethodEnum {
+    ClickConfirm = 'CLICK_CONFIRM',
+    Signature = 'SIGNATURE',
+    ElectronicSignature = 'ELECTRONIC_SIGNATURE',
+    VerbalConfirmation = 'VERBAL_CONFIRMATION'
+};
+
+
 
 function isOptionalApproveEstimateRequestPropertyOfType(
     value: Record<string, unknown>,
@@ -82,8 +94,8 @@ export function instanceOfApproveEstimateRequest(value: object): value is Approv
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createApproveEstimateRequestPropertyNames('customerId', );
-    const optionalStringProperties = createApproveEstimateRequestOptionalProperties({ name: 'customerId', nullable: false }, { name: 'notes', nullable: false }, { name: 'purchaseOrderNumber', nullable: false }, { name: 'signatureData', nullable: false }, { name: 'signatureMimeType', nullable: false }, { name: 'signerName', nullable: false }, );
+    const requiredProperties = createApproveEstimateRequestPropertyNames('approvalMethod', 'customerId', );
+    const optionalStringProperties = createApproveEstimateRequestOptionalProperties({ name: 'approvalMethod', nullable: false }, { name: 'customerId', nullable: false }, { name: 'notes', nullable: false }, { name: 'purchaseOrderNumber', nullable: false }, { name: 'signatureData', nullable: false }, { name: 'signatureMimeType', nullable: false }, { name: 'signerName', nullable: false }, );
     const optionalNumberProperties = createApproveEstimateRequestOptionalProperties();
     const optionalBooleanProperties = createApproveEstimateRequestOptionalProperties();
 
