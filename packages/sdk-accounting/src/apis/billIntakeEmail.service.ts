@@ -47,22 +47,29 @@ export class BillIntakeEmailService extends BaseService {
 
     /**
      * Request or Rotate Bill Intake Email Address
-     * Requests the tenant\&#39;s private bill intake address, or rotates it. REQUEST returns the current address, asking the inbound-mail service to issue one only when there is none. ROTATE retires the current address, which stops working at once, and issues a new one; mail sent to the old address is refused and shows in the email log. Use this tool to get the first address or to replace one that has leaked; use getBillIntakeSettings instead to read the address you already have, and do not use it to change who may email in (updateBillIntakeSettings). Preconditions: the caller holds accounting:bill_intake:manage. Required inputs: action (REQUEST or ROTATE), requestId (a UUID generated once per command; a replay answers the same address and never rotates twice), and for ROTATE a reason of at least 10 characters. Emits an ACCOUNTING_BILL_INTAKE_EMAIL_ADDRESS_CHANGE event and audits the request or rotation with the address ids (never the address) and the reason. Returns 200 with the address and when it was issued, 400 VALIDATION_ERROR for a missing action or requestId, 400 JUSTIFICATION_REQUIRED for a rotation without a reason of 10 characters, 403 without accounting:bill_intake:manage, and 503 INBOUND_MAIL_UNAVAILABLE when the inbound-mail service cannot be reached, with the stored address unchanged.
+     * Requests the tenant\&#39;s private bill intake address, or rotates it. REQUEST returns the current address, asking the inbound-mail service to issue one only when there is none. ROTATE retires the current address, which stops working at once, and issues a new one; mail sent to the old address is refused and shows in the email log. Use this tool to get the first address or to replace one that has leaked; use getBillIntakeSettings instead to read the address you already have, and do not use it to change who may email in (updateBillIntakeSettings). Preconditions: the caller holds accounting:bill_intake:manage. Required inputs: action (REQUEST or ROTATE), the Idempotency-Key header (a UUID generated once per command: a replay answers the same address and never rotates twice, the same key with another body or by another caller is 409 IDEMPOTENCY_CONFLICT, and a retry while the command is still running answers 409 with Retry-After: 1), and for ROTATE a reason of at least 10 characters. Emits an ACCOUNTING_BILL_INTAKE_EMAIL_ADDRESS_CHANGE event once, on the request that issues the address, and audits the request or rotation with the address ids (never the address) and the reason. Returns 200 with the address and when it was issued, 400 VALIDATION_ERROR for a missing action, or a missing or non-UUID Idempotency-Key, 400 JUSTIFICATION_REQUIRED for a rotation without a reason of 10 characters, 403 without accounting:bill_intake:manage, 409 IDEMPOTENCY_CONFLICT when the key was used for another request, and 503 INBOUND_MAIL_UNAVAILABLE when the inbound-mail service cannot be reached, with the stored address unchanged.
      * @endpoint post /v1/accounting/bill-intake/settings/email-address
-     * @param emailAddressRequest REQUEST or ROTATE, the request id, and for ROTATE the reason.
+     * @param idempotencyKey The request\&#39;s idempotency key: a UUID generated once per command. A replay answers the first address with Idempotency-Replayed: true; the same key with another request or by another caller is 409 IDEMPOTENCY_CONFLICT, and one still in progress answers 409 with Retry-After: 1
+     * @param emailAddressRequest REQUEST or ROTATE, and for ROTATE the reason; the Idempotency-Key header makes the command safe to retry.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public changeBillIntakeEmailAddress(emailAddressRequest: EmailAddressRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<EmailAddressResponse>;
-    public changeBillIntakeEmailAddress(emailAddressRequest: EmailAddressRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EmailAddressResponse>>;
-    public changeBillIntakeEmailAddress(emailAddressRequest: EmailAddressRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EmailAddressResponse>>;
-    public changeBillIntakeEmailAddress(emailAddressRequest: EmailAddressRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public changeBillIntakeEmailAddress(idempotencyKey: string, emailAddressRequest: EmailAddressRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<EmailAddressResponse>;
+    public changeBillIntakeEmailAddress(idempotencyKey: string, emailAddressRequest: EmailAddressRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EmailAddressResponse>>;
+    public changeBillIntakeEmailAddress(idempotencyKey: string, emailAddressRequest: EmailAddressRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EmailAddressResponse>>;
+    public changeBillIntakeEmailAddress(idempotencyKey: string, emailAddressRequest: EmailAddressRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling changeBillIntakeEmailAddress.');
+        }
         if (emailAddressRequest === null || emailAddressRequest === undefined) {
             throw new Error('Required parameter emailAddressRequest was null or undefined when calling changeBillIntakeEmailAddress.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');

@@ -19,10 +19,6 @@ export interface VendorStatementReconcileRequest {
      */
     comparisonVersion: string;
     /**
-     * Makes the command safe to retry: the same id with the same body answers the first result
-     */
-    requestId: string;
-    /**
      * One resolution per difference; none for an agreeing statement
      */
     resolutions: Array<Resolution>;
@@ -66,8 +62,8 @@ export function instanceOfVendorStatementReconcileRequest(value: object): value 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createVendorStatementReconcileRequestPropertyNames('comparisonVersion', 'requestId', 'resolutions', );
-    const optionalStringProperties = createVendorStatementReconcileRequestOptionalProperties({ name: 'comparisonVersion', nullable: false }, { name: 'requestId', nullable: false }, );
+    const requiredProperties = createVendorStatementReconcileRequestPropertyNames('comparisonVersion', 'resolutions', );
+    const optionalStringProperties = createVendorStatementReconcileRequestOptionalProperties({ name: 'comparisonVersion', nullable: false }, );
     const optionalNumberProperties = createVendorStatementReconcileRequestOptionalProperties();
     const optionalBooleanProperties = createVendorStatementReconcileRequestOptionalProperties();
 

@@ -146,14 +146,6 @@ export interface BankImportResponse {
      */
     rejectedCount: number;
     /**
-     * True when this response replays an earlier create with the same requestId
-     */
-    replayed: boolean;
-    /**
-     * The client\'s requestId
-     */
-    requestId: string;
-    /**
      * When the raw file becomes eligible for the retention purge
      */
     retentionUntil?: string;
@@ -250,10 +242,10 @@ export function instanceOfBankImportResponse(value: object): value is BankImport
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createBankImportResponsePropertyNames('acceptedCount', 'columns', 'createdAt', 'createdBy', 'currency', 'filePurged', 'fileSha256', 'formatCode', 'glAccountCode', 'glAccountId', 'glAccountName', 'importId', 'mappingRequired', 'outOfWindowCount', 'possibleDuplicateCount', 'rejectedCount', 'replayed', 'requestId', 'rowCount', 'skippedCount', 'statement', 'status', 'version', );
-    const optionalStringProperties = createBankImportResponseOptionalProperties({ name: 'committedAt', nullable: false }, { name: 'committedBy', nullable: false }, { name: 'contentType', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'currency', nullable: false }, { name: 'dateFormat', nullable: false }, { name: 'decimalFormat', nullable: false }, { name: 'delimiter', nullable: false }, { name: 'discardReason', nullable: false }, { name: 'discardedAt', nullable: false }, { name: 'discardedBy', nullable: false }, { name: 'encoding', nullable: false }, { name: 'fileName', nullable: false }, { name: 'fileSha256', nullable: false }, { name: 'formatCode', nullable: false }, { name: 'gapAcknowledgement', nullable: false }, { name: 'glAccountCode', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'glAccountName', nullable: false }, { name: 'importId', nullable: false }, { name: 'reconciliationId', nullable: false }, { name: 'requestId', nullable: false }, { name: 'retentionUntil', nullable: false }, { name: 'signConvention', nullable: false }, { name: 'statementId', nullable: false }, { name: 'status', nullable: false }, { name: 'supersedesStatementId', nullable: false }, { name: 'supersessionJustification', nullable: false }, );
+    const requiredProperties = createBankImportResponsePropertyNames('acceptedCount', 'columns', 'createdAt', 'createdBy', 'currency', 'filePurged', 'fileSha256', 'formatCode', 'glAccountCode', 'glAccountId', 'glAccountName', 'importId', 'mappingRequired', 'outOfWindowCount', 'possibleDuplicateCount', 'rejectedCount', 'rowCount', 'skippedCount', 'statement', 'status', 'version', );
+    const optionalStringProperties = createBankImportResponseOptionalProperties({ name: 'committedAt', nullable: false }, { name: 'committedBy', nullable: false }, { name: 'contentType', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'currency', nullable: false }, { name: 'dateFormat', nullable: false }, { name: 'decimalFormat', nullable: false }, { name: 'delimiter', nullable: false }, { name: 'discardReason', nullable: false }, { name: 'discardedAt', nullable: false }, { name: 'discardedBy', nullable: false }, { name: 'encoding', nullable: false }, { name: 'fileName', nullable: false }, { name: 'fileSha256', nullable: false }, { name: 'formatCode', nullable: false }, { name: 'gapAcknowledgement', nullable: false }, { name: 'glAccountCode', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'glAccountName', nullable: false }, { name: 'importId', nullable: false }, { name: 'reconciliationId', nullable: false }, { name: 'retentionUntil', nullable: false }, { name: 'signConvention', nullable: false }, { name: 'statementId', nullable: false }, { name: 'status', nullable: false }, { name: 'supersedesStatementId', nullable: false }, { name: 'supersessionJustification', nullable: false }, );
     const optionalNumberProperties = createBankImportResponseOptionalProperties({ name: 'acceptedCount', nullable: false }, { name: 'fileSize', nullable: false }, { name: 'outOfWindowCount', nullable: false }, { name: 'possibleDuplicateCount', nullable: false }, { name: 'rejectedCount', nullable: false }, { name: 'rowCount', nullable: false }, { name: 'skippedCount', nullable: false }, { name: 'version', nullable: false }, );
-    const optionalBooleanProperties = createBankImportResponseOptionalProperties({ name: 'filePurged', nullable: false }, { name: 'headerRow', nullable: false }, { name: 'mappingRequired', nullable: false }, { name: 'replayed', nullable: false }, { name: 'saveMappingAsDefault', nullable: false }, );
+    const optionalBooleanProperties = createBankImportResponseOptionalProperties({ name: 'filePurged', nullable: false }, { name: 'headerRow', nullable: false }, { name: 'mappingRequired', nullable: false }, { name: 'saveMappingAsDefault', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalBankImportResponsePropertyOfType(_v, property.name, 'string', property.nullable))

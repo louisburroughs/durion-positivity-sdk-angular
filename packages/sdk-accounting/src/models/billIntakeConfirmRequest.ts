@@ -14,10 +14,6 @@
  */
 export interface BillIntakeConfirmRequest {
     /**
-     * A caller-generated UUIDv7: a retry with the same id answers the same bill
-     */
-    requestId?: string | null;
-    /**
      * The draft\'s version as you read it
      */
     version: number;
@@ -62,7 +58,7 @@ export function instanceOfBillIntakeConfirmRequest(value: object): value is Bill
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBillIntakeConfirmRequestPropertyNames('version', );
-    const optionalStringProperties = createBillIntakeConfirmRequestOptionalProperties({ name: 'requestId', nullable: true }, );
+    const optionalStringProperties = createBillIntakeConfirmRequestOptionalProperties();
     const optionalNumberProperties = createBillIntakeConfirmRequestOptionalProperties({ name: 'version', nullable: false }, );
     const optionalBooleanProperties = createBillIntakeConfirmRequestOptionalProperties();
 

@@ -280,26 +280,33 @@ export class VendorStatementsService extends BaseService {
 
     /**
      * Reconcile A Vendor Statement
-     * Records how each difference between a checked vendor statement and the books will be settled, and marks the statement RECONCILED. Every difference in the comparison needs exactly one resolution: TAKE_IN_BILL for a NOT_IN_BOOKS difference, REQUEST_CREDIT_NOTE for AMOUNT_DIFFERS or NOT_ON_STATEMENT, VENDOR_ERROR for any kind with a note of at least 10 characters. It posts nothing: no journal entry, bill, payment or vendor setting changes, and the vendor is not contacted; the bill or credit note arrives later through intake under normal approval. Use this tool when a person has checked a statement and decided what to do about each difference; do not use it to correct the statement\&#39;s lines (edit it) or to take in a bill (use bill intake). Preconditions: the statement is READY_FOR_REVIEW with no field still marked Check this and no two lines for one document; comparisonVersion is the one you read, else 409 VENDOR_STATEMENT_COMPARISON_CHANGED with the new differences itemized (read the statement again for the full comparison); the caller holds accounting:vendor_statement:reconcile (the uploader may reconcile). Required inputs: comparisonVersion, resolutions (differenceKey, resolution, note) and requestId; the same requestId with the same body answers the first result. Emits an ACCOUNTING_VENDOR_STATEMENT_RECONCILE event and one VENDOR_STATEMENT audit row with each key and resolution; the statement\&#39;s file is kept for the configured retention period from now unless on legal hold. Returns 200 with the reconciled statement; 400 JUSTIFICATION_REQUIRED or VALIDATION_ERROR; 403 without the permission; 404 VENDOR_STATEMENT_NOT_FOUND; 409 VENDOR_STATEMENT_NOT_EDITABLE, VENDOR_STATEMENT_COMPARISON_CHANGED or IDEMPOTENCY_CONFLICT; 422 VENDOR_STATEMENT_FIELDS_UNCHECKED, VENDOR_STATEMENT_RESOLUTION_MISSING or VENDOR_STATEMENT_RESOLUTION_NOT_ALLOWED (fieldErrors keyed by differenceKey).
+     * Records how each difference between a checked vendor statement and the books will be settled, and marks the statement RECONCILED. Every difference in the comparison needs exactly one resolution: TAKE_IN_BILL for a NOT_IN_BOOKS difference, REQUEST_CREDIT_NOTE for AMOUNT_DIFFERS or NOT_ON_STATEMENT, VENDOR_ERROR for any kind with a note of at least 10 characters. It posts nothing: no journal entry, bill, payment or vendor setting changes, and the vendor is not contacted; the bill or credit note arrives later through intake under normal approval. Use this tool when a person has checked a statement and decided what to do about each difference; do not use it to correct the statement\&#39;s lines (edit it) or to take in a bill (use bill intake). Preconditions: the statement is READY_FOR_REVIEW with no field still marked Check this and no two lines for one document; comparisonVersion is the one you read, else 409 VENDOR_STATEMENT_COMPARISON_CHANGED with the new differences itemized (read the statement again for the full comparison); the caller holds accounting:vendor_statement:reconcile (the uploader may reconcile). Required inputs: comparisonVersion, resolutions (differenceKey, resolution, note) and the Idempotency-Key header, a UUID generated once per reconciliation; the same key with the same statement and body answers the first result with Idempotency-Replayed: true, and another statement, body or caller under that key is 409 IDEMPOTENCY_CONFLICT. Emits an ACCOUNTING_VENDOR_STATEMENT_RECONCILE event once, on the request that reconciles, and one VENDOR_STATEMENT audit row with each key and resolution; the statement\&#39;s file is kept for the configured retention period from now unless on legal hold. Returns 200 with the reconciled statement; 400 JUSTIFICATION_REQUIRED or VALIDATION_ERROR (a missing or non-UUID Idempotency-Key included); 403 without the permission; 404 VENDOR_STATEMENT_NOT_FOUND; 409 VENDOR_STATEMENT_NOT_EDITABLE, VENDOR_STATEMENT_COMPARISON_CHANGED or IDEMPOTENCY_CONFLICT; 422 VENDOR_STATEMENT_FIELDS_UNCHECKED, VENDOR_STATEMENT_RESOLUTION_MISSING or VENDOR_STATEMENT_RESOLUTION_NOT_ALLOWED (fieldErrors keyed by differenceKey).
      * @endpoint post /v1/accounting/vendor-statements/{statementId}/reconciliation
      * @param statementId
-     * @param vendorStatementReconcileRequest The comparisonVersion you read, one resolution for every difference (differenceKey, resolution, note) and a requestId that makes a retry safe.
+     * @param idempotencyKey The request\&#39;s idempotency key: a UUID generated once per reconciliation. A replay answers the first answer with Idempotency-Replayed: true; the same key with another request or by another caller is 409 IDEMPOTENCY_CONFLICT
+     * @param vendorStatementReconcileRequest The comparisonVersion you read and one resolution for every difference (differenceKey, resolution, note); the Idempotency-Key header makes a retry safe.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public reconcileVendorStatement(statementId: string, vendorStatementReconcileRequest: VendorStatementReconcileRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VendorStatementResponse>;
-    public reconcileVendorStatement(statementId: string, vendorStatementReconcileRequest: VendorStatementReconcileRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VendorStatementResponse>>;
-    public reconcileVendorStatement(statementId: string, vendorStatementReconcileRequest: VendorStatementReconcileRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VendorStatementResponse>>;
-    public reconcileVendorStatement(statementId: string, vendorStatementReconcileRequest: VendorStatementReconcileRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public reconcileVendorStatement(statementId: string, idempotencyKey: string, vendorStatementReconcileRequest: VendorStatementReconcileRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VendorStatementResponse>;
+    public reconcileVendorStatement(statementId: string, idempotencyKey: string, vendorStatementReconcileRequest: VendorStatementReconcileRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VendorStatementResponse>>;
+    public reconcileVendorStatement(statementId: string, idempotencyKey: string, vendorStatementReconcileRequest: VendorStatementReconcileRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VendorStatementResponse>>;
+    public reconcileVendorStatement(statementId: string, idempotencyKey: string, vendorStatementReconcileRequest: VendorStatementReconcileRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (statementId === null || statementId === undefined) {
             throw new Error('Required parameter statementId was null or undefined when calling reconcileVendorStatement.');
+        }
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling reconcileVendorStatement.');
         }
         if (vendorStatementReconcileRequest === null || vendorStatementReconcileRequest === undefined) {
             throw new Error('Required parameter vendorStatementReconcileRequest was null or undefined when calling reconcileVendorStatement.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
@@ -428,12 +435,12 @@ export class VendorStatementsService extends BaseService {
 
     /**
      * Upload A Vendor Statement
-     * Uploads one vendor statement, a PDF or a CSV, and creates a statement for a person to check. The file is stored apart, scanned for malware and read: a CSV by its columns, a PDF by the extraction service or, where it cannot read statements, by typing the lines in; nothing is compared, reconciled or posted. Use this tool to bring in a statement a vendor sent so it can be checked against the books; do not use it for a bill (uploadBillDocuments), for a spreadsheet of bills (importBillSpreadsheet) or for a bank statement (createBankImport). Preconditions: the caller holds accounting:bill_intake:create; the vendor is in accounting\&#39;s vendor list (an inactive vendor is allowed); the file\&#39;s type is judged by its content, never by its name or declared type, and a file that is neither a PDF nor a CSV is refused with status FILE_REJECTED and reason TYPE_NOT_ALLOWED. Required inputs: file (one PDF or CSV, at most 25 MB), vendorId, statementDate (yyyy-MM-dd), closingBalance (signed: negative means the vendor owes the shop) and a UUIDv7 requestId; optional: currency (the ledger currency, the default) and, for a CSV, columnMapping (a JSON object of column to the file\&#39;s header; without it the headers must be document_number, document_date and amount, with document_type and reference optional); a replay of the same requestId with the same file and values returns the same statement. Emits an ACCOUNTING_VENDOR_STATEMENT_UPLOAD event and one VENDOR_STATEMENT audit row naming the file\&#39;s sha-256. Returns 201 with the statement (QUARANTINED, or FILE_REJECTED with a reason); 400 VALIDATION_ERROR for a malformed mapping or an amount of more than four decimals; 403 without the permission; 409 IDEMPOTENCY_CONFLICT when the requestId was used with another file or values; 413 PAYLOAD_TOO_LARGE over 25 MB; 422 VENDOR_NOT_FOUND for a vendor that is not set up, CURRENCY_NOT_SUPPORTED for another currency than the ledger\&#39;s.
+     * Uploads one vendor statement, a PDF or a CSV, and creates a statement for a person to check. The file is stored apart, scanned for malware and read: a CSV by its columns, a PDF by the extraction service or, where it cannot read statements, by typing the lines in; nothing is compared, reconciled or posted. Use this tool to bring in a statement a vendor sent so it can be checked against the books; do not use it for a bill (uploadBillDocuments), for a spreadsheet of bills (importBillSpreadsheet) or for a bank statement (createBankImport). Preconditions: the caller holds accounting:bill_intake:create; the vendor is in accounting\&#39;s vendor list (an inactive vendor is allowed); the file\&#39;s type is judged by its content, never by its name or declared type, and a file that is neither a PDF nor a CSV is refused with status FILE_REJECTED and reason TYPE_NOT_ALLOWED. Required inputs: file (one PDF or CSV, at most 25 MB), vendorId, statementDate (yyyy-MM-dd), closingBalance (signed: negative means the vendor owes the shop) and the Idempotency-Key header, a UUID generated once per upload; optional: currency (the ledger currency, the default) and, for a CSV, columnMapping (a JSON object of column to the file\&#39;s header; without it the headers must be document_number, document_date and amount, with document_type and reference optional); a replay of the same key with the same file and values returns the same statement with Idempotency-Replayed: true, and another file, other values or another caller under that key is 409 IDEMPOTENCY_CONFLICT. Emits an ACCOUNTING_VENDOR_STATEMENT_UPLOAD event once, on the request that stores the statement, and one VENDOR_STATEMENT audit row naming the file\&#39;s sha-256. Returns 201 with the statement (QUARANTINED, or FILE_REJECTED with a reason); 400 VALIDATION_ERROR for a malformed mapping, an amount of more than four decimals, or a missing or non-UUID Idempotency-Key; 403 without the permission; 409 IDEMPOTENCY_CONFLICT when the key was used for another request; 413 PAYLOAD_TOO_LARGE over 25 MB; 422 VENDOR_NOT_FOUND for a vendor that is not set up, CURRENCY_NOT_SUPPORTED for another currency than the ledger\&#39;s.
      * @endpoint post /v1/accounting/vendor-statements
      * @param vendorId The vendor the statement is from, in accounting\&#39;s vendor list
      * @param statementDate The date of the statement, yyyy-MM-dd
      * @param closingBalance The closing balance, signed: negative means the vendor owes the shop
-     * @param requestId A caller-generated UUIDv7 that makes the upload replayable
+     * @param idempotencyKey The request\&#39;s idempotency key: a UUID generated once per upload. A replay answers the first answer with Idempotency-Replayed: true; the same key with another request or by another caller is 409 IDEMPOTENCY_CONFLICT
      * @param file The statement: one PDF or CSV in a part named file
      * @param currency The ledger currency (the default); another is 422 CURRENCY_NOT_SUPPORTED
      * @param columnMapping For a CSV, the columns as a JSON object: statement column to the file\&#39;s header
@@ -441,10 +448,10 @@ export class VendorStatementsService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public uploadVendorStatement(vendorId: string, statementDate: string, closingBalance: number, requestId: string, file: Blob, currency?: string, columnMapping?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VendorStatementResponse>;
-    public uploadVendorStatement(vendorId: string, statementDate: string, closingBalance: number, requestId: string, file: Blob, currency?: string, columnMapping?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VendorStatementResponse>>;
-    public uploadVendorStatement(vendorId: string, statementDate: string, closingBalance: number, requestId: string, file: Blob, currency?: string, columnMapping?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VendorStatementResponse>>;
-    public uploadVendorStatement(vendorId: string, statementDate: string, closingBalance: number, requestId: string, file: Blob, currency?: string, columnMapping?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public uploadVendorStatement(vendorId: string, statementDate: string, closingBalance: number, idempotencyKey: string, file: Blob, currency?: string, columnMapping?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VendorStatementResponse>;
+    public uploadVendorStatement(vendorId: string, statementDate: string, closingBalance: number, idempotencyKey: string, file: Blob, currency?: string, columnMapping?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VendorStatementResponse>>;
+    public uploadVendorStatement(vendorId: string, statementDate: string, closingBalance: number, idempotencyKey: string, file: Blob, currency?: string, columnMapping?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VendorStatementResponse>>;
+    public uploadVendorStatement(vendorId: string, statementDate: string, closingBalance: number, idempotencyKey: string, file: Blob, currency?: string, columnMapping?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (vendorId === null || vendorId === undefined) {
             throw new Error('Required parameter vendorId was null or undefined when calling uploadVendorStatement.');
         }
@@ -454,8 +461,8 @@ export class VendorStatementsService extends BaseService {
         if (closingBalance === null || closingBalance === undefined) {
             throw new Error('Required parameter closingBalance was null or undefined when calling uploadVendorStatement.');
         }
-        if (requestId === null || requestId === undefined) {
-            throw new Error('Required parameter requestId was null or undefined when calling uploadVendorStatement.');
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling uploadVendorStatement.');
         }
         if (file === null || file === undefined) {
             throw new Error('Required parameter file was null or undefined when calling uploadVendorStatement.');
@@ -492,15 +499,6 @@ export class VendorStatementsService extends BaseService {
 
         localVarQueryParameters = this.addToHttpParams(
             localVarQueryParameters,
-            'requestId',
-            <any>requestId,
-            QueryParamStyle.Form,
-            true,
-        );
-
-
-        localVarQueryParameters = this.addToHttpParams(
-            localVarQueryParameters,
             'currency',
             <any>currency,
             QueryParamStyle.Form,
@@ -518,6 +516,9 @@ export class VendorStatementsService extends BaseService {
 
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');

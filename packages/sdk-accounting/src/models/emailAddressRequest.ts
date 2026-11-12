@@ -21,10 +21,6 @@ export interface EmailAddressRequest {
      * Why the address is rotated; at least 10 characters, required for ROTATE
      */
     reason?: string;
-    /**
-     * Client-generated UUID that makes the command idempotent: a replay answers the same address and rotates nothing twice
-     */
-    requestId: string;
 }
 export enum EmailAddressRequestActionEnum {
     Request = 'REQUEST',
@@ -71,8 +67,8 @@ export function instanceOfEmailAddressRequest(value: object): value is EmailAddr
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createEmailAddressRequestPropertyNames('action', 'requestId', );
-    const optionalStringProperties = createEmailAddressRequestOptionalProperties({ name: 'action', nullable: false }, { name: 'reason', nullable: false }, { name: 'requestId', nullable: false }, );
+    const requiredProperties = createEmailAddressRequestPropertyNames('action', );
+    const optionalStringProperties = createEmailAddressRequestOptionalProperties({ name: 'action', nullable: false }, { name: 'reason', nullable: false }, );
     const optionalNumberProperties = createEmailAddressRequestOptionalProperties();
     const optionalBooleanProperties = createEmailAddressRequestOptionalProperties();
 
