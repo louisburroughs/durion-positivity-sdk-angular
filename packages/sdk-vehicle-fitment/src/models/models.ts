@@ -17,3 +17,6 @@ export * from './policyBlocker';
 export * from './suggestedAlternative';
 export * from './updateHintRequest';
 export * from './vehicleTypeResponse';
+export * from './vinDecodeEngine';
+export * from './vinDecodeRequest';
+export * from './vinDecodeResponse';
