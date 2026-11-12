@@ -33,10 +33,6 @@ export interface RegisterFloatGoLiveRequest {
      * The location the register belongs to
      */
     locationId: string;
-    /**
-     * Caller-generated UUIDv7 naming this request; a replay returns the first result
-     */
-    requestId: string;
 }
 
 function isOptionalRegisterFloatGoLiveRequestPropertyOfType(
@@ -77,8 +73,8 @@ export function instanceOfRegisterFloatGoLiveRequest(value: object): value is Re
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRegisterFloatGoLiveRequestPropertyNames('amount', 'currencyCode', 'goLiveDate', 'justification', 'locationId', 'requestId', );
-    const optionalStringProperties = createRegisterFloatGoLiveRequestOptionalProperties({ name: 'currencyCode', nullable: false }, { name: 'goLiveDate', nullable: false }, { name: 'justification', nullable: false }, { name: 'locationId', nullable: false }, { name: 'requestId', nullable: false }, );
+    const requiredProperties = createRegisterFloatGoLiveRequestPropertyNames('amount', 'currencyCode', 'goLiveDate', 'justification', 'locationId', );
+    const optionalStringProperties = createRegisterFloatGoLiveRequestOptionalProperties({ name: 'currencyCode', nullable: false }, { name: 'goLiveDate', nullable: false }, { name: 'justification', nullable: false }, { name: 'locationId', nullable: false }, );
     const optionalNumberProperties = createRegisterFloatGoLiveRequestOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createRegisterFloatGoLiveRequestOptionalProperties();
 

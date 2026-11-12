@@ -12,7 +12,7 @@ import { VendorInformationReturnRequest } from './vendorInformationReturnRequest
 
 
 /**
- * The vendor\'s AP settings to change (defaults, AP hold, information-return flag, tax-on-resale acceptance), the justification and the request id. A field left out is unchanged; a default sent as null clears it.
+ * The vendor\'s AP settings to change (defaults, AP hold, information-return flag, tax-on-resale acceptance) and the justification; the request\'s key travels in the Idempotency-Key header. A field left out is unchanged; a default sent as null clears it.
  */
 export interface VendorApSettingsRequest {
     /**
@@ -33,10 +33,6 @@ export interface VendorApSettingsRequest {
      * Why the settings change, at least 10 characters; recorded on every audit row, and the record of why a hold is released
      */
     justification: string;
-    /**
-     * A UUID generated once per change: a request id already recorded writes nothing and returns the vendor as it is
-     */
-    requestId: string;
 }
 export enum VendorApSettingsRequestDefaultDebitClassEnum {
     Goods = 'GOODS',
@@ -83,8 +79,8 @@ export function instanceOfVendorApSettingsRequest(value: object): value is Vendo
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createVendorApSettingsRequestPropertyNames('justification', 'requestId', );
-    const optionalStringProperties = createVendorApSettingsRequestOptionalProperties({ name: 'defaultDebitClass', nullable: true }, { name: 'defaultExpenseMappingKey', nullable: true }, { name: 'justification', nullable: false }, { name: 'requestId', nullable: false }, );
+    const requiredProperties = createVendorApSettingsRequestPropertyNames('justification', );
+    const optionalStringProperties = createVendorApSettingsRequestOptionalProperties({ name: 'defaultDebitClass', nullable: true }, { name: 'defaultExpenseMappingKey', nullable: true }, { name: 'justification', nullable: false }, );
     const optionalNumberProperties = createVendorApSettingsRequestOptionalProperties();
     const optionalBooleanProperties = createVendorApSettingsRequestOptionalProperties({ name: 'acceptTaxOnResaleGoods', nullable: false }, );
 

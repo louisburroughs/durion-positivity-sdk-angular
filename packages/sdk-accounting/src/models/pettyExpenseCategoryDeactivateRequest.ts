@@ -17,10 +17,6 @@ export interface PettyExpenseCategoryDeactivateRequest {
      * Why (at least 10 characters); kept in its history
      */
     justification: string;
-    /**
-     * Caller-generated UUIDv7 naming this request; a replay returns the first result
-     */
-    requestId: string;
 }
 
 function isOptionalPettyExpenseCategoryDeactivateRequestPropertyOfType(
@@ -61,8 +57,8 @@ export function instanceOfPettyExpenseCategoryDeactivateRequest(value: object): 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPettyExpenseCategoryDeactivateRequestPropertyNames('justification', 'requestId', );
-    const optionalStringProperties = createPettyExpenseCategoryDeactivateRequestOptionalProperties({ name: 'justification', nullable: false }, { name: 'requestId', nullable: false }, );
+    const requiredProperties = createPettyExpenseCategoryDeactivateRequestPropertyNames('justification', );
+    const optionalStringProperties = createPettyExpenseCategoryDeactivateRequestOptionalProperties({ name: 'justification', nullable: false }, );
     const optionalNumberProperties = createPettyExpenseCategoryDeactivateRequestOptionalProperties();
     const optionalBooleanProperties = createPettyExpenseCategoryDeactivateRequestOptionalProperties();
 

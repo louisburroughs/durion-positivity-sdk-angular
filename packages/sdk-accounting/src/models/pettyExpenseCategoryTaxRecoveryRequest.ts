@@ -22,10 +22,6 @@ export interface PettyExpenseCategoryTaxRecoveryRequest {
      */
     recoverablePercent?: number;
     /**
-     * Caller-generated UUIDv7 naming this request; a replay returns the first result
-     */
-    requestId: string;
-    /**
      * Whether the tax stated on this category\'s receipts is recovered
      */
     taxRecoverable: boolean;
@@ -73,8 +69,8 @@ export function instanceOfPettyExpenseCategoryTaxRecoveryRequest(value: object):
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPettyExpenseCategoryTaxRecoveryRequestPropertyNames('justification', 'requestId', 'taxRecoverable', 'version', );
-    const optionalStringProperties = createPettyExpenseCategoryTaxRecoveryRequestOptionalProperties({ name: 'justification', nullable: false }, { name: 'requestId', nullable: false }, );
+    const requiredProperties = createPettyExpenseCategoryTaxRecoveryRequestPropertyNames('justification', 'taxRecoverable', 'version', );
+    const optionalStringProperties = createPettyExpenseCategoryTaxRecoveryRequestOptionalProperties({ name: 'justification', nullable: false }, );
     const optionalNumberProperties = createPettyExpenseCategoryTaxRecoveryRequestOptionalProperties({ name: 'recoverablePercent', nullable: false }, { name: 'version', nullable: false }, );
     const optionalBooleanProperties = createPettyExpenseCategoryTaxRecoveryRequestOptionalProperties({ name: 'taxRecoverable', nullable: false }, );
 

@@ -33,10 +33,6 @@ export interface PettyExpenseCategoryCreateRequest {
      * The label the cashier sees
      */
     label: string;
-    /**
-     * Caller-generated UUIDv7 naming this request; a replay returns the first result
-     */
-    requestId: string;
 }
 
 function isOptionalPettyExpenseCategoryCreateRequestPropertyOfType(
@@ -77,8 +73,8 @@ export function instanceOfPettyExpenseCategoryCreateRequest(value: object): valu
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPettyExpenseCategoryCreateRequestPropertyNames('code', 'glAccountId', 'justification', 'label', 'requestId', );
-    const optionalStringProperties = createPettyExpenseCategoryCreateRequestOptionalProperties({ name: 'code', nullable: false }, { name: 'examples', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'justification', nullable: false }, { name: 'label', nullable: false }, { name: 'requestId', nullable: false }, );
+    const requiredProperties = createPettyExpenseCategoryCreateRequestPropertyNames('code', 'glAccountId', 'justification', 'label', );
+    const optionalStringProperties = createPettyExpenseCategoryCreateRequestOptionalProperties({ name: 'code', nullable: false }, { name: 'examples', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'justification', nullable: false }, { name: 'label', nullable: false }, );
     const optionalNumberProperties = createPettyExpenseCategoryCreateRequestOptionalProperties();
     const optionalBooleanProperties = createPettyExpenseCategoryCreateRequestOptionalProperties();
 
