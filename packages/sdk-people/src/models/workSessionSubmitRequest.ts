@@ -10,21 +10,24 @@
 
 
 /**
- * Request to submit a completed work session for review
+ * Submit an ended work session. Optional, and every field is ignored: the server computes the minutes and the submission time
  */
 export interface WorkSessionSubmitRequest {
     /**
-     * Total billable minutes for the session
+     * Ignored. The server computes billable minutes from the session\'s start, stop and breaks.
+     * @deprecated
      */
-    billableMinutes: number;
+    billableMinutes?: number;
     /**
-     * Total break minutes for the session
+     * Ignored. The server computes break minutes from the session\'s breaks.
+     * @deprecated
      */
-    breakMinutes: number;
+    breakMinutes?: number;
     /**
-     * Timestamp the session was submitted
+     * Ignored. The server stamps the submission with its own clock.
+     * @deprecated
      */
-    submittedAt: string;
+    submittedAt?: string;
 }
 
 function isOptionalWorkSessionSubmitRequestPropertyOfType(
@@ -65,7 +68,7 @@ export function instanceOfWorkSessionSubmitRequest(value: object): value is Work
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createWorkSessionSubmitRequestPropertyNames('billableMinutes', 'breakMinutes', 'submittedAt', );
+    const requiredProperties = createWorkSessionSubmitRequestPropertyNames();
     const optionalStringProperties = createWorkSessionSubmitRequestOptionalProperties({ name: 'submittedAt', nullable: false }, );
     const optionalNumberProperties = createWorkSessionSubmitRequestOptionalProperties({ name: 'billableMinutes', nullable: false }, { name: 'breakMinutes', nullable: false }, );
     const optionalBooleanProperties = createWorkSessionSubmitRequestOptionalProperties();

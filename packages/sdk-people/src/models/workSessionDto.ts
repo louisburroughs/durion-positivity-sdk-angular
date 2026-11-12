@@ -34,6 +34,18 @@ export interface WorkSessionDto {
      */
     sessionId: string;
     /**
+     * Server time at which the start event was received
+     */
+    startReceivedAt?: string;
+    /**
+     * Whether the start was a live call (LIVE) or replayed from the app\'s offline queue (OFFLINE_REPLAY, when occurredAt was more than 2 minutes before receipt).
+     */
+    startSource?: WorkSessionDtoStartSourceEnum;
+    /**
+     * How the session started: MANUAL, or FIRST_SIGN_IN for the app\'s automatic clock-in. An undone session keeps the trigger it started with.
+     */
+    startTrigger?: WorkSessionDtoStartTriggerEnum;
+    /**
      * Timestamp the session started
      */
     startedAt?: string;
@@ -46,6 +58,17 @@ export interface WorkSessionDto {
      */
     submittedAt?: string;
 }
+export enum WorkSessionDtoStartSourceEnum {
+    Live = 'LIVE',
+    OfflineReplay = 'OFFLINE_REPLAY'
+};
+export enum WorkSessionDtoStartTriggerEnum {
+    Manual = 'MANUAL',
+    FirstSignIn = 'FIRST_SIGN_IN',
+    Undo = 'UNDO'
+};
+
+
 
 function isOptionalWorkSessionDtoPropertyOfType(
     value: Record<string, unknown>,
@@ -86,7 +109,7 @@ export function instanceOfWorkSessionDto(value: object): value is WorkSessionDto
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkSessionDtoPropertyNames('personId', 'sessionId', 'status', );
-    const optionalStringProperties = createWorkSessionDtoOptionalProperties({ name: 'endedAt', nullable: false }, { name: 'personId', nullable: false }, { name: 'sessionId', nullable: false }, { name: 'startedAt', nullable: false }, { name: 'status', nullable: false }, { name: 'submittedAt', nullable: false }, );
+    const optionalStringProperties = createWorkSessionDtoOptionalProperties({ name: 'endedAt', nullable: false }, { name: 'personId', nullable: false }, { name: 'sessionId', nullable: false }, { name: 'startReceivedAt', nullable: false }, { name: 'startSource', nullable: false }, { name: 'startTrigger', nullable: false }, { name: 'startedAt', nullable: false }, { name: 'status', nullable: false }, { name: 'submittedAt', nullable: false }, );
     const optionalNumberProperties = createWorkSessionDtoOptionalProperties({ name: 'billableMinutes', nullable: false }, { name: 'breakMinutes', nullable: false }, );
     const optionalBooleanProperties = createWorkSessionDtoOptionalProperties();
 

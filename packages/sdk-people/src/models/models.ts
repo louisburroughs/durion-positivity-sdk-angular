@@ -65,6 +65,8 @@ export * from './timekeepingEntryDto';
 export * from './transitionTimePeriodRequest';
 export * from './updateEmployeeRequest';
 export * from './updateStaffingAssignmentRequest';
+export * from './workSessionBreakStartRequest';
+export * from './workSessionBreakStopRequest';
 export * from './workSessionClockStateResponse';
 export * from './workSessionDto';
 export * from './workSessionRequest';

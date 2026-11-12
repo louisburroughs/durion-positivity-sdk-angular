@@ -21,6 +21,10 @@ import { ApiError } from '../models/apiError';
 // @ts-ignore
 import { BreakDto } from '../models/breakDto';
 // @ts-ignore
+import { WorkSessionBreakStartRequest } from '../models/workSessionBreakStartRequest';
+// @ts-ignore
+import { WorkSessionBreakStopRequest } from '../models/workSessionBreakStopRequest';
+// @ts-ignore
 import { WorkSessionClockStateResponse } from '../models/workSessionClockStateResponse';
 // @ts-ignore
 import { WorkSessionDto } from '../models/workSessionDto';
@@ -47,7 +51,7 @@ export class WorkSessionsAPIService extends BaseService {
 
     /**
      * Get A Person\&#39;s Current Work-Session (Clock) State
-     * Reads a person\&#39;s current clock state — CLOCKED_IN, ON_BREAK or CLOCKED_OUT — with the open session id, its start time and the open break\&#39;s start time when there is one. Derived on read from the open work session and break; nothing is created, closed or changed. Use this tool to render a clock-in/out toggle for one person, for example after a toggle press or on a self-service view; use listPeopleAvailability instead to read the clock state of everyone at a location in one call, which is what a dispatch board needs. Preconditions: the person must exist, either as an employee of this module or in the identity replica. Required inputs: none are mandatory; personId (UUID) as a query parameter defaults to the caller\&#39;s own linked person when omitted. Authorization: a person reads their own state with people:self:view; reading another person\&#39;s state needs people:timekeeping:view, and when that grant is location-scoped it must cover one of the person\&#39;s active assignment locations. Emits a PEOPLE_WORK_SESSION_CURRENT_GET audit event but changes no state. Returns 200 with clockState CLOCKED_OUT and null session fields when nothing is open — never 404 for that; 404 PERSON_NOT_FOUND when the person is unknown, 404 when personId is omitted and the caller\&#39;s person link is present but no longer active, 503 USER_LINK_REPLICATION_PENDING with a Retry-After header when personId is omitted and the caller has no person link in the replica yet, 403 FORBIDDEN when the caller is neither the person nor a people:timekeeping:view holder, and 403 LOCATION_SCOPE_DENIED when the caller\&#39;s grant does not cover the person\&#39;s location.
+     * Reads a person\&#39;s current clock state — CLOCKED_IN, ON_BREAK or CLOCKED_OUT — with the open session id, its start time and the open break\&#39;s start time when there is one. Derived on read from the open work session and break; nothing is created, closed or changed; an undone session is closed, so it reads CLOCKED_OUT. Use this tool to render a clock-in/out toggle for one person, for example after a toggle press or on a self-service view; use listPeopleAvailability instead to read the clock state of everyone at a location in one call, which is what a dispatch board needs. Preconditions: the person must exist, either as an employee of this module or in the identity replica. Required inputs: none are mandatory; personId (UUID) as a query parameter defaults to the caller\&#39;s own linked person when omitted. Authorization: a person reads their own state with people:self:view; reading another person\&#39;s state needs people:timekeeping:view, and when that grant is location-scoped it must cover one of the person\&#39;s active assignment locations. Emits a PEOPLE_WORK_SESSION_CURRENT_GET audit event but changes no state. Returns 200 with clockState CLOCKED_OUT and null session fields when nothing is open — never 404 for that; 404 PERSON_NOT_FOUND when the person is unknown, 404 when personId is omitted and the caller\&#39;s person link is present but no longer active, 503 USER_LINK_REPLICATION_PENDING with a Retry-After header when personId is omitted and the caller has no person link in the replica yet, 403 FORBIDDEN when the caller is neither the person nor a people:timekeeping:view holder, and 403 LOCATION_SCOPE_DENIED when the caller\&#39;s grant does not cover the person\&#39;s location.
      * @endpoint get /v1/people/workSessions/current
      * @param personId Person whose clock state to read. Defaults to the caller\&#39;s own linked person when omitted.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -116,22 +120,29 @@ export class WorkSessionsAPIService extends BaseService {
 
     /**
      * Start A Work Session For Person
-     * Starts a new ACTIVE work session for a person, stamping the start time from the server clock and the actor from the security context. Use this tool when a person clocks in for the day; do not use startWorkSessionBreak, which pauses an already running session. Preconditions: the person must exist, either as an employee of this module or in the identity replica, and the person must have no session that is still open. Required inputs: personId (UUID) in the body; the body\&#39;s actor field is ignored, because the recorded actor is always the authenticated username. Authorization: the caller must be the person themself, or hold people:timekeeping:approve; when that grant is location-scoped it must cover one of the person\&#39;s active assignment locations (403 FORBIDDEN otherwise, 403 LOCATION_SCOPE_DENIED when only the scope fails). Emits a PEOPLE_WORK_SESSION_START event. Returns 404 when the person is unknown, and 409 when an active session already exists for the person, including under concurrent start races.
+     * Starts a new ACTIVE work session for a person at the time the technician clocked in, and records the actor from the security context. Use this tool when a person clocks in for the day; do not use startWorkSessionBreak, which pauses an already running session. Idempotency (ADR-0075): the Idempotency-Key header is required; repeating the call with the same key and body returns the session the first call created, with Idempotency-Replayed: true, and creates no second row, while the same key with a different body or caller is 409 IDEMPOTENCY_CONFLICT. Offline replay (DECISION-PEOPLE-029): occurredAt, when supplied, is the instant the technician actually clocked in and becomes the session\&#39;s startedAt; it may be at most 2 minutes in the future and at most 72 hours old (422 OCCURRED_AT_OUT_OF_RANGE otherwise), and the server also records startReceivedAt and startSource, which is OFFLINE_REPLAY when occurredAt was more than 2 minutes before receipt and LIVE otherwise. Preconditions: the person must exist, either as an employee of this module or in the identity replica, and the person must have no session that is still open. Required inputs: personId (UUID) in the body; trigger is optional and is MANUAL (the default) or FIRST_SIGN_IN, the app\&#39;s automatic clock-in (TM5, DECISION-PEOPLE-028), which is stored and shown on approval screens, while UNDO is not a start trigger; the body\&#39;s actor field is ignored, because the recorded actor is always the authenticated username. Authorization: the caller must be the person themself, or hold people:timekeeping:approve; when that grant is location-scoped it must cover one of the person\&#39;s active assignment locations (403 FORBIDDEN otherwise, 403 LOCATION_SCOPE_DENIED when only the scope fails); emits a PEOPLE_WORK_SESSION_START event; a replay writes and emits nothing. Returns 400 VALIDATION_ERROR when the Idempotency-Key is missing or not a UUID (fieldErrors names Idempotency-Key) or the trigger does not fit the call, 404 when the person is unknown, 409 when an active session already exists for the person (including under concurrent start races) or the key was already used, and 422 when occurredAt is out of range.
      * @endpoint post /v1/people/workSessions/start
-     * @param workSessionRequest Identifies the person clocking in; the actor field is ignored in favour of the authenticated username.
+     * @param idempotencyKey Required key that makes retries safe; a UUID (ADR-0075)
+     * @param workSessionRequest Identifies the person clocking in, with the instant they clocked in and how the clock-in was triggered; the actor field is ignored in favour of the authenticated username.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public startWorkSession(workSessionRequest: WorkSessionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkSessionDto>;
-    public startWorkSession(workSessionRequest: WorkSessionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkSessionDto>>;
-    public startWorkSession(workSessionRequest: WorkSessionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkSessionDto>>;
-    public startWorkSession(workSessionRequest: WorkSessionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public startWorkSession(idempotencyKey: string, workSessionRequest: WorkSessionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkSessionDto>;
+    public startWorkSession(idempotencyKey: string, workSessionRequest: WorkSessionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkSessionDto>>;
+    public startWorkSession(idempotencyKey: string, workSessionRequest: WorkSessionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkSessionDto>>;
+    public startWorkSession(idempotencyKey: string, workSessionRequest: WorkSessionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling startWorkSession.');
+        }
         if (workSessionRequest === null || workSessionRequest === undefined) {
             throw new Error('Required parameter workSessionRequest was null or undefined when calling startWorkSession.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
@@ -186,22 +197,33 @@ export class WorkSessionsAPIService extends BaseService {
 
     /**
      * Start A Break In Work Session
-     * Starts a break inside an active work session, stamping the start time from the server clock. Use this tool when a person pauses work; do not use stopWorkSession, which ends the whole session rather than pausing it. Preconditions: the session must exist and still be open, and no break may already be open on it. Required inputs: the work session id (UUID) as the path parameter; there is no request body. Authorization: the caller must be the session\&#39;s person, or hold people:timekeeping:approve; when that grant is location-scoped it must cover one of the person\&#39;s active assignment locations (403 FORBIDDEN otherwise, 403 LOCATION_SCOPE_DENIED when only the scope fails). Emits a PEOPLE_WORK_SESSION_BREAK_START event. Returns 404 when no open session exists for the id, and 409 when a break is already open, including under concurrent break-start races.
+     * Starts a break inside an active work session, recording the instant the technician started it and what kind of break it was. Use this tool when a person pauses work; do not use stopWorkSession, which ends the whole session rather than pausing it. Client rule (TM6, DECISION-PEOPLE-029 item 5): breaks and work are not coupled on the server, so the technician app stops the work in progress in pos-workorder before it starts the break and a meal is not recorded as time on the job; this API refuses nothing on that basis. Idempotency (ADR-0075) and offline replay (DECISION-PEOPLE-029): the Idempotency-Key header is required, and a repeat with the same key and body replays the stored answer with Idempotency-Replayed: true; occurredAt, when supplied, is the instant the break actually started and becomes its startedAt, at most 2 minutes in the future and 72 hours old and not earlier than the session\&#39;s startedAt. Preconditions: the session must exist and still be open, and no break may already be open on it. Required inputs: the work session id (UUID) as the path parameter and a body with type, which is MEAL, REST or OTHER (DECISION-PEOPLE-007); note is required and must not be blank when type is OTHER (DECISION-PEOPLE-029 item 4), and is optional for MEAL and REST. Authorization: the caller must be the session\&#39;s person, or hold people:timekeeping:approve; when that grant is location-scoped it must cover one of the person\&#39;s active assignment locations (403 FORBIDDEN otherwise, 403 LOCATION_SCOPE_DENIED when only the scope fails); emits a PEOPLE_WORK_SESSION_BREAK_START event; a replay writes and emits nothing. Returns 400 VALIDATION_ERROR when the Idempotency-Key is missing or not a UUID, type is missing, or type is OTHER without a note (fieldErrors names note), 404 when no open session exists for the id, 409 when a break is already open (including under concurrent break-start races) or the key was already used with a different body or caller (IDEMPOTENCY_CONFLICT), and 422 OCCURRED_AT_OUT_OF_RANGE when occurredAt is out of range or before the session\&#39;s start.
      * @endpoint post /v1/people/workSessions/{id}/breaks/start
      * @param id Work session ID
+     * @param idempotencyKey Required key that makes retries safe; a UUID (ADR-0075)
+     * @param workSessionBreakStartRequest The kind of break, an optional note and the instant the break started.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public startWorkSessionBreak(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BreakDto>;
-    public startWorkSessionBreak(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BreakDto>>;
-    public startWorkSessionBreak(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BreakDto>>;
-    public startWorkSessionBreak(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public startWorkSessionBreak(id: string, idempotencyKey: string, workSessionBreakStartRequest: WorkSessionBreakStartRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BreakDto>;
+    public startWorkSessionBreak(id: string, idempotencyKey: string, workSessionBreakStartRequest: WorkSessionBreakStartRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BreakDto>>;
+    public startWorkSessionBreak(id: string, idempotencyKey: string, workSessionBreakStartRequest: WorkSessionBreakStartRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BreakDto>>;
+    public startWorkSessionBreak(id: string, idempotencyKey: string, workSessionBreakStartRequest: WorkSessionBreakStartRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling startWorkSessionBreak.');
         }
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling startWorkSessionBreak.');
+        }
+        if (workSessionBreakStartRequest === null || workSessionBreakStartRequest === undefined) {
+            throw new Error('Required parameter workSessionBreakStartRequest was null or undefined when calling startWorkSessionBreak.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
@@ -217,6 +239,15 @@ export class WorkSessionsAPIService extends BaseService {
 
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
@@ -234,6 +265,7 @@ export class WorkSessionsAPIService extends BaseService {
         return this.httpClient.request<BreakDto>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: workSessionBreakStartRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -246,22 +278,29 @@ export class WorkSessionsAPIService extends BaseService {
 
     /**
      * Stop An Active Work Session
-     * Stops a person\&#39;s open work session, setting status ENDED and closing any break still open at the same timestamp. Use this tool when a person clocks out; do not use submitWorkSession, which sends an already ENDED session for approval. Preconditions: the person must have an open session; sessions are keyed by person here, not by session id. Required inputs: personId (UUID) in the body; the body\&#39;s actor field is ignored in favour of the authenticated username. Authorization: the caller must be the person themself, or hold people:timekeeping:approve; when that grant is location-scoped it must cover one of the person\&#39;s active assignment locations (403 FORBIDDEN otherwise, 403 LOCATION_SCOPE_DENIED when only the scope fails). Emits a PEOPLE_WORK_SESSION_STOP event. Returns 404 when no active session exists for the person.
+     * Stops a person\&#39;s open work session, setting status ENDED and closing any break still open at the same timestamp. Use this tool when a person clocks out; do not use submitWorkSession, which sends an already ENDED session for approval. Idempotency (ADR-0075): the Idempotency-Key header is required; repeating the call with the same key and body replays the stored answer with Idempotency-Replayed: true, and the same key with a different body or caller is 409 IDEMPOTENCY_CONFLICT. Offline replay (DECISION-PEOPLE-029): occurredAt, when supplied, is the instant the technician actually clocked out and becomes the session\&#39;s endedAt, subject to the same 2 minutes in the future and 72 hours old bounds (422 OCCURRED_AT_OUT_OF_RANGE); it must also not be earlier than the session\&#39;s startedAt or than the open break\&#39;s start, which is the same 422. Preconditions: the person must have an open session; sessions are keyed by person here, not by session id. Required inputs: personId (UUID) in the body; trigger is optional and is MANUAL (the default) or UNDO, where an UNDO stop retracts the clock-in (DECISION-PEOPLE-028): within 2 minutes of the session\&#39;s start it ends the session with status UNDONE and zero duration, so it can never be submitted and produces no time entry, and FIRST_SIGN_IN is not a stop trigger; the body\&#39;s actor field is ignored in favour of the authenticated username. Authorization: the caller must be the person themself, or hold people:timekeeping:approve; when that grant is location-scoped it must cover one of the person\&#39;s active assignment locations (403 FORBIDDEN otherwise, 403 LOCATION_SCOPE_DENIED when only the scope fails); emits a PEOPLE_WORK_SESSION_STOP event, whether the session ended or was undone; a replay writes and emits nothing. Returns 400 VALIDATION_ERROR when the Idempotency-Key is missing or not a UUID or the trigger does not fit the call, 404 when no active session exists for the person, 409 for a key conflict or an undo more than 2 minutes after the start (UNDO_WINDOW_EXPIRED), and 422 when occurredAt is out of range or out of order.
      * @endpoint post /v1/people/workSessions/stop
-     * @param workSessionRequest Identifies the person clocking out; the open session is found by person id, not session id.
+     * @param idempotencyKey Required key that makes retries safe; a UUID (ADR-0075)
+     * @param workSessionRequest Identifies the person clocking out, with the instant they clocked out and how the stop was triggered; the open session is found by person id, not session id.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public stopWorkSession(workSessionRequest: WorkSessionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkSessionDto>;
-    public stopWorkSession(workSessionRequest: WorkSessionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkSessionDto>>;
-    public stopWorkSession(workSessionRequest: WorkSessionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkSessionDto>>;
-    public stopWorkSession(workSessionRequest: WorkSessionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public stopWorkSession(idempotencyKey: string, workSessionRequest: WorkSessionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkSessionDto>;
+    public stopWorkSession(idempotencyKey: string, workSessionRequest: WorkSessionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkSessionDto>>;
+    public stopWorkSession(idempotencyKey: string, workSessionRequest: WorkSessionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkSessionDto>>;
+    public stopWorkSession(idempotencyKey: string, workSessionRequest: WorkSessionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling stopWorkSession.');
+        }
         if (workSessionRequest === null || workSessionRequest === undefined) {
             throw new Error('Required parameter workSessionRequest was null or undefined when calling stopWorkSession.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
@@ -316,22 +355,30 @@ export class WorkSessionsAPIService extends BaseService {
 
     /**
      * Stop The Open Work Session Break
-     * Ends the open break on a work session, stamping the end time from the server clock. Use this tool when a person returns from a break; do not use stopWorkSession, which ends the session and auto-closes any open break itself. Preconditions: the session must have an open break with no recorded end time. Required inputs: the work session id (UUID) as the path parameter; there is no request body. Authorization: the caller must be the session\&#39;s person, or hold people:timekeeping:approve; when that grant is location-scoped it must cover one of the person\&#39;s active assignment locations (403 FORBIDDEN otherwise, 403 LOCATION_SCOPE_DENIED when only the scope fails). Emits a PEOPLE_WORK_SESSION_BREAK_STOP event. Returns 409 when no open break exists for the session, including when the session id itself is unknown.
+     * Ends the open break on a work session at the instant the technician returned. Use this tool when a person returns from a break; do not use stopWorkSession, which ends the session and auto-closes any open break itself. Idempotency (ADR-0075): the Idempotency-Key header is required; repeating the call with the same key and body replays the stored answer with Idempotency-Replayed: true, and the same key with a different body or caller is 409 IDEMPOTENCY_CONFLICT. Offline replay (DECISION-PEOPLE-029): the optional body may carry occurredAt, the instant the break actually ended, which becomes its endedAt; it is subject to the same 2 minutes in the future and 72 hours old bounds and must not be earlier than the break\&#39;s start (422 OCCURRED_AT_OUT_OF_RANGE), and a call with no body records the server clock. Preconditions: the session must have an open break with no recorded end time. Required inputs: the work session id (UUID) as the path parameter; the body is optional. Authorization: the caller must be the session\&#39;s person, or hold people:timekeeping:approve; when that grant is location-scoped it must cover one of the person\&#39;s active assignment locations (403 FORBIDDEN otherwise, 403 LOCATION_SCOPE_DENIED when only the scope fails); emits a PEOPLE_WORK_SESSION_BREAK_STOP event; a replay writes and emits nothing. Returns 400 when the Idempotency-Key is missing or not a UUID, 409 when no open break exists for the session (including when the session id itself is unknown) or the key was already used, and 422 when occurredAt is out of range or before the break\&#39;s start.
      * @endpoint post /v1/people/workSessions/{id}/breaks/stop
      * @param id Work session ID
+     * @param idempotencyKey Required key that makes retries safe; a UUID (ADR-0075)
+     * @param workSessionBreakStopRequest Optional; carries the instant the break actually ended.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public stopWorkSessionBreak(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BreakDto>;
-    public stopWorkSessionBreak(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BreakDto>>;
-    public stopWorkSessionBreak(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BreakDto>>;
-    public stopWorkSessionBreak(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public stopWorkSessionBreak(id: string, idempotencyKey: string, workSessionBreakStopRequest?: WorkSessionBreakStopRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BreakDto>;
+    public stopWorkSessionBreak(id: string, idempotencyKey: string, workSessionBreakStopRequest?: WorkSessionBreakStopRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BreakDto>>;
+    public stopWorkSessionBreak(id: string, idempotencyKey: string, workSessionBreakStopRequest?: WorkSessionBreakStopRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BreakDto>>;
+    public stopWorkSessionBreak(id: string, idempotencyKey: string, workSessionBreakStopRequest?: WorkSessionBreakStopRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling stopWorkSessionBreak.');
         }
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling stopWorkSessionBreak.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
@@ -347,6 +394,15 @@ export class WorkSessionsAPIService extends BaseService {
 
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
@@ -364,6 +420,7 @@ export class WorkSessionsAPIService extends BaseService {
         return this.httpClient.request<BreakDto>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: workSessionBreakStopRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -376,26 +433,30 @@ export class WorkSessionsAPIService extends BaseService {
 
     /**
      * Submit An Ended Work Session
-     * Submits an ENDED work session for approval, recording billable and break minute totals and marking the session SUBMITTED. Use this tool after stopWorkSession has ended the session; do not use approveTimeEntriesBatch, which decides time entries, not work sessions. Preconditions: the session must exist and be in ENDED status; ACTIVE or already SUBMITTED sessions are rejected. Required inputs: the work session id (UUID) path parameter and a body with billableMinutes and breakMinutes (both zero or greater) and submittedAt (ISO-8601 instant). Authorization: the caller must be the session\&#39;s person, or hold people:timekeeping:approve; when that grant is location-scoped it must cover one of the person\&#39;s active assignment locations (403 FORBIDDEN otherwise, 403 LOCATION_SCOPE_DENIED when only the scope fails). Emits a PEOPLE_WORK_SESSION_SUBMIT event. Returns 404 when the session does not exist, and 409 when the session is not in ENDED status.
+     * Submits an ENDED work session for approval, computing its minutes on the server and marking the session SUBMITTED. Use this tool after stopWorkSession has ended the session; do not use approveTimeEntriesBatch, which decides time entries, not work sessions. Server-computed minutes (DECISION-PEOPLE-029 item 3): breakMinutes is the whole-minute sum of the session\&#39;s breaks (an open break counts up to the stop) and billableMinutes is the whole-minute start-to-stop duration less that break time, never below zero; fractions truncate, nothing else is rounded, and submittedAt is the server\&#39;s clock. Idempotency (ADR-0075): the Idempotency-Key header is required; repeating the call with the same key and body replays the stored answer with Idempotency-Replayed: true and creates no second time entry, and the same key with a different body or caller is 409 IDEMPOTENCY_CONFLICT. Preconditions: the session must exist and be in ENDED status; ACTIVE, already SUBMITTED and UNDONE sessions are rejected, so a retracted clock-in never becomes a time entry. Required inputs: the work session id (UUID) path parameter; the body is optional, so the app can send an empty submit right after its stop, and any billableMinutes, breakMinutes or submittedAt in it is ignored and never stored, so the technician\&#39;s phone cannot mis-send paid time. Authorization: the caller must be the session\&#39;s person, or hold people:timekeeping:approve; when that grant is location-scoped it must cover one of the person\&#39;s active assignment locations (403 FORBIDDEN otherwise, 403 LOCATION_SCOPE_DENIED when only the scope fails); emits a PEOPLE_WORK_SESSION_SUBMIT event; a replay writes and emits nothing. Returns 400 when the Idempotency-Key is missing or not a UUID, 404 when the session does not exist, and 409 when the session is not in ENDED status or the key was already used.
      * @endpoint post /v1/people/workSessions/{id}/submit
      * @param id Work session ID
-     * @param workSessionSubmitRequest Billable and break minute totals plus the submission timestamp for the ended session.
+     * @param idempotencyKey Required key that makes retries safe; a UUID (ADR-0075)
+     * @param workSessionSubmitRequest Optional and ignored: the server computes billableMinutes and breakMinutes from the session and stamps submittedAt with its own clock. The fields are kept, and deprecated, only so a deployed client that still sends them is accepted.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public submitWorkSession(id: string, workSessionSubmitRequest: WorkSessionSubmitRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkSessionDto>;
-    public submitWorkSession(id: string, workSessionSubmitRequest: WorkSessionSubmitRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkSessionDto>>;
-    public submitWorkSession(id: string, workSessionSubmitRequest: WorkSessionSubmitRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkSessionDto>>;
-    public submitWorkSession(id: string, workSessionSubmitRequest: WorkSessionSubmitRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public submitWorkSession(id: string, idempotencyKey: string, workSessionSubmitRequest?: WorkSessionSubmitRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkSessionDto>;
+    public submitWorkSession(id: string, idempotencyKey: string, workSessionSubmitRequest?: WorkSessionSubmitRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkSessionDto>>;
+    public submitWorkSession(id: string, idempotencyKey: string, workSessionSubmitRequest?: WorkSessionSubmitRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkSessionDto>>;
+    public submitWorkSession(id: string, idempotencyKey: string, workSessionSubmitRequest?: WorkSessionSubmitRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling submitWorkSession.');
         }
-        if (workSessionSubmitRequest === null || workSessionSubmitRequest === undefined) {
-            throw new Error('Required parameter workSessionSubmitRequest was null or undefined when calling submitWorkSession.');
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling submitWorkSession.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');

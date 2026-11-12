@@ -46,6 +46,10 @@ export interface TimeEntrySummary {
      */
     startAtUtc?: string;
     /**
+     * How the work session started: MANUAL, or FIRST_SIGN_IN for the app\'s automatic clock-in (DECISION-PEOPLE-028). Null for entries that did not come from a work session
+     */
+    startTrigger?: TimeEntrySummaryStartTriggerEnum;
+    /**
      * Approval status
      */
     status: TimeEntrySummaryStatusEnum;
@@ -66,6 +70,11 @@ export interface TimeEntrySummary {
      */
     workSessionId?: string;
 }
+export enum TimeEntrySummaryStartTriggerEnum {
+    Manual = 'MANUAL',
+    FirstSignIn = 'FIRST_SIGN_IN',
+    Undo = 'UNDO'
+};
 export enum TimeEntrySummaryStatusEnum {
     Draft = 'DRAFT',
     Submitted = 'SUBMITTED',
@@ -115,7 +124,7 @@ export function instanceOfTimeEntrySummary(value: object): value is TimeEntrySum
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTimeEntrySummaryPropertyNames('status', 'timeEntryId', );
-    const optionalStringProperties = createTimeEntrySummaryOptionalProperties({ name: 'decisionAtUtc', nullable: false }, { name: 'decisionByUserId', nullable: false }, { name: 'employeeId', nullable: false }, { name: 'endAtUtc', nullable: false }, { name: 'locationId', nullable: false }, { name: 'rejectionReason', nullable: false }, { name: 'startAtUtc', nullable: false }, { name: 'status', nullable: false }, { name: 'submittedAtUtc', nullable: false }, { name: 'timeEntryId', nullable: false }, { name: 'workDate', nullable: false }, { name: 'workSessionId', nullable: false }, );
+    const optionalStringProperties = createTimeEntrySummaryOptionalProperties({ name: 'decisionAtUtc', nullable: false }, { name: 'decisionByUserId', nullable: false }, { name: 'employeeId', nullable: false }, { name: 'endAtUtc', nullable: false }, { name: 'locationId', nullable: false }, { name: 'rejectionReason', nullable: false }, { name: 'startAtUtc', nullable: false }, { name: 'startTrigger', nullable: false }, { name: 'status', nullable: false }, { name: 'submittedAtUtc', nullable: false }, { name: 'timeEntryId', nullable: false }, { name: 'workDate', nullable: false }, { name: 'workSessionId', nullable: false }, );
     const optionalNumberProperties = createTimeEntrySummaryOptionalProperties({ name: 'breakMinutes', nullable: false }, );
     const optionalBooleanProperties = createTimeEntrySummaryOptionalProperties();
 

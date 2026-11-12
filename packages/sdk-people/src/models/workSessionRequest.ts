@@ -18,10 +18,25 @@ export interface WorkSessionRequest {
      */
     actor?: string;
     /**
+     * Instant the technician actually clocked in or out, as the app recorded it. Omitted means now (the server clock). No more than 2 minutes in the future and no more than 72 hours old; a value outside those bounds is 422 OCCURRED_AT_OUT_OF_RANGE.
+     */
+    occurredAt?: string;
+    /**
      * ID of the person
      */
     personId: string;
+    /**
+     * What triggered the action: MANUAL or FIRST_SIGN_IN when starting, MANUAL or UNDO when stopping. Omitted means MANUAL; a value that does not fit the call is 400 VALIDATION_ERROR.
+     */
+    trigger?: WorkSessionRequestTriggerEnum;
 }
+export enum WorkSessionRequestTriggerEnum {
+    Manual = 'MANUAL',
+    FirstSignIn = 'FIRST_SIGN_IN',
+    Undo = 'UNDO'
+};
+
+
 
 function isOptionalWorkSessionRequestPropertyOfType(
     value: Record<string, unknown>,
@@ -62,7 +77,7 @@ export function instanceOfWorkSessionRequest(value: object): value is WorkSessio
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkSessionRequestPropertyNames('personId', );
-    const optionalStringProperties = createWorkSessionRequestOptionalProperties({ name: 'actor', nullable: false }, { name: 'personId', nullable: false }, );
+    const optionalStringProperties = createWorkSessionRequestOptionalProperties({ name: 'actor', nullable: false }, { name: 'occurredAt', nullable: false }, { name: 'personId', nullable: false }, { name: 'trigger', nullable: false }, );
     const optionalNumberProperties = createWorkSessionRequestOptionalProperties();
     const optionalBooleanProperties = createWorkSessionRequestOptionalProperties();
 
