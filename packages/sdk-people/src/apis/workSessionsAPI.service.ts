@@ -27,6 +27,10 @@ import { WorkSessionBreakStopRequest } from '../models/workSessionBreakStopReque
 // @ts-ignore
 import { WorkSessionClockStateResponse } from '../models/workSessionClockStateResponse';
 // @ts-ignore
+import { WorkSessionCloseMissedRequest } from '../models/workSessionCloseMissedRequest';
+// @ts-ignore
+import { WorkSessionCloseMissedResponse } from '../models/workSessionCloseMissedResponse';
+// @ts-ignore
 import { WorkSessionDto } from '../models/workSessionDto';
 // @ts-ignore
 import { WorkSessionRequest } from '../models/workSessionRequest';
@@ -47,6 +51,87 @@ export class WorkSessionsAPIService extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
+    }
+
+    /**
+     * Close A Missed Clock-Out At The Instant The Technician Stopped
+     * Closes the caller\&#39;s own still-open work session at the end time they actually stopped, ends the attendance window there, and files the correction for a manager to approve. Use this tool when a technician forgot to clock out and the session is still open from an earlier day; do not use stopWorkSession, which records the server\&#39;s now as the end (a shift of a day or more) and needs no approval, and do not use createTimeEntryAdjustment, which corrects an existing time entry rather than creating one. What it does: the session ends at proposedEndAt, any open break is closed at the same instant, the session becomes SUBMITTED with server-computed breakMinutes (the whole-minute sum of its breaks, an open one counted up to proposedEndAt) and billableMinutes (the whole-minute startedAt..proposedEndAt duration less that break time, floored at 0), and two rows are filed: a PENDING_APPROVAL time entry whose attendance window is startedAt..proposedEndAt, and a PENDING time_entry_adjustment against it with reasonCode MISSED_CLOCK_OUT, the proposed window and the caller\&#39;s notes, so nothing reaches payroll until a manager decides on the entry. Preconditions: the session must exist, still be open (ACTIVE with no endedAt), have started before the start of the current local day, and belong to the caller, who must hold people:timeAdjustment:create (a manager is deliberately refused on this path, because the correction is the technician\&#39;s and the decision is the manager\&#39;s); the local day is the day of the optional timeZone in the body, and UTC when it is absent or blank. Required inputs: the work session id (UUID) as the path parameter and proposedEndAt (an instant) in the body; reasonCode, notes and timeZone are optional, and a supplied reasonCode must be MISSED_CLOCK_OUT. Emits a PEOPLE_WORK_SESSION_CLOSE_MISSED event; a replay writes and emits nothing, and the recorded actor is the authenticated username, never a request field. Idempotency (ADR-0075): the Idempotency-Key header is required; repeating the call with the same key and body returns the stored answer with Idempotency-Replayed: true and creates no second time entry or adjustment, and the same key with a different body or caller is 409 IDEMPOTENCY_CONFLICT. Returns 200 with the submitted session and the new timeEntryId and adjustmentId, 400 VALIDATION_ERROR when the Idempotency-Key is missing or not a UUID, proposedEndAt is missing, not after startedAt, in the future or before the open break\&#39;s start (fieldErrors names proposedEndAt), reasonCode is not MISSED_CLOCK_OUT, or timeZone is not a known zone id, 403 FORBIDDEN when the caller is not the session\&#39;s person, 404 WORK_SESSION_NOT_FOUND when no session has that id, and 409 RESOURCE_STATE_CONFLICT when the session started on the current local day or is not open (ENDED, SUBMITTED or UNDONE).
+     * @endpoint post /v1/people/workSessions/{id}/close-missed
+     * @param id Work session ID of the still-open session to close
+     * @param idempotencyKey Required key that makes retries safe; a UUID (ADR-0075)
+     * @param workSessionCloseMissedRequest The instant the technician actually stopped, plus the optional correction reason, notes and IANA time zone deciding the local day.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public closeMissedWorkSessionClockOut(id: string, idempotencyKey: string, workSessionCloseMissedRequest: WorkSessionCloseMissedRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkSessionCloseMissedResponse>;
+    public closeMissedWorkSessionClockOut(id: string, idempotencyKey: string, workSessionCloseMissedRequest: WorkSessionCloseMissedRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkSessionCloseMissedResponse>>;
+    public closeMissedWorkSessionClockOut(id: string, idempotencyKey: string, workSessionCloseMissedRequest: WorkSessionCloseMissedRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkSessionCloseMissedResponse>>;
+    public closeMissedWorkSessionClockOut(id: string, idempotencyKey: string, workSessionCloseMissedRequest: WorkSessionCloseMissedRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling closeMissedWorkSessionClockOut.');
+        }
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling closeMissedWorkSessionClockOut.');
+        }
+        if (workSessionCloseMissedRequest === null || workSessionCloseMissedRequest === undefined) {
+            throw new Error('Required parameter workSessionCloseMissedRequest was null or undefined when calling closeMissedWorkSessionClockOut.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/people/workSessions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/close-missed`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<WorkSessionCloseMissedResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: workSessionCloseMissedRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
     }
 
     /**
