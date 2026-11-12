@@ -34,10 +34,6 @@ export interface RecordCashPaymentRequest {
      */
     currencyCode: string;
     /**
-     * Client-provided idempotency key for safe retry (the register\'s tender key)
-     */
-    idempotencyKey: string;
-    /**
      * The register session (drawer) that holds the cash
      */
     sessionId?: string;
@@ -89,8 +85,8 @@ export function instanceOfRecordCashPaymentRequest(value: object): value is Reco
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRecordCashPaymentRequestPropertyNames('amount', 'cashRoundingAmount', 'currencyCode', 'idempotencyKey', 'settledAmount', );
-    const optionalStringProperties = createRecordCashPaymentRequestOptionalProperties({ name: 'cashierId', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'idempotencyKey', nullable: false }, { name: 'sessionId', nullable: false }, { name: 'terminalId', nullable: false }, );
+    const requiredProperties = createRecordCashPaymentRequestPropertyNames('amount', 'cashRoundingAmount', 'currencyCode', 'settledAmount', );
+    const optionalStringProperties = createRecordCashPaymentRequestOptionalProperties({ name: 'cashierId', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'sessionId', nullable: false }, { name: 'terminalId', nullable: false }, );
     const optionalNumberProperties = createRecordCashPaymentRequestOptionalProperties({ name: 'amount', nullable: false }, { name: 'cashIncrement', nullable: false }, { name: 'cashRoundingAmount', nullable: false }, { name: 'settledAmount', nullable: false }, );
     const optionalBooleanProperties = createRecordCashPaymentRequestOptionalProperties();
 
