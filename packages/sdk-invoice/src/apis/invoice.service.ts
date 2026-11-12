@@ -34,6 +34,10 @@ import { OrderInvoiceCreationRequest } from '../models/orderInvoiceCreationReque
 import { OrderInvoiceResponse } from '../models/orderInvoiceResponse';
 // @ts-ignore
 import { RevertRequest } from '../models/revertRequest';
+// @ts-ignore
+import { SendInvoiceRequest } from '../models/sendInvoiceRequest';
+// @ts-ignore
+import { SendInvoiceResponse } from '../models/sendInvoiceResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -587,6 +591,141 @@ export class InvoiceService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: revertRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Send Invoice to Customer by Text or Email
+     * Texts or emails an issued invoice to its customer as a short message with a link that opens the invoice without signing in. The recipient is the invoice\&#39;s billing party (for a commercial account, its primary billing contact), resolved by the platform sender: the request never names and the response never returns a phone number or an email address, except an SMS number masked to its last four digits for the confirmation. Use this tool when a technician or advisor wants a waiting or absent customer to get their invoice; do not use recordReceiptEmailDelivery, which only records a receipt email sent elsewhere. Preconditions: the invoice is issued (FINALIZED or POSTED); the caller holds invoice:invoice:send at the invoice\&#39;s location (ADR-0061); the invoice has a customer that is not the CASH walk-in account. Required inputs: invoiceId (path), channel (SMS or EMAIL) and the Idempotency-Key header (a UUID): a replay with the same key answers the original response with Idempotency-Replayed: true and never sends a second message. Emits an INVOICE_SENT event once per key and issues a customer link valid for 30 days by default. Returns 202 with status QUEUED, the masked number for SMS and when the link expires; 400 when the key is missing or not a UUID or channel is missing; 403 without invoice:invoice:send or outside the invoice\&#39;s location; 404 when the invoice does not exist; 409 INVALID_STATE for an invoice that is not issued (DRAFT, CANCELLED, ERROR), IDEMPOTENCY_CONFLICT for a key reused with a different request, or INVOICE_SEND_IN_FLIGHT with Retry-After while the same send is still in progress; 422 INVOICE_RECIPIENT_NO_MOBILE or INVOICE_RECIPIENT_NO_EMAIL when the customer has no number or email on file for the channel, INVOICE_RECIPIENT_UNDELIVERABLE when the one on file cannot receive it, INVOICE_RECIPIENT_UNKNOWN when there is no customer or contact person to send to, INVOICE_SEND_REFUSED when the provider refused the message (for example the number opted out of texts); 503 INVOICE_SEND_UNAVAILABLE when the message service could not be reached (with Retry-After; retry the same key) or INVOICE_SEND_NOT_CONFIGURED. A key that already succeeded replays its answer even if the invoice changed since (ADR-0075 §8).
+     * @endpoint post /v1/invoices/{invoiceId}/send
+     * @param invoiceId
+     * @param idempotencyKey The send\&#39;s idempotency key (a UUID): a replay answers the original response with Idempotency-Replayed: true and sends nothing; the same key with a different request answers 409 IDEMPOTENCY_CONFLICT
+     * @param sendInvoiceRequest The channel to send the invoice by.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public sendInvoice(invoiceId: string, idempotencyKey: string, sendInvoiceRequest: SendInvoiceRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SendInvoiceResponse>;
+    public sendInvoice(invoiceId: string, idempotencyKey: string, sendInvoiceRequest: SendInvoiceRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SendInvoiceResponse>>;
+    public sendInvoice(invoiceId: string, idempotencyKey: string, sendInvoiceRequest: SendInvoiceRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SendInvoiceResponse>>;
+    public sendInvoice(invoiceId: string, idempotencyKey: string, sendInvoiceRequest: SendInvoiceRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (invoiceId === null || invoiceId === undefined) {
+            throw new Error('Required parameter invoiceId was null or undefined when calling sendInvoice.');
+        }
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling sendInvoice.');
+        }
+        if (sendInvoiceRequest === null || sendInvoiceRequest === undefined) {
+            throw new Error('Required parameter sendInvoiceRequest was null or undefined when calling sendInvoice.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/invoices/${this.configuration.encodeParam({name: "invoiceId", value: invoiceId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/send`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<SendInvoiceResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: sendInvoiceRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Open an Invoice Through a Customer Link
+     * Renders the issued invoice a customer link points to as an inline PDF, without signing in. Use this tool only to follow a link sent by sendInvoice; do not use downloadInvoiceArtifact, which needs a short-lived download token minted by a signed-in user. Preconditions: the token was issued by sendInvoice, has not expired (30 days by default) or been revoked, and its invoice is still issued (FINALIZED or POSTED). Required inputs: token as a path parameter; there is no request body and no Authorization header. Emits an INVOICE_LINK_VIEW event; no state changes. Returns 200 with the PDF, 404 INVOICE_LINK_NOT_FOUND when the token is unknown or malformed, and 410 INVOICE_LINK_EXPIRED when the link expired, was revoked, or its invoice was cancelled.
+     * @endpoint get /v1/invoice-links/{token}
+     * @param token
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public viewInvoiceLink(token: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public viewInvoiceLink(token: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public viewInvoiceLink(token: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public viewInvoiceLink(token: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (token === null || token === undefined) {
+            throw new Error('Required parameter token was null or undefined when calling viewInvoiceLink.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/invoice-links/${this.configuration.encodeParam({name: "token", value: token, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

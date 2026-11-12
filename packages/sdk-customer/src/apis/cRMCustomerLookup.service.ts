@@ -22,6 +22,10 @@ import { ApiError } from '../models/apiError';
 import { CustomerSummaryResponse } from '../models/customerSummaryResponse';
 // @ts-ignore
 import { PartyLookupResult } from '../models/partyLookupResult';
+// @ts-ignore
+import { PartySummaryLookupRequest } from '../models/partySummaryLookupRequest';
+// @ts-ignore
+import { PartySummaryLookupResult } from '../models/partySummaryLookupResult';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -181,6 +185,76 @@ export class CRMCustomerLookupService extends BaseService {
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Find a Customer Without Reading a Contact
+     * Finds the customers a technician may see: the typed text matched against names and vehicle plates, or against a whole phone number or e-mail address, best match first. Use this tool instead of lookupParties whenever the caller may hold a customer\&#39;s name but not their phone number or e-mail address (DECISION-INVENTORY-017): the response carries the party id, the name, what matched, the last four phone digits and the vehicle count, and never a contact value. Preconditions: the caller needs crm:party_summary:search authority. A phone or e-mail matches exactly only, after the same normalisation the duplicate check uses, so a fragment of either finds nothing; names and plates match as lookupParties matches them (plate by prefix from three characters); merged-away, deactivated and house-account parties never appear. Required inputs: q as a JSON body field (at least 2 characters after trimming), and limit (default 8) clamped into 1 to 25. A POST, so a typed contact never lands in a URL; the response is marked Cache-Control: no-store. Emits a CRM_PARTY_SUMMARY_LOOKUP event; no state changes occur, and q is never logged. Returns 200 with an empty array when nothing matches, 400 VALIDATION_FAILED when q is missing or shorter than 2 characters once trimmed (a request-body Bean Validation failure, with the offending field in fieldErrors), and 403 when the caller lacks the authority.
+     * @endpoint post /v1/crm/parties/summary-lookup
+     * @param partySummaryLookupRequest The typed text, matched against names and plates or exactly against a whole phone number or e-mail address, and the result limit (default 8, clamped into 1 to 25). A POST so the typed contact never lands in a URL.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public summaryLookupParties(partySummaryLookupRequest: PartySummaryLookupRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<PartySummaryLookupResult>>;
+    public summaryLookupParties(partySummaryLookupRequest: PartySummaryLookupRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<PartySummaryLookupResult>>>;
+    public summaryLookupParties(partySummaryLookupRequest: PartySummaryLookupRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<PartySummaryLookupResult>>>;
+    public summaryLookupParties(partySummaryLookupRequest: PartySummaryLookupRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (partySummaryLookupRequest === null || partySummaryLookupRequest === undefined) {
+            throw new Error('Required parameter partySummaryLookupRequest was null or undefined when calling summaryLookupParties.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/crm/parties/summary-lookup`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<PartySummaryLookupResult>>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: partySummaryLookupRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
