@@ -64,10 +64,6 @@ export interface BankImportCreateRequest {
      */
     glAccountId: string;
     /**
-     * Caller-generated UUIDv7; a replay with the same payload returns the original import
-     */
-    requestId: string;
-    /**
      * SIGNED_AMOUNT (default, positive = cash in), SIGNED_AMOUNT_INVERTED or DEBIT_CREDIT_COLUMNS
      */
     signConvention?: string;
@@ -124,8 +120,8 @@ export function instanceOfBankImportCreateRequest(value: object): value is BankI
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createBankImportCreateRequestPropertyNames('formatCode', 'glAccountId', 'requestId', 'statement', );
-    const optionalStringProperties = createBankImportCreateRequestOptionalProperties({ name: 'content', nullable: false }, { name: 'contentType', nullable: false }, { name: 'currency', nullable: false }, { name: 'dateFormat', nullable: false }, { name: 'decimalFormat', nullable: false }, { name: 'delimiter', nullable: false }, { name: 'encoding', nullable: false }, { name: 'fileName', nullable: false }, { name: 'formatCode', nullable: false }, { name: 'gapAcknowledgement', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'requestId', nullable: false }, { name: 'signConvention', nullable: false }, { name: 'supersedesStatementId', nullable: false }, { name: 'supersessionJustification', nullable: false }, );
+    const requiredProperties = createBankImportCreateRequestPropertyNames('formatCode', 'glAccountId', 'statement', );
+    const optionalStringProperties = createBankImportCreateRequestOptionalProperties({ name: 'content', nullable: false }, { name: 'contentType', nullable: false }, { name: 'currency', nullable: false }, { name: 'dateFormat', nullable: false }, { name: 'decimalFormat', nullable: false }, { name: 'delimiter', nullable: false }, { name: 'encoding', nullable: false }, { name: 'fileName', nullable: false }, { name: 'formatCode', nullable: false }, { name: 'gapAcknowledgement', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'signConvention', nullable: false }, { name: 'supersedesStatementId', nullable: false }, { name: 'supersessionJustification', nullable: false }, );
     const optionalNumberProperties = createBankImportCreateRequestOptionalProperties();
     const optionalBooleanProperties = createBankImportCreateRequestOptionalProperties();
 
