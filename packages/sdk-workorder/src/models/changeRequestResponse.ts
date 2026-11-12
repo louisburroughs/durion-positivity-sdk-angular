@@ -35,6 +35,10 @@ export interface ChangeRequestResponse {
      */
     decidedBy?: string;
     /**
+     * Display name of who decided (First Last, name only). Null until decided, when the decider has no linked person, or when the person is not replicated
+     */
+    decidedByName?: string | null;
+    /**
      * The decision reached: APPROVED, DECLINED or APPROVED_WITH_EXCEPTION. Null while the request awaits review, and on a cancelled request
      */
     decision?: string;
@@ -139,7 +143,7 @@ export function instanceOfChangeRequestResponse(value: object): value is ChangeR
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createChangeRequestResponsePropertyNames();
-    const optionalStringProperties = createChangeRequestResponseOptionalProperties({ name: 'approvalNote', nullable: false }, { name: 'approvedAt', nullable: false }, { name: 'approvedBy', nullable: false }, { name: 'decidedAt', nullable: false }, { name: 'decidedBy', nullable: false }, { name: 'decision', nullable: false }, { name: 'declinedAt', nullable: false }, { name: 'declinedBy', nullable: false }, { name: 'description', nullable: false }, { name: 'exceptionReason', nullable: false }, { name: 'id', nullable: false }, { name: 'requestedAt', nullable: false }, { name: 'requestedByUserId', nullable: false }, { name: 'status', nullable: false }, { name: 'urgency', nullable: false }, { name: 'workorderId', nullable: false }, );
+    const optionalStringProperties = createChangeRequestResponseOptionalProperties({ name: 'approvalNote', nullable: false }, { name: 'approvedAt', nullable: false }, { name: 'approvedBy', nullable: false }, { name: 'decidedAt', nullable: false }, { name: 'decidedBy', nullable: false }, { name: 'decidedByName', nullable: true }, { name: 'decision', nullable: false }, { name: 'declinedAt', nullable: false }, { name: 'declinedBy', nullable: false }, { name: 'description', nullable: false }, { name: 'exceptionReason', nullable: false }, { name: 'id', nullable: false }, { name: 'requestedAt', nullable: false }, { name: 'requestedByUserId', nullable: false }, { name: 'status', nullable: false }, { name: 'urgency', nullable: false }, { name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createChangeRequestResponseOptionalProperties();
     const optionalBooleanProperties = createChangeRequestResponseOptionalProperties({ name: 'isApprovalGated', nullable: false }, { name: 'isEmergencyException', nullable: false }, );
 
