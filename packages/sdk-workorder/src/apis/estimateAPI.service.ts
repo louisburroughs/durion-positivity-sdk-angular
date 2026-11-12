@@ -35,9 +35,11 @@ import { EstimateSnapshotResponse } from '../models/estimateSnapshotResponse';
 // @ts-ignore
 import { EstimateSummaryResponse } from '../models/estimateSummaryResponse';
 // @ts-ignore
-import { UpdateEstimateItemRequest } from '../models/updateEstimateItemRequest';
+import { PromoteEstimateRequest } from '../models/promoteEstimateRequest';
 // @ts-ignore
-import { WorkorderResponse } from '../models/workorderResponse';
+import { PromoteEstimateResponse } from '../models/promoteEstimateResponse';
+// @ts-ignore
+import { UpdateEstimateItemRequest } from '../models/updateEstimateItemRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -1089,18 +1091,19 @@ export class EstimateAPIService extends BaseService {
 
     /**
      * Promote Approved Estimate to Workorder
-     * Promotes an APPROVED estimate into a new DRAFT workorder that inherits the estimate\&#39;s customer, location, and CRM references. Use this tool after approveEstimate succeeds; do not use createWorkorder, which builds a workorder from an estimate id without the promotion validations. Preconditions: the estimate must be APPROVED with a valid, unexpired approval, have approved items, and not already be promoted — a prior promotion is answered with the existing workorder instead of a duplicate. Required inputs: estimateId (UUID) as a path parameter; an Idempotency-Key header collapses retries onto the originally created workorder. Emits a WORKORDER_ESTIMATE_PROMOTE event. Returns 200 with the workorder (also on ALREADY_PROMOTED replays that can resolve the existing workorder), 404 when the estimate does not exist, 409 when a promotion precondition or the customer\&#39;s requirements verdict refuses it, 409 with code DOCUMENT_NUMBER_CONFLICT and a Retry-After header when a concurrent create took the workorder number, and 503 when the requirements verdict has not replicated yet. Those last two are the only answers worth retrying. Every non-2xx answer carries the ApiError envelope with a machine-readable code and the correlation id that also appears in the server log line.
+     * Promotes an APPROVED estimate into a new workorder that inherits the estimate\&#39;s customer, location, and CRM references: DRAFT and unassigned without a body, or, with a claim in the body, APPROVED on the customer\&#39;s estimate approval with the calling technician assigned and the workorder placed on the bay, mobile unit or HOLD the claim names, in one transaction. Use this tool after approveEstimate succeeds; do not use createWorkorder, which skips the promotion validations, and do not use it to claim a workorder that already exists, which is claimWorkorder. Preconditions: the estimate must be APPROVED with a valid, unexpired approval, have approved items, and not already be promoted (a prior promotion is answered with the existing workorder and no claim is attempted); a claim also requires workorder:workorder:claim with the estimate\&#39;s location within its reach (ADR-0061) and a login with a linked person, and its position and technician follow claimWorkorder\&#39;s rules. Required inputs: estimateId (UUID) as a path parameter; an optional body with a claim (resourceType BAY, MOBILE_UNIT or HOLD, resourceId for BAY and MOBILE_UNIT, optional slotStart and slotEnd); an optional Idempotency-Key header that collapses retries onto the first answer and covers the body. When the claimed slot is already taken the promotion still succeeds: the workorder is created APPROVED and unassigned, the answer carries claim.claimed false with claim.conflicts naming the holder, and it is placed afterwards with claimWorkorder, not by promoting again. Emits a WORKORDER_ESTIMATE_PROMOTE event, and a WORKORDER_CLAIM event when the claim placed the workorder; a replay emits none. Returns 200 with the workorder (and a claim object only when a claim was sent and this call created the workorder), 400 for an invalid claim, 403 FORBIDDEN, NO_LINKED_PERSON or LOCATION_SCOPE_DENIED when the caller may not claim, 404 when the estimate does not exist, 409 when a promotion precondition refuses it or the key was used for a different request, 422 when the claim\&#39;s technician or position is refused, and 503 when the requirements verdict, the technician or the position has not replicated yet; only 409 DOCUMENT_NUMBER_CONFLICT, 409 RESOURCE_OCCUPIED (the slot was lost to a concurrent request) and the 503s are worth retrying, and every refusal creates nothing. Every non-2xx answer carries the ApiError envelope with a machine-readable code and the correlation id that also appears in the server log line.
      * @endpoint post /v1/workorders/estimates/{estimateId}/promote
      * @param estimateId ID of the estimate to promote
      * @param idempotencyKey Optional idempotency key (a UUID) for safe retries
+     * @param promoteEstimateRequest Optional. Omit it, or omit claim, to create a DRAFT workorder.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public promoteEstimate(estimateId: string, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkorderResponse>;
-    public promoteEstimate(estimateId: string, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkorderResponse>>;
-    public promoteEstimate(estimateId: string, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkorderResponse>>;
-    public promoteEstimate(estimateId: string, idempotencyKey?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public promoteEstimate(estimateId: string, idempotencyKey?: string, promoteEstimateRequest?: PromoteEstimateRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PromoteEstimateResponse>;
+    public promoteEstimate(estimateId: string, idempotencyKey?: string, promoteEstimateRequest?: PromoteEstimateRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PromoteEstimateResponse>>;
+    public promoteEstimate(estimateId: string, idempotencyKey?: string, promoteEstimateRequest?: PromoteEstimateRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PromoteEstimateResponse>>;
+    public promoteEstimate(estimateId: string, idempotencyKey?: string, promoteEstimateRequest?: PromoteEstimateRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (estimateId === null || estimateId === undefined) {
             throw new Error('Required parameter estimateId was null or undefined when calling promoteEstimate.');
         }
@@ -1125,6 +1128,15 @@ export class EstimateAPIService extends BaseService {
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
 
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
@@ -1138,9 +1150,10 @@ export class EstimateAPIService extends BaseService {
 
         let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/promote`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<WorkorderResponse>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<PromoteEstimateResponse>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: promoteEstimateRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

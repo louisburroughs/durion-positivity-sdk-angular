@@ -27,10 +27,6 @@ export interface InvoiceCreationRequest {
      */
     estimateId?: string;
     /**
-     * Idempotency key to prevent duplicate invoice creation.
-     */
-    idempotencyKey?: string;
-    /**
      * Line items to include on the invoice.
      */
     lineItems?: Array<InvoiceLineItem>;
@@ -83,7 +79,7 @@ export function instanceOfInvoiceCreationRequest(value: object): value is Invoic
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createInvoiceCreationRequestPropertyNames();
-    const optionalStringProperties = createInvoiceCreationRequestOptionalProperties({ name: 'approvalId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'idempotencyKey', nullable: false }, { name: 'locationId', nullable: false }, { name: 'workorderId', nullable: false }, );
+    const optionalStringProperties = createInvoiceCreationRequestOptionalProperties({ name: 'approvalId', nullable: false }, { name: 'customerId', nullable: false }, { name: 'estimateId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createInvoiceCreationRequestOptionalProperties();
     const optionalBooleanProperties = createInvoiceCreationRequestOptionalProperties();
 
