@@ -275,9 +275,9 @@ export class EstimateAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createEstimate(createEstimateRequest: CreateEstimateRequest, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<EstimateResponse>;
-    public createEstimate(createEstimateRequest: CreateEstimateRequest, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EstimateResponse>>;
-    public createEstimate(createEstimateRequest: CreateEstimateRequest, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EstimateResponse>>;
+    public createEstimate(createEstimateRequest: CreateEstimateRequest, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
+    public createEstimate(createEstimateRequest: CreateEstimateRequest, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
+    public createEstimate(createEstimateRequest: CreateEstimateRequest, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
     public createEstimate(createEstimateRequest: CreateEstimateRequest, idempotencyKey?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (createEstimateRequest === null || createEstimateRequest === undefined) {
             throw new Error('Required parameter createEstimateRequest was null or undefined when calling createEstimate.');
@@ -325,7 +325,7 @@ export class EstimateAPIService extends BaseService {
 
         let localVarPath = `/v1/workorders/estimates`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<EstimateResponse>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<object>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: createEstimateRequest,
@@ -1025,9 +1025,9 @@ export class EstimateAPIService extends BaseService {
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public patchEstimateStatus(estimateId: string, body: object, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<EstimateResponse>;
-    public patchEstimateStatus(estimateId: string, body: object, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<EstimateResponse>>;
-    public patchEstimateStatus(estimateId: string, body: object, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<EstimateResponse>>;
+    public patchEstimateStatus(estimateId: string, body: object, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
+    public patchEstimateStatus(estimateId: string, body: object, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
+    public patchEstimateStatus(estimateId: string, body: object, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
     public patchEstimateStatus(estimateId: string, body: object, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (estimateId === null || estimateId === undefined) {
             throw new Error('Required parameter estimateId was null or undefined when calling patchEstimateStatus.');
@@ -1075,7 +1075,7 @@ export class EstimateAPIService extends BaseService {
 
         let localVarPath = `/v1/workorders/estimates/${this.configuration.encodeParam({name: "estimateId", value: estimateId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<EstimateResponse>('patch', `${basePath}${localVarPath}`,
+        return this.httpClient.request<object>('patch', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: body,

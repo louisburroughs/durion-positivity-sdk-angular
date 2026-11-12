@@ -1,6 +1,6 @@
 {
   "name": "@durion-sdk/marketing",
-  "version": "0.239.0-alpha",
+  "version": "0.240.0-alpha",
   "description": "OpenAPI client for @durion-sdk/marketing",
   "author": "OpenAPI-Generator Contributors",
   "repository": {
