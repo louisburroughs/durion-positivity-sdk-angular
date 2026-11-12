@@ -41,9 +41,17 @@ export interface WorkorderLaborEntryResponse {
     id: string;
     lastAdjustment?: WorkorderLaborAdjustmentResponse;
     /**
+     * Whether the stop crossed a closed day at the workorder location or ran past closing, so a service advisor must review it. The entry is recorded and billed as usual; the flag lets genuine overtime be restored (#3319).
+     */
+    needsReview?: boolean;
+    /**
      * Session notes
      */
     notes?: string;
+    /**
+     * The end the caller asked for when the location\'s calendar capped endTime at the closing time of the last open day (closed hours are not billed); null when nothing was capped (#3319).
+     */
+    originalEndTime?: string;
     /**
      * Server receipt instant, set only for an OFFLINE_REPLAY entry
      */
@@ -119,9 +127,9 @@ export function instanceOfWorkorderLaborEntryResponse(value: object): value is W
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkorderLaborEntryResponsePropertyNames('active', 'id', 'warnings', 'workorderId', );
-    const optionalStringProperties = createWorkorderLaborEntryResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'endTime', nullable: false }, { name: 'id', nullable: false }, { name: 'notes', nullable: false }, { name: 'receivedAt', nullable: false }, { name: 'source', nullable: false }, { name: 'startTime', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderServiceId', nullable: false }, );
+    const optionalStringProperties = createWorkorderLaborEntryResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'endTime', nullable: false }, { name: 'id', nullable: false }, { name: 'notes', nullable: false }, { name: 'originalEndTime', nullable: false }, { name: 'receivedAt', nullable: false }, { name: 'source', nullable: false }, { name: 'startTime', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderServiceId', nullable: false }, );
     const optionalNumberProperties = createWorkorderLaborEntryResponseOptionalProperties({ name: 'hoursWorked', nullable: false }, );
-    const optionalBooleanProperties = createWorkorderLaborEntryResponseOptionalProperties({ name: 'active', nullable: false }, );
+    const optionalBooleanProperties = createWorkorderLaborEntryResponseOptionalProperties({ name: 'active', nullable: false }, { name: 'needsReview', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalWorkorderLaborEntryResponsePropertyOfType(_v, property.name, 'string', property.nullable))

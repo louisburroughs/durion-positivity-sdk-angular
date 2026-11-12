@@ -30,6 +30,14 @@ export interface WorkexecTimerEntryResponse {
      */
     mechanicId?: string;
     /**
+     * Whether the stop crossed a closed day at the workorder location or ran past closing, so a service advisor must review it. The entry is recorded and billed as usual; the flag lets genuine overtime be restored (#3319).
+     */
+    needsReview?: boolean;
+    /**
+     * The end the caller asked for when the location\'s calendar capped endTime at the closing time of the last open day (closed hours are not billed); null when nothing was capped (#3319).
+     */
+    originalEndTime?: string;
+    /**
      * Server receipt instant, set only for an OFFLINE_REPLAY entry
      */
     receivedAt?: string;
@@ -104,9 +112,9 @@ export function instanceOfWorkexecTimerEntryResponse(value: object): value is Wo
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkexecTimerEntryResponsePropertyNames();
-    const optionalStringProperties = createWorkexecTimerEntryResponseOptionalProperties({ name: 'endTime', nullable: false }, { name: 'laborCode', nullable: false }, { name: 'mechanicId', nullable: false }, { name: 'receivedAt', nullable: false }, { name: 'source', nullable: false }, { name: 'startTime', nullable: false }, { name: 'status', nullable: false }, { name: 'timeEntryId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderItemId', nullable: false }, );
+    const optionalStringProperties = createWorkexecTimerEntryResponseOptionalProperties({ name: 'endTime', nullable: false }, { name: 'laborCode', nullable: false }, { name: 'mechanicId', nullable: false }, { name: 'originalEndTime', nullable: false }, { name: 'receivedAt', nullable: false }, { name: 'source', nullable: false }, { name: 'startTime', nullable: false }, { name: 'status', nullable: false }, { name: 'timeEntryId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderItemId', nullable: false }, );
     const optionalNumberProperties = createWorkexecTimerEntryResponseOptionalProperties({ name: 'durationInSeconds', nullable: false }, );
-    const optionalBooleanProperties = createWorkexecTimerEntryResponseOptionalProperties();
+    const optionalBooleanProperties = createWorkexecTimerEntryResponseOptionalProperties({ name: 'needsReview', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalWorkexecTimerEntryResponsePropertyOfType(_v, property.name, 'string', property.nullable))
