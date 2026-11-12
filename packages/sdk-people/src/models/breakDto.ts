@@ -18,6 +18,10 @@ export interface BreakDto {
      */
     endedAt?: string;
     /**
+     * Why the break was taken; present when the caller supplied one, and always for type OTHER
+     */
+    note?: string;
+    /**
      * Work session the break belongs to
      */
     sessionId: string;
@@ -25,7 +29,18 @@ export interface BreakDto {
      * Timestamp the break started
      */
     startedAt: string;
+    /**
+     * Kind of break: MEAL, REST or OTHER
+     */
+    type?: BreakDtoTypeEnum;
 }
+export enum BreakDtoTypeEnum {
+    Meal = 'MEAL',
+    Rest = 'REST',
+    Other = 'OTHER'
+};
+
+
 
 function isOptionalBreakDtoPropertyOfType(
     value: Record<string, unknown>,
@@ -66,7 +81,7 @@ export function instanceOfBreakDto(value: object): value is BreakDto {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBreakDtoPropertyNames('sessionId', 'startedAt', );
-    const optionalStringProperties = createBreakDtoOptionalProperties({ name: 'endedAt', nullable: false }, { name: 'sessionId', nullable: false }, { name: 'startedAt', nullable: false }, );
+    const optionalStringProperties = createBreakDtoOptionalProperties({ name: 'endedAt', nullable: false }, { name: 'note', nullable: false }, { name: 'sessionId', nullable: false }, { name: 'startedAt', nullable: false }, { name: 'type', nullable: false }, );
     const optionalNumberProperties = createBreakDtoOptionalProperties();
     const optionalBooleanProperties = createBreakDtoOptionalProperties();
 
