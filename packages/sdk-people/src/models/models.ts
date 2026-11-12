@@ -68,6 +68,8 @@ export * from './updateStaffingAssignmentRequest';
 export * from './workSessionBreakStartRequest';
 export * from './workSessionBreakStopRequest';
 export * from './workSessionClockStateResponse';
+export * from './workSessionCloseMissedRequest';
+export * from './workSessionCloseMissedResponse';
 export * from './workSessionDto';
 export * from './workSessionRequest';
 export * from './workSessionSubmitRequest';
