@@ -45,26 +45,33 @@ export class AccountingRegisterFloatService extends BaseService {
 
     /**
      * Change Register Float
-     * Sets a register\&#39;s change float to a new amount. The difference posts against the chosen bank account: an increase Dr 1080 Register Float / Cr bank, a decrease Dr bank / Cr 1080. A register with no float yet starts at zero, so a register added after go-live is funded from the bank. Use this tool when the shop decides a drawer should hold more or less change; do not use establishGoLiveRegisterFloat, which is once per register against opening balance equity, and do not use a drawer cash movement, which is not a float. Preconditions: caller holds accounting:float:manage; bankGlAccountId is an active BANK_CASH account in functional currency (422 FLOAT_BANK_ACCOUNT_NOT_ELIGIBLE); the new amount differs from the current one (422 FLOAT_AMOUNT_UNCHANGED); the effective date passes the period gate (a CLOSED period needs accounting:period:override and overrideJustification). Idempotent on requestId: a replay returns the first result with 200, another body with the same requestId is 409 IDEMPOTENCY_CONFLICT. Required inputs: registerId (path), locationId, amount (zero or more), currencyCode (ISO 4217, the functional currency: 422 CURRENCY_NOT_SUPPORTED otherwise), bankGlAccountId, justification (at least 10 characters), requestId; effectiveDate defaults to today in the tenant\&#39;s accounting time zone. Emits an ACCOUNTING_REGISTER_FLOAT_CHANGE event, queues accounting.float.changed, writes an audit row naming the caller, and returns 201 with the previous and new amount, their currencyCode, and the journal entry id and number.
+     * Sets a register\&#39;s change float to a new amount. The difference posts against the chosen bank account: an increase Dr 1080 Register Float / Cr bank, a decrease Dr bank / Cr 1080. A register with no float yet starts at zero, so a register added after go-live is funded from the bank. Use this tool when the shop decides a drawer should hold more or less change; do not use establishGoLiveRegisterFloat, which is once per register against opening balance equity, and do not use a drawer cash movement, which is not a float. Preconditions: caller holds accounting:float:manage; bankGlAccountId is an active BANK_CASH account in functional currency (422 FLOAT_BANK_ACCOUNT_NOT_ELIGIBLE); the new amount differs from the current one (422 FLOAT_AMOUNT_UNCHANGED); the effective date passes the period gate (a CLOSED period needs accounting:period:override and overrideJustification). Idempotent on the Idempotency-Key header: a replay returns the first result with 201 and Idempotency-Replayed: true, and another body with the same key is 409 IDEMPOTENCY_CONFLICT. Required inputs: registerId (path), locationId, amount (zero or more), currencyCode (ISO 4217, the functional currency: 422 CURRENCY_NOT_SUPPORTED otherwise), bankGlAccountId, justification (at least 10 characters) and the Idempotency-Key header; effectiveDate defaults to today in the tenant\&#39;s accounting time zone. Emits an ACCOUNTING_REGISTER_FLOAT_CHANGE event, queues accounting.float.changed, writes an audit row naming the caller, and returns 201 with the previous and new amount, their currencyCode, and the journal entry id and number.
      * @endpoint post /v1/accounting/registers/{registerId}/float
      * @param registerId The register: pos-order\&#39;s terminalId
+     * @param idempotencyKey The request\&#39;s idempotency key: a UUID generated once per intent. A replay answers the first result with Idempotency-Replayed: true; the same key with another request or by another caller is 409 IDEMPOTENCY_CONFLICT
      * @param registerFloatChangeRequest The new float, the bank account and why
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public changeRegisterFloat(registerId: string, registerFloatChangeRequest: RegisterFloatChangeRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RegisterFloatResponse>;
-    public changeRegisterFloat(registerId: string, registerFloatChangeRequest: RegisterFloatChangeRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RegisterFloatResponse>>;
-    public changeRegisterFloat(registerId: string, registerFloatChangeRequest: RegisterFloatChangeRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RegisterFloatResponse>>;
-    public changeRegisterFloat(registerId: string, registerFloatChangeRequest: RegisterFloatChangeRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public changeRegisterFloat(registerId: string, idempotencyKey: string, registerFloatChangeRequest: RegisterFloatChangeRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RegisterFloatResponse>;
+    public changeRegisterFloat(registerId: string, idempotencyKey: string, registerFloatChangeRequest: RegisterFloatChangeRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RegisterFloatResponse>>;
+    public changeRegisterFloat(registerId: string, idempotencyKey: string, registerFloatChangeRequest: RegisterFloatChangeRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RegisterFloatResponse>>;
+    public changeRegisterFloat(registerId: string, idempotencyKey: string, registerFloatChangeRequest: RegisterFloatChangeRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (registerId === null || registerId === undefined) {
             throw new Error('Required parameter registerId was null or undefined when calling changeRegisterFloat.');
+        }
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling changeRegisterFloat.');
         }
         if (registerFloatChangeRequest === null || registerFloatChangeRequest === undefined) {
             throw new Error('Required parameter registerFloatChangeRequest was null or undefined when calling changeRegisterFloat.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
@@ -119,26 +126,33 @@ export class AccountingRegisterFloatService extends BaseService {
 
     /**
      * Establish Go-Live Register Float
-     * Puts a register\&#39;s change float on the books at go-live: posts Dr 1080 Register Float / Cr 3900 Opening Balance Equity for the amount, dated the go-live date, the 1080 line carrying the register and its location. Use this tool once per register, when the shop starts using the system with cash already in the drawer; do not use changeRegisterFloat, which moves the difference to or from a bank account, and do not use createJournalEntry, which records no float. Preconditions: caller holds accounting:float:manage; the go-live date falls in an OPEN period, with no override path (422 PERIOD_CLOSED or PERIOD_HARD_LOCKED otherwise); the register has no standing go-live and no standing float change (409 FLOAT_ALREADY_ESTABLISHED; correct a mistake by reversing the entry and running go-live again; the reversal itself is final (409 FLOAT_REVERSAL_NOT_REVERSIBLE): never reverse it, run the go-live or change-float command again). Idempotent on requestId: a replay returns the first result with 200, another body with the same requestId is 409 IDEMPOTENCY_CONFLICT. Required inputs: registerId (path, pos-order\&#39;s terminalId), locationId, amount (more than zero), currencyCode (ISO 4217, the functional currency: 422 CURRENCY_NOT_SUPPORTED otherwise), goLiveDate, justification (at least 10 characters), requestId. Emits an ACCOUNTING_REGISTER_FLOAT_GO_LIVE event, queues accounting.float.changed, writes an audit row naming the caller, and returns 201 with the previous and new amount, their currencyCode, and the journal entry id and number.
+     * Puts a register\&#39;s change float on the books at go-live: posts Dr 1080 Register Float / Cr 3900 Opening Balance Equity for the amount, dated the go-live date, the 1080 line carrying the register and its location. Use this tool once per register, when the shop starts using the system with cash already in the drawer; do not use changeRegisterFloat, which moves the difference to or from a bank account, and do not use createJournalEntry, which records no float. Preconditions: caller holds accounting:float:manage; the go-live date falls in an OPEN period, with no override path (422 PERIOD_CLOSED or PERIOD_HARD_LOCKED otherwise); the register has no standing go-live and no standing float change (409 FLOAT_ALREADY_ESTABLISHED; correct a mistake by reversing the entry and running go-live again; the reversal itself is final (409 FLOAT_REVERSAL_NOT_REVERSIBLE): never reverse it, run the go-live or change-float command again). Idempotent on the Idempotency-Key header: a replay returns the first result with 201 and Idempotency-Replayed: true, and another body with the same key is 409 IDEMPOTENCY_CONFLICT. Required inputs: registerId (path, pos-order\&#39;s terminalId), locationId, amount (more than zero), currencyCode (ISO 4217, the functional currency: 422 CURRENCY_NOT_SUPPORTED otherwise), goLiveDate, justification (at least 10 characters) and the Idempotency-Key header. Emits an ACCOUNTING_REGISTER_FLOAT_GO_LIVE event, queues accounting.float.changed, writes an audit row naming the caller, and returns 201 with the previous and new amount, their currencyCode, and the journal entry id and number.
      * @endpoint post /v1/accounting/registers/{registerId}/float/go-live
      * @param registerId The register: pos-order\&#39;s terminalId
+     * @param idempotencyKey The request\&#39;s idempotency key: a UUID generated once per intent. A replay answers the first result with Idempotency-Replayed: true; the same key with another request or by another caller is 409 IDEMPOTENCY_CONFLICT
      * @param registerFloatGoLiveRequest The go-live float and why
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public establishGoLiveRegisterFloat(registerId: string, registerFloatGoLiveRequest: RegisterFloatGoLiveRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RegisterFloatResponse>;
-    public establishGoLiveRegisterFloat(registerId: string, registerFloatGoLiveRequest: RegisterFloatGoLiveRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RegisterFloatResponse>>;
-    public establishGoLiveRegisterFloat(registerId: string, registerFloatGoLiveRequest: RegisterFloatGoLiveRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RegisterFloatResponse>>;
-    public establishGoLiveRegisterFloat(registerId: string, registerFloatGoLiveRequest: RegisterFloatGoLiveRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public establishGoLiveRegisterFloat(registerId: string, idempotencyKey: string, registerFloatGoLiveRequest: RegisterFloatGoLiveRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RegisterFloatResponse>;
+    public establishGoLiveRegisterFloat(registerId: string, idempotencyKey: string, registerFloatGoLiveRequest: RegisterFloatGoLiveRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RegisterFloatResponse>>;
+    public establishGoLiveRegisterFloat(registerId: string, idempotencyKey: string, registerFloatGoLiveRequest: RegisterFloatGoLiveRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RegisterFloatResponse>>;
+    public establishGoLiveRegisterFloat(registerId: string, idempotencyKey: string, registerFloatGoLiveRequest: RegisterFloatGoLiveRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (registerId === null || registerId === undefined) {
             throw new Error('Required parameter registerId was null or undefined when calling establishGoLiveRegisterFloat.');
+        }
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling establishGoLiveRegisterFloat.');
         }
         if (registerFloatGoLiveRequest === null || registerFloatGoLiveRequest === undefined) {
             throw new Error('Required parameter registerFloatGoLiveRequest was null or undefined when calling establishGoLiveRegisterFloat.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
@@ -193,26 +207,33 @@ export class AccountingRegisterFloatService extends BaseService {
 
     /**
      * Move a Register and Its Float to Another Location
-     * Moves a register and its change float from fromLocationId to toLocationId, posting Dr 1080 Register Float at the destination / Cr 1080 at the origin for the current float on the effective date. The float is unchanged, there is no bank or 3900 line, and a zero float moves without an entry (journalEntryId null), which fixes a go-live made under a mistyped location. Use this tool for a register set up under the wrong location (ENTERED_IN_ERROR) or a drawer that moved (MOVED); do not use changeRegisterFloat, which changes the amount, and never reverse the relocation entry (409 FLOAT_RELOCATION_NOT_REVERSIBLE): move again instead. Preconditions: the caller holds accounting:float:manage with both locations in scope (403 LOCATION_SCOPE_DENIED), and the float is held at fromLocationId (404 FLOAT_REGISTER_NOT_FOUND, 422 FLOAT_REGISTER_LOCATION_MISMATCH) and moves elsewhere (422 FLOAT_RELOCATION_SAME_LOCATION). The register has no open pos-order session (422 FLOAT_REGISTER_SESSION_OPEN, referenceId names it) and its float is not negative (422 FLOAT_AMOUNT_NEGATIVE). The effective date is not after today nor before the register\&#39;s latest float entry (422 FLOAT_RELOCATION_DATE_INVALID), and passes the period gate (a CLOSED period needs accounting:period:override and overrideJustification). Required inputs: registerId (path), fromLocationId, toLocationId, reason, justification (10 or more characters) and requestId, on which the command is idempotent (a replay returns the first result with 200, another body is 409 IDEMPOTENCY_CONFLICT); effectiveDate defaults to today in the accounting time zone. Emits ACCOUNTING_REGISTER_FLOAT_RELOCATE, queues accounting.float.changed with kind RELOCATION, writes an audit row naming both locations and the reason, and returns 201.
+     * Moves a register and its change float from fromLocationId to toLocationId, posting Dr 1080 Register Float at the destination / Cr 1080 at the origin for the current float on the effective date. The float is unchanged, there is no bank or 3900 line, and a zero float moves without an entry (journalEntryId null), which fixes a go-live made under a mistyped location. Use this tool for a register set up under the wrong location (ENTERED_IN_ERROR) or a drawer that moved (MOVED); do not use changeRegisterFloat, which changes the amount, and never reverse the relocation entry (409 FLOAT_RELOCATION_NOT_REVERSIBLE): move again instead. Preconditions: the caller holds accounting:float:manage with both locations in scope (403 LOCATION_SCOPE_DENIED), and the float is held at fromLocationId (404 FLOAT_REGISTER_NOT_FOUND, 422 FLOAT_REGISTER_LOCATION_MISMATCH) and moves elsewhere (422 FLOAT_RELOCATION_SAME_LOCATION). The register has no open pos-order session (422 FLOAT_REGISTER_SESSION_OPEN, referenceId names it) and its float is not negative (422 FLOAT_AMOUNT_NEGATIVE). The effective date is not after today nor before the register\&#39;s latest float entry (422 FLOAT_RELOCATION_DATE_INVALID), and passes the period gate (a CLOSED period needs accounting:period:override and overrideJustification). Required inputs: registerId (path), fromLocationId, toLocationId, reason, justification (10 or more characters) and the Idempotency-Key header, on which the command is idempotent (a replay returns the first result with 201 and Idempotency-Replayed: true, another body is 409 IDEMPOTENCY_CONFLICT); effectiveDate defaults to today in the accounting time zone. Emits ACCOUNTING_REGISTER_FLOAT_RELOCATE, queues accounting.float.changed with kind RELOCATION, writes an audit row naming both locations and the reason, and returns 201.
      * @endpoint post /v1/accounting/registers/{registerId}/float/relocation
      * @param registerId The register: pos-order\&#39;s terminalId
+     * @param idempotencyKey The request\&#39;s idempotency key: a UUID generated once per intent. A replay answers the first result with Idempotency-Replayed: true; the same key with another request or by another caller is 409 IDEMPOTENCY_CONFLICT
      * @param registerFloatRelocationRequest Where the register moves from and to, and why
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public relocateRegisterFloat(registerId: string, registerFloatRelocationRequest: RegisterFloatRelocationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RegisterFloatResponse>;
-    public relocateRegisterFloat(registerId: string, registerFloatRelocationRequest: RegisterFloatRelocationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RegisterFloatResponse>>;
-    public relocateRegisterFloat(registerId: string, registerFloatRelocationRequest: RegisterFloatRelocationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RegisterFloatResponse>>;
-    public relocateRegisterFloat(registerId: string, registerFloatRelocationRequest: RegisterFloatRelocationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public relocateRegisterFloat(registerId: string, idempotencyKey: string, registerFloatRelocationRequest: RegisterFloatRelocationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RegisterFloatResponse>;
+    public relocateRegisterFloat(registerId: string, idempotencyKey: string, registerFloatRelocationRequest: RegisterFloatRelocationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RegisterFloatResponse>>;
+    public relocateRegisterFloat(registerId: string, idempotencyKey: string, registerFloatRelocationRequest: RegisterFloatRelocationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RegisterFloatResponse>>;
+    public relocateRegisterFloat(registerId: string, idempotencyKey: string, registerFloatRelocationRequest: RegisterFloatRelocationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (registerId === null || registerId === undefined) {
             throw new Error('Required parameter registerId was null or undefined when calling relocateRegisterFloat.');
+        }
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling relocateRegisterFloat.');
         }
         if (registerFloatRelocationRequest === null || registerFloatRelocationRequest === undefined) {
             throw new Error('Required parameter registerFloatRelocationRequest was null or undefined when calling relocateRegisterFloat.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');

@@ -22,10 +22,6 @@ export interface AgedThresholdsRequest {
      */
     justification: string;
     /**
-     * Client-generated UUID that makes the PUT idempotent: a replay with the same body writes nothing, a reuse with another body is refused 409
-     */
-    requestId: string;
-    /**
      * Calendar days an undeposited register session waits before it is aged, from its business date; 1 to 30, default 3
      */
     undepositedCashAgedDays: number;
@@ -73,8 +69,8 @@ export function instanceOfAgedThresholdsRequest(value: object): value is AgedThr
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createAgedThresholdsRequestPropertyNames('deliveriesNotBilledDays', 'justification', 'requestId', 'undepositedCashAgedDays', 'vendorCodUnappliedAgedDays', );
-    const optionalStringProperties = createAgedThresholdsRequestOptionalProperties({ name: 'justification', nullable: false }, { name: 'requestId', nullable: false }, );
+    const requiredProperties = createAgedThresholdsRequestPropertyNames('deliveriesNotBilledDays', 'justification', 'undepositedCashAgedDays', 'vendorCodUnappliedAgedDays', );
+    const optionalStringProperties = createAgedThresholdsRequestOptionalProperties({ name: 'justification', nullable: false }, );
     const optionalNumberProperties = createAgedThresholdsRequestOptionalProperties({ name: 'deliveriesNotBilledDays', nullable: false }, { name: 'undepositedCashAgedDays', nullable: false }, { name: 'vendorCodUnappliedAgedDays', nullable: false }, );
     const optionalBooleanProperties = createAgedThresholdsRequestOptionalProperties();
 

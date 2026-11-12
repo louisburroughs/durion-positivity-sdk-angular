@@ -34,10 +34,6 @@ export interface PettyExpenseCategoryResponse {
     label?: string;
     laterAccount?: PettyExpenseCategoryAccount;
     /**
-     * True when this answers a replayed requestId
-     */
-    replayed?: boolean;
-    /**
      * ACTIVE or INACTIVE (terminal)
      */
     status?: PettyExpenseCategoryResponseStatusEnum;
@@ -94,7 +90,7 @@ export function instanceOfPettyExpenseCategoryResponse(value: object): value is 
     const requiredProperties = createPettyExpenseCategoryResponsePropertyNames();
     const optionalStringProperties = createPettyExpenseCategoryResponseOptionalProperties({ name: 'code', nullable: false }, { name: 'examples', nullable: false }, { name: 'label', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createPettyExpenseCategoryResponseOptionalProperties({ name: 'version', nullable: false }, );
-    const optionalBooleanProperties = createPettyExpenseCategoryResponseOptionalProperties({ name: 'replayed', nullable: false }, );
+    const optionalBooleanProperties = createPettyExpenseCategoryResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalPettyExpenseCategoryResponsePropertyOfType(_v, property.name, 'string', property.nullable))

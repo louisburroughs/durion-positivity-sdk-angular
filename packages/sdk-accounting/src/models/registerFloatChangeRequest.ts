@@ -41,10 +41,6 @@ export interface RegisterFloatChangeRequest {
      * Why the change posts into a closed period; honoured only with accounting:period:override
      */
     overrideJustification?: string;
-    /**
-     * Caller-generated UUIDv7 naming this request; a replay returns the first result
-     */
-    requestId: string;
 }
 
 function isOptionalRegisterFloatChangeRequestPropertyOfType(
@@ -85,8 +81,8 @@ export function instanceOfRegisterFloatChangeRequest(value: object): value is Re
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRegisterFloatChangeRequestPropertyNames('amount', 'bankGlAccountId', 'currencyCode', 'justification', 'locationId', 'requestId', );
-    const optionalStringProperties = createRegisterFloatChangeRequestOptionalProperties({ name: 'bankGlAccountId', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'effectiveDate', nullable: false }, { name: 'justification', nullable: false }, { name: 'locationId', nullable: false }, { name: 'overrideJustification', nullable: false }, { name: 'requestId', nullable: false }, );
+    const requiredProperties = createRegisterFloatChangeRequestPropertyNames('amount', 'bankGlAccountId', 'currencyCode', 'justification', 'locationId', );
+    const optionalStringProperties = createRegisterFloatChangeRequestOptionalProperties({ name: 'bankGlAccountId', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'effectiveDate', nullable: false }, { name: 'justification', nullable: false }, { name: 'locationId', nullable: false }, { name: 'overrideJustification', nullable: false }, );
     const optionalNumberProperties = createRegisterFloatChangeRequestOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createRegisterFloatChangeRequestOptionalProperties();
 

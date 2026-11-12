@@ -10,7 +10,7 @@
 
 
 /**
- * The AP approval policy settings to change, with the justification and the request id
+ * The AP approval policy settings to change, with the justification; the request\'s key travels in the Idempotency-Key header
  */
 export interface ApApprovalPolicyRequest {
     /**
@@ -41,10 +41,6 @@ export interface ApApprovalPolicyRequest {
      * Why the policy changes; at least 10 characters (400 JUSTIFICATION_REQUIRED otherwise), recorded on every AP_APPROVAL_POLICY_SET audit row
      */
     justification: string;
-    /**
-     * Generated once per user intent by the client (§8.2): a replay with a request id already recorded writes nothing and returns the current policy
-     */
-    requestId: string;
 }
 
 function isOptionalApApprovalPolicyRequestPropertyOfType(
@@ -85,8 +81,8 @@ export function instanceOfApApprovalPolicyRequest(value: object): value is ApApp
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createApApprovalPolicyRequestPropertyNames('justification', 'requestId', );
-    const optionalStringProperties = createApApprovalPolicyRequestOptionalProperties({ name: 'currencyCode', nullable: false }, { name: 'defaultTerms', nullable: false }, { name: 'justification', nullable: false }, { name: 'requestId', nullable: false }, );
+    const requiredProperties = createApApprovalPolicyRequestPropertyNames('justification', );
+    const optionalStringProperties = createApApprovalPolicyRequestOptionalProperties({ name: 'currencyCode', nullable: false }, { name: 'defaultTerms', nullable: false }, { name: 'justification', nullable: false }, );
     const optionalNumberProperties = createApApprovalPolicyRequestOptionalProperties({ name: 'autoApprovalLimit', nullable: false }, { name: 'clerkApprovalLimit', nullable: false }, );
     const optionalBooleanProperties = createApApprovalPolicyRequestOptionalProperties({ name: 'allowApproverPayment', nullable: false }, { name: 'allowCreatorApproval', nullable: false }, );
 

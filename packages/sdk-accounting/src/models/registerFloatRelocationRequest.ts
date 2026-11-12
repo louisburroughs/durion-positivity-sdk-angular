@@ -34,10 +34,6 @@ export interface RegisterFloatRelocationRequest {
      */
     reason: RegisterFloatRelocationRequestReasonEnum;
     /**
-     * Caller-generated UUIDv7 naming this request; a replay returns the first result
-     */
-    requestId: string;
-    /**
      * The location the register moves to; differs from fromLocationId
      */
     toLocationId: string;
@@ -87,8 +83,8 @@ export function instanceOfRegisterFloatRelocationRequest(value: object): value i
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRegisterFloatRelocationRequestPropertyNames('fromLocationId', 'justification', 'reason', 'requestId', 'toLocationId', );
-    const optionalStringProperties = createRegisterFloatRelocationRequestOptionalProperties({ name: 'effectiveDate', nullable: false }, { name: 'fromLocationId', nullable: false }, { name: 'justification', nullable: false }, { name: 'overrideJustification', nullable: false }, { name: 'reason', nullable: false }, { name: 'requestId', nullable: false }, { name: 'toLocationId', nullable: false }, );
+    const requiredProperties = createRegisterFloatRelocationRequestPropertyNames('fromLocationId', 'justification', 'reason', 'toLocationId', );
+    const optionalStringProperties = createRegisterFloatRelocationRequestOptionalProperties({ name: 'effectiveDate', nullable: false }, { name: 'fromLocationId', nullable: false }, { name: 'justification', nullable: false }, { name: 'overrideJustification', nullable: false }, { name: 'reason', nullable: false }, { name: 'toLocationId', nullable: false }, );
     const optionalNumberProperties = createRegisterFloatRelocationRequestOptionalProperties();
     const optionalBooleanProperties = createRegisterFloatRelocationRequestOptionalProperties();
 

@@ -26,10 +26,6 @@ export interface PettyExpenseCategoryUpdateRequest {
      */
     label: string;
     /**
-     * Caller-generated UUIDv7 naming this request; a replay returns the first result
-     */
-    requestId: string;
-    /**
      * The category version the caller read; another version is 409 VERSION_CONFLICT
      */
     version?: number;
@@ -73,8 +69,8 @@ export function instanceOfPettyExpenseCategoryUpdateRequest(value: object): valu
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPettyExpenseCategoryUpdateRequestPropertyNames('justification', 'label', 'requestId', );
-    const optionalStringProperties = createPettyExpenseCategoryUpdateRequestOptionalProperties({ name: 'examples', nullable: false }, { name: 'justification', nullable: false }, { name: 'label', nullable: false }, { name: 'requestId', nullable: false }, );
+    const requiredProperties = createPettyExpenseCategoryUpdateRequestPropertyNames('justification', 'label', );
+    const optionalStringProperties = createPettyExpenseCategoryUpdateRequestOptionalProperties({ name: 'examples', nullable: false }, { name: 'justification', nullable: false }, { name: 'label', nullable: false }, );
     const optionalNumberProperties = createPettyExpenseCategoryUpdateRequestOptionalProperties({ name: 'version', nullable: false }, );
     const optionalBooleanProperties = createPettyExpenseCategoryUpdateRequestOptionalProperties();
 

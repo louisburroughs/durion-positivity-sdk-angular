@@ -47,26 +47,33 @@ export class AccountingTaxRegistrationsService extends BaseService {
 
     /**
      * Change Tax Registration
-     * Changes a tax registration\&#39;s number or dates in pos-tax\&#39;s registry, or ends it by setting effectiveTo; the country and regime never change, and a registration is never deleted. Use this tool to correct or end a registration; do not use it to register another regime, which is recordTaxRegistration instead. Preconditions: caller holds accounting:tax_registration:manage and is a person (403 otherwise); the registration exists (404, relayed); version is the current one (409 OPTIMISTIC_LOCK, relayed). Required inputs: registrationId (path), registrationNumber, effectiveFrom, version, justification (at least 10 characters) and requestId; effectiveTo is optional and inclusive. The number must match the regime\&#39;s configured shape (400 VALIDATION_ERROR with fieldErrors[registrationNumber]); back-dating never changes an entry already posted. Emits an ACCOUNTING_TAX_REGISTRATION_UPDATE event and returns 200, also for a replayed requestId; pos-tax\&#39;s 409 TAX_REGISTRATION_OVERLAP and IDEMPOTENCY_CONFLICT are relayed unchanged. Returns 503 SERVICE_UNAVAILABLE with Retry-After when pos-tax cannot be reached, and nothing changes.
+     * Changes a tax registration\&#39;s number or dates in pos-tax\&#39;s registry, or ends it by setting effectiveTo; the country and regime never change, and a registration is never deleted. Use this tool to correct or end a registration; do not use it to register another regime, which is recordTaxRegistration instead. Preconditions: caller holds accounting:tax_registration:manage and is a person (403 otherwise); the registration exists (404, relayed); version is the current one (409 OPTIMISTIC_LOCK, relayed). Required inputs: registrationId (path), registrationNumber, effectiveFrom, version, justification (at least 10 characters) and the Idempotency-Key header; effectiveTo is optional and inclusive. The number must match the regime\&#39;s configured shape (400 VALIDATION_ERROR with fieldErrors[registrationNumber]); back-dating never changes an entry already posted. Emits an ACCOUNTING_TAX_REGISTRATION_UPDATE event and returns 200, also for a replay (with Idempotency-Replayed: true); pos-tax\&#39;s 409 TAX_REGISTRATION_OVERLAP and IDEMPOTENCY_CONFLICT are relayed unchanged. Returns 503 SERVICE_UNAVAILABLE with Retry-After when pos-tax cannot be reached, and nothing changes.
      * @endpoint put /v1/accounting/tax-registrations/{registrationId}
      * @param registrationId Registration id
+     * @param idempotencyKey The request\&#39;s idempotency key: a UUID generated once per intent. A replay answers the first result with Idempotency-Replayed: true and does not call pos-tax again; the same key with another request or by another caller is 409 IDEMPOTENCY_CONFLICT
      * @param changeTaxRegistrationRequest The registration\&#39;s new number or dates, the version read, and why
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public changeTaxRegistration(registrationId: string, changeTaxRegistrationRequest: ChangeTaxRegistrationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxRegistrationView>;
-    public changeTaxRegistration(registrationId: string, changeTaxRegistrationRequest: ChangeTaxRegistrationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxRegistrationView>>;
-    public changeTaxRegistration(registrationId: string, changeTaxRegistrationRequest: ChangeTaxRegistrationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxRegistrationView>>;
-    public changeTaxRegistration(registrationId: string, changeTaxRegistrationRequest: ChangeTaxRegistrationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public changeTaxRegistration(registrationId: string, idempotencyKey: string, changeTaxRegistrationRequest: ChangeTaxRegistrationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxRegistrationView>;
+    public changeTaxRegistration(registrationId: string, idempotencyKey: string, changeTaxRegistrationRequest: ChangeTaxRegistrationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxRegistrationView>>;
+    public changeTaxRegistration(registrationId: string, idempotencyKey: string, changeTaxRegistrationRequest: ChangeTaxRegistrationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxRegistrationView>>;
+    public changeTaxRegistration(registrationId: string, idempotencyKey: string, changeTaxRegistrationRequest: ChangeTaxRegistrationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (registrationId === null || registrationId === undefined) {
             throw new Error('Required parameter registrationId was null or undefined when calling changeTaxRegistration.');
+        }
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling changeTaxRegistration.');
         }
         if (changeTaxRegistrationRequest === null || changeTaxRegistrationRequest === undefined) {
             throw new Error('Required parameter changeTaxRegistrationRequest was null or undefined when calling changeTaxRegistration.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
@@ -259,22 +266,29 @@ export class AccountingTaxRegistrationsService extends BaseService {
 
     /**
      * Record Tax Registration
-     * Records that the company is registered for one country\&#39;s indirect-tax regime from a date, in pos-tax\&#39;s registry, through this front door. Use this tool when the company registers for a regime; do not use it to end or correct an existing registration, which is changeTaxRegistration instead. Preconditions: caller holds accounting:tax_registration:manage and is a person (403 otherwise); the country has a tax profile that declares the regime (422 relayed). Required inputs: countryCode, regime, registrationNumber, effectiveFrom, justification (at least 10 characters) and requestId; effectiveTo is optional and inclusive. The number must match the regime\&#39;s configured shape: otherwise 400 VALIDATION_ERROR with fieldErrors[registrationNumber], nothing is stored, and the value is never echoed or logged. Emits an ACCOUNTING_TAX_REGISTRATION_CREATE event and returns 201, or 200 with the first result for a replayed requestId; pos-tax\&#39;s 409 TAX_REGISTRATION_OVERLAP and IDEMPOTENCY_CONFLICT are relayed unchanged. Returns 503 SERVICE_UNAVAILABLE with Retry-After when pos-tax cannot be reached, and nothing is stored.
+     * Records that the company is registered for one country\&#39;s indirect-tax regime from a date, in pos-tax\&#39;s registry, through this front door. Use this tool when the company registers for a regime; do not use it to end or correct an existing registration, which is changeTaxRegistration instead. Preconditions: caller holds accounting:tax_registration:manage and is a person (403 otherwise); the country has a tax profile that declares the regime (422 relayed). Required inputs: countryCode, regime, registrationNumber, effectiveFrom, justification (at least 10 characters) and the Idempotency-Key header; effectiveTo is optional and inclusive. The number must match the regime\&#39;s configured shape: otherwise 400 VALIDATION_ERROR with fieldErrors[registrationNumber], nothing is stored, and the value is never echoed or logged. Emits an ACCOUNTING_TAX_REGISTRATION_CREATE event and returns 201, or the original status with the first result and Idempotency-Replayed: true for a replayed Idempotency-Key; pos-tax\&#39;s 409 TAX_REGISTRATION_OVERLAP and IDEMPOTENCY_CONFLICT are relayed unchanged. Returns 503 SERVICE_UNAVAILABLE with Retry-After when pos-tax cannot be reached, and nothing is stored.
      * @endpoint post /v1/accounting/tax-registrations
+     * @param idempotencyKey The request\&#39;s idempotency key: a UUID generated once per intent. A replay answers the first result with Idempotency-Replayed: true and does not call pos-tax again; the same key with another request or by another caller is 409 IDEMPOTENCY_CONFLICT
      * @param recordTaxRegistrationRequest The country\&#39;s regime, the number as printed, its dates and why
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public recordTaxRegistration(recordTaxRegistrationRequest: RecordTaxRegistrationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxRegistrationView>;
-    public recordTaxRegistration(recordTaxRegistrationRequest: RecordTaxRegistrationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxRegistrationView>>;
-    public recordTaxRegistration(recordTaxRegistrationRequest: RecordTaxRegistrationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxRegistrationView>>;
-    public recordTaxRegistration(recordTaxRegistrationRequest: RecordTaxRegistrationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public recordTaxRegistration(idempotencyKey: string, recordTaxRegistrationRequest: RecordTaxRegistrationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxRegistrationView>;
+    public recordTaxRegistration(idempotencyKey: string, recordTaxRegistrationRequest: RecordTaxRegistrationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxRegistrationView>>;
+    public recordTaxRegistration(idempotencyKey: string, recordTaxRegistrationRequest: RecordTaxRegistrationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxRegistrationView>>;
+    public recordTaxRegistration(idempotencyKey: string, recordTaxRegistrationRequest: RecordTaxRegistrationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling recordTaxRegistration.');
+        }
         if (recordTaxRegistrationRequest === null || recordTaxRegistrationRequest === undefined) {
             throw new Error('Required parameter recordTaxRegistrationRequest was null or undefined when calling recordTaxRegistration.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');

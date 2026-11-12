@@ -17,10 +17,6 @@ export interface EnableTemplateAddOnRequest {
      * Why the tenant needs the add-on (at least 10 characters); kept in the audit log
      */
     justification: string;
-    /**
-     * Caller-generated UUIDv7 naming this request; a replay changes nothing and returns the current state
-     */
-    requestId: string;
 }
 
 function isOptionalEnableTemplateAddOnRequestPropertyOfType(
@@ -61,8 +57,8 @@ export function instanceOfEnableTemplateAddOnRequest(value: object): value is En
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createEnableTemplateAddOnRequestPropertyNames('justification', 'requestId', );
-    const optionalStringProperties = createEnableTemplateAddOnRequestOptionalProperties({ name: 'justification', nullable: false }, { name: 'requestId', nullable: false }, );
+    const requiredProperties = createEnableTemplateAddOnRequestPropertyNames('justification', );
+    const optionalStringProperties = createEnableTemplateAddOnRequestOptionalProperties({ name: 'justification', nullable: false }, );
     const optionalNumberProperties = createEnableTemplateAddOnRequestOptionalProperties();
     const optionalBooleanProperties = createEnableTemplateAddOnRequestOptionalProperties();
 

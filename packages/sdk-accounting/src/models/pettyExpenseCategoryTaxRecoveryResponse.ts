@@ -26,10 +26,6 @@ export interface PettyExpenseCategoryTaxRecoveryResponse {
      */
     recoverablePercent?: number | null;
     /**
-     * True when this answers a replayed requestId
-     */
-    replayed: boolean;
-    /**
      * Whether the tax stated on its receipts is recovered
      */
     taxRecoverable: boolean;
@@ -77,10 +73,10 @@ export function instanceOfPettyExpenseCategoryTaxRecoveryResponse(value: object)
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPettyExpenseCategoryTaxRecoveryResponsePropertyNames('code', 'effectiveFrom', 'replayed', 'taxRecoverable', 'version', );
+    const requiredProperties = createPettyExpenseCategoryTaxRecoveryResponsePropertyNames('code', 'effectiveFrom', 'taxRecoverable', 'version', );
     const optionalStringProperties = createPettyExpenseCategoryTaxRecoveryResponseOptionalProperties({ name: 'code', nullable: false }, { name: 'effectiveFrom', nullable: false }, );
     const optionalNumberProperties = createPettyExpenseCategoryTaxRecoveryResponseOptionalProperties({ name: 'recoverablePercent', nullable: true }, { name: 'version', nullable: false }, );
-    const optionalBooleanProperties = createPettyExpenseCategoryTaxRecoveryResponseOptionalProperties({ name: 'replayed', nullable: false }, { name: 'taxRecoverable', nullable: false }, );
+    const optionalBooleanProperties = createPettyExpenseCategoryTaxRecoveryResponseOptionalProperties({ name: 'taxRecoverable', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalPettyExpenseCategoryTaxRecoveryResponsePropertyOfType(_v, property.name, 'string', property.nullable))

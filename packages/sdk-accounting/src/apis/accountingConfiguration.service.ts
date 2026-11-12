@@ -231,22 +231,29 @@ export class AccountingConfigurationService extends BaseService {
 
     /**
      * Set Aged Thresholds
-     * Replaces the tenant\&#39;s three aged-item thresholds, in calendar days on the accounting date: undepositedCashAgedDays (1 to 30), vendorCodUnappliedAgedDays (1 to 90) and deliveriesNotBilledDays (7 to 120). Use this tool when Finance changes how long undeposited register cash, an unapplied vendor cash-on-delivery payment or a delivery with no approved bill may wait before it is flagged; use getAgedThresholds instead to read them, and do not use it to act on an aged item. Preconditions: the caller holds accounting:period:hard_lock. Required inputs: all three day counts, a justification of at least 10 characters, and requestId, a UUID generated once per change. Emits an ACCOUNTING_CONFIGURATION_AGED_THRESHOLDS_SET event and writes one audit row per threshold whose value changes (old and new value, justification, requestId); an unchanged threshold writes nothing, and a replayed requestId changes nothing. Returns 400 VALIDATION_ERROR for a missing field or a value outside its range, 400 JUSTIFICATION_REQUIRED for a justification of 1 to 9 characters, and 409 for a requestId already used with another body.
+     * Replaces the tenant\&#39;s three aged-item thresholds, in calendar days on the accounting date: undepositedCashAgedDays (1 to 30), vendorCodUnappliedAgedDays (1 to 90) and deliveriesNotBilledDays (7 to 120). Use this tool when Finance changes how long undeposited register cash, an unapplied vendor cash-on-delivery payment or a delivery with no approved bill may wait before it is flagged; use getAgedThresholds instead to read them, and do not use it to act on an aged item. Preconditions: the caller holds accounting:period:hard_lock. Required inputs: all three day counts, a justification of at least 10 characters, and the Idempotency-Key header, a UUID generated once per change. Emits an ACCOUNTING_CONFIGURATION_AGED_THRESHOLDS_SET event and writes one audit row per threshold whose value changes (old and new value, justification); an unchanged threshold writes nothing, and a replay of the same Idempotency-Key returns the first answer. Returns 400 VALIDATION_ERROR for a missing field or a value outside its range, 400 JUSTIFICATION_REQUIRED for a justification of 1 to 9 characters, and 409 IDEMPOTENCY_CONFLICT for a key already used with another request.
      * @endpoint put /v1/accounting/configuration/aged-thresholds
-     * @param agedThresholdsRequest The three thresholds with the audit justification and the request id.
+     * @param idempotencyKey The request\&#39;s idempotency key: a UUID generated once per intent. A replay answers the first result with Idempotency-Replayed: true; the same key with another request or by another caller is 409 IDEMPOTENCY_CONFLICT
+     * @param agedThresholdsRequest The three thresholds with the audit justification; the request\&#39;s key travels in the Idempotency-Key header.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public setAgedThresholds(agedThresholdsRequest: AgedThresholdsRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AgedThresholdsResponse>;
-    public setAgedThresholds(agedThresholdsRequest: AgedThresholdsRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AgedThresholdsResponse>>;
-    public setAgedThresholds(agedThresholdsRequest: AgedThresholdsRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AgedThresholdsResponse>>;
-    public setAgedThresholds(agedThresholdsRequest: AgedThresholdsRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public setAgedThresholds(idempotencyKey: string, agedThresholdsRequest: AgedThresholdsRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<AgedThresholdsResponse>;
+    public setAgedThresholds(idempotencyKey: string, agedThresholdsRequest: AgedThresholdsRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<AgedThresholdsResponse>>;
+    public setAgedThresholds(idempotencyKey: string, agedThresholdsRequest: AgedThresholdsRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<AgedThresholdsResponse>>;
+    public setAgedThresholds(idempotencyKey: string, agedThresholdsRequest: AgedThresholdsRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling setAgedThresholds.');
+        }
         if (agedThresholdsRequest === null || agedThresholdsRequest === undefined) {
             throw new Error('Required parameter agedThresholdsRequest was null or undefined when calling setAgedThresholds.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
@@ -301,22 +308,29 @@ export class AccountingConfigurationService extends BaseService {
 
     /**
      * Set Cash Safety Cushion
-     * Sets or clears the tenant\&#39;s cash safety cushion: the amount, in the functional currency, below which the 30-day cash outlook warns that the lowest projected balance falls short. It is only a threshold: it is never posted, never reserved and never taken off the cash shown, and it refuses nothing. Use this tool when Finance sets, raises, lowers or removes the cushion; use getCashSafetyCushion instead to read it, and do not use it to move money. Preconditions: the caller holds accounting:period:hard_lock, and currencyCode is the tenant\&#39;s functional currency. Required inputs: amount (not negative, at the currency\&#39;s minor-unit precision, 0 allowed; null clears the cushion), currencyCode (ISO 4217), a justification of at least 10 characters, and requestId, a UUID generated once per change. Emits an ACCOUNTING_CONFIGURATION_CASH_SAFETY_CUSHION_SET event and audits the old and new amount with the justification and requestId; setting the current value again, or replaying a requestId, changes nothing. Returns 400 VALIDATION_ERROR for a missing field, an unknown currency code, a negative amount or too many decimal places, 400 JUSTIFICATION_REQUIRED for a justification of 1 to 9 characters, 409 for a requestId already used with another body, and 422 CURRENCY_NOT_SUPPORTED for a currency other than the functional one.
+     * Sets or clears the tenant\&#39;s cash safety cushion: the amount, in the functional currency, below which the 30-day cash outlook warns that the lowest projected balance falls short. It is only a threshold: it is never posted, never reserved and never taken off the cash shown, and it refuses nothing. Use this tool when Finance sets, raises, lowers or removes the cushion; use getCashSafetyCushion instead to read it, and do not use it to move money. Preconditions: the caller holds accounting:period:hard_lock, and currencyCode is the tenant\&#39;s functional currency. Required inputs: amount (not negative, at the currency\&#39;s minor-unit precision, 0 allowed; null clears the cushion), currencyCode (ISO 4217), a justification of at least 10 characters, and the Idempotency-Key header, a UUID generated once per change. Emits an ACCOUNTING_CONFIGURATION_CASH_SAFETY_CUSHION_SET event and audits the old and new amount with the justification; setting the current value again changes nothing, and a replay of the same Idempotency-Key returns the first answer with Idempotency-Replayed: true. Returns 400 VALIDATION_ERROR for a missing field, an unknown currency code, a negative amount or too many decimal places, 400 JUSTIFICATION_REQUIRED for a justification of 1 to 9 characters, 409 IDEMPOTENCY_CONFLICT for a key already used with another request, and 422 CURRENCY_NOT_SUPPORTED for a currency other than the functional one.
      * @endpoint put /v1/accounting/configuration/cash-safety-cushion
-     * @param cashSafetyCushionRequest The cushion with its currency, the audit justification and the request id.
+     * @param idempotencyKey The request\&#39;s idempotency key: a UUID generated once per intent. A replay answers the first result with Idempotency-Replayed: true; the same key with another request or by another caller is 409 IDEMPOTENCY_CONFLICT
+     * @param cashSafetyCushionRequest The cushion with its currency and the audit justification; the request\&#39;s key travels in the Idempotency-Key header.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public setCashSafetyCushion(cashSafetyCushionRequest: CashSafetyCushionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CashSafetyCushionResponse>;
-    public setCashSafetyCushion(cashSafetyCushionRequest: CashSafetyCushionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CashSafetyCushionResponse>>;
-    public setCashSafetyCushion(cashSafetyCushionRequest: CashSafetyCushionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CashSafetyCushionResponse>>;
-    public setCashSafetyCushion(cashSafetyCushionRequest: CashSafetyCushionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public setCashSafetyCushion(idempotencyKey: string, cashSafetyCushionRequest: CashSafetyCushionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CashSafetyCushionResponse>;
+    public setCashSafetyCushion(idempotencyKey: string, cashSafetyCushionRequest: CashSafetyCushionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CashSafetyCushionResponse>>;
+    public setCashSafetyCushion(idempotencyKey: string, cashSafetyCushionRequest: CashSafetyCushionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CashSafetyCushionResponse>>;
+    public setCashSafetyCushion(idempotencyKey: string, cashSafetyCushionRequest: CashSafetyCushionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling setCashSafetyCushion.');
+        }
         if (cashSafetyCushionRequest === null || cashSafetyCushionRequest === undefined) {
             throw new Error('Required parameter cashSafetyCushionRequest was null or undefined when calling setCashSafetyCushion.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');

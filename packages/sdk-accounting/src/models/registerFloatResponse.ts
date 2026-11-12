@@ -49,10 +49,6 @@ export interface RegisterFloatResponse {
      * The register (pos-order\'s terminalId)
      */
     registerId: string;
-    /**
-     * True when this answers a replayed requestId with the first result
-     */
-    replayed?: boolean;
 }
 export enum RegisterFloatResponseKindEnum {
     GoLive = 'GO_LIVE',
@@ -104,7 +100,7 @@ export function instanceOfRegisterFloatResponse(value: object): value is Registe
     const requiredProperties = createRegisterFloatResponsePropertyNames('amount', 'currencyCode', 'effectiveDate', 'kind', 'locationId', 'previousAmount', 'registerId', );
     const optionalStringProperties = createRegisterFloatResponseOptionalProperties({ name: 'currencyCode', nullable: false }, { name: 'effectiveDate', nullable: false }, { name: 'journalEntryId', nullable: true }, { name: 'journalEntryNumber', nullable: false }, { name: 'kind', nullable: false }, { name: 'locationId', nullable: false }, { name: 'registerId', nullable: false }, );
     const optionalNumberProperties = createRegisterFloatResponseOptionalProperties({ name: 'amount', nullable: false }, { name: 'previousAmount', nullable: false }, );
-    const optionalBooleanProperties = createRegisterFloatResponseOptionalProperties({ name: 'replayed', nullable: false }, );
+    const optionalBooleanProperties = createRegisterFloatResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalRegisterFloatResponsePropertyOfType(_v, property.name, 'string', property.nullable))

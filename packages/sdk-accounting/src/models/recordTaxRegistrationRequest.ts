@@ -37,10 +37,6 @@ export interface RecordTaxRegistrationRequest {
      * The number as printed; spaces and hyphens are ignored. It must match the regime\'s configured shape, and is never echoed in an error
      */
     registrationNumber: string;
-    /**
-     * Caller-generated UUIDv7 naming this request; a replay returns the first result
-     */
-    requestId: string;
 }
 
 function isOptionalRecordTaxRegistrationRequestPropertyOfType(
@@ -81,8 +77,8 @@ export function instanceOfRecordTaxRegistrationRequest(value: object): value is 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRecordTaxRegistrationRequestPropertyNames('countryCode', 'effectiveFrom', 'justification', 'regime', 'registrationNumber', 'requestId', );
-    const optionalStringProperties = createRecordTaxRegistrationRequestOptionalProperties({ name: 'countryCode', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, { name: 'justification', nullable: false }, { name: 'regime', nullable: false }, { name: 'registrationNumber', nullable: false }, { name: 'requestId', nullable: false }, );
+    const requiredProperties = createRecordTaxRegistrationRequestPropertyNames('countryCode', 'effectiveFrom', 'justification', 'regime', 'registrationNumber', );
+    const optionalStringProperties = createRecordTaxRegistrationRequestOptionalProperties({ name: 'countryCode', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, { name: 'justification', nullable: false }, { name: 'regime', nullable: false }, { name: 'registrationNumber', nullable: false }, );
     const optionalNumberProperties = createRecordTaxRegistrationRequestOptionalProperties();
     const optionalBooleanProperties = createRecordTaxRegistrationRequestOptionalProperties();
 

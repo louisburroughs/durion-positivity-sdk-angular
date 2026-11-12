@@ -25,10 +25,6 @@ export interface CashSafetyCushionRequest {
      * Why the cushion changes; 10 to 1000 characters; recorded on the audit row
      */
     justification: string;
-    /**
-     * Client-generated UUID that makes the PUT idempotent: a replay with the same body writes nothing, a reuse with another body is refused 409
-     */
-    requestId: string;
 }
 
 function isOptionalCashSafetyCushionRequestPropertyOfType(
@@ -69,8 +65,8 @@ export function instanceOfCashSafetyCushionRequest(value: object): value is Cash
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCashSafetyCushionRequestPropertyNames('amount', 'currencyCode', 'justification', 'requestId', );
-    const optionalStringProperties = createCashSafetyCushionRequestOptionalProperties({ name: 'currencyCode', nullable: false }, { name: 'justification', nullable: false }, { name: 'requestId', nullable: false }, );
+    const requiredProperties = createCashSafetyCushionRequestPropertyNames('amount', 'currencyCode', 'justification', );
+    const optionalStringProperties = createCashSafetyCushionRequestOptionalProperties({ name: 'currencyCode', nullable: false }, { name: 'justification', nullable: false }, );
     const optionalNumberProperties = createCashSafetyCushionRequestOptionalProperties({ name: 'amount', nullable: true }, );
     const optionalBooleanProperties = createCashSafetyCushionRequestOptionalProperties();
 

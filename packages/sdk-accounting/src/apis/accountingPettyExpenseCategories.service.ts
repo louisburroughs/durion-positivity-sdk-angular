@@ -53,22 +53,29 @@ export class AccountingPettyExpenseCategoriesService extends BaseService {
 
     /**
      * Create Petty-Expense Category
-     * Adds a petty-expense category: its REGISTER_CASH_MOVEMENT mapping key PETTY_EXPENSE_&lt;code&gt; and a GL mapping to the chosen expense account, effective today in the tenant\&#39;s accounting time zone. Use this tool when cashiers need a new category of drawer spending; do not use createMappingKey or createGLMapping, which refuse petty-expense keys (422 PETTY_EXPENSE_CATEGORY_MANAGED). Preconditions: caller holds accounting:mapping-key:create and accounting:gl-mapping:create; the code is new (409 PETTY_EXPENSE_CATEGORY_EXISTS) and is not OTHER (422 PETTY_EXPENSE_CATEGORY_NOT_ALLOWED: there is no \&quot;Other\&quot;); glAccountId is an active EXPENSE account (422 PETTY_EXPENSE_ACCOUNT_NOT_ELIGIBLE). Required inputs: code (permanent, [A-Z0-9_]{1,40}), label, glAccountId, justification (at least 10 characters) and requestId (a replay returns the first result with 200; the same requestId with another body is 409 IDEMPOTENCY_CONFLICT); examples is optional. Emits an ACCOUNTING_PETTY_EXPENSE_CATEGORY_CREATE event, writes a history row naming the caller, queues accounting.petty-expense-category.changed, and returns 201 with the category, each history row\&#39;s actorName resolved now (absent when not known, a replayed requestId included).
+     * Adds a petty-expense category: its REGISTER_CASH_MOVEMENT mapping key PETTY_EXPENSE_&lt;code&gt; and a GL mapping to the chosen expense account, effective today in the tenant\&#39;s accounting time zone. Use this tool when cashiers need a new category of drawer spending; do not use createMappingKey or createGLMapping, which refuse petty-expense keys (422 PETTY_EXPENSE_CATEGORY_MANAGED). Preconditions: caller holds accounting:mapping-key:create and accounting:gl-mapping:create; the code is new (409 PETTY_EXPENSE_CATEGORY_EXISTS) and is not OTHER (422 PETTY_EXPENSE_CATEGORY_NOT_ALLOWED: there is no \&quot;Other\&quot;); glAccountId is an active EXPENSE account (422 PETTY_EXPENSE_ACCOUNT_NOT_ELIGIBLE). Required inputs: code (permanent, [A-Z0-9_]{1,40}), label, glAccountId, justification (at least 10 characters) and the Idempotency-Key header (a replay returns the first result with Idempotency-Replayed: true; the same key with another request or caller is 409 IDEMPOTENCY_CONFLICT); examples is optional. Emits an ACCOUNTING_PETTY_EXPENSE_CATEGORY_CREATE event, writes a history row naming the caller, queues accounting.petty-expense-category.changed, and returns 201 with the category, each history row\&#39;s actorName resolved now (absent when not known, a replay included).
      * @endpoint post /v1/accounting/petty-expense-categories
+     * @param idempotencyKey The request\&#39;s idempotency key: a UUID generated once per intent. A replay answers the first result with Idempotency-Replayed: true; the same key with another request or by another caller is 409 IDEMPOTENCY_CONFLICT
      * @param pettyExpenseCategoryCreateRequest The new category\&#39;s code, label, account and why
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createPettyExpenseCategory(pettyExpenseCategoryCreateRequest: PettyExpenseCategoryCreateRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PettyExpenseCategoryResponse>;
-    public createPettyExpenseCategory(pettyExpenseCategoryCreateRequest: PettyExpenseCategoryCreateRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PettyExpenseCategoryResponse>>;
-    public createPettyExpenseCategory(pettyExpenseCategoryCreateRequest: PettyExpenseCategoryCreateRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PettyExpenseCategoryResponse>>;
-    public createPettyExpenseCategory(pettyExpenseCategoryCreateRequest: PettyExpenseCategoryCreateRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createPettyExpenseCategory(idempotencyKey: string, pettyExpenseCategoryCreateRequest: PettyExpenseCategoryCreateRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PettyExpenseCategoryResponse>;
+    public createPettyExpenseCategory(idempotencyKey: string, pettyExpenseCategoryCreateRequest: PettyExpenseCategoryCreateRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PettyExpenseCategoryResponse>>;
+    public createPettyExpenseCategory(idempotencyKey: string, pettyExpenseCategoryCreateRequest: PettyExpenseCategoryCreateRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PettyExpenseCategoryResponse>>;
+    public createPettyExpenseCategory(idempotencyKey: string, pettyExpenseCategoryCreateRequest: PettyExpenseCategoryCreateRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling createPettyExpenseCategory.');
+        }
         if (pettyExpenseCategoryCreateRequest === null || pettyExpenseCategoryCreateRequest === undefined) {
             throw new Error('Required parameter pettyExpenseCategoryCreateRequest was null or undefined when calling createPettyExpenseCategory.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
@@ -123,26 +130,33 @@ export class AccountingPettyExpenseCategoriesService extends BaseService {
 
     /**
      * Deactivate Petty-Expense Category
-     * Deactivates a petty-expense category so cashiers can no longer pick it. Its mapping is kept, so movements recorded before deactivation still post at close (never retroactive). There is no delete and no reactivation. Use this tool to retire a category; do not use deactivateMappingKey, which refuses petty-expense keys (422 PETTY_EXPENSE_CATEGORY_MANAGED). Preconditions: caller holds accounting:mapping-key:deactivate; the category exists (404) and is active (409 PETTY_EXPENSE_CATEGORY_INACTIVE). Required inputs: code (path), justification (at least 10 characters) and requestId (a replay returns the first result with 200; the same requestId with another body is 409 IDEMPOTENCY_CONFLICT). Emits an ACCOUNTING_PETTY_EXPENSE_CATEGORY_DEACTIVATE event, writes a history row naming the caller, queues accounting.petty-expense-category.changed, and returns 200 with the category, each history row\&#39;s actorName resolved now (absent when not known, a replayed requestId included).
+     * Deactivates a petty-expense category so cashiers can no longer pick it. Its mapping is kept, so movements recorded before deactivation still post at close (never retroactive). There is no delete and no reactivation. Use this tool to retire a category; do not use deactivateMappingKey, which refuses petty-expense keys (422 PETTY_EXPENSE_CATEGORY_MANAGED). Preconditions: caller holds accounting:mapping-key:deactivate; the category exists (404) and is active (409 PETTY_EXPENSE_CATEGORY_INACTIVE). Required inputs: code (path), justification (at least 10 characters) and the Idempotency-Key header (a replay returns the first result with Idempotency-Replayed: true; the same key with another request or caller is 409 IDEMPOTENCY_CONFLICT). Emits an ACCOUNTING_PETTY_EXPENSE_CATEGORY_DEACTIVATE event, writes a history row naming the caller, queues accounting.petty-expense-category.changed, and returns 200 with the category, each history row\&#39;s actorName resolved now (absent when not known, a replay included).
      * @endpoint post /v1/accounting/petty-expense-categories/{code}/deactivate
      * @param code Permanent category code
+     * @param idempotencyKey The request\&#39;s idempotency key: a UUID generated once per intent. A replay answers the first result with Idempotency-Replayed: true; the same key with another request or by another caller is 409 IDEMPOTENCY_CONFLICT
      * @param pettyExpenseCategoryDeactivateRequest Why the category is retired
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public deactivatePettyExpenseCategory(code: string, pettyExpenseCategoryDeactivateRequest: PettyExpenseCategoryDeactivateRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PettyExpenseCategoryResponse>;
-    public deactivatePettyExpenseCategory(code: string, pettyExpenseCategoryDeactivateRequest: PettyExpenseCategoryDeactivateRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PettyExpenseCategoryResponse>>;
-    public deactivatePettyExpenseCategory(code: string, pettyExpenseCategoryDeactivateRequest: PettyExpenseCategoryDeactivateRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PettyExpenseCategoryResponse>>;
-    public deactivatePettyExpenseCategory(code: string, pettyExpenseCategoryDeactivateRequest: PettyExpenseCategoryDeactivateRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deactivatePettyExpenseCategory(code: string, idempotencyKey: string, pettyExpenseCategoryDeactivateRequest: PettyExpenseCategoryDeactivateRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PettyExpenseCategoryResponse>;
+    public deactivatePettyExpenseCategory(code: string, idempotencyKey: string, pettyExpenseCategoryDeactivateRequest: PettyExpenseCategoryDeactivateRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PettyExpenseCategoryResponse>>;
+    public deactivatePettyExpenseCategory(code: string, idempotencyKey: string, pettyExpenseCategoryDeactivateRequest: PettyExpenseCategoryDeactivateRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PettyExpenseCategoryResponse>>;
+    public deactivatePettyExpenseCategory(code: string, idempotencyKey: string, pettyExpenseCategoryDeactivateRequest: PettyExpenseCategoryDeactivateRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling deactivatePettyExpenseCategory.');
+        }
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling deactivatePettyExpenseCategory.');
         }
         if (pettyExpenseCategoryDeactivateRequest === null || pettyExpenseCategoryDeactivateRequest === undefined) {
             throw new Error('Required parameter pettyExpenseCategoryDeactivateRequest was null or undefined when calling deactivatePettyExpenseCategory.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
@@ -253,26 +267,33 @@ export class AccountingPettyExpenseCategoriesService extends BaseService {
 
     /**
      * Change Petty-Expense Category Account
-     * Moves a petty-expense category to another expense account from a date: the current mapping ends the day before effectiveFrom and the new one starts on it, so a posting dated earlier still reaches the old account. Use this tool when a category should post somewhere else from now on; do not use createGLMapping, which cannot bind a mapping to a category and key. Preconditions: caller holds accounting:gl-mapping:create; the category exists (404); no mapping of the category starts on or after effectiveFrom (400 PETTY_EXPENSE_MAPPING_OVERLAP, the non-overlap rule); glAccountId is an active EXPENSE account (422 PETTY_EXPENSE_ACCOUNT_NOT_ELIGIBLE); effectiveFrom is today or later in the tenant\&#39;s accounting calendar, never retroactive (422 PETTY_EXPENSE_ACCOUNT_CHANGE_BACKDATED). Required inputs: code (path), glAccountId, effectiveFrom, justification (at least 10 characters) and requestId (a replay returns the first result with 200; the same requestId with another body is 409 IDEMPOTENCY_CONFLICT). Emits an ACCOUNTING_PETTY_EXPENSE_CATEGORY_REMAP event, writes a history row naming the caller, queues accounting.petty-expense-category.changed, and returns 200 with the category, each history row\&#39;s actorName resolved now (absent when not known, a replayed requestId included).
+     * Moves a petty-expense category to another expense account from a date: the current mapping ends the day before effectiveFrom and the new one starts on it, so a posting dated earlier still reaches the old account. Use this tool when a category should post somewhere else from now on; do not use createGLMapping, which cannot bind a mapping to a category and key. Preconditions: caller holds accounting:gl-mapping:create; the category exists (404); no mapping of the category starts on or after effectiveFrom (400 PETTY_EXPENSE_MAPPING_OVERLAP, the non-overlap rule); glAccountId is an active EXPENSE account (422 PETTY_EXPENSE_ACCOUNT_NOT_ELIGIBLE); effectiveFrom is today or later in the tenant\&#39;s accounting calendar, never retroactive (422 PETTY_EXPENSE_ACCOUNT_CHANGE_BACKDATED). Required inputs: code (path), glAccountId, effectiveFrom, justification (at least 10 characters) and the Idempotency-Key header (a replay returns the first result with Idempotency-Replayed: true; the same key with another request or caller is 409 IDEMPOTENCY_CONFLICT). Emits an ACCOUNTING_PETTY_EXPENSE_CATEGORY_REMAP event, writes a history row naming the caller, queues accounting.petty-expense-category.changed, and returns 200 with the category, each history row\&#39;s actorName resolved now (absent when not known, a replay included).
      * @endpoint post /v1/accounting/petty-expense-categories/{code}/account
      * @param code Permanent category code
+     * @param idempotencyKey The request\&#39;s idempotency key: a UUID generated once per intent. A replay answers the first result with Idempotency-Replayed: true; the same key with another request or by another caller is 409 IDEMPOTENCY_CONFLICT
      * @param pettyExpenseCategoryRemapRequest The new account, the date it applies from, and why
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public remapPettyExpenseCategory(code: string, pettyExpenseCategoryRemapRequest: PettyExpenseCategoryRemapRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PettyExpenseCategoryResponse>;
-    public remapPettyExpenseCategory(code: string, pettyExpenseCategoryRemapRequest: PettyExpenseCategoryRemapRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PettyExpenseCategoryResponse>>;
-    public remapPettyExpenseCategory(code: string, pettyExpenseCategoryRemapRequest: PettyExpenseCategoryRemapRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PettyExpenseCategoryResponse>>;
-    public remapPettyExpenseCategory(code: string, pettyExpenseCategoryRemapRequest: PettyExpenseCategoryRemapRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public remapPettyExpenseCategory(code: string, idempotencyKey: string, pettyExpenseCategoryRemapRequest: PettyExpenseCategoryRemapRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PettyExpenseCategoryResponse>;
+    public remapPettyExpenseCategory(code: string, idempotencyKey: string, pettyExpenseCategoryRemapRequest: PettyExpenseCategoryRemapRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PettyExpenseCategoryResponse>>;
+    public remapPettyExpenseCategory(code: string, idempotencyKey: string, pettyExpenseCategoryRemapRequest: PettyExpenseCategoryRemapRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PettyExpenseCategoryResponse>>;
+    public remapPettyExpenseCategory(code: string, idempotencyKey: string, pettyExpenseCategoryRemapRequest: PettyExpenseCategoryRemapRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling remapPettyExpenseCategory.');
+        }
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling remapPettyExpenseCategory.');
         }
         if (pettyExpenseCategoryRemapRequest === null || pettyExpenseCategoryRemapRequest === undefined) {
             throw new Error('Required parameter pettyExpenseCategoryRemapRequest was null or undefined when calling remapPettyExpenseCategory.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
@@ -327,26 +348,33 @@ export class AccountingPettyExpenseCategoriesService extends BaseService {
 
     /**
      * Set Petty-Expense Category Tax Recovery
-     * Sets whether the tax stated on a petty-expense category\&#39;s receipts is recovered, and which share, from now on; a movement already recorded keeps the share in force when it was recorded. Use this tool when the accountant decides how much of a category\&#39;s stated tax may be claimed; do not use updatePettyExpenseCategory, which changes only the label and examples. Preconditions: caller holds accounting:mapping-key:edit; the category exists (404); recovery under at least one regime is on today (422 INPUT_TAX_RECOVERY_NOT_ENABLED); version is the one last read, 0 for a category never set (409 OPTIMISTIC_LOCK); the tax service answers whether a regime\&#39;s recovery is on (503 SERVICE_UNAVAILABLE with Retry-After when it cannot). Required inputs: code (path), taxRecoverable, recoverablePercent in (0, 100] when recoverable and absent otherwise, version, justification (at least 10 characters) and requestId (a replay returns the first result with 200; the same requestId with another body is 409 IDEMPOTENCY_CONFLICT). Emits an ACCOUNTING_PETTY_CATEGORY_TAX_RECOVERY_UPDATE event, writes a history row naming the caller and role, queues accounting.petty-expense-category.changed with the new values, and returns 200 with the setting.
+     * Sets whether the tax stated on a petty-expense category\&#39;s receipts is recovered, and which share, from now on; a movement already recorded keeps the share in force when it was recorded. Use this tool when the accountant decides how much of a category\&#39;s stated tax may be claimed; do not use updatePettyExpenseCategory, which changes only the label and examples. Preconditions: caller holds accounting:mapping-key:edit; the category exists (404); recovery under at least one regime is on today (422 INPUT_TAX_RECOVERY_NOT_ENABLED); version is the one last read, 0 for a category never set (409 OPTIMISTIC_LOCK); the tax service answers whether a regime\&#39;s recovery is on (503 SERVICE_UNAVAILABLE with Retry-After when it cannot). Required inputs: code (path), taxRecoverable, recoverablePercent in (0, 100] when recoverable and absent otherwise, version, justification (at least 10 characters) and the Idempotency-Key header (a replay returns the first result with Idempotency-Replayed: true; the same key with another request or caller is 409 IDEMPOTENCY_CONFLICT). Emits an ACCOUNTING_PETTY_CATEGORY_TAX_RECOVERY_UPDATE event, writes a history row naming the caller and role, queues accounting.petty-expense-category.changed with the new values, and returns 200 with the setting.
      * @endpoint put /v1/accounting/petty-expense-categories/{code}/tax-recovery
      * @param code Permanent category code
+     * @param idempotencyKey The request\&#39;s idempotency key: a UUID generated once per intent. A replay answers the first result with Idempotency-Replayed: true; the same key with another request or by another caller is 409 IDEMPOTENCY_CONFLICT
      * @param pettyExpenseCategoryTaxRecoveryRequest Whether the category\&#39;s stated tax is recovered, which share, and why
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public setPettyExpenseCategoryTaxRecovery(code: string, pettyExpenseCategoryTaxRecoveryRequest: PettyExpenseCategoryTaxRecoveryRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PettyExpenseCategoryTaxRecoveryResponse>;
-    public setPettyExpenseCategoryTaxRecovery(code: string, pettyExpenseCategoryTaxRecoveryRequest: PettyExpenseCategoryTaxRecoveryRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PettyExpenseCategoryTaxRecoveryResponse>>;
-    public setPettyExpenseCategoryTaxRecovery(code: string, pettyExpenseCategoryTaxRecoveryRequest: PettyExpenseCategoryTaxRecoveryRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PettyExpenseCategoryTaxRecoveryResponse>>;
-    public setPettyExpenseCategoryTaxRecovery(code: string, pettyExpenseCategoryTaxRecoveryRequest: PettyExpenseCategoryTaxRecoveryRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public setPettyExpenseCategoryTaxRecovery(code: string, idempotencyKey: string, pettyExpenseCategoryTaxRecoveryRequest: PettyExpenseCategoryTaxRecoveryRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PettyExpenseCategoryTaxRecoveryResponse>;
+    public setPettyExpenseCategoryTaxRecovery(code: string, idempotencyKey: string, pettyExpenseCategoryTaxRecoveryRequest: PettyExpenseCategoryTaxRecoveryRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PettyExpenseCategoryTaxRecoveryResponse>>;
+    public setPettyExpenseCategoryTaxRecovery(code: string, idempotencyKey: string, pettyExpenseCategoryTaxRecoveryRequest: PettyExpenseCategoryTaxRecoveryRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PettyExpenseCategoryTaxRecoveryResponse>>;
+    public setPettyExpenseCategoryTaxRecovery(code: string, idempotencyKey: string, pettyExpenseCategoryTaxRecoveryRequest: PettyExpenseCategoryTaxRecoveryRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling setPettyExpenseCategoryTaxRecovery.');
+        }
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling setPettyExpenseCategoryTaxRecovery.');
         }
         if (pettyExpenseCategoryTaxRecoveryRequest === null || pettyExpenseCategoryTaxRecoveryRequest === undefined) {
             throw new Error('Required parameter pettyExpenseCategoryTaxRecoveryRequest was null or undefined when calling setPettyExpenseCategoryTaxRecovery.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
@@ -401,26 +429,33 @@ export class AccountingPettyExpenseCategoriesService extends BaseService {
 
     /**
      * Relabel Petty-Expense Category
-     * Changes a petty-expense category\&#39;s label and examples; the code never changes, and the mapping key\&#39;s description follows the label. Use this tool to make a category clearer to cashiers; do not use updateMappingKey, which refuses petty-expense keys (422 PETTY_EXPENSE_CATEGORY_MANAGED) and would rename the key. Preconditions: caller holds accounting:mapping-key:edit; the category exists (404); a version, when sent, is the current one (409 VERSION_CONFLICT). Required inputs: code (path), label, justification (at least 10 characters) and requestId (a replay returns the first result with 200; the same requestId with another body is 409 IDEMPOTENCY_CONFLICT); examples and version are optional. Emits an ACCOUNTING_PETTY_EXPENSE_CATEGORY_UPDATE event, writes a history row naming the caller, queues accounting.petty-expense-category.changed, and returns 200 with the category, each history row\&#39;s actorName resolved now (absent when not known, a replayed requestId included).
+     * Changes a petty-expense category\&#39;s label and examples; the code never changes, and the mapping key\&#39;s description follows the label. Use this tool to make a category clearer to cashiers; do not use updateMappingKey, which refuses petty-expense keys (422 PETTY_EXPENSE_CATEGORY_MANAGED) and would rename the key. Preconditions: caller holds accounting:mapping-key:edit; the category exists (404); a version, when sent, is the current one (409 VERSION_CONFLICT). Required inputs: code (path), label, justification (at least 10 characters) and the Idempotency-Key header (a replay returns the first result with Idempotency-Replayed: true; the same key with another request or caller is 409 IDEMPOTENCY_CONFLICT); examples and version are optional. Emits an ACCOUNTING_PETTY_EXPENSE_CATEGORY_UPDATE event, writes a history row naming the caller, queues accounting.petty-expense-category.changed, and returns 200 with the category, each history row\&#39;s actorName resolved now (absent when not known, a replay included).
      * @endpoint put /v1/accounting/petty-expense-categories/{code}
      * @param code Permanent category code
+     * @param idempotencyKey The request\&#39;s idempotency key: a UUID generated once per intent. A replay answers the first result with Idempotency-Replayed: true; the same key with another request or by another caller is 409 IDEMPOTENCY_CONFLICT
      * @param pettyExpenseCategoryUpdateRequest The new label and examples, and why
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public updatePettyExpenseCategory(code: string, pettyExpenseCategoryUpdateRequest: PettyExpenseCategoryUpdateRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PettyExpenseCategoryResponse>;
-    public updatePettyExpenseCategory(code: string, pettyExpenseCategoryUpdateRequest: PettyExpenseCategoryUpdateRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PettyExpenseCategoryResponse>>;
-    public updatePettyExpenseCategory(code: string, pettyExpenseCategoryUpdateRequest: PettyExpenseCategoryUpdateRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PettyExpenseCategoryResponse>>;
-    public updatePettyExpenseCategory(code: string, pettyExpenseCategoryUpdateRequest: PettyExpenseCategoryUpdateRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public updatePettyExpenseCategory(code: string, idempotencyKey: string, pettyExpenseCategoryUpdateRequest: PettyExpenseCategoryUpdateRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PettyExpenseCategoryResponse>;
+    public updatePettyExpenseCategory(code: string, idempotencyKey: string, pettyExpenseCategoryUpdateRequest: PettyExpenseCategoryUpdateRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PettyExpenseCategoryResponse>>;
+    public updatePettyExpenseCategory(code: string, idempotencyKey: string, pettyExpenseCategoryUpdateRequest: PettyExpenseCategoryUpdateRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PettyExpenseCategoryResponse>>;
+    public updatePettyExpenseCategory(code: string, idempotencyKey: string, pettyExpenseCategoryUpdateRequest: PettyExpenseCategoryUpdateRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (code === null || code === undefined) {
             throw new Error('Required parameter code was null or undefined when calling updatePettyExpenseCategory.');
+        }
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling updatePettyExpenseCategory.');
         }
         if (pettyExpenseCategoryUpdateRequest === null || pettyExpenseCategoryUpdateRequest === undefined) {
             throw new Error('Required parameter pettyExpenseCategoryUpdateRequest was null or undefined when calling updatePettyExpenseCategory.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');

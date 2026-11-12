@@ -25,10 +25,6 @@ export interface PettyExpenseCategoryRemapRequest {
      * Why the account changes (at least 10 characters); kept in its history
      */
     justification: string;
-    /**
-     * Caller-generated UUIDv7 naming this request; a replay returns the first result
-     */
-    requestId: string;
 }
 
 function isOptionalPettyExpenseCategoryRemapRequestPropertyOfType(
@@ -69,8 +65,8 @@ export function instanceOfPettyExpenseCategoryRemapRequest(value: object): value
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPettyExpenseCategoryRemapRequestPropertyNames('effectiveFrom', 'glAccountId', 'justification', 'requestId', );
-    const optionalStringProperties = createPettyExpenseCategoryRemapRequestOptionalProperties({ name: 'effectiveFrom', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'justification', nullable: false }, { name: 'requestId', nullable: false }, );
+    const requiredProperties = createPettyExpenseCategoryRemapRequestPropertyNames('effectiveFrom', 'glAccountId', 'justification', );
+    const optionalStringProperties = createPettyExpenseCategoryRemapRequestOptionalProperties({ name: 'effectiveFrom', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'justification', nullable: false }, );
     const optionalNumberProperties = createPettyExpenseCategoryRemapRequestOptionalProperties();
     const optionalBooleanProperties = createPettyExpenseCategoryRemapRequestOptionalProperties();
 

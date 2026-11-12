@@ -41,22 +41,29 @@ export class AccountingTenantTemplateService extends BaseService {
 
     /**
      * Enable Retread Plant Accounting Add-On
-     * Turns the retread-plant add-on on for the caller\&#39;s tenant: the GL accounts only a shop that runs a retread plant needs (curing consumables, MRT equipment depreciation and leases, inventory charge, scrapped casings, production adjustments, rubber dust sales) and their Labor &amp; Overhead report lines. Use this tool once, at tenant setup, when the shop runs a retread plant; do not use createGLAccount, which adds one account without its report line and leaves the tenant\&#39;s choice unrecorded. Preconditions: caller holds accounting:coa:create. There is no switching off: nothing the template provisioned is ever removed. Idempotent: a replayed requestId, or a call for a tenant that already has the add-on, changes nothing and returns the current state. Required inputs: justification (at least 10 characters) and requestId. The tenant is the caller\&#39;s own, taken from the token. Emits an ACCOUNTING_TENANT_TEMPLATE_ADD_ON_ENABLE event, writes one audit row naming the caller, and returns 200 with the tenant\&#39;s template status after the accounts and lines were added; an account the tenant already holds under one of the add-on\&#39;s codes is adopted when it is the same account and reported under attention when it is not.
+     * Turns the retread-plant add-on on for the caller\&#39;s tenant: the GL accounts only a shop that runs a retread plant needs (curing consumables, MRT equipment depreciation and leases, inventory charge, scrapped casings, production adjustments, rubber dust sales) and their Labor &amp; Overhead report lines. Use this tool once, at tenant setup, when the shop runs a retread plant; do not use createGLAccount, which adds one account without its report line and leaves the tenant\&#39;s choice unrecorded. Preconditions: caller holds accounting:coa:create. There is no switching off: nothing the template provisioned is ever removed. Idempotent: a replayed Idempotency-Key, or a call for a tenant that already has the add-on, changes nothing and returns the current state. Required inputs: justification (at least 10 characters) and the Idempotency-Key header. The tenant is the caller\&#39;s own, taken from the token. Emits an ACCOUNTING_TENANT_TEMPLATE_ADD_ON_ENABLE event, writes one audit row naming the caller, and returns 200 with the tenant\&#39;s template status after the accounts and lines were added; an account the tenant already holds under one of the add-on\&#39;s codes is adopted when it is the same account and reported under attention when it is not.
      * @endpoint put /v1/accounting/tenant-template/add-ons/retread-plant
-     * @param enableTemplateAddOnRequest Why the tenant needs the add-on, and the id naming this request.
+     * @param idempotencyKey The request\&#39;s idempotency key: a UUID generated once per intent. A replay answers the first result with Idempotency-Replayed: true; the same key with another request or by another caller is 409 IDEMPOTENCY_CONFLICT
+     * @param enableTemplateAddOnRequest Why the tenant needs the add-on; the request\&#39;s key travels in the Idempotency-Key header.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public enableRetreadPlantAddOn(enableTemplateAddOnRequest: EnableTemplateAddOnRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TenantTemplateStatusResponse>;
-    public enableRetreadPlantAddOn(enableTemplateAddOnRequest: EnableTemplateAddOnRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TenantTemplateStatusResponse>>;
-    public enableRetreadPlantAddOn(enableTemplateAddOnRequest: EnableTemplateAddOnRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TenantTemplateStatusResponse>>;
-    public enableRetreadPlantAddOn(enableTemplateAddOnRequest: EnableTemplateAddOnRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public enableRetreadPlantAddOn(idempotencyKey: string, enableTemplateAddOnRequest: EnableTemplateAddOnRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TenantTemplateStatusResponse>;
+    public enableRetreadPlantAddOn(idempotencyKey: string, enableTemplateAddOnRequest: EnableTemplateAddOnRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TenantTemplateStatusResponse>>;
+    public enableRetreadPlantAddOn(idempotencyKey: string, enableTemplateAddOnRequest: EnableTemplateAddOnRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TenantTemplateStatusResponse>>;
+    public enableRetreadPlantAddOn(idempotencyKey: string, enableTemplateAddOnRequest: EnableTemplateAddOnRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling enableRetreadPlantAddOn.');
+        }
         if (enableTemplateAddOnRequest === null || enableTemplateAddOnRequest === undefined) {
             throw new Error('Required parameter enableTemplateAddOnRequest was null or undefined when calling enableRetreadPlantAddOn.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
