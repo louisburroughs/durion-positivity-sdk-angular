@@ -14,6 +14,10 @@
  */
 export interface StoreImageRequest {
     /**
+     * Caption shown beside the photo
+     */
+    caption?: string;
+    /**
      * Base64 bytes (max 14,000,000 chars; 10 MiB decoded default). JPEG, PNG, WebP, and GIF only.
      */
     content: string;
@@ -30,10 +34,26 @@ export interface StoreImageRequest {
      */
     filename: string;
     /**
+     * Id of the record the image belongs to; a tag, not validated against the owning service
+     */
+    ownerId?: string;
+    /**
+     * Kind of record the image belongs to (#3288); sent together with ownerId or not at all. An owned image is read only with image:image:view
+     */
+    ownerType?: StoreImageRequestOwnerTypeEnum;
+    /**
      * Where the bytes were fetched from. Kept as provenance for audit and reconciliation, never used as a render source
      */
     sourceUri?: string;
 }
+export enum StoreImageRequestOwnerTypeEnum {
+    EstimateCheckIn = 'ESTIMATE_CHECK_IN',
+    Workorder = 'WORKORDER',
+    WorkorderService = 'WORKORDER_SERVICE',
+    ChangeRequest = 'CHANGE_REQUEST'
+};
+
+
 
 function isOptionalStoreImageRequestPropertyOfType(
     value: Record<string, unknown>,
@@ -74,7 +94,7 @@ export function instanceOfStoreImageRequest(value: object): value is StoreImageR
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createStoreImageRequestPropertyNames('content', 'contentType', 'filename', );
-    const optionalStringProperties = createStoreImageRequestOptionalProperties({ name: 'content', nullable: false }, { name: 'contentType', nullable: false }, { name: 'filename', nullable: false }, { name: 'sourceUri', nullable: false }, );
+    const optionalStringProperties = createStoreImageRequestOptionalProperties({ name: 'caption', nullable: false }, { name: 'content', nullable: false }, { name: 'contentType', nullable: false }, { name: 'filename', nullable: false }, { name: 'ownerId', nullable: false }, { name: 'ownerType', nullable: false }, { name: 'sourceUri', nullable: false }, );
     const optionalNumberProperties = createStoreImageRequestOptionalProperties();
     const optionalBooleanProperties = createStoreImageRequestOptionalProperties();
 
