@@ -21,6 +21,10 @@ export interface AddWorkorderNoteRequest {
      * Caller-supplied classification of the note. Free text; the shops\' vocabularies differ and CRM only displays it.
      */
     noteType?: string;
+    /**
+     * Business time the note was written, for work replayed from the technician app\'s offline queue (#3291). ISO-8601 with an offset; omitted means now. A note with this field is accepted in every workorder status, closed ones included.
+     */
+    occurredAt?: string;
 }
 
 function isOptionalAddWorkorderNoteRequestPropertyOfType(
@@ -62,7 +66,7 @@ export function instanceOfAddWorkorderNoteRequest(value: object): value is AddWo
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAddWorkorderNoteRequestPropertyNames('noteText', );
-    const optionalStringProperties = createAddWorkorderNoteRequestOptionalProperties({ name: 'noteText', nullable: false }, { name: 'noteType', nullable: false }, );
+    const optionalStringProperties = createAddWorkorderNoteRequestOptionalProperties({ name: 'noteText', nullable: false }, { name: 'noteType', nullable: false }, { name: 'occurredAt', nullable: false }, );
     const optionalNumberProperties = createAddWorkorderNoteRequestOptionalProperties();
     const optionalBooleanProperties = createAddWorkorderNoteRequestOptionalProperties();
 

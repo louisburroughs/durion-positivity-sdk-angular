@@ -18,6 +18,10 @@ export interface ConsumePickedItemsRequest {
      * Items to consume
      */
     items: Array<ConsumeItem>;
+    /**
+     * Business time the parts were used, for work replayed from the technician app\'s offline queue (#3291). ISO-8601 with an offset; omitted means now. Must be no more than 72 hours old and no more than 2 minutes in the future.
+     */
+    occurredAt?: string;
 }
 
 function isOptionalConsumePickedItemsRequestPropertyOfType(
@@ -59,7 +63,7 @@ export function instanceOfConsumePickedItemsRequest(value: object): value is Con
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createConsumePickedItemsRequestPropertyNames('items', );
-    const optionalStringProperties = createConsumePickedItemsRequestOptionalProperties();
+    const optionalStringProperties = createConsumePickedItemsRequestOptionalProperties({ name: 'occurredAt', nullable: false }, );
     const optionalNumberProperties = createConsumePickedItemsRequestOptionalProperties();
     const optionalBooleanProperties = createConsumePickedItemsRequestOptionalProperties();
 

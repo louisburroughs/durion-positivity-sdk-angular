@@ -18,8 +18,17 @@ export interface WorkorderNoteResponse {
     noteId?: string;
     noteText?: string;
     noteType?: string;
+    occurredAt?: string;
+    receivedAt?: string;
+    source?: WorkorderNoteResponseSourceEnum;
     workorderId?: string;
 }
+export enum WorkorderNoteResponseSourceEnum {
+    Live = 'LIVE',
+    OfflineReplay = 'OFFLINE_REPLAY'
+};
+
+
 
 function isOptionalWorkorderNoteResponsePropertyOfType(
     value: Record<string, unknown>,
@@ -60,7 +69,7 @@ export function instanceOfWorkorderNoteResponse(value: object): value is Workord
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkorderNoteResponsePropertyNames();
-    const optionalStringProperties = createWorkorderNoteResponseOptionalProperties({ name: 'authoredBy', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'noteId', nullable: false }, { name: 'noteText', nullable: false }, { name: 'noteType', nullable: false }, { name: 'workorderId', nullable: false }, );
+    const optionalStringProperties = createWorkorderNoteResponseOptionalProperties({ name: 'authoredBy', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'noteId', nullable: false }, { name: 'noteText', nullable: false }, { name: 'noteType', nullable: false }, { name: 'occurredAt', nullable: false }, { name: 'receivedAt', nullable: false }, { name: 'source', nullable: false }, { name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createWorkorderNoteResponseOptionalProperties();
     const optionalBooleanProperties = createWorkorderNoteResponseOptionalProperties();
 

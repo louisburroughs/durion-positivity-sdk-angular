@@ -18,6 +18,10 @@ export interface ConsumePartRequest {
      */
     notes?: string;
     /**
+     * Business time the parts were used, for work replayed from the technician app\'s offline queue (#3291). ISO-8601 with an offset; omitted means now. Must be no more than 72 hours old and no more than 2 minutes in the future.
+     */
+    occurredAt?: string;
+    /**
      * Quantity to consume
      */
     quantity: number;
@@ -70,7 +74,7 @@ export function instanceOfConsumePartRequest(value: object): value is ConsumePar
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createConsumePartRequestPropertyNames('quantity', 'workorderPartId', );
-    const optionalStringProperties = createConsumePartRequestOptionalProperties({ name: 'notes', nullable: false }, { name: 'uomCode', nullable: false }, { name: 'workorderPartId', nullable: false }, );
+    const optionalStringProperties = createConsumePartRequestOptionalProperties({ name: 'notes', nullable: false }, { name: 'occurredAt', nullable: false }, { name: 'uomCode', nullable: false }, { name: 'workorderPartId', nullable: false }, );
     const optionalNumberProperties = createConsumePartRequestOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createConsumePartRequestOptionalProperties();
 

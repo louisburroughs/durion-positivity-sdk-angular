@@ -45,6 +45,14 @@ export interface WorkorderLaborEntryResponse {
      */
     notes?: string;
     /**
+     * Server receipt instant, set only for an OFFLINE_REPLAY entry
+     */
+    receivedAt?: string;
+    /**
+     * How the entry arrived: LIVE when the server stamped it on receipt, OFFLINE_REPLAY when the technician app replayed work done offline (#3291).
+     */
+    source?: WorkorderLaborEntryResponseSourceEnum;
+    /**
      * Labor session start time
      */
     startTime?: string;
@@ -65,6 +73,12 @@ export interface WorkorderLaborEntryResponse {
      */
     workorderServiceId?: string;
 }
+export enum WorkorderLaborEntryResponseSourceEnum {
+    Live = 'LIVE',
+    OfflineReplay = 'OFFLINE_REPLAY'
+};
+
+
 
 function isOptionalWorkorderLaborEntryResponsePropertyOfType(
     value: Record<string, unknown>,
@@ -105,7 +119,7 @@ export function instanceOfWorkorderLaborEntryResponse(value: object): value is W
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkorderLaborEntryResponsePropertyNames('active', 'id', 'warnings', 'workorderId', );
-    const optionalStringProperties = createWorkorderLaborEntryResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'endTime', nullable: false }, { name: 'id', nullable: false }, { name: 'notes', nullable: false }, { name: 'startTime', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderServiceId', nullable: false }, );
+    const optionalStringProperties = createWorkorderLaborEntryResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'endTime', nullable: false }, { name: 'id', nullable: false }, { name: 'notes', nullable: false }, { name: 'receivedAt', nullable: false }, { name: 'source', nullable: false }, { name: 'startTime', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderServiceId', nullable: false }, );
     const optionalNumberProperties = createWorkorderLaborEntryResponseOptionalProperties({ name: 'hoursWorked', nullable: false }, );
     const optionalBooleanProperties = createWorkorderLaborEntryResponseOptionalProperties({ name: 'active', nullable: false }, );
 

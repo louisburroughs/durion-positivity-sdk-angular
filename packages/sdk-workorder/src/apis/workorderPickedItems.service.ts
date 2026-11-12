@@ -43,26 +43,33 @@ export class WorkorderPickedItemsService extends BaseService {
 
     /**
      * Consume Picked Items into Workorder
-     * Queues asynchronous consumption of picked items into the workorder over the Kafka command feed per ADR-0044; each item is acknowledged with status PENDING, and the inventory consumption-recorded fact later updates the pick replicas. Use this tool when staged picked parts are installed on the job; do not use consumeParts, which operates on workorder part lines outside the pick flow. Preconditions: a pick list replica must exist for the workorder and every referenced pickTaskId must belong to it. Required inputs: workorderId (UUID) as a path parameter and a non-empty items list, each entry carrying pickTaskId (UUID) and quantityToConsume (integer). Emits a WORKORDER_PICKED_ITEMS_CONSUME event and publishes a consume command; callers must poll getPickedItems to observe the consumed quantities. Returns 202 with per-item PENDING results, 404 when the pick list or a referenced pick task is missing, 503 when the command feed is unavailable or, with PICK_LIST_REPLICATION_PENDING and a Retry-After header, when the workorder holds part lines but its pick list or tasks have not replicated from Inventory yet, and 403 LOCATION_SCOPE_DENIED when the caller\&#39;s location scope does not cover the workorder\&#39;s own site (ADR-0061 mechanism, #2204).
+     * Queues asynchronous consumption of picked items into the workorder over the Kafka command feed per ADR-0044; each item is acknowledged with status PENDING, and the inventory consumption-recorded fact later updates the pick replicas. Use this tool when staged picked parts are installed on the job; do not use consumeParts, which operates on workorder part lines outside the pick flow. Preconditions: a pick list replica must exist for the workorder and every referenced pickTaskId must belong to it. Required inputs: workorderId (UUID) as a path parameter and a non-empty items list, each entry carrying pickTaskId (UUID) and quantityToConsume (integer); the required Idempotency-Key header (a UUID) makes a retry of the same request replay the first answer without publishing a second command. occurredAt is the optional business time the parts were used, for work replayed from the technician app\&#39;s offline queue: it must be no more than 72 hours old and no more than 2 minutes in the future, it travels on the inventory command, and a replay whose workorder was completed, cancelled, invoiced or put on hold meanwhile answers 409 WORKORDER_STATE_CHANGED. Emits a WORKORDER_PICKED_ITEMS_CONSUME event and publishes a consume command; callers must poll getPickedItems to observe the consumed quantities. Returns 202 with per-item PENDING results, 404 when the pick list or a referenced pick task is missing, 503 when the command feed is unavailable or, with PICK_LIST_REPLICATION_PENDING and a Retry-After header, when the workorder holds part lines but its pick list or tasks have not replicated from Inventory yet, 409 WORKORDER_STATE_CHANGED when a replay\&#39;s workorder changed meanwhile or IDEMPOTENCY_CONFLICT when the key was used for a different request, 422 OCCURRED_AT_OUT_OF_RANGE when occurredAt is outside the replay window, and 403 LOCATION_SCOPE_DENIED when the caller\&#39;s location scope does not cover the workorder\&#39;s own site (ADR-0061 mechanism, #2204).
      * @endpoint post /v1/workorders/{workorderId}/picked-items:consume
      * @param workorderId Workorder ID
+     * @param idempotencyKey Required idempotency key (a UUID): the technician app sends this call from its offline queue (ADR-0075 §2). A replay returns the original answer
      * @param consumePickedItemsRequest Picked pick-task quantities to consume into the workorder.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public consumeWorkorderPickedItems(workorderId: string, consumePickedItemsRequest: ConsumePickedItemsRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ConsumePickedItemsResponse>;
-    public consumeWorkorderPickedItems(workorderId: string, consumePickedItemsRequest: ConsumePickedItemsRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ConsumePickedItemsResponse>>;
-    public consumeWorkorderPickedItems(workorderId: string, consumePickedItemsRequest: ConsumePickedItemsRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ConsumePickedItemsResponse>>;
-    public consumeWorkorderPickedItems(workorderId: string, consumePickedItemsRequest: ConsumePickedItemsRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public consumeWorkorderPickedItems(workorderId: string, idempotencyKey: string, consumePickedItemsRequest: ConsumePickedItemsRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ConsumePickedItemsResponse>;
+    public consumeWorkorderPickedItems(workorderId: string, idempotencyKey: string, consumePickedItemsRequest: ConsumePickedItemsRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ConsumePickedItemsResponse>>;
+    public consumeWorkorderPickedItems(workorderId: string, idempotencyKey: string, consumePickedItemsRequest: ConsumePickedItemsRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ConsumePickedItemsResponse>>;
+    public consumeWorkorderPickedItems(workorderId: string, idempotencyKey: string, consumePickedItemsRequest: ConsumePickedItemsRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (workorderId === null || workorderId === undefined) {
             throw new Error('Required parameter workorderId was null or undefined when calling consumeWorkorderPickedItems.');
+        }
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling consumeWorkorderPickedItems.');
         }
         if (consumePickedItemsRequest === null || consumePickedItemsRequest === undefined) {
             throw new Error('Required parameter consumePickedItemsRequest was null or undefined when calling consumeWorkorderPickedItems.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
