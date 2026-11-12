@@ -13,6 +13,7 @@ export * from './assignTechnicianRequest';
 export * from './assignmentHistoryEntry';
 export * from './bayStatus';
 export * from './breakSegmentResponse';
+export * from './changeRequestItemResponse';
 export * from './changeRequestResponse';
 export * from './claimWorkorderRequest';
 export * from './completePickTaskRequest';

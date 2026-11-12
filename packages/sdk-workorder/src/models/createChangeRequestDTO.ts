@@ -31,14 +31,29 @@ export interface CreateChangeRequestDTO {
      */
     parts?: Array<WorkorderItemDTO>;
     /**
+     * Photo image ids from pos-image showing what was found, at most 12 and without duplicates. Stored as given, without validating them against pos-image. At least one satisfies the photo evidence an emergency/safety item needs
+     */
+    photoImageIds?: Set<string>;
+    /**
      * Service items included in this change request
      */
     services?: Array<WorkorderItemDTO>;
+    /**
+     * How soon the technician judges the work is needed: CAN_WAIT, SOON or UNSAFE. The technician\'s own judgement, shown to the advisor; it is not the emergency exception
+     */
+    urgency?: CreateChangeRequestDTOUrgencyEnum;
     /**
      * Workorder identifier
      */
     workorderId?: string;
 }
+export enum CreateChangeRequestDTOUrgencyEnum {
+    CanWait = 'CAN_WAIT',
+    Soon = 'SOON',
+    Unsafe = 'UNSAFE'
+};
+
+
 
 function isOptionalCreateChangeRequestDTOPropertyOfType(
     value: Record<string, unknown>,
@@ -79,7 +94,7 @@ export function instanceOfCreateChangeRequestDTO(value: object): value is Create
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCreateChangeRequestDTOPropertyNames('description', );
-    const optionalStringProperties = createCreateChangeRequestDTOOptionalProperties({ name: 'description', nullable: false }, { name: 'exceptionReason', nullable: false }, { name: 'workorderId', nullable: false }, );
+    const optionalStringProperties = createCreateChangeRequestDTOOptionalProperties({ name: 'description', nullable: false }, { name: 'exceptionReason', nullable: false }, { name: 'urgency', nullable: false }, { name: 'workorderId', nullable: false }, );
     const optionalNumberProperties = createCreateChangeRequestDTOOptionalProperties();
     const optionalBooleanProperties = createCreateChangeRequestDTOOptionalProperties({ name: 'isEmergencyException', nullable: false }, );
 
