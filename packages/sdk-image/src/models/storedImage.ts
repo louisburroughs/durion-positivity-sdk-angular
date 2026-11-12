@@ -11,13 +11,27 @@
 
 export interface StoredImage {
     byteSize?: number;
+    caption?: string;
     contentHash?: string;
     contentType?: string;
     filename?: string;
     imageId?: string;
     newlyStored?: boolean;
+    ownerId?: string;
+    /**
+     * Kind of record an image belongs to
+     */
+    ownerType?: StoredImageOwnerTypeEnum;
     sourceUri?: string;
 }
+export enum StoredImageOwnerTypeEnum {
+    EstimateCheckIn = 'ESTIMATE_CHECK_IN',
+    Workorder = 'WORKORDER',
+    WorkorderService = 'WORKORDER_SERVICE',
+    ChangeRequest = 'CHANGE_REQUEST'
+};
+
+
 
 function isOptionalStoredImagePropertyOfType(
     value: Record<string, unknown>,
@@ -58,7 +72,7 @@ export function instanceOfStoredImage(value: object): value is StoredImage {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createStoredImagePropertyNames();
-    const optionalStringProperties = createStoredImageOptionalProperties({ name: 'contentHash', nullable: false }, { name: 'contentType', nullable: false }, { name: 'filename', nullable: false }, { name: 'imageId', nullable: false }, { name: 'sourceUri', nullable: false }, );
+    const optionalStringProperties = createStoredImageOptionalProperties({ name: 'caption', nullable: false }, { name: 'contentHash', nullable: false }, { name: 'contentType', nullable: false }, { name: 'filename', nullable: false }, { name: 'imageId', nullable: false }, { name: 'ownerId', nullable: false }, { name: 'ownerType', nullable: false }, { name: 'sourceUri', nullable: false }, );
     const optionalNumberProperties = createStoredImageOptionalProperties({ name: 'byteSize', nullable: false }, );
     const optionalBooleanProperties = createStoredImageOptionalProperties({ name: 'newlyStored', nullable: false }, );
 

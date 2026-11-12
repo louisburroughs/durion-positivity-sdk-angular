@@ -19,6 +19,10 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 // @ts-ignore
 import { ApiError } from '../models/apiError';
 // @ts-ignore
+import { AttachImageOwnerRequest } from '../models/attachImageOwnerRequest';
+// @ts-ignore
+import { ImageSummary } from '../models/imageSummary';
+// @ts-ignore
 import { StoreImageRequest } from '../models/storeImageRequest';
 // @ts-ignore
 import { StoredImage } from '../models/storedImage';
@@ -40,8 +44,86 @@ export class ImageAPIService extends BaseService {
     }
 
     /**
+     * Attach a stored image to its owner
+     * Attaches an image stored earlier without an owner to a check-in, workorder, service line or change request, with an optional caption. Use this operation when the image was uploaded before its owner was known, as the technician app\&#39;s offline queue does; do not use it to move an image between owners, store a new image instead. Preconditions: the image exists in the caller\&#39;s tenant; the owner is a tag that the owning service never validates. Required inputs: the Idempotency-Key header (a UUID), id, ownerType and ownerId; caption is optional. Emits IMAGE_OWNER_ATTACH and no domain event (the owning record is authoritative); re-attaching to the owner the image already has is a no-op 200, and resending the same key and body replays the first answer with Idempotency-Replayed: true. Returns 400 for a missing or malformed key, id, ownerType or ownerId; 404 when the image is absent or another tenant\&#39;s; 409 IMAGE_OWNER_CONFLICT when it has a different owner; and 409 IDEMPOTENCY_CONFLICT for a key reused with another body.
+     * @endpoint put /v1/images/{id}/owner
+     * @param id ID of the image to attach
+     * @param idempotencyKey Client-minted UUID; a resend with the same key replays the original answer (ADR-0075)
+     * @param attachImageOwnerRequest The owner to attach the image to, and an optional caption.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public attachImageOwner(id: string, idempotencyKey: string, attachImageOwnerRequest: AttachImageOwnerRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ImageSummary>;
+    public attachImageOwner(id: string, idempotencyKey: string, attachImageOwnerRequest: AttachImageOwnerRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ImageSummary>>;
+    public attachImageOwner(id: string, idempotencyKey: string, attachImageOwnerRequest: AttachImageOwnerRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ImageSummary>>;
+    public attachImageOwner(id: string, idempotencyKey: string, attachImageOwnerRequest: AttachImageOwnerRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling attachImageOwner.');
+        }
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling attachImageOwner.');
+        }
+        if (attachImageOwnerRequest === null || attachImageOwnerRequest === undefined) {
+            throw new Error('Required parameter attachImageOwnerRequest was null or undefined when calling attachImageOwner.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/images/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/owner`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ImageSummary>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: attachImageOwnerRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Get image by filename
-     * Returns image bytes inline for an exact filename match. Use this operation when only the filename is known; do not use it when the image ID is available, use getImageById instead, because filenames are not unique over time. Preconditions: a matching record must exist; legacy records are served only when pos.image.legacy-root is configured and the path resolves safely beneath it. Required inputs: filename including its extension; If-None-Match is optional, and there is no body. No events are emitted and no state changes occur. Stored content has a strong ETag and private, no-cache headers; a matching If-None-Match returns 304. Filenames are never immutable. Returns 404 for no matching record, an unconfigured legacy root, a missing file, or an escaping path; variants are not currently supported.
+     * Returns image bytes inline for an exact filename match. Use this operation when only the filename is known; do not use it when the image ID is available, use getImageById instead, because filenames are not unique over time. Preconditions: a matching record must exist in the caller\&#39;s tenant; an image that has an owner is served only with image:image:view and reads as 404 otherwise; legacy records are served only when pos.image.legacy-root is configured and the path resolves safely beneath it. Required inputs: filename including its extension; If-None-Match is optional, and there is no body. No events are emitted and no state changes occur. Stored content has a strong ETag and private, no-cache headers; a matching If-None-Match returns 304. Filenames are never immutable. Returns 404 for no matching record, an unconfigured legacy root, a missing file, or an escaping path; variants are not currently supported.
      * @endpoint get /v1/images/filename/{filename}
      * @param filename Filename of the image to retrieve
      * @param ifNoneMatch
@@ -94,21 +176,33 @@ export class ImageAPIService extends BaseService {
 
     /**
      * Get image by ID
-     * Returns image bytes inline for an image record ID (a UUID). Use this operation when the caller has the image ID; do not use it when only the filename is known, use getImageByFilename instead. Preconditions: the image record must exist; legacy records are served only when pos.image.legacy-root is configured and the path resolves safely beneath it. Required inputs: id (the image UUID); If-None-Match is optional, and there is no request body. No events are emitted and no state changes occur. Stored bytes carry a strong ETag and private, immutable-by-ID cache headers; a matching If-None-Match returns 304. Returns 400 when id is not a UUID, and 404 for an unknown record, an unconfigured legacy root, a missing file, or an escaping path; use getImageByFilename for filename lookup. Variants are not currently supported.
+     * Returns image bytes inline for an image record ID (a UUID), or its 320 px thumbnail with size&#x3D;thumb. Use this operation when the caller has the image ID; when only the filename is known, use getImageByFilename instead. Preconditions: the record exists in the caller\&#39;s tenant; an image with an owner (a check-in, workorder, service-line or change-request photo) needs image:image:view, while unowned images (catalogue artwork, logos, employee photos) need no permission, and legacy records are served only when pos.image.legacy-root resolves their path safely. Required inputs: id; size (original or thumb, where a record without a thumbnail serves the original) and If-None-Match are optional, and there is no request body. No events are emitted and no state changes occur. Stored bytes carry a strong ETag (the served rendition\&#39;s content hash) and private, immutable-by-ID cache headers; a matching If-None-Match returns 304. Returns 400 when id is not a UUID or size is unknown, and 404 for an unknown or other-tenant record, an owned record without image:image:view, or an unavailable legacy file.
      * @endpoint get /v1/images/id/{id}
      * @param id ID of the image to retrieve
+     * @param size Rendition to serve: original (default) or thumb (320 px long edge)
      * @param ifNoneMatch
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getImageById(id: string, ifNoneMatch?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'image/gif' | 'image/jpeg' | 'image/png' | 'image/webp' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Blob>;
-    public getImageById(id: string, ifNoneMatch?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'image/gif' | 'image/jpeg' | 'image/png' | 'image/webp' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Blob>>;
-    public getImageById(id: string, ifNoneMatch?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'image/gif' | 'image/jpeg' | 'image/png' | 'image/webp' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Blob>>;
-    public getImageById(id: string, ifNoneMatch?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'image/gif' | 'image/jpeg' | 'image/png' | 'image/webp' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getImageById(id: string, size?: 'original' | 'thumb', ifNoneMatch?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'image/gif' | 'image/jpeg' | 'image/png' | 'image/webp' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Blob>;
+    public getImageById(id: string, size?: 'original' | 'thumb', ifNoneMatch?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'image/gif' | 'image/jpeg' | 'image/png' | 'image/webp' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Blob>>;
+    public getImageById(id: string, size?: 'original' | 'thumb', ifNoneMatch?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'image/gif' | 'image/jpeg' | 'image/png' | 'image/webp' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Blob>>;
+    public getImageById(id: string, size?: 'original' | 'thumb', ifNoneMatch?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'image/gif' | 'image/jpeg' | 'image/png' | 'image/webp' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling getImageById.');
         }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
 
         let localVarHeaders = this.defaultHeaders;
         if (ifNoneMatch !== undefined && ifNoneMatch !== null) {
@@ -136,6 +230,7 @@ export class ImageAPIService extends BaseService {
         return this.httpClient.request('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: "blob",
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -147,26 +242,114 @@ export class ImageAPIService extends BaseService {
     }
 
     /**
+     * List an owner\&#39;s images
+     * Lists the images attached to one owner (a check-in, workorder, service line or change request), newest first, without their bytes; fetch bytes with getImageById and thumbnails with size&#x3D;thumb. Use this operation to show a job\&#39;s photos; do not use it to decide what belongs to the job, read the owning record (photoImageIds on a check-in or change request) instead, because that record is authoritative. Preconditions: the caller holds image:image:view; the owner is not validated, so an unknown owner simply has no images. Required inputs: ownerType and ownerId; there is no request body. Emits IMAGE_LIST_BY_OWNER; no state changes occur, and images in another tenant are never listed. Returns 400 for a missing or malformed ownerType or ownerId, and 403 without image:image:view.
+     * @endpoint get /v1/images
+     * @param ownerType Kind of record the images belong to
+     * @param ownerId Id of the record the images belong to
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listImagesByOwner(ownerType: 'ESTIMATE_CHECK_IN' | 'WORKORDER' | 'WORKORDER_SERVICE' | 'CHANGE_REQUEST', ownerId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ImageSummary>>;
+    public listImagesByOwner(ownerType: 'ESTIMATE_CHECK_IN' | 'WORKORDER' | 'WORKORDER_SERVICE' | 'CHANGE_REQUEST', ownerId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ImageSummary>>>;
+    public listImagesByOwner(ownerType: 'ESTIMATE_CHECK_IN' | 'WORKORDER' | 'WORKORDER_SERVICE' | 'CHANGE_REQUEST', ownerId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ImageSummary>>>;
+    public listImagesByOwner(ownerType: 'ESTIMATE_CHECK_IN' | 'WORKORDER' | 'WORKORDER_SERVICE' | 'CHANGE_REQUEST', ownerId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (ownerType === null || ownerType === undefined) {
+            throw new Error('Required parameter ownerType was null or undefined when calling listImagesByOwner.');
+        }
+        if (ownerId === null || ownerId === undefined) {
+            throw new Error('Required parameter ownerId was null or undefined when calling listImagesByOwner.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'ownerType',
+            <any>ownerType,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'ownerId',
+            <any>ownerId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/images`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<Array<ImageSummary>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Store An Image
-     * Stores JPEG, PNG, WebP, or GIF image bytes and returns a reference, reusing the existing reference when the same origin and content hash were already stored. Use this operation when a caller has image bytes that must be served by pos-image; do not use it to register an image that remains at an external URL or an existing legacy filesystem path. Preconditions: decoded content is nonempty, has supported magic bytes, and does not exceed pos.image.max-bytes (10 MiB by default); SVG is not supported. Required inputs: filename, a MIME claim (which may be blank), and base64 content; sourceUri and context are optional, and sourceUri is provenance only. No events are emitted; the operation creates or reuses tenant-scoped image and image_content rows. Returns 413 for content over the configured decoded-size limit and 400 for invalid base64, empty or unsupported bytes, or a claim naming a different supported image type.
+     * Stores JPEG, PNG, WebP, or GIF image bytes, optionally attached to an owner with a caption, and returns a reference. Use this operation when image bytes must be served by pos-image; do not use it to register an image kept at an external URL or a legacy filesystem path. Preconditions: decoded content is nonempty, well formed, a supported type (not SVG) and within pos.image.max-bytes (10 MiB by default); ownerType and ownerId come together or not at all, and the owner is a tag the owning service never validates. Required inputs: the Idempotency-Key header (a UUID), filename, a MIME claim (which may be blank) and base64 content; sourceUri (provenance only), context, the owner and caption are optional. Emits IMAGE_STORE; location metadata (EXIF except orientation, XMP, IPTC) is stripped before the content hash, a 320 px thumbnail is generated, and an unowned store from a sourceUri already held with the same bytes reuses that record. Resending the same Idempotency-Key and body answers the original 201 and body with Idempotency-Replayed: true and stores nothing. Returns 400 for a missing or malformed key, bad base64, empty, malformed or unsupported bytes, a conflicting type claim or half an owner; 409 IDEMPOTENCY_CONFLICT for a key reused with another body; and 413 over the size limit.
      * @endpoint post /v1/images
+     * @param idempotencyKey Client-minted UUID; a resend with the same key replays the original answer (ADR-0075)
      * @param storeImageRequest The image to store, with the origin it was fetched from where there was one.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public storeImage(storeImageRequest: StoreImageRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<StoredImage>;
-    public storeImage(storeImageRequest: StoreImageRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<StoredImage>>;
-    public storeImage(storeImageRequest: StoreImageRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<StoredImage>>;
-    public storeImage(storeImageRequest: StoreImageRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public storeImage(idempotencyKey: string, storeImageRequest: StoreImageRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<StoredImage>;
+    public storeImage(idempotencyKey: string, storeImageRequest: StoreImageRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<StoredImage>>;
+    public storeImage(idempotencyKey: string, storeImageRequest: StoreImageRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<StoredImage>>;
+    public storeImage(idempotencyKey: string, storeImageRequest: StoreImageRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling storeImage.');
+        }
         if (storeImageRequest === null || storeImageRequest === undefined) {
             throw new Error('Required parameter storeImageRequest was null or undefined when calling storeImage.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            '*/*',
             'application/json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
