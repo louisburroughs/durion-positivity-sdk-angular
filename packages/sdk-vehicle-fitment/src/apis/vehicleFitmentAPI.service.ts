@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../models/apiError';
+// @ts-ignore
 import { MakeResponse } from '../models/makeResponse';
 // @ts-ignore
 import { ManufacturerResponse } from '../models/manufacturerResponse';
@@ -24,6 +26,10 @@ import { ManufacturerResponse } from '../models/manufacturerResponse';
 import { ModelResponse } from '../models/modelResponse';
 // @ts-ignore
 import { VehicleTypeResponse } from '../models/vehicleTypeResponse';
+// @ts-ignore
+import { VinDecodeRequest } from '../models/vinDecodeRequest';
+// @ts-ignore
+import { VinDecodeResponse } from '../models/vinDecodeResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -39,6 +45,76 @@ export class VehicleFitmentAPIService extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
+    }
+
+    /**
+     * Decode a VIN
+     * Decodes a vehicle identification number to model year, make, model and, when known, trim, body class, drive type, engine and GVWR class, through the configured provider (NHTSA vPIC today). Use this tool when adding a vehicle that is not on file, so the technician checks the details against the car instead of typing them; do not use it to find a vehicle already in the registry. Preconditions: the VIN is normalised (whitespace, separators and lower case removed) and must then be 17 letters and digits without I, O or Q, and a VIN starting 1-5 must pass its check digit; neither failure reaches the provider, and pre-1981 VINs go to manual entry. Required inputs: vin in the request body, never in the URL. Emits a VEHICLE_VIN_DECODE event without the VIN, and caches a decode by VIN for 30 days (24 hours when partial) while never caching an error. Returns 200 with the decode, partial&#x3D;true with warnings when the provider reported problems, and values that stay advisory until the technician confirms them. Fails with 400 for a malformed VIN, 403 without the permission, 422 VIN_CHECK_DIGIT_INVALID or VIN_NOT_DECODABLE, and 503 VIN_DECODE_UNAVAILABLE with Retry-After; after the last two, let the technician type year, make and model.
+     * @endpoint post /v1/vehicle-fitment/vin/decode
+     * @param vinDecodeRequest The VIN to decode, as typed or scanned.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public decodeVin(vinDecodeRequest: VinDecodeRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VinDecodeResponse>;
+    public decodeVin(vinDecodeRequest: VinDecodeRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VinDecodeResponse>>;
+    public decodeVin(vinDecodeRequest: VinDecodeRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VinDecodeResponse>>;
+    public decodeVin(vinDecodeRequest: VinDecodeRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (vinDecodeRequest === null || vinDecodeRequest === undefined) {
+            throw new Error('Required parameter vinDecodeRequest was null or undefined when calling decodeVin.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/vehicle-fitment/vin/decode`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<VinDecodeResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: vinDecodeRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
     }
 
     /**
