@@ -30,10 +30,6 @@ export interface TaxRegistrationUpdateRequest {
      */
     registrationNumber: string;
     /**
-     * Caller-generated UUIDv7 naming this request; a replay returns the first result
-     */
-    requestId: string;
-    /**
      * The version the caller read; another one is 409 OPTIMISTIC_LOCK
      */
     version: number;
@@ -77,8 +73,8 @@ export function instanceOfTaxRegistrationUpdateRequest(value: object): value is 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTaxRegistrationUpdateRequestPropertyNames('effectiveFrom', 'justification', 'registrationNumber', 'requestId', 'version', );
-    const optionalStringProperties = createTaxRegistrationUpdateRequestOptionalProperties({ name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, { name: 'justification', nullable: false }, { name: 'registrationNumber', nullable: false }, { name: 'requestId', nullable: false }, );
+    const requiredProperties = createTaxRegistrationUpdateRequestPropertyNames('effectiveFrom', 'justification', 'registrationNumber', 'version', );
+    const optionalStringProperties = createTaxRegistrationUpdateRequestOptionalProperties({ name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, { name: 'justification', nullable: false }, { name: 'registrationNumber', nullable: false }, );
     const optionalNumberProperties = createTaxRegistrationUpdateRequestOptionalProperties({ name: 'version', nullable: false }, );
     const optionalBooleanProperties = createTaxRegistrationUpdateRequestOptionalProperties();
 

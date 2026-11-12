@@ -41,22 +41,29 @@ export class TaxProviderBindingsService extends BaseService {
 
     /**
      * Set a tenant\&#39;s tax-provider binding
-     * Sets the plug-in that prices one tenant\&#39;s documents in one country from a date, replacing the binding that begins on the same day and recording the change in pos-tax\&#39;s binding history. Use this tool only as the pos-tenant front door; do not use it from a screen or another service, which call PUT /v1/platform/tenants/{tenantId}/tax-provider-bindings instead. Preconditions: the call carries pos-tenant\&#39;s front-door secret and the forwarded X-User-Id and X-Tenant-Id (401 otherwise); providerId is a registered plug-in that serves countryCode (US_SELF for US, AVALARA for any country, or &lt;country&gt;_SELF of a profiled country) (422 TAX_PROVIDER_NOT_REGISTERED otherwise). Required inputs: countryCode, providerId, effectiveFrom and requestId; providerProfile and effectiveTo are optional, and effectiveTo is inclusive. Emits a TAX_PROVIDER_BINDING_SET event, writes a history row naming the forwarded actor, and returns 201, or 200 with the first result when the same request is replayed with its requestId. Returns 409 TAX_PROVIDER_BINDING_OVERLAP when another binding of the same country is in effect on any date this one covers, and 409 IDEMPOTENCY_CONFLICT when the requestId was used for another request.
+     * Sets the plug-in that prices one tenant\&#39;s documents in one country from a date, replacing the binding that begins on the same day and recording the change in pos-tax\&#39;s binding history. Use this tool only as the pos-tenant front door; do not use it from a screen or another service, which call PUT /v1/platform/tenants/{tenantId}/tax-provider-bindings instead. Preconditions: the call carries pos-tenant\&#39;s front-door secret and the forwarded X-User-Id and X-Tenant-Id (401 otherwise), and the Idempotency-Key header (UUID; missing or malformed is 400 VALIDATION_ERROR); providerId is a registered plug-in that serves countryCode (US_SELF for US, AVALARA for any country, or &lt;country&gt;_SELF of a profiled country) (422 TAX_PROVIDER_NOT_REGISTERED otherwise). Required inputs: countryCode, providerId and effectiveFrom; providerProfile and effectiveTo are optional, and effectiveTo is inclusive. The key travels in the Idempotency-Key header, never in the body. Emits a TAX_PROVIDER_BINDING_SET event, writes a history row naming the forwarded actor, and returns 201. A replay with the same key and request returns the stored 201 and body with Idempotency-Replayed: true, and writes no second history row or event. Returns 409 TAX_PROVIDER_BINDING_OVERLAP when another binding of the same country is in effect on any date this one covers, and 409 IDEMPOTENCY_CONFLICT when the key was used for another request or by another actor.
      * @endpoint put /v1/tax/provider-bindings
+     * @param idempotencyKey Caller-generated UUID naming this request (ADR-0075), forwarded unchanged from pos-tenant; a replay with the same key and request answers the first status and body with Idempotency-Replayed: true
      * @param taxProviderBindingRequest The country, the plug-in that serves it and the dates it applies to
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public setTaxProviderBinding(taxProviderBindingRequest: TaxProviderBindingRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxProviderBindingResponse>;
-    public setTaxProviderBinding(taxProviderBindingRequest: TaxProviderBindingRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxProviderBindingResponse>>;
-    public setTaxProviderBinding(taxProviderBindingRequest: TaxProviderBindingRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxProviderBindingResponse>>;
-    public setTaxProviderBinding(taxProviderBindingRequest: TaxProviderBindingRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public setTaxProviderBinding(idempotencyKey: string, taxProviderBindingRequest: TaxProviderBindingRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TaxProviderBindingResponse>;
+    public setTaxProviderBinding(idempotencyKey: string, taxProviderBindingRequest: TaxProviderBindingRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TaxProviderBindingResponse>>;
+    public setTaxProviderBinding(idempotencyKey: string, taxProviderBindingRequest: TaxProviderBindingRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TaxProviderBindingResponse>>;
+    public setTaxProviderBinding(idempotencyKey: string, taxProviderBindingRequest: TaxProviderBindingRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling setTaxProviderBinding.');
+        }
         if (taxProviderBindingRequest === null || taxProviderBindingRequest === undefined) {
             throw new Error('Required parameter taxProviderBindingRequest was null or undefined when calling setTaxProviderBinding.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (tenantFrontDoorSecret) required
         localVarHeaders = this.configuration.addCredentialToHeaders('tenantFrontDoorSecret', 'X-Pos-Tax-Front-Door-Secret', localVarHeaders);
