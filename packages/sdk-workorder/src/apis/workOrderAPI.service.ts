@@ -21,6 +21,8 @@ import { ApiError } from '../models/apiError';
 // @ts-ignore
 import { ApproveWorkorderRequest } from '../models/approveWorkorderRequest';
 // @ts-ignore
+import { CompleteServiceItemRequest } from '../models/completeServiceItemRequest';
+// @ts-ignore
 import { CompleteWorkorderRequest } from '../models/completeWorkorderRequest';
 // @ts-ignore
 import { CompleteWorkorderResponse } from '../models/completeWorkorderResponse';
@@ -209,26 +211,34 @@ export class WorkOrderAPIService extends BaseService {
 
     /**
      * Complete a Workorder Service Line
-     * Marks one workorder service line as COMPLETED, leaving the workorder\&#39;s own status untouched. Use this tool to close individual service lines as work finishes; do not use completeWorkorder, which completes the whole workorder, or completePartItem, which closes a part line. Preconditions: the service line must exist, belong to the given workorder, and not be in CANCELLED or PENDING_APPROVAL status; completing an already-COMPLETED line is an idempotent no-op. Required inputs: workorderId and serviceLineId (UUIDs) as path parameters; there is no request body. Emits a WORKORDER_SERVICE_ITEM_COMPLETE event. Returns 404 when the line is missing or belongs to another workorder, and 400 when the line is CANCELLED or PENDING_APPROVAL.
+     * Marks one workorder service line as COMPLETED, leaving the workorder\&#39;s own status untouched. Use this tool to close individual service lines as work finishes; do not use completeWorkorder, which completes the whole workorder, or completePartItem, which closes a part line. Preconditions: the service line must exist, belong to the given workorder, and not be in CANCELLED or PENDING_APPROVAL status; completing an already-COMPLETED line is an idempotent no-op. Required inputs: workorderId and serviceLineId (UUIDs) as path parameters; the body is optional and the Idempotency-Key header is required (a UUID) so a retry replays the original answer with Idempotency-Replayed: true. occurredAt is the optional business time the line was completed, for work replayed from the technician app\&#39;s offline queue: it must be no more than 72 hours old and no more than 2 minutes in the future, and a replay whose workorder was completed, cancelled, invoiced, put on hold or reassigned meanwhile answers 409 WORKORDER_STATE_CHANGED. Emits a WORKORDER_SERVICE_ITEM_COMPLETE event. Returns 404 when the line is missing or belongs to another workorder, 400 when the line is CANCELLED or PENDING_APPROVAL, 409 WORKORDER_STATE_CHANGED when a replay\&#39;s workorder changed meanwhile or IDEMPOTENCY_CONFLICT when the key was used for a different request, and 422 OCCURRED_AT_OUT_OF_RANGE when occurredAt is outside the replay window.
      * @endpoint post /v1/workorders/{workorderId}/services/{serviceLineId}/complete
      * @param workorderId Workorder ID
      * @param serviceLineId Service line ID
+     * @param idempotencyKey Required idempotency key (a UUID): the technician app sends this call from its offline queue (ADR-0075 §2). A replay returns the original answer
+     * @param completeServiceItemRequest Optional business time the line was completed at, for work replayed from the technician app\&#39;s offline queue.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public completeServiceItem(workorderId: string, serviceLineId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkorderItemCompletionResponse>;
-    public completeServiceItem(workorderId: string, serviceLineId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkorderItemCompletionResponse>>;
-    public completeServiceItem(workorderId: string, serviceLineId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkorderItemCompletionResponse>>;
-    public completeServiceItem(workorderId: string, serviceLineId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public completeServiceItem(workorderId: string, serviceLineId: string, idempotencyKey: string, completeServiceItemRequest?: CompleteServiceItemRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkorderItemCompletionResponse>;
+    public completeServiceItem(workorderId: string, serviceLineId: string, idempotencyKey: string, completeServiceItemRequest?: CompleteServiceItemRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkorderItemCompletionResponse>>;
+    public completeServiceItem(workorderId: string, serviceLineId: string, idempotencyKey: string, completeServiceItemRequest?: CompleteServiceItemRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkorderItemCompletionResponse>>;
+    public completeServiceItem(workorderId: string, serviceLineId: string, idempotencyKey: string, completeServiceItemRequest?: CompleteServiceItemRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (workorderId === null || workorderId === undefined) {
             throw new Error('Required parameter workorderId was null or undefined when calling completeServiceItem.');
         }
         if (serviceLineId === null || serviceLineId === undefined) {
             throw new Error('Required parameter serviceLineId was null or undefined when calling completeServiceItem.');
         }
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling completeServiceItem.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
@@ -244,6 +254,15 @@ export class WorkOrderAPIService extends BaseService {
 
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
@@ -261,6 +280,7 @@ export class WorkOrderAPIService extends BaseService {
         return this.httpClient.request<WorkorderItemCompletionResponse>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: completeServiceItemRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

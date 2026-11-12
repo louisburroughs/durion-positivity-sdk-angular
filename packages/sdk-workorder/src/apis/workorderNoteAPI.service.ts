@@ -41,26 +41,33 @@ export class WorkorderNoteAPIService extends BaseService {
 
     /**
      * Record a Note About the Customer
-     * Records a free-text note about the customer against a workorder, such as something the customer said while the job was open, and publishes it so it lands on the customer\&#39;s CRM timeline. Use this tool for a note about the CUSTOMER; do not use it for notes about the work itself or about a decision on it — completion notes and approval notes are fields on the workorder and the change request respectively. Preconditions: the workorder must exist; the author is taken from the authenticated caller rather than the request body. Required inputs: workorderId (UUID) as a path parameter and noteText (max 2000 characters); noteType is an optional free-text classification such as CUSTOMER_REQUEST. Emits a WORKORDER_NOTE_ADD event and publishes the workorder.note.added.v1 fact, which pos-customer projects onto the party\&#39;s timeline. Returns 201 with the saved note, and 404 when the workorder does not exist.
+     * Records a free-text note about the customer against a workorder, such as something the customer said while the job was open, and publishes it so it lands on the customer\&#39;s CRM timeline. Use this tool for a note about the CUSTOMER; do not use it for notes about the work itself or about a decision on it — completion notes and approval notes are fields on the workorder and the change request respectively. Preconditions: the workorder must exist; the author is taken from the authenticated caller rather than the request body. Required inputs: workorderId (UUID) as a path parameter and noteText (max 2000 characters); noteType is an optional free-text classification such as CUSTOMER_REQUEST, and the Idempotency-Key header is required (a UUID) so a retry replays the original 201 note. occurredAt is the optional business time the note was written, for the technician app replaying work done offline: it must be no more than 72 hours old and no more than 2 minutes in the future, and a note with a business time is accepted in EVERY workorder status, closed ones included, because the app keeps an entry it could not apply as a note. Emits a WORKORDER_NOTE_ADD event and publishes the workorder.note.added.v1 fact, which pos-customer projects onto the party\&#39;s timeline. Returns 201 with the saved note (the same 201 on an idempotent replay), 404 when the workorder does not exist, 409 IDEMPOTENCY_CONFLICT when the key was used for a different request, 422 OCCURRED_AT_OUT_OF_RANGE when occurredAt is outside the replay window, and 400 when the Idempotency-Key is not a UUID.
      * @endpoint post /v1/workorders/{workorderId}/notes
      * @param workorderId Workorder ID
+     * @param idempotencyKey Required idempotency key (a UUID): the technician app sends this call from its offline queue (ADR-0075 §2). A replay returns the original answer
      * @param addWorkorderNoteRequest The note to record.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public addWorkorderNote(workorderId: string, addWorkorderNoteRequest: AddWorkorderNoteRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkorderNoteResponse>;
-    public addWorkorderNote(workorderId: string, addWorkorderNoteRequest: AddWorkorderNoteRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkorderNoteResponse>>;
-    public addWorkorderNote(workorderId: string, addWorkorderNoteRequest: AddWorkorderNoteRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkorderNoteResponse>>;
-    public addWorkorderNote(workorderId: string, addWorkorderNoteRequest: AddWorkorderNoteRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public addWorkorderNote(workorderId: string, idempotencyKey: string, addWorkorderNoteRequest: AddWorkorderNoteRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkorderNoteResponse>;
+    public addWorkorderNote(workorderId: string, idempotencyKey: string, addWorkorderNoteRequest: AddWorkorderNoteRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkorderNoteResponse>>;
+    public addWorkorderNote(workorderId: string, idempotencyKey: string, addWorkorderNoteRequest: AddWorkorderNoteRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkorderNoteResponse>>;
+    public addWorkorderNote(workorderId: string, idempotencyKey: string, addWorkorderNoteRequest: AddWorkorderNoteRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (workorderId === null || workorderId === undefined) {
             throw new Error('Required parameter workorderId was null or undefined when calling addWorkorderNote.');
+        }
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling addWorkorderNote.');
         }
         if (addWorkorderNoteRequest === null || addWorkorderNoteRequest === undefined) {
             throw new Error('Required parameter addWorkorderNoteRequest was null or undefined when calling addWorkorderNote.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');

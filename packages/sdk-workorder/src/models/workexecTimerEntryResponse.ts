@@ -30,6 +30,14 @@ export interface WorkexecTimerEntryResponse {
      */
     mechanicId?: string;
     /**
+     * Server receipt instant, set only for an OFFLINE_REPLAY entry
+     */
+    receivedAt?: string;
+    /**
+     * How the entry arrived: LIVE when the server stamped it on receipt, OFFLINE_REPLAY when the technician app replayed work done offline (#3291).
+     */
+    source?: WorkexecTimerEntryResponseSourceEnum;
+    /**
      * Timer start timestamp
      */
     startTime?: string;
@@ -50,6 +58,12 @@ export interface WorkexecTimerEntryResponse {
      */
     workorderItemId?: string;
 }
+export enum WorkexecTimerEntryResponseSourceEnum {
+    Live = 'LIVE',
+    OfflineReplay = 'OFFLINE_REPLAY'
+};
+
+
 
 function isOptionalWorkexecTimerEntryResponsePropertyOfType(
     value: Record<string, unknown>,
@@ -90,7 +104,7 @@ export function instanceOfWorkexecTimerEntryResponse(value: object): value is Wo
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkexecTimerEntryResponsePropertyNames();
-    const optionalStringProperties = createWorkexecTimerEntryResponseOptionalProperties({ name: 'endTime', nullable: false }, { name: 'laborCode', nullable: false }, { name: 'mechanicId', nullable: false }, { name: 'startTime', nullable: false }, { name: 'status', nullable: false }, { name: 'timeEntryId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderItemId', nullable: false }, );
+    const optionalStringProperties = createWorkexecTimerEntryResponseOptionalProperties({ name: 'endTime', nullable: false }, { name: 'laborCode', nullable: false }, { name: 'mechanicId', nullable: false }, { name: 'receivedAt', nullable: false }, { name: 'source', nullable: false }, { name: 'startTime', nullable: false }, { name: 'status', nullable: false }, { name: 'timeEntryId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderItemId', nullable: false }, );
     const optionalNumberProperties = createWorkexecTimerEntryResponseOptionalProperties({ name: 'durationInSeconds', nullable: false }, );
     const optionalBooleanProperties = createWorkexecTimerEntryResponseOptionalProperties();
 

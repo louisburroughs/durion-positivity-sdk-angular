@@ -42,6 +42,14 @@ export interface WorkorderPartUsageEventResponse {
      */
     quantity: number;
     /**
+     * Server receipt instant, set only for an OFFLINE_REPLAY event
+     */
+    receivedAt?: string;
+    /**
+     * How the event arrived: LIVE when the server stamped it on receipt, OFFLINE_REPLAY when the technician app replayed work done offline (#3291).
+     */
+    source?: WorkorderPartUsageEventResponseSourceEnum;
+    /**
      * Workorder identifier
      */
     workorderId: string;
@@ -50,6 +58,12 @@ export interface WorkorderPartUsageEventResponse {
      */
     workorderPartId: string;
 }
+export enum WorkorderPartUsageEventResponseSourceEnum {
+    Live = 'LIVE',
+    OfflineReplay = 'OFFLINE_REPLAY'
+};
+
+
 
 function isOptionalWorkorderPartUsageEventResponsePropertyOfType(
     value: Record<string, unknown>,
@@ -90,7 +104,7 @@ export function instanceOfWorkorderPartUsageEventResponse(value: object): value 
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkorderPartUsageEventResponsePropertyNames('eventType', 'id', 'performedAt', 'performedBy', 'quantity', 'workorderId', 'workorderPartId', );
-    const optionalStringProperties = createWorkorderPartUsageEventResponseOptionalProperties({ name: 'eventType', nullable: false }, { name: 'id', nullable: false }, { name: 'notes', nullable: false }, { name: 'partDescription', nullable: false }, { name: 'performedAt', nullable: false }, { name: 'performedBy', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderPartId', nullable: false }, );
+    const optionalStringProperties = createWorkorderPartUsageEventResponseOptionalProperties({ name: 'eventType', nullable: false }, { name: 'id', nullable: false }, { name: 'notes', nullable: false }, { name: 'partDescription', nullable: false }, { name: 'performedAt', nullable: false }, { name: 'performedBy', nullable: false }, { name: 'receivedAt', nullable: false }, { name: 'source', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderPartId', nullable: false }, );
     const optionalNumberProperties = createWorkorderPartUsageEventResponseOptionalProperties({ name: 'quantity', nullable: false }, );
     const optionalBooleanProperties = createWorkorderPartUsageEventResponseOptionalProperties();
 

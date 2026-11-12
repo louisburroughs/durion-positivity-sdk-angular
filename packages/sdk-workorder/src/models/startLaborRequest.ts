@@ -18,6 +18,10 @@ export interface StartLaborRequest {
      */
     notes?: string;
     /**
+     * Business time the session started, for work replayed from the technician app\'s offline queue (#3291). ISO-8601 with an offset; omitted means now. Must be no more than 72 hours old and no more than 2 minutes in the future.
+     */
+    occurredAt?: string;
+    /**
      * ID of the technician performing the work
      */
     technicianId: string;
@@ -62,7 +66,7 @@ export function instanceOfStartLaborRequest(value: object): value is StartLaborR
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createStartLaborRequestPropertyNames('technicianId', );
-    const optionalStringProperties = createStartLaborRequestOptionalProperties({ name: 'notes', nullable: false }, { name: 'technicianId', nullable: false }, );
+    const optionalStringProperties = createStartLaborRequestOptionalProperties({ name: 'notes', nullable: false }, { name: 'occurredAt', nullable: false }, { name: 'technicianId', nullable: false }, );
     const optionalNumberProperties = createStartLaborRequestOptionalProperties();
     const optionalBooleanProperties = createStartLaborRequestOptionalProperties();
 

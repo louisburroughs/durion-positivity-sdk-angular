@@ -18,6 +18,10 @@ export interface WorkexecTimerStartRequest {
      */
     laborCode?: string;
     /**
+     * Business time the timer started, for work replayed from the technician app\'s offline queue (#3291). ISO-8601 with an offset; omitted means now. Must be no more than 72 hours old and no more than 2 minutes in the future; the timer-active check is evaluated at this time.
+     */
+    occurredAt?: string;
+    /**
      * Required when starting a timer on behalf of a technician other than yourself or the current assignee.
      */
     reason?: string;
@@ -74,7 +78,7 @@ export function instanceOfWorkexecTimerStartRequest(value: object): value is Wor
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createWorkexecTimerStartRequestPropertyNames('workorderId', );
-    const optionalStringProperties = createWorkexecTimerStartRequestOptionalProperties({ name: 'laborCode', nullable: false }, { name: 'reason', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderItemId', nullable: false }, );
+    const optionalStringProperties = createWorkexecTimerStartRequestOptionalProperties({ name: 'laborCode', nullable: false }, { name: 'occurredAt', nullable: false }, { name: 'reason', nullable: false }, { name: 'technicianId', nullable: false }, { name: 'workorderId', nullable: false }, { name: 'workorderItemId', nullable: false }, );
     const optionalNumberProperties = createWorkexecTimerStartRequestOptionalProperties();
     const optionalBooleanProperties = createWorkexecTimerStartRequestOptionalProperties();
 

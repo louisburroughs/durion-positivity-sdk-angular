@@ -23,6 +23,8 @@ import { ApiError } from '../models/apiError';
 // @ts-ignore
 import { StartLaborRequest } from '../models/startLaborRequest';
 // @ts-ignore
+import { StopLaborRequest } from '../models/stopLaborRequest';
+// @ts-ignore
 import { WorkorderLaborAdjustmentResponse } from '../models/workorderLaborAdjustmentResponse';
 // @ts-ignore
 import { WorkorderLaborEntryResponse } from '../models/workorderLaborEntryResponse';
@@ -254,7 +256,7 @@ export class WorkorderLaborAPIService extends BaseService {
 
     /**
      * Start Labor Session on Service
-     * Starts a labor entry tracking a technician\&#39;s time against one workorder service line, stamping the start time and zero hours worked. Use this tool when a technician begins billable labor on a specific service; do not use startWorkexecWorkSession, which is the payroll timekeeping clock rather than per-service labor tracking. Preconditions: the workorder must be in ASSIGNED, WORK_IN_PROGRESS, AWAITING_PARTS, or AWAITING_APPROVAL status, the service must belong to that workorder, and the service must have no labor session still open. Required inputs: workorderId and serviceId (UUIDs) as path parameters, technicianId (UUID) in the body and the required Idempotency-Key header (a UUID); notes are optional, and a replay of the same request returns the original 201 answer with Idempotency-Replayed: true. Emits a WORKORDER_LABOR_START event. Returns 201 with the new entry (the same 201 on an idempotent replay), 404 when the workorder or service cannot be found, 409 IDEMPOTENCY_CONFLICT when the key was used for a different request or by a different actor, and 400 when a session is already active, the status disallows labor, or the Idempotency-Key is missing or not a UUID.
+     * Starts a labor entry tracking a technician\&#39;s time against one workorder service line, stamping the start time and zero hours worked. Use this tool when a technician begins billable labor on a specific service; do not use startWorkexecWorkSession, which is the payroll timekeeping clock rather than per-service labor tracking. Preconditions: the workorder must be in ASSIGNED, WORK_IN_PROGRESS, AWAITING_PARTS, or AWAITING_APPROVAL status, the service must belong to that workorder, and the service must have no labor session still open. Required inputs: workorderId and serviceId (UUIDs) as path parameters, technicianId (UUID) in the body and the required Idempotency-Key header (a UUID); notes are optional, and a replay of the same request returns the original 201 answer with Idempotency-Replayed: true. occurredAt is the optional business time the session started, for work replayed from the technician app\&#39;s offline queue: it must be no more than 72 hours old and no more than 2 minutes in the future, and the entry is stored at that time with source OFFLINE_REPLAY when it differs from receipt by more than 2 minutes. A replay whose workorder was completed, cancelled, invoiced, put on hold or reassigned meanwhile answers 409 WORKORDER_STATE_CHANGED. Emits a WORKORDER_LABOR_START event. Returns 201 with the new entry (the same 201 on an idempotent replay), 404 when the workorder or service cannot be found, 409 IDEMPOTENCY_CONFLICT when the key was used for a different request or by a different actor, 409 WORKORDER_STATE_CHANGED when a replay\&#39;s workorder changed meanwhile, 422 OCCURRED_AT_OUT_OF_RANGE when occurredAt is outside the replay window, and 400 when a session is already active, the status disallows labor, or the Idempotency-Key is missing or not a UUID.
      * @endpoint post /v1/workorders/{workorderId}/services/{serviceId}/labor/start
      * @param workorderId ID of the workorder
      * @param serviceId ID of the service item
@@ -339,19 +341,20 @@ export class WorkorderLaborAPIService extends BaseService {
 
     /**
      * Stop Active Labor Session
-     * Stops an open labor entry, stamping the end time and computing hours worked from the elapsed session time. Use this tool when a technician finishes labor on a service; do not use adjustLaborHours, which corrects the hours on an already-stopped entry. Preconditions: the labor entry must exist and still be open — an entry with an end time cannot be stopped again. Required inputs: workorderId and entryId (UUIDs) as path parameters and the required Idempotency-Key header (a UUID); there is no request body, and a replay returns the already-stopped entry with Idempotency-Replayed: true. Emits a WORKORDER_LABOR_STOP event. Returns 404 when no labor entry exists for the id, 409 IDEMPOTENCY_CONFLICT when the key was used for a different request or by a different actor, and 400 when the session is already stopped or the Idempotency-Key is missing or not a UUID.
+     * Stops an open labor entry, stamping the end time and computing hours worked from the elapsed session time. Use this tool when a technician finishes labor on a service; do not use adjustLaborHours, which corrects the hours on an already-stopped entry. Preconditions: the labor entry must exist and still be open — an entry with an end time cannot be stopped again. Required inputs: workorderId and entryId (UUIDs) as path parameters and the required Idempotency-Key header (a UUID); the optional body may carry occurredAt, the business time the session ended for work replayed from the technician app\&#39;s offline queue, and a replay returns the already-stopped entry with Idempotency-Replayed: true. Emits a WORKORDER_LABOR_STOP event. Returns 404 when no labor entry exists for the id, 409 IDEMPOTENCY_CONFLICT when the key was used for a different request or by a different actor, 409 LABOR_SEQUENCE_INVALID when occurredAt precedes the entry\&#39;s start, 409 WORKORDER_STATE_CHANGED when a replay\&#39;s workorder changed meanwhile, 422 OCCURRED_AT_OUT_OF_RANGE when occurredAt is outside the replay window, and 400 when the session is already stopped or the Idempotency-Key is missing or not a UUID.
      * @endpoint post /v1/workorders/{workorderId}/labor/{entryId}/stop
      * @param workorderId ID of the workorder
      * @param entryId ID of the labor entry to stop
      * @param idempotencyKey Required idempotency key (a UUID); a replay returns the original answer
+     * @param stopLaborRequest Optional business time the session ended at, for work replayed from the technician app\&#39;s offline queue.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public stopLaborSession(workorderId: string, entryId: string, idempotencyKey: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkorderLaborEntryResponse>;
-    public stopLaborSession(workorderId: string, entryId: string, idempotencyKey: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkorderLaborEntryResponse>>;
-    public stopLaborSession(workorderId: string, entryId: string, idempotencyKey: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkorderLaborEntryResponse>>;
-    public stopLaborSession(workorderId: string, entryId: string, idempotencyKey: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public stopLaborSession(workorderId: string, entryId: string, idempotencyKey: string, stopLaborRequest?: StopLaborRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkorderLaborEntryResponse>;
+    public stopLaborSession(workorderId: string, entryId: string, idempotencyKey: string, stopLaborRequest?: StopLaborRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkorderLaborEntryResponse>>;
+    public stopLaborSession(workorderId: string, entryId: string, idempotencyKey: string, stopLaborRequest?: StopLaborRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkorderLaborEntryResponse>>;
+    public stopLaborSession(workorderId: string, entryId: string, idempotencyKey: string, stopLaborRequest?: StopLaborRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (workorderId === null || workorderId === undefined) {
             throw new Error('Required parameter workorderId was null or undefined when calling stopLaborSession.');
         }
@@ -382,6 +385,15 @@ export class WorkorderLaborAPIService extends BaseService {
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
 
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
@@ -398,6 +410,7 @@ export class WorkorderLaborAPIService extends BaseService {
         return this.httpClient.request<WorkorderLaborEntryResponse>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: stopLaborRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
