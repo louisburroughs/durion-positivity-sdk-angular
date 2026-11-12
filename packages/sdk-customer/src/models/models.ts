@@ -91,6 +91,8 @@ export * from './partyMatch';
 export * from './partyNameRef';
 export * from './partyNameResolveRequest';
 export * from './partySummary';
+export * from './partySummaryLookupRequest';
+export * from './partySummaryLookupResult';
 export * from './partyTagAssignmentResponse';
 export * from './partyTagResponse';
 export * from './period';

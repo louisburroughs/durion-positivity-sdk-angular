@@ -47,6 +47,8 @@ export * from './revenueByCustomerReport';
 export * from './revenueByCustomerRow';
 export * from './revertRequest';
 export * from './sellerTaxRegistration';
+export * from './sendInvoiceRequest';
+export * from './sendInvoiceResponse';
 export * from './sortObject';
 export * from './standaloneRefundRequest';
 export * from './suggestedAlternative';
