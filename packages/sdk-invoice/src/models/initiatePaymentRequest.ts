@@ -18,14 +18,23 @@ export interface InitiatePaymentRequest {
      */
     amount: number;
     /**
+     * Card channel: COUNTER_READER, TAP_TO_PAY or HOSTED_PAGE
+     */
+    channel: InitiatePaymentRequestChannelEnum;
+    /**
      * Payment flow: SALE_CAPTURE (default one-step) or AUTH_ONLY (two-step)
      */
     paymentFlow: InitiatePaymentRequestPaymentFlowEnum;
     /**
-     * Tokenised card reference (no PAN)
+     * Counter reader, when the channel is a reader
      */
-    paymentToken: string;
+    readerId?: string;
 }
+export enum InitiatePaymentRequestChannelEnum {
+    CounterReader = 'COUNTER_READER',
+    TapToPay = 'TAP_TO_PAY',
+    HostedPage = 'HOSTED_PAGE'
+};
 export enum InitiatePaymentRequestPaymentFlowEnum {
     SaleCapture = 'SALE_CAPTURE',
     AuthOnly = 'AUTH_ONLY'
@@ -71,8 +80,8 @@ export function instanceOfInitiatePaymentRequest(value: object): value is Initia
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createInitiatePaymentRequestPropertyNames('amount', 'paymentFlow', 'paymentToken', );
-    const optionalStringProperties = createInitiatePaymentRequestOptionalProperties({ name: 'paymentFlow', nullable: false }, { name: 'paymentToken', nullable: false }, );
+    const requiredProperties = createInitiatePaymentRequestPropertyNames('amount', 'channel', 'paymentFlow', );
+    const optionalStringProperties = createInitiatePaymentRequestOptionalProperties({ name: 'channel', nullable: false }, { name: 'paymentFlow', nullable: false }, { name: 'readerId', nullable: false }, );
     const optionalNumberProperties = createInitiatePaymentRequestOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createInitiatePaymentRequestOptionalProperties();
 

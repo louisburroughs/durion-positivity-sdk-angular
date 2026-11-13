@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ClientHandoffResponse } from './clientHandoffResponse';
 
 
 /**
@@ -29,6 +30,7 @@ export interface InitiatePaymentResponse {
      * Cash tender only: signed rounding, settledAmount minus the amount applied
      */
     cashRoundingAmount?: number;
+    clientHandoff?: ClientHandoffResponse;
     /**
      * Gateway provider identifier (e.g., stripe)
      */
