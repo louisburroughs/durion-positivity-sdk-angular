@@ -4,6 +4,7 @@ export * from './application';
 export * from './artifactDownloadToken';
 export * from './billingRulesDTO';
 export * from './captureAmountRequest';
+export * from './clientHandoffResponse';
 export * from './conflict';
 export * from './createDepositRequest';
 export * from './depositCreditResponse';
