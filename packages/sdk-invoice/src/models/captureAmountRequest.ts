@@ -17,10 +17,6 @@ export interface CaptureAmountRequest {
      * Amount to capture from the authorized hold
      */
     amount: number;
-    /**
-     * Idempotency key ensuring the capture is processed at most once
-     */
-    captureIdempotencyKey: string;
 }
 
 function isOptionalCaptureAmountRequestPropertyOfType(
@@ -61,8 +57,8 @@ export function instanceOfCaptureAmountRequest(value: object): value is CaptureA
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCaptureAmountRequestPropertyNames('amount', 'captureIdempotencyKey', );
-    const optionalStringProperties = createCaptureAmountRequestOptionalProperties({ name: 'captureIdempotencyKey', nullable: false }, );
+    const requiredProperties = createCaptureAmountRequestPropertyNames('amount', );
+    const optionalStringProperties = createCaptureAmountRequestOptionalProperties();
     const optionalNumberProperties = createCaptureAmountRequestOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createCaptureAmountRequestOptionalProperties();
 
