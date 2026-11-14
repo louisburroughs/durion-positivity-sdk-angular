@@ -25,6 +25,8 @@ import { InitiatePaymentRequest } from '../models/initiatePaymentRequest';
 // @ts-ignore
 import { InitiatePaymentResponse } from '../models/initiatePaymentResponse';
 // @ts-ignore
+import { PaymentConnectionTokenResponse } from '../models/paymentConnectionTokenResponse';
+// @ts-ignore
 import { PaymentIntentResponse } from '../models/paymentIntentResponse';
 // @ts-ignore
 import { RecordCashPaymentRequest } from '../models/recordCashPaymentRequest';
@@ -131,6 +133,66 @@ export class PaymentService extends BaseService {
     }
 
     /**
+     * Mint a Terminal Connection Token
+     * Mints a Terminal connection token for the phone\&#39;s Tap to Pay reader, scoped to the invoice\&#39;s location\&#39;s Terminal Location on the tenant\&#39;s connected account; that Terminal Location is created on first use from the location\&#39;s replicated address. The token lets the phone\&#39;s Terminal SDK connect a reader and carries no money itself, so the invoice\&#39;s status and customer are not checked. Use this tool before a TAP_TO_PAY payment; do not use initiatePayment, which starts the payment the token\&#39;s reader collects. Preconditions: the invoice must exist; the caller needs the invoice:payment:process authority scoped to the invoice\&#39;s location (ADR-0061); the location must have replicated with a complete address (address_line1, city, region, postal_code and country); the tenant must have an active merchant account for the functional currency whose processor supports TAP_TO_PAY. Required inputs: only the invoice id in the path, with no request body and no Idempotency-Key, because each call mints a fresh token and stores nothing but the Terminal Location mapping. Emits INVOICE_PAYMENT_CONNECTION_TOKEN; the answer carries a secret that is never logged, stored or published, and is marked Cache-Control: no-store. Returns 201 with providerId, secret and terminalLocationId, 403 FORBIDDEN when the authority is missing or LOCATION_SCOPE_DENIED when the invoice\&#39;s location is outside the caller\&#39;s reach, 404 INVOICE_NOT_FOUND when the invoice does not exist, 422 PAYMENT_LOCATION_ADDRESS_REQUIRED when the location\&#39;s address is incomplete, 422 PAYMENT_MERCHANT_NOT_CONFIGURED or PAYMENT_CAPABILITY_UNSUPPORTED when the tenant or its processor cannot take a tap, 502 PAYMENT_PROCESSOR_UNAVAILABLE when the processor cannot be reached, and 503 LOCATION_REPLICATION_PENDING with Retry-After while the location has not replicated.
+     * @endpoint post /v1/invoices/{invoiceId}/payments/connection-token
+     * @param invoiceId
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public createPaymentConnectionToken(invoiceId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PaymentConnectionTokenResponse>;
+    public createPaymentConnectionToken(invoiceId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PaymentConnectionTokenResponse>>;
+    public createPaymentConnectionToken(invoiceId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PaymentConnectionTokenResponse>>;
+    public createPaymentConnectionToken(invoiceId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (invoiceId === null || invoiceId === undefined) {
+            throw new Error('Required parameter invoiceId was null or undefined when calling createPaymentConnectionToken.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/invoices/${this.configuration.encodeParam({name: "invoiceId", value: invoiceId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/payments/connection-token`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PaymentConnectionTokenResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Get Payment Detail
      * Returns the full detail of a single payment intent under an invoice, including its captured, voided and refunded amounts and the balance still refundable — never the tokenised card reference or the raw gateway response. Use this tool to render a single payment\&#39;s detail; do not use listInvoicePayments unless you need the invoice\&#39;s full payment history. Preconditions: the payment intent must exist and belong to the given invoice; the caller needs the invoice:invoice:view authority, scoped to the invoice\&#39;s location (ADR-0061). Required inputs: invoiceId and paymentId (both UUID) as path parameters. Emits an INVOICE_PAYMENT_VIEW audit event; no state changes — this is a read-only projection. Returns 200 with the payment intent detail, 403 when invoice:invoice:view is missing or the invoice\&#39;s location is outside the caller\&#39;s reach, and 404 when no payment intent with that id exists under that invoice — a payment intent that exists under a different invoice also reports 404, so the response never confirms another invoice\&#39;s payment id.
      * @endpoint get /v1/invoices/{invoiceId}/payments/{paymentId}
@@ -196,7 +258,7 @@ export class PaymentService extends BaseService {
 
     /**
      * Initiate Card Payment on Invoice
-     * Initiates a card payment against an invoice as a processor-neutral payment session (ADR-0077), creating a payment intent that is CAPTURED immediately (SALE_CAPTURE) or left AUTHORIZED as a hold (AUTH_ONLY). The channel collects the card: pos-invoice never receives a card number, so the request carries no card token, and the response\&#39;s clientHandoff carries what the channel\&#39;s device or hosted page needs. Use this tool to take card tender; do not use capturePayment, which settles an existing AUTH_ONLY hold rather than starting a new payment. Preconditions: the invoice must exist and must name a customer (partyId); the tenant must have an active merchant account for the invoice\&#39;s currency (else 422 PAYMENT_MERCHANT_NOT_CONFIGURED); the channel must be one the tenant\&#39;s processor supports (else 422 PAYMENT_CAPABILITY_UNSUPPORTED naming it); the caller needs the invoice:payment:process authority (scoped to the invoice\&#39;s location, ADR-0061), and must also hold invoice:payment:limit_override when the amount exceeds 500.00 and invoice:payment:flow_select to choose AUTH_ONLY, each for that location. Required inputs: the Idempotency-Key header (a UUID), paymentFlow (SALE_CAPTURE or AUTH_ONLY), amount (positive) and channel (COUNTER_READER, TAP_TO_PAY or HOSTED_PAGE); readerId is accepted but unused on every channel until #3447 defines the reader contract, so it is never required. A replay with the same key and an identical request returns the original status and body with Idempotency-Replayed: true instead of charging twice; the replay keeps the clientHandoff\&#39;s provider id and url but never its clientSecret, so a client that lost the secret starts a new payment instead. Emits an INVOICE_PAYMENT_INITIATE event and records the session\&#39;s first state on the intent. Returns 201 with the intent and clientHandoff, 400 when Idempotency-Key is missing or not a UUID or another field is invalid, 403 when invoice:payment:process or a conditional authority the request needs is missing or the invoice\&#39;s location is outside the caller\&#39;s reach, 404 when the invoice does not exist, 409 IDEMPOTENCY_CONFLICT when the key was already used with a different request or caller (or is still in progress), 422 with INVOICE_PARTY_REQUIRED when the invoice has no customer, 422 with PAYMENT_MERCHANT_NOT_CONFIGURED or PAYMENT_CAPABILITY_UNSUPPORTED when the tenant or its processor cannot take this payment, 422 with PAYMENT_DECLINED when the processor declines, and 502 with PAYMENT_PROCESSOR_UNAVAILABLE when the processor cannot be reached.
+     * Initiates a card payment against an invoice as a processor-neutral payment session (ADR-0077), creating a payment intent that is CAPTURED immediately (SALE_CAPTURE) or left AUTHORIZED as a hold (AUTH_ONLY). The channel collects the card: pos-invoice never receives a card number, so the request carries no card token, and the response\&#39;s clientHandoff carries what the channel\&#39;s device or hosted page needs. Use this tool to take card tender; do not use capturePayment, which settles an existing AUTH_ONLY hold rather than starting a new payment. Preconditions: the invoice must exist and must name a customer (partyId); the tenant must have an active merchant account for the invoice\&#39;s currency (else 422 PAYMENT_MERCHANT_NOT_CONFIGURED); the channel must be one the tenant\&#39;s processor supports (else 422 PAYMENT_CAPABILITY_UNSUPPORTED naming it); the caller needs the invoice:payment:process authority (scoped to the invoice\&#39;s location, ADR-0061), and must also hold invoice:payment:limit_override when the amount exceeds 500.00 and invoice:payment:flow_select to choose AUTH_ONLY, each for that location. Required inputs: the Idempotency-Key header (a UUID), paymentFlow (SALE_CAPTURE or AUTH_ONLY), amount (positive) and channel (COUNTER_READER, TAP_TO_PAY or HOSTED_PAGE); readerId is accepted but unused on every channel until #3447 defines the reader contract, so it is never required. A replay with the same key and an identical request returns the original status and body with Idempotency-Replayed: true instead of charging twice; a replay of a payment that is still PENDING carries a current clientHandoff read from pos-payments, so a phone that lost the create response can still collect, while a final or unreadable payment carries none; the handoff is never stored in the idempotency record. Emits an INVOICE_PAYMENT_INITIATE event and records the session\&#39;s first state on the intent. Returns 201 with the intent and clientHandoff, 400 when Idempotency-Key is missing or not a UUID or another field is invalid, 403 when invoice:payment:process or a conditional authority the request needs is missing or the invoice\&#39;s location is outside the caller\&#39;s reach, 404 when the invoice does not exist, 409 IDEMPOTENCY_CONFLICT when the key was already used with a different request or caller (or is still in progress), 422 with INVOICE_PARTY_REQUIRED when the invoice has no customer, 422 with PAYMENT_MERCHANT_NOT_CONFIGURED or PAYMENT_CAPABILITY_UNSUPPORTED when the tenant or its processor cannot take this payment, 422 with PAYMENT_DECLINED when the processor declines, and 502 with PAYMENT_PROCESSOR_UNAVAILABLE when the processor cannot be reached.
      * @endpoint post /v1/invoices/{invoiceId}/payments
      * @param invoiceId
      * @param idempotencyKey Caller-chosen UUID identifying this write (ADR-0075); a replay of the same request returns the original status and body with Idempotency-Replayed: true
