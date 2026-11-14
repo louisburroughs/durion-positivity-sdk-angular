@@ -23,6 +23,8 @@ import { ContactCheckRequest } from '../models/contactCheckRequest';
 // @ts-ignore
 import { ContactCheckResponse } from '../models/contactCheckResponse';
 // @ts-ignore
+import { VehicleDriverLinkResponse } from '../models/vehicleDriverLinkResponse';
+// @ts-ignore
 import { VehiclePartySummaryDto } from '../models/vehiclePartySummaryDto';
 
 // @ts-ignore
@@ -117,7 +119,7 @@ export class CRMVehiclePartiesService extends BaseService {
 
     /**
      * List a Vehicle\&#39;s Linked Parties (Masked)
-     * Returns the parties linked to a vehicle — the owner and, for a commercial account, its drivers — in masked form: for a person a first name, a last initial, the last four digits of a phone and a masked e-mail; for a commercial account only its organization name. Use this tool to confirm with the customer, out loud, that this is the right vehicle\&#39;s customer; use checkVehicleContact instead to test a phone or e-mail the customer gives. Preconditions: the caller needs crm:vehicle_contact:check; the vehicle must have replicated into ext_vehicle. The owner is the party whose id equals the vehicle\&#39;s account id, drivers are persons with an effective DRIVER relationship from a commercial owner, merged, inactive and out-of-date parties are excluded, and there is no lessee. Required inputs: vehicleId (UUID) as a path parameter; there is no request body. Emits a CRM_VEHICLE_PARTIES_SUMMARY event; no state changes occur. The response is never cached and never contains a full phone, e-mail or address. Returns 403 when the caller lacks the authority, 503 VEHICLE_REPLICATION_PENDING with a Retry-After header when the vehicle has not replicated yet, and 200 with an empty list when the vehicle links no party.
+     * Returns the parties linked to a vehicle — the owner and, for a commercial account, its drivers — in masked form: for a person a first name, a last initial, the last four digits of a phone and a masked e-mail; for a commercial account only its organization name. Use this tool to confirm with the customer, out loud, that this is the right vehicle\&#39;s customer; use checkVehicleContact instead to test a phone or e-mail the customer gives. Preconditions: the caller needs crm:vehicle_contact:check; the vehicle must have replicated into ext_vehicle. The owner is the party whose id equals the vehicle\&#39;s account id, and the drivers are the persons with an effective DRIVER relationship from a commercial owner plus the persons linked to this vehicle as its driver; merged, inactive and out-of-date parties are excluded, and there is no lessee. Required inputs: vehicleId (UUID) as a path parameter; there is no request body. Emits a CRM_VEHICLE_PARTIES_SUMMARY event; no state changes occur. The response is never cached and never contains a full phone, e-mail or address. Returns 403 when the caller lacks the authority, 503 VEHICLE_REPLICATION_PENDING with a Retry-After header when the vehicle has not replicated yet, and 200 with an empty list when the vehicle links no party.
      * @endpoint get /v1/crm/vehicles/{vehicleId}/parties/summary
      * @param vehicleId Vehicle ID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -163,6 +165,134 @@ export class CRMVehiclePartiesService extends BaseService {
         let localVarPath = `/v1/crm/vehicles/${this.configuration.encodeParam({name: "vehicleId", value: vehicleId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/parties/summary`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<Array<VehiclePartySummaryDto>>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Link a Person to a Vehicle as its Driver
+     * Records that a person brought a vehicle in: an in-effect per-vehicle DRIVER link between the vehicle and the person party. It never changes the vehicle\&#39;s owner and never writes to the vehicle registry. Use this tool when someone other than the owner brings the vehicle in; use unlinkVehicleDriver instead to take the link away again. Preconditions: the caller needs crm:vehicle_driver:create; the vehicle must have replicated into ext_vehicle; the party must be an active person party, not the tenant\&#39;s house account and not the vehicle\&#39;s owner; the vehicle must be active and have a usable owner. Required inputs: vehicleId and partyId (UUIDs) as path parameters; there is no request body and no Idempotency-Key. The call is naturally idempotent: a repeat answers the link already in effect with the same linkedAt, writes nothing and publishes no fact, while a new link publishes customer.vehicle-party.changed with linked&#x3D;true. Emits a CRM_VEHICLE_DRIVER_LINK event, and the answer is never cached and carries no name, phone, e-mail or address. Returns 400 VALIDATION_ERROR when an id is not a UUID, 403 when the caller lacks the authority, 404 PARTY_NOT_FOUND, 409 HOUSE_ACCOUNT_IMMUTABLE, 422 VEHICLE_DRIVER_NOT_A_PERSON, VEHICLE_DRIVER_PARTY_INACTIVE, VEHICLE_NOT_LINKABLE or VEHICLE_DRIVER_IS_OWNER, and 503 VEHICLE_REPLICATION_PENDING with a Retry-After header when the vehicle has not replicated yet.
+     * @endpoint put /v1/crm/vehicles/{vehicleId}/drivers/{partyId}
+     * @param vehicleId Vehicle ID
+     * @param partyId Person party ID to link as the vehicle\&#39;s driver
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public linkVehicleDriver(vehicleId: string, partyId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<VehicleDriverLinkResponse>;
+    public linkVehicleDriver(vehicleId: string, partyId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<VehicleDriverLinkResponse>>;
+    public linkVehicleDriver(vehicleId: string, partyId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<VehicleDriverLinkResponse>>;
+    public linkVehicleDriver(vehicleId: string, partyId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (vehicleId === null || vehicleId === undefined) {
+            throw new Error('Required parameter vehicleId was null or undefined when calling linkVehicleDriver.');
+        }
+        if (partyId === null || partyId === undefined) {
+            throw new Error('Required parameter partyId was null or undefined when calling linkVehicleDriver.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/crm/vehicles/${this.configuration.encodeParam({name: "vehicleId", value: vehicleId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/drivers/${this.configuration.encodeParam({name: "partyId", value: partyId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<VehicleDriverLinkResponse>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Remove a Vehicle\&#39;s Driver Link
+     * Ends the in-effect per-vehicle DRIVER link between the vehicle and the person party, keeping the row as history with its end date and the user who ended it. The vehicle\&#39;s owner is never touched and the row is never deleted. Use this tool when the wrong person was recorded as a driver; use deactivatePartyRelationship instead for a driver an account applies to every one of its vehicles. Preconditions: the caller needs crm:vehicle_driver:delete; the vehicle must have replicated into ext_vehicle; the person must not be the tenant\&#39;s house account, and the removal checks neither the party\&#39;s nor the vehicle\&#39;s current state, so a stale link can always be ended. Required inputs: vehicleId and partyId (UUIDs) as path parameters; there is no request body and no Idempotency-Key. Ending a link publishes customer.vehicle-party.changed with linked&#x3D;false, while a repeated removal or one with nothing in effect writes nothing and publishes nothing. Emits a CRM_VEHICLE_DRIVER_UNLINK event. Returns 204 in every authorized case, except 400 VALIDATION_ERROR when an id is not a UUID, 403 when the caller lacks the authority, 409 HOUSE_ACCOUNT_IMMUTABLE, 422 VEHICLE_DRIVER_ACCOUNT_WIDE when the person is a driver only through the owning account, and 503 VEHICLE_REPLICATION_PENDING with a Retry-After header when the vehicle has not replicated yet.
+     * @endpoint delete /v1/crm/vehicles/{vehicleId}/drivers/{partyId}
+     * @param vehicleId Vehicle ID
+     * @param partyId Person party ID whose driver link is ended
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public unlinkVehicleDriver(vehicleId: string, partyId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public unlinkVehicleDriver(vehicleId: string, partyId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public unlinkVehicleDriver(vehicleId: string, partyId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public unlinkVehicleDriver(vehicleId: string, partyId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (vehicleId === null || vehicleId === undefined) {
+            throw new Error('Required parameter vehicleId was null or undefined when calling unlinkVehicleDriver.');
+        }
+        if (partyId === null || partyId === undefined) {
+            throw new Error('Required parameter partyId was null or undefined when calling unlinkVehicleDriver.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/crm/vehicles/${this.configuration.encodeParam({name: "vehicleId", value: vehicleId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/drivers/${this.configuration.encodeParam({name: "partyId", value: partyId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
