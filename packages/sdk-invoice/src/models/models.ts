@@ -38,6 +38,7 @@ export * from './orderInvoiceResponse';
 export * from './pageInvoiceSearchResult';
 export * from './pageableObject';
 export * from './partyStandaloneRefundRequest';
+export * from './paymentConnectionTokenResponse';
 export * from './paymentIntentResponse';
 export * from './policyBlocker';
 export * from './printDeliveryRequest';
