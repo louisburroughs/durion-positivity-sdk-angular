@@ -26,7 +26,7 @@ export interface InitiatePaymentRequest {
      */
     paymentFlow: InitiatePaymentRequestPaymentFlowEnum;
     /**
-     * Counter reader, when the channel is a reader
+     * The counter reader id. Accepted but unused on every channel until #3447 defines the reader contract; it is not required by COUNTER_READER and may be omitted
      */
     readerId?: string;
 }
