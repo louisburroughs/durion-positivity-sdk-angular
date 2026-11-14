@@ -25,6 +25,10 @@ import { ManufacturerResponse } from '../models/manufacturerResponse';
 // @ts-ignore
 import { ModelResponse } from '../models/modelResponse';
 // @ts-ignore
+import { PlateResolveRequest } from '../models/plateResolveRequest';
+// @ts-ignore
+import { PlateResolveResponse } from '../models/plateResolveResponse';
+// @ts-ignore
 import { VehicleTypeResponse } from '../models/vehicleTypeResponse';
 // @ts-ignore
 import { VinDecodeRequest } from '../models/vinDecodeRequest';
@@ -343,6 +347,76 @@ export class VehicleFitmentAPIService extends BaseService {
         return this.httpClient.request<Array<VehicleTypeResponse>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Resolve a plate to a VIN
+     * Resolves a licence plate and its jurisdiction to a vehicle identification number through the configured provider (CarAPI today). Use this tool only when the shop\&#39;s registry search found nothing, on an explicit action after a registry miss; do not use it to find a vehicle already in the registry (search the registry instead) or to decode a VIN (use decodeVin instead). It creates and updates no vehicle. Preconditions: the plate is normalised (case and separators removed) and must then be 2 to 8 characters; the jurisdiction is ISO 3166-2 (US-NY, CA-BC, MX-JAL), a bare subdivision code is refused, and its country must be one the module may send a plate to, and neither failure reaches the provider. Required inputs: plate and jurisdiction in the request body, never in the URL. Emits a VEHICLE_PLATE_RESOLVE event without the plate, answers from a per-tenant cache, and meters the tenant\&#39;s daily allowance of paid provider calls; a cached answer is free. Returns 200 with the VIN, the provider name and warnings (CHECK_DIGIT_MISMATCH when a VIN starting 1-5 fails its check digit); year, make and model are not returned and come from the VIN decode. Fails with 400 for a malformed plate or an unsupported jurisdiction, 403 without the permission, 422 PLATE_NOT_FOUND, 429 PLATE_RESOLUTION_CAP_REACHED with Retry-After to the next UTC midnight, and 503 PLATE_RESOLUTION_UNAVAILABLE with Retry-After and nextAction; after the last, let the technician type the vehicle in by hand.
+     * @endpoint post /v1/vehicle-fitment/plate/resolve
+     * @param plateResolveRequest The plate and the jurisdiction it was issued in.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public resolvePlate(plateResolveRequest: PlateResolveRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PlateResolveResponse>;
+    public resolvePlate(plateResolveRequest: PlateResolveRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PlateResolveResponse>>;
+    public resolvePlate(plateResolveRequest: PlateResolveRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PlateResolveResponse>>;
+    public resolvePlate(plateResolveRequest: PlateResolveRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (plateResolveRequest === null || plateResolveRequest === undefined) {
+            throw new Error('Required parameter plateResolveRequest was null or undefined when calling resolvePlate.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/vehicle-fitment/plate/resolve`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PlateResolveResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: plateResolveRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

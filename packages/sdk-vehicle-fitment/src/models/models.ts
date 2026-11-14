@@ -13,6 +13,8 @@ export * from './hintResponse';
 export * from './makeResponse';
 export * from './manufacturerResponse';
 export * from './modelResponse';
+export * from './plateResolveRequest';
+export * from './plateResolveResponse';
 export * from './policyBlocker';
 export * from './suggestedAlternative';
 export * from './updateHintRequest';
