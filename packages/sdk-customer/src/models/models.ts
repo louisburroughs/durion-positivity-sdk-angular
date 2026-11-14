@@ -138,6 +138,7 @@ export * from './upsertPartyTagRequest';
 export * from './upsertSegmentRequest';
 export * from './upsertSegmentRequestPredicate';
 export * from './valueMetric';
+export * from './vehicleDriverLinkResponse';
 export * from './vehiclePartySummaryDto';
 export * from './vehicleResponse';
 export * from './vehicleSummary';
