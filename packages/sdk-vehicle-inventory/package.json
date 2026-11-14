@@ -1,6 +1,6 @@
 {
   "name": "@durion-sdk/vehicle-inventory",
-  "version": "0.259.0-alpha",
+  "version": "0.260.0-alpha",
   "description": "OpenAPI client for @durion-sdk/vehicle-inventory",
   "author": "OpenAPI-Generator Contributors",
   "repository": {
