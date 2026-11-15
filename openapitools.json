@@ -528,6 +528,27 @@
           "gitRepoId": "durion-positivity-sdk-angular"
         },
         "templateDir": "templates/typescript-angular"
+      },
+      "sdk-platform-sender": {
+        "generatorName": "typescript-angular",
+        "output": "packages/sdk-platform-sender",
+        "inputSpec": "../durion-positivity-backend/pos-platform-sender/openapi-public.yaml",
+        "additionalProperties": {
+          "npmName": "@durion-sdk/platform-sender",
+          "npmVersion": "0.264.0-alpha",
+          "ngVersion": "22",
+          "ngPackagrVersion": "22.0.0",
+          "tsVersion": ">=6.0.0 <6.1.0",
+          "providedIn": "root",
+          "supportsES6": true,
+          "stringEnums": true,
+          "withSeparateModelsAndApi": true,
+          "modelPackage": "src/models",
+          "apiPackage": "src/apis",
+          "gitUserId": "louisburroughs",
+          "gitRepoId": "durion-positivity-sdk-angular"
+        },
+        "templateDir": "templates/typescript-angular"
       }
     }
   }
