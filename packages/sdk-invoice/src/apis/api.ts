@@ -8,6 +8,7 @@ export * from './invoiceArtifactDownloadController.service';
 export * from './invoiceSearch.service';
 export * from './merchantAccounts.service';
 export * from './payment.service';
+export * from './paymentReaders.service';
 export * from './paymentReversal.service';
 export * from './receipt.service';
 export * from './standaloneRefund.service';

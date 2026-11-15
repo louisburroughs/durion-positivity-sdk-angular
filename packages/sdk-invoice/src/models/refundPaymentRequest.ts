@@ -26,6 +26,10 @@ export interface RefundPaymentRequest {
      */
     notes?: string;
     /**
+     * The reader the customer\'s card is presented on. Required when the payment was taken with Interac, which the processor only refunds in person (OI-5, #3447), and ignored when it can be refunded through the processor\'s API
+     */
+    readerId?: string;
+    /**
      * Reason the payment is being refunded
      */
     reason: RefundPaymentRequestReasonEnum;
@@ -83,7 +87,7 @@ export function instanceOfRefundPaymentRequest(value: object): value is RefundPa
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createRefundPaymentRequestPropertyNames('amount', 'reason', );
-    const optionalStringProperties = createRefundPaymentRequestOptionalProperties({ name: 'externalReference', nullable: false }, { name: 'notes', nullable: false }, { name: 'reason', nullable: false }, );
+    const optionalStringProperties = createRefundPaymentRequestOptionalProperties({ name: 'externalReference', nullable: false }, { name: 'notes', nullable: false }, { name: 'readerId', nullable: false }, { name: 'reason', nullable: false }, );
     const optionalNumberProperties = createRefundPaymentRequestOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createRefundPaymentRequestOptionalProperties();
 
