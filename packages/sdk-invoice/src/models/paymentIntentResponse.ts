@@ -22,6 +22,14 @@ export interface PaymentIntentResponse {
      */
     capturedAmount?: number;
     /**
+     * Card brand reported by the processor; null for a non-card payment or a payment recorded before ADR-0077
+     */
+    cardBrand?: string | null;
+    /**
+     * Last four digits of the card; null for a non-card payment or a payment recorded before ADR-0077
+     */
+    cardLast4?: string | null;
+    /**
      * Cash tender only: the increment applied; absent when the currency has none
      */
     cashIncrement?: number;
@@ -140,7 +148,7 @@ export function instanceOfPaymentIntentResponse(value: object): value is Payment
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPaymentIntentResponsePropertyNames('createdAt', 'invoiceId', 'paymentFlow', 'paymentId', 'status', 'updatedAt', );
-    const optionalStringProperties = createPaymentIntentResponseOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'gatewayProvider', nullable: false }, { name: 'gatewayReference', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'methodType', nullable: false }, { name: 'paymentFlow', nullable: false }, { name: 'paymentId', nullable: false }, { name: 'status', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const optionalStringProperties = createPaymentIntentResponseOptionalProperties({ name: 'cardBrand', nullable: true }, { name: 'cardLast4', nullable: true }, { name: 'createdAt', nullable: false }, { name: 'gatewayProvider', nullable: false }, { name: 'gatewayReference', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'methodType', nullable: false }, { name: 'paymentFlow', nullable: false }, { name: 'paymentId', nullable: false }, { name: 'status', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createPaymentIntentResponseOptionalProperties({ name: 'authorizedAmount', nullable: false }, { name: 'capturedAmount', nullable: false }, { name: 'cashIncrement', nullable: false }, { name: 'cashRoundingAmount', nullable: false }, { name: 'refundableAmount', nullable: true }, { name: 'refundedAmount', nullable: false }, { name: 'settledAmount', nullable: false }, { name: 'voidedRemainderAmount', nullable: false }, );
     const optionalBooleanProperties = createPaymentIntentResponseOptionalProperties();
 

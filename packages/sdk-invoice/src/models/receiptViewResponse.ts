@@ -14,6 +14,14 @@
  */
 export interface ReceiptViewResponse {
     /**
+     * Card brand reported by the processor; null for a non-card payment or a payment recorded before ADR-0077
+     */
+    cardBrand?: string | null;
+    /**
+     * Last four digits of the card; null for a non-card payment or a payment recorded before ADR-0077
+     */
+    cardLast4?: string | null;
+    /**
      * Cashier who generated the receipt
      */
     cashierId: string;
@@ -62,7 +70,7 @@ export interface ReceiptViewResponse {
      */
     paymentIntentId: string;
     /**
-     * Payment gateway/processor that handled the transaction (e.g. \"stripe\"); pos-invoice does not store card brand, last 4 or authorization code
+     * Payment gateway/processor that handled the transaction (e.g. \"stripe\"); the authorization code is not stored
      */
     paymentMethod?: string;
     /**
@@ -147,7 +155,7 @@ export function instanceOfReceiptViewResponse(value: object): value is ReceiptVi
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createReceiptViewResponsePropertyNames('cashierId', 'createdAt', 'invoiceId', 'paymentIntentId', 'receiptId', 'reference', 'reprintCount', 'status', 'templateId', 'templateVersion', 'terminalId', );
-    const optionalStringProperties = createReceiptViewResponseOptionalProperties({ name: 'cashierId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'deliveryEmailAddress', nullable: false }, { name: 'deliveryMethod', nullable: false }, { name: 'deliveryStatus', nullable: false }, { name: 'gatewayReference', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'invoiceNumber', nullable: false }, { name: 'lastReprintReason', nullable: false }, { name: 'lastReprintedBy', nullable: false }, { name: 'paymentIntentId', nullable: false }, { name: 'paymentMethod', nullable: false }, { name: 'receiptId', nullable: false }, { name: 'reference', nullable: false }, { name: 'status', nullable: false }, { name: 'templateId', nullable: false }, { name: 'templateVersion', nullable: false }, { name: 'terminalId', nullable: false }, );
+    const optionalStringProperties = createReceiptViewResponseOptionalProperties({ name: 'cardBrand', nullable: true }, { name: 'cardLast4', nullable: true }, { name: 'cashierId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'deliveryEmailAddress', nullable: false }, { name: 'deliveryMethod', nullable: false }, { name: 'deliveryStatus', nullable: false }, { name: 'gatewayReference', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'invoiceNumber', nullable: false }, { name: 'lastReprintReason', nullable: false }, { name: 'lastReprintedBy', nullable: false }, { name: 'paymentIntentId', nullable: false }, { name: 'paymentMethod', nullable: false }, { name: 'receiptId', nullable: false }, { name: 'reference', nullable: false }, { name: 'status', nullable: false }, { name: 'templateId', nullable: false }, { name: 'templateVersion', nullable: false }, { name: 'terminalId', nullable: false }, );
     const optionalNumberProperties = createReceiptViewResponseOptionalProperties({ name: 'paidAmount', nullable: false }, { name: 'reprintCount', nullable: false }, );
     const optionalBooleanProperties = createReceiptViewResponseOptionalProperties();
 
