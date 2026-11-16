@@ -21,6 +21,8 @@ import { AdjustmentRequest } from '../models/adjustmentRequest';
 // @ts-ignore
 import { ApiError } from '../models/apiError';
 // @ts-ignore
+import { CreatePaymentLinkRequest } from '../models/createPaymentLinkRequest';
+// @ts-ignore
 import { FinalizationRequest } from '../models/finalizationRequest';
 // @ts-ignore
 import { InvoiceCreationRequest } from '../models/invoiceCreationRequest';
@@ -32,6 +34,8 @@ import { InvoiceGenerationResponse } from '../models/invoiceGenerationResponse';
 import { OrderInvoiceCreationRequest } from '../models/orderInvoiceCreationRequest';
 // @ts-ignore
 import { OrderInvoiceResponse } from '../models/orderInvoiceResponse';
+// @ts-ignore
+import { PaymentLinkResponse } from '../models/paymentLinkResponse';
 // @ts-ignore
 import { RevertRequest } from '../models/revertRequest';
 // @ts-ignore
@@ -323,6 +327,84 @@ export class InvoiceService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: orderInvoiceCreationRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Send a pay link for an Invoice to its Customer
+     * Texts or emails the customer a link to pay an issued invoice on the card processor\&#39;s own hosted page, so the customer can pay without the card being at hand or being on site and the card is typed only into the processor\&#39;s page. The recipient is the invoice\&#39;s billing party, resolved by the platform sender: the request never names and the response never returns a phone number, an email address or the link itself, which is the customer\&#39;s (the response carries at most an SMS number masked to its last four digits). Use this tool when a customer is not at the counter and wants to pay remotely; use initiatePayment instead when the card is present and the page can be opened on the spot. Preconditions: the invoice is issued (FINALIZED or POSTED); the caller holds invoice:payment:process and invoice:invoice:send at the invoice\&#39;s location (ADR-0061); the invoice has a customer that is not the CASH walk-in account; something is still due; the amount (absent means the whole balance due) is positive and no more than the balance due; and, above 500.00, the caller holds invoice:payment:limit_override (BILL-DEC-010). Required inputs: invoiceId (path), channel (SMS or EMAIL), the optional amount, and the Idempotency-Key header (a UUID): a replay with the same key answers the original response with Idempotency-Replayed: true and never sends a second message or creates a second link. Emits an INVOICE_PAYMENT_LINK_SEND event. A new link supersedes the invoice\&#39;s open ones, and a link is cancelled after commit when another payment settles the invoice; a link lives at most 24 hours (pos.invoice.payment-link.ttl, default PT24H). Returns 202 with status QUEUED, the payment id, the masked number for SMS and when the link expires; 400 when the key is missing or not a UUID, channel is missing or the amount is not positive; 403 without invoice:payment:process or invoice:invoice:send, or outside the invoice\&#39;s location; 404 when the invoice does not exist; 409 INVALID_STATE for an invoice that is not issued, INVOICE_ALREADY_PAID when nothing is due, or IDEMPOTENCY_CONFLICT for a reused key; 422 PAYMENT_AMOUNT_EXCEEDS_BALANCE above the balance due, INVOICE_RECIPIENT_UNKNOWN when there is no customer or contact person to send to, INVOICE_RECIPIENT_NO_MOBILE or INVOICE_RECIPIENT_NO_EMAIL when the customer has no number or email on file for the channel, INVOICE_RECIPIENT_UNDELIVERABLE when the one on file cannot receive it, or INVOICE_SEND_REFUSED when the provider refused the message (a refused send leaves no live link); 503 INVOICE_SEND_UNAVAILABLE when the message service could not be reached (with Retry-After; retry the same key) or INVOICE_SEND_NOT_CONFIGURED.
+     * @endpoint post /v1/invoices/{invoiceId}/payment-links
+     * @param invoiceId
+     * @param idempotencyKey The pay link\&#39;s idempotency key (a UUID): a replay answers the original response with Idempotency-Replayed: true and sends nothing; the same key with a different request answers 409 IDEMPOTENCY_CONFLICT
+     * @param createPaymentLinkRequest The channel to send the pay link by and, optionally, how much it collects.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public createPaymentLink(invoiceId: string, idempotencyKey: string, createPaymentLinkRequest: CreatePaymentLinkRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PaymentLinkResponse>;
+    public createPaymentLink(invoiceId: string, idempotencyKey: string, createPaymentLinkRequest: CreatePaymentLinkRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PaymentLinkResponse>>;
+    public createPaymentLink(invoiceId: string, idempotencyKey: string, createPaymentLinkRequest: CreatePaymentLinkRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PaymentLinkResponse>>;
+    public createPaymentLink(invoiceId: string, idempotencyKey: string, createPaymentLinkRequest: CreatePaymentLinkRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (invoiceId === null || invoiceId === undefined) {
+            throw new Error('Required parameter invoiceId was null or undefined when calling createPaymentLink.');
+        }
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling createPaymentLink.');
+        }
+        if (createPaymentLinkRequest === null || createPaymentLinkRequest === undefined) {
+            throw new Error('Required parameter createPaymentLinkRequest was null or undefined when calling createPaymentLink.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/invoices/${this.configuration.encodeParam({name: "invoiceId", value: invoiceId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/payment-links`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PaymentLinkResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: createPaymentLinkRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
