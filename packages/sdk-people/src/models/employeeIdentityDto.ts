@@ -18,7 +18,7 @@ export interface EmployeeIdentityDto {
      */
     active: boolean;
     /**
-     * Employee record identifier
+     * Employee identifier, as accepted by every `/v1/people/employees/{employeeId}` endpoint. An employee is keyed by its person, so this equals `personId`
      */
     employeeId: string;
     /**

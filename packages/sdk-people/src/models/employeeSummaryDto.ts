@@ -31,7 +31,7 @@ export interface EmployeeSummaryDto {
     clock?: EmployeeClockStateDto;
     contactInfo?: EmployeeContactInfoDto;
     /**
-     * Employee record identifier
+     * Employee identifier, as accepted by every `/v1/people/employees/{employeeId}` endpoint. An employee is keyed by its person, so this equals `personId`
      */
     employeeId: string;
     /**
