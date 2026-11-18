@@ -31,6 +31,8 @@ import { WorkSessionCloseMissedRequest } from '../models/workSessionCloseMissedR
 // @ts-ignore
 import { WorkSessionCloseMissedResponse } from '../models/workSessionCloseMissedResponse';
 // @ts-ignore
+import { WorkSessionDayResponse } from '../models/workSessionDayResponse';
+// @ts-ignore
 import { WorkSessionDto } from '../models/workSessionDto';
 // @ts-ignore
 import { WorkSessionRequest } from '../models/workSessionRequest';
@@ -190,6 +192,95 @@ export class WorkSessionsAPIService extends BaseService {
         let localVarPath = `/v1/people/workSessions/current`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<WorkSessionClockStateResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get A Person\&#39;s Work Sessions For One Day, With Breaks And Minutes
+     * Reads every work session a person started on one calendar day, in start order, each with its breaks in start order, plus the day\&#39;s elapsed, break and billable minutes. The minutes are computed on the server with the same arithmetic submit stores (DECISION-PEOPLE-029): break minutes are the whole-minute sum of a session\&#39;s breaks and billable minutes are its whole-minute duration less that break time, floored at 0; fractions truncate. An open session and an active break are measured up to asOf, which the answer carries, so the client may advance the display from asOf but never computes minutes itself. Nothing is created, closed or changed.A session belongs to the day it STARTED in: the day is the calendar day workDate names in timeZone, read as [start of that day, start of the next), so a session that started at 23:30 local and ended after midnight is returned for its start day only. Every session of the day is returned, an UNDONE (retracted) one included, with its stored status and startTrigger and zero minutes; the client decides what to show. A work session has no location, so none is returned. A break\&#39;s note is returned only when the caller is the person themself.Use this tool to render an employee profile\&#39;s \&quot;hours today\&quot; and \&quot;Today\&quot; list of punches and breaks; use getCurrentWorkSession instead to render only the clock-in/out toggle for right now, and listTimeEntries to read submitted time entries for approval.Preconditions: the person must exist, either as an employee of this module or in the identity replica.Required inputs: none are mandatory. personId (UUID) defaults to the caller\&#39;s own linked person; workDate (ISO date, YYYY-MM-DD) defaults to today in timeZone; timeZone (IANA zone id) defaults to UTC and names the zone whose calendar day workDate is.Authorization: a person reads their own day with people:self:view; reading another person\&#39;s day needs people:timekeeping:view, and when that grant is location-scoped it must cover one of the person\&#39;s active assignment locations today.Emits a PEOPLE_WORK_SESSION_DAY_GET audit event but changes no state.Returns 200 with an empty sessions list and zero minutes for a day with no sessions — never 404 for that; 400 VALIDATION_ERROR for an unknown timeZone or a malformed workDate; 404 PERSON_NOT_FOUND when the person is unknown, and 404 when personId is omitted and the caller\&#39;s person link is present but no longer active; 503 USER_LINK_REPLICATION_PENDING with a Retry-After header when personId is omitted and the caller has no person link in the replica yet; 403 FORBIDDEN when the caller is neither the person nor a people:timekeeping:view holder, and 403 LOCATION_SCOPE_DENIED when the caller\&#39;s grant does not cover the person\&#39;s location.
+     * @endpoint get /v1/people/workSessions
+     * @param personId Person whose day to read. Defaults to the caller\&#39;s own linked person when omitted.
+     * @param workDate Calendar day to read (ISO date). Defaults to today in timeZone.
+     * @param timeZone IANA zone whose calendar day workDate names; defaults to UTC
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getWorkSessionDay(personId?: string, workDate?: string, timeZone?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkSessionDayResponse>;
+    public getWorkSessionDay(personId?: string, workDate?: string, timeZone?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkSessionDayResponse>>;
+    public getWorkSessionDay(personId?: string, workDate?: string, timeZone?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkSessionDayResponse>>;
+    public getWorkSessionDay(personId?: string, workDate?: string, timeZone?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'personId',
+            <any>personId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'workDate',
+            <any>workDate,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'timeZone',
+            <any>timeZone,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/people/workSessions`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<WorkSessionDayResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),
