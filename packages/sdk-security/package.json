@@ -1,6 +1,6 @@
 {
   "name": "@durion-sdk/security",
-  "version": "0.305.0-alpha",
+  "version": "0.306.0-alpha",
   "description": "OpenAPI client for @durion-sdk/security",
   "author": "OpenAPI-Generator Contributors",
   "repository": {
