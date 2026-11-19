@@ -18,6 +18,10 @@ export interface BillIntakeTaxView {
      */
     amount?: number | null;
     /**
+     * Why the entry is CHECK_THIS when confirmation would refuse it: INVALID_TAX_ENTRY (no valid tax type, or no amount) or NEGATIVE (a negative amount). Null otherwise. The code never carries the value.
+     */
+    reason?: BillIntakeTaxViewReasonEnum | null;
+    /**
      * READ, CHECK_THIS, ACCEPTED or CORRECTED
      */
     state?: BillIntakeTaxViewStateEnum;
@@ -26,6 +30,21 @@ export interface BillIntakeTaxView {
      */
     taxType?: string;
 }
+export enum BillIntakeTaxViewReasonEnum {
+    Required = 'REQUIRED',
+    NotANumber = 'NOT_A_NUMBER',
+    TooManyDecimals = 'TOO_MANY_DECIMALS',
+    Negative = 'NEGATIVE',
+    NotPositive = 'NOT_POSITIVE',
+    NotADate = 'NOT_A_DATE',
+    NotACurrency = 'NOT_A_CURRENCY',
+    InvalidDocumentType = 'INVALID_DOCUMENT_TYPE',
+    InvalidDebitClass = 'INVALID_DEBIT_CLASS',
+    TooLong = 'TOO_LONG',
+    InvalidExpenseKey = 'INVALID_EXPENSE_KEY',
+    InvalidTaxEntry = 'INVALID_TAX_ENTRY',
+    UnitCostRequired = 'UNIT_COST_REQUIRED'
+};
 export enum BillIntakeTaxViewStateEnum {
     Read = 'READ',
     CheckThis = 'CHECK_THIS',
@@ -74,7 +93,7 @@ export function instanceOfBillIntakeTaxView(value: object): value is BillIntakeT
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBillIntakeTaxViewPropertyNames();
-    const optionalStringProperties = createBillIntakeTaxViewOptionalProperties({ name: 'state', nullable: false }, { name: 'taxType', nullable: false }, );
+    const optionalStringProperties = createBillIntakeTaxViewOptionalProperties({ name: 'reason', nullable: true }, { name: 'state', nullable: false }, { name: 'taxType', nullable: false }, );
     const optionalNumberProperties = createBillIntakeTaxViewOptionalProperties({ name: 'amount', nullable: true }, );
     const optionalBooleanProperties = createBillIntakeTaxViewOptionalProperties();
 

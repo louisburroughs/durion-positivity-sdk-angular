@@ -11,7 +11,7 @@ import { BillIntakeStructuredValueView } from './billIntakeStructuredValueView';
 
 
 /**
- * One field of a bill draft: its value and its state. READ is read from the document and not yet looked at, CHECK_THIS must be looked at before the bill exists, ACCEPTED is kept by a person, CORRECTED was changed by one.
+ * One field of a bill draft: its value and its state. READ is read from the document and not yet looked at, CHECK_THIS must be looked at before the bill exists, ACCEPTED is kept by a person, CORRECTED was changed by one. A field whose value no bill can hold is CHECK_THIS with a reason, even after a person accepted or corrected it; the value is kept.
  */
 export interface BillIntakeFieldView {
     /**
@@ -19,6 +19,10 @@ export interface BillIntakeFieldView {
      */
     confidence?: number | null;
     objectValue?: BillIntakeStructuredValueView;
+    /**
+     * Why the field is CHECK_THIS when its value is one confirmation would refuse: REQUIRED (a field a bill needs is empty), NOT_A_NUMBER, TOO_MANY_DECIMALS (more than four), NEGATIVE, NOT_POSITIVE (a total of zero), NOT_A_DATE, NOT_A_CURRENCY (not three letters), INVALID_DOCUMENT_TYPE, INVALID_DEBIT_CLASS, TOO_LONG, INVALID_EXPENSE_KEY (not EXPENSE_<CODE>), INVALID_TAX_ENTRY or UNIT_COST_REQUIRED (no unit cost on a line with a zero quantity and an amount). Null in every other state, and for a field marked by the reader, the vendor\'s defaults or the totals check. The code names a rule and never carries the value.
+     */
+    reason?: BillIntakeFieldViewReasonEnum | null;
     /**
      * Where on the page the value was read: page and box (fractions of the page)
      */
@@ -32,6 +36,21 @@ export interface BillIntakeFieldView {
      */
     value?: string | null;
 }
+export enum BillIntakeFieldViewReasonEnum {
+    Required = 'REQUIRED',
+    NotANumber = 'NOT_A_NUMBER',
+    TooManyDecimals = 'TOO_MANY_DECIMALS',
+    Negative = 'NEGATIVE',
+    NotPositive = 'NOT_POSITIVE',
+    NotADate = 'NOT_A_DATE',
+    NotACurrency = 'NOT_A_CURRENCY',
+    InvalidDocumentType = 'INVALID_DOCUMENT_TYPE',
+    InvalidDebitClass = 'INVALID_DEBIT_CLASS',
+    TooLong = 'TOO_LONG',
+    InvalidExpenseKey = 'INVALID_EXPENSE_KEY',
+    InvalidTaxEntry = 'INVALID_TAX_ENTRY',
+    UnitCostRequired = 'UNIT_COST_REQUIRED'
+};
 export enum BillIntakeFieldViewStateEnum {
     Read = 'READ',
     CheckThis = 'CHECK_THIS',
@@ -80,7 +99,7 @@ export function instanceOfBillIntakeFieldView(value: object): value is BillIntak
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBillIntakeFieldViewPropertyNames();
-    const optionalStringProperties = createBillIntakeFieldViewOptionalProperties({ name: 'state', nullable: false }, { name: 'value', nullable: true }, );
+    const optionalStringProperties = createBillIntakeFieldViewOptionalProperties({ name: 'reason', nullable: true }, { name: 'state', nullable: false }, { name: 'value', nullable: true }, );
     const optionalNumberProperties = createBillIntakeFieldViewOptionalProperties();
     const optionalBooleanProperties = createBillIntakeFieldViewOptionalProperties();
 
