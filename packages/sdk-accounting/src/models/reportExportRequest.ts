@@ -14,11 +14,11 @@
  */
 export interface ReportExportRequest {
     /**
-     * Optional GL account UUID filter, honored by GENERAL_LEDGER exports only; null spans all accounts
+     * Optional GL account UUID filter, honored by GENERAL_LEDGER exports only; null spans all accounts. Ignored for every other report type, MONTH_END_PACKET included: a packet\'s general ledger always spans all accounts
      */
     accountId?: string;
     /**
-     * Period end date (inclusive, YYYY-MM-DD). For the as-of reports (BALANCE_SHEET, TRIAL_BALANCE, AGED_RECEIVABLES, AGED_PAYABLES) this date is used as the as-of date.
+     * Period end date (inclusive, YYYY-MM-DD). For the as-of reports (BALANCE_SHEET, TRIAL_BALANCE, AGED_RECEIVABLES, AGED_PAYABLES) this date is used as the as-of date. For MONTH_END_PACKET the range may hold at most 366 days, both ends counted; a longer one is refused with 400 VALIDATION_ERROR naming endDate.
      */
     endDate: string;
     /**
@@ -26,15 +26,15 @@ export interface ReportExportRequest {
      */
     filename?: string;
     /**
-     * Export format. Every report type renders CSV and PDF; a format the report type does not render (today XLSX and JSON) is refused with 400 VALIDATION_ERROR naming format.
+     * Export format. Every single report renders CSV and PDF; MONTH_END_PACKET renders PDF only. A format the report type does not render (today XLSX and JSON, and CSV for MONTH_END_PACKET) is refused with 400 VALIDATION_ERROR naming format.
      */
     format: ReportExportRequestFormatEnum;
     /**
-     * The report to export. A value outside the list is refused with 400 VALIDATION_ERROR naming reportType; no job is stored for it.
+     * The report to export. MONTH_END_PACKET is one PDF holding the range\'s reports and the lists of vendor bills and credit notes posted, voided and not yet approved; requesting it also requires accounting:ap:view. A value outside the list is refused with 400 VALIDATION_ERROR naming reportType; no job is stored for it.
      */
     reportType: ReportExportRequestReportTypeEnum;
     /**
-     * Period start date (inclusive, YYYY-MM-DD)
+     * Period start date (inclusive, YYYY-MM-DD). For MONTH_END_PACKET the first day of the packet\'s range.
      */
     startDate: string;
 }
@@ -51,7 +51,8 @@ export enum ReportExportRequestReportTypeEnum {
     TrialBalance = 'TRIAL_BALANCE',
     GeneralLedger = 'GENERAL_LEDGER',
     AgedReceivables = 'AGED_RECEIVABLES',
-    AgedPayables = 'AGED_PAYABLES'
+    AgedPayables = 'AGED_PAYABLES',
+    MonthEndPacket = 'MONTH_END_PACKET'
 };
 
 

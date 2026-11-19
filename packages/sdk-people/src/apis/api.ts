@@ -11,6 +11,7 @@ export * from './peopleStaffingAssignments.service';
 export * from './peopleStaffingCoverage.service';
 export * from './peopleStaffingTargets.service';
 export * from './peopleTimeEntries.service';
+export * from './peopleTimeOff.service';
 export * from './personCredentialAPI.service';
 export * from './personCredentialBulkIngestAPI.service';
 export * from './skillRegistryAPI.service';

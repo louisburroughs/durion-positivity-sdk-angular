@@ -27,6 +27,8 @@ import { WorkSessionBreakStopRequest } from '../models/workSessionBreakStopReque
 // @ts-ignore
 import { WorkSessionClockStateResponse } from '../models/workSessionClockStateResponse';
 // @ts-ignore
+import { WorkSessionCloseMissedForPersonRequest } from '../models/workSessionCloseMissedForPersonRequest';
+// @ts-ignore
 import { WorkSessionCloseMissedRequest } from '../models/workSessionCloseMissedRequest';
 // @ts-ignore
 import { WorkSessionCloseMissedResponse } from '../models/workSessionCloseMissedResponse';
@@ -126,6 +128,87 @@ export class WorkSessionsAPIService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: workSessionCloseMissedRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Close Another Person\&#39;s Missed Clock-Out As Their Manager
+     * Closes another person\&#39;s still-open work session at the instant they actually stopped, on a manager\&#39;s authority, and files the correction for an approver to decide. Use this tool when a manager fixes a missed clock-out from an earlier day for an employee who has not filed it; do not use closeMissedWorkSessionClockOut, which is the employee\&#39;s own correction, and do not use stopWorkSession, which ends at the server\&#39;s now and files no adjustment. Preconditions: the caller holds people:timekeeping:approve covering one of the person\&#39;s ACTIVE staffing-assignment locations and is not the session\&#39;s person, and the session exists, is open (ACTIVE with no endedAt) and started before the current local day in the zone of the person\&#39;s location on the session\&#39;s start date, read from the location replica only (there is no timeZone input and UTC is never assumed). Required inputs: the work session id (UUID) path parameter, the Idempotency-Key header (UUID, ADR-0075) and a body with proposedEndAt (an instant) and notes (not blank, at most 2000 characters); a repeat with the same key and body returns the stored answer with Idempotency-Replayed: true and writes nothing. Emits a PEOPLE_WORK_SESSION_CLOSE_MISSED_FOR_PERSON event (never on a replay) after, in one transaction and with the same arithmetic as closeMissedWorkSessionClockOut, the session ends at proposedEndAt with any open break closed there and becomes SUBMITTED, a PENDING_APPROVAL time entry and a PENDING MISSED_CLOCK_OUT adjustment whose createdBy is the caller\&#39;s authenticated username are filed, and any OPEN or ACKNOWLEDGED MISSED_CLOCK_OUT time exception of the session is resolved by the caller; no notification is sent and no workorder labor is read or stopped. Separation of duties: the caller, as the filer, is then refused with 403 TIME_SELF_APPROVAL when approving this adjustment, its time entry or the pay period it sits on, unless the tenant\&#39;s sole-approver switch is on and no other approver is staffed at the entry\&#39;s location. Returns errors in this check order: 400 VALIDATION_ERROR (Idempotency-Key missing or not a UUID, proposedEndAt missing, notes blank or longer than 2000), 404 WORK_SESSION_NOT_FOUND, 403 FORBIDDEN when the session is the caller\&#39;s own (use closeMissedWorkSessionClockOut), 403 LOCATION_SCOPE_DENIED when the person is outside the caller\&#39;s reach, the Idempotency-Key claim (409 IDEMPOTENCY_CONFLICT for the same key with another body or caller), 409 RESOURCE_STATE_CONFLICT when the session is not open, 422 LOCATION_TIMEZONE_UNKNOWN when the location\&#39;s zone is unknown, 409 RESOURCE_STATE_CONFLICT when the session started on the location\&#39;s current local day, and 400 VALIDATION_ERROR naming proposedEndAt in fieldErrors when it is not after startedAt, is in the future or precedes the open break\&#39;s start. Returns 200 with the submitted session and the new timeEntryId and adjustmentId, the same answer closeMissedWorkSessionClockOut gives.
+     * @endpoint post /v1/people/workSessions/{id}/close-missed-for-person
+     * @param id Work session ID of the other person\&#39;s still-open session to close
+     * @param idempotencyKey Required key that makes retries safe; a UUID (ADR-0075)
+     * @param workSessionCloseMissedForPersonRequest The instant the person actually stopped and the manager\&#39;s required note.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public closeMissedWorkSessionClockOutForPerson(id: string, idempotencyKey: string, workSessionCloseMissedForPersonRequest: WorkSessionCloseMissedForPersonRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<WorkSessionCloseMissedResponse>;
+    public closeMissedWorkSessionClockOutForPerson(id: string, idempotencyKey: string, workSessionCloseMissedForPersonRequest: WorkSessionCloseMissedForPersonRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<WorkSessionCloseMissedResponse>>;
+    public closeMissedWorkSessionClockOutForPerson(id: string, idempotencyKey: string, workSessionCloseMissedForPersonRequest: WorkSessionCloseMissedForPersonRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<WorkSessionCloseMissedResponse>>;
+    public closeMissedWorkSessionClockOutForPerson(id: string, idempotencyKey: string, workSessionCloseMissedForPersonRequest: WorkSessionCloseMissedForPersonRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling closeMissedWorkSessionClockOutForPerson.');
+        }
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling closeMissedWorkSessionClockOutForPerson.');
+        }
+        if (workSessionCloseMissedForPersonRequest === null || workSessionCloseMissedForPersonRequest === undefined) {
+            throw new Error('Required parameter workSessionCloseMissedForPersonRequest was null or undefined when calling closeMissedWorkSessionClockOutForPerson.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/people/workSessions/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/close-missed-for-person`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<WorkSessionCloseMissedResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: workSessionCloseMissedForPersonRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
