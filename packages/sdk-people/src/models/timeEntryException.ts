@@ -10,54 +10,70 @@
 
 
 /**
- * Time entry exception representing a discrepancy or issue with time tracking
+ * Time exception: a discrepancy in a person\'s recorded time, with its lifecycle status
  */
 export interface TimeEntryException {
     /**
-     * Timestamp when the exception was detected
+     * When the exception was detected or recorded
      */
-    detectedAt?: string;
+    detectedAt: string;
     /**
-     * Employee identifier associated with the exception
+     * Person\'s display name from the local person replica; null when the person has not replicated or has no name on record
      */
-    employeeId: string;
+    displayName?: string | null;
     /**
-     * Exception code identifying the type of exception
+     * Exception code from the closed vocabulary
      */
-    exceptionCode: string;
+    exceptionCode: TimeEntryExceptionExceptionCodeEnum;
     /**
      * Unique identifier for the exception
      */
-    readonly exceptionId?: string;
+    readonly exceptionId: string;
     /**
-     * Notes describing resolution or actions taken
+     * Location the exception belongs to: the time entry\'s location when there is one, else the person\'s ACTIVE staffing assignment location (primary first) on the subject\'s start date; null when none could be resolved, and such rows are listed only to unscoped callers
      */
-    resolutionNotes?: string;
+    locationId?: string | null;
     /**
-     * Timestamp when the exception was resolved
+     * Person the exception concerns
      */
-    resolvedAt?: string;
+    personId: string;
     /**
-     * User who resolved the exception
+     * Notes describing the exception or the action taken on it
      */
-    resolvedBy?: string;
+    resolutionNotes?: string | null;
     /**
-     * Severity level of the exception
+     * When the exception was last acted on
+     */
+    resolvedAt?: string | null;
+    /**
+     * User who last acted on the exception (acknowledged, resolved or waived it)
+     */
+    resolvedBy?: string | null;
+    /**
+     * Severity, fixed by the exception code
      */
     severity: TimeEntryExceptionSeverityEnum;
     /**
-     * Current status of the exception
+     * Current lifecycle status of the exception
      */
     status: TimeEntryExceptionStatusEnum;
     /**
-     * Associated time entry identifier
+     * Time entry the exception concerns, when there is one
      */
-    timeEntryId?: string;
+    timeEntryId?: string | null;
     /**
-     * Work date when the exception occurred
+     * Local date, in the location\'s time zone, that the session or break the exception names started on; null for a manual exception recorded without one
      */
-    workDate: string;
+    workDate?: string | null;
+    /**
+     * Work session the exception concerns (set for MISSED_CLOCK_OUT and LONG_BREAK raised by detection); null otherwise
+     */
+    workSessionId?: string | null;
 }
+export enum TimeEntryExceptionExceptionCodeEnum {
+    MissedClockOut = 'MISSED_CLOCK_OUT',
+    LongBreak = 'LONG_BREAK'
+};
 export enum TimeEntryExceptionSeverityEnum {
     Warning = 'WARNING',
     Blocking = 'BLOCKING'
@@ -109,8 +125,8 @@ export function instanceOfTimeEntryException(value: object): value is TimeEntryE
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTimeEntryExceptionPropertyNames('employeeId', 'exceptionCode', 'severity', 'status', 'workDate', );
-    const optionalStringProperties = createTimeEntryExceptionOptionalProperties({ name: 'detectedAt', nullable: false }, { name: 'employeeId', nullable: false }, { name: 'exceptionCode', nullable: false }, { name: 'exceptionId', nullable: false }, { name: 'resolutionNotes', nullable: false }, { name: 'resolvedAt', nullable: false }, { name: 'resolvedBy', nullable: false }, { name: 'severity', nullable: false }, { name: 'status', nullable: false }, { name: 'timeEntryId', nullable: false }, { name: 'workDate', nullable: false }, );
+    const requiredProperties = createTimeEntryExceptionPropertyNames('detectedAt', 'exceptionCode', 'exceptionId', 'personId', 'severity', 'status', );
+    const optionalStringProperties = createTimeEntryExceptionOptionalProperties({ name: 'detectedAt', nullable: false }, { name: 'displayName', nullable: true }, { name: 'exceptionCode', nullable: false }, { name: 'exceptionId', nullable: false }, { name: 'locationId', nullable: true }, { name: 'personId', nullable: false }, { name: 'resolutionNotes', nullable: true }, { name: 'resolvedAt', nullable: true }, { name: 'resolvedBy', nullable: true }, { name: 'severity', nullable: false }, { name: 'status', nullable: false }, { name: 'timeEntryId', nullable: true }, { name: 'workDate', nullable: true }, { name: 'workSessionId', nullable: true }, );
     const optionalNumberProperties = createTimeEntryExceptionOptionalProperties();
     const optionalBooleanProperties = createTimeEntryExceptionOptionalProperties();
 

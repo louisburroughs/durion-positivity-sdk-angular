@@ -17,6 +17,16 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ApiError } from '../models/apiError';
+// @ts-ignore
+import { CorrectPersonCredentialRequest } from '../models/correctPersonCredentialRequest';
+// @ts-ignore
+import { CreatePersonCredentialRequest } from '../models/createPersonCredentialRequest';
+// @ts-ignore
+import { CredentialAttentionCounts } from '../models/credentialAttentionCounts';
+// @ts-ignore
+import { CredentialAttentionPage } from '../models/credentialAttentionPage';
+// @ts-ignore
 import { PersonCredentialResponse } from '../models/personCredentialResponse';
 
 // @ts-ignore
@@ -36,8 +46,355 @@ export class PersonCredentialAPIService extends BaseService {
     }
 
     /**
+     * Correct A Credential\&#39;s Expiry Date
+     * Corrects the expiry date of a credential the person holds and returns it with its status re-derived as of today (UTC); expiresOn is replaced, so omitting it or sending null records that the credential does not expire. Use this tool to fix a mistyped or changed expiry; do not use it to renew, which is createPersonCredential with a later issuedOn, because skill, issuer and issuedOn identify the credential and cannot change here. Preconditions: the credential must belong to the person and be neither REVOKED nor SUPERSEDED, the person must not be TERMINATED, expiresOn must not be before the stored issuedOn, and one of the person\&#39;s ACTIVE staffing-assignment locations must lie within the caller\&#39;s people:credential:manage reach, checked after the 404s; the credential row is locked before these checks, so a concurrent renewal or correction is seen, not overwritten. Required inputs: personId and credentialId (UUID) path parameters and a body with expiresOn; skillCode, issuer and issuedOn may be echoed but must equal the stored values; no document is accepted in this version. Emits a PEOPLE_CREDENTIAL_UPDATE event and queues one people.person-credential.updated fact in the same transaction. Returns 200 with the credential; 404 PERSON_NOT_FOUND or CREDENTIAL_NOT_FOUND; 403 LOCATION_SCOPE_DENIED; 400 VALIDATION_ERROR for a malformed body; 422 SEMANTIC_VALIDATION_ERROR naming skillCode, issuer or issuedOn when it differs from the stored value, or expiresOn when it is before the stored issuedOn; 409 RESOURCE_STATE_CONFLICT when the credential is REVOKED or SUPERSEDED; and 422 EMPLOYEE_TERMINATED.
+     * @endpoint put /v1/people/{personId}/credentials/{credentialId}
+     * @param personId Person who holds the credential
+     * @param credentialId Credential to correct
+     * @param correctPersonCredentialRequest The new expiry date; skill, issuer and issue date may be echoed unchanged.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public correctPersonCredential(personId: string, credentialId: string, correctPersonCredentialRequest: CorrectPersonCredentialRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PersonCredentialResponse>;
+    public correctPersonCredential(personId: string, credentialId: string, correctPersonCredentialRequest: CorrectPersonCredentialRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PersonCredentialResponse>>;
+    public correctPersonCredential(personId: string, credentialId: string, correctPersonCredentialRequest: CorrectPersonCredentialRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PersonCredentialResponse>>;
+    public correctPersonCredential(personId: string, credentialId: string, correctPersonCredentialRequest: CorrectPersonCredentialRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (personId === null || personId === undefined) {
+            throw new Error('Required parameter personId was null or undefined when calling correctPersonCredential.');
+        }
+        if (credentialId === null || credentialId === undefined) {
+            throw new Error('Required parameter credentialId was null or undefined when calling correctPersonCredential.');
+        }
+        if (correctPersonCredentialRequest === null || correctPersonCredentialRequest === undefined) {
+            throw new Error('Required parameter correctPersonCredentialRequest was null or undefined when calling correctPersonCredential.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/people/${this.configuration.encodeParam({name: "personId", value: personId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/credentials/${this.configuration.encodeParam({name: "credentialId", value: credentialId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PersonCredentialResponse>('put', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: correctPersonCredentialRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Record Or Renew A Person\&#39;s Credential
+     * Records a credential the person holds, naming the registry skill it certifies, the issuer and the issue and expiry dates, and returns it with its status as of today (UTC). A renewal is this same call with a later issuedOn: it adds a new row and leaves the renewed one as it is, so the earlier qualification stays on record and stops needing attention. Use this tool to add or renew a licence or certification; do not use correctPersonCredential, which only changes the expiry of an existing row, and do not use the bulk credential ingest, which loads a vendor feed. Preconditions: the person must have an employee record that is not TERMINATED, skillCode must name an active registry skill, no credential may already have the same person, skill, issuer and issuedOn, and one of the person\&#39;s ACTIVE staffing-assignment locations must lie within the caller\&#39;s people:credential:manage reach, checked after the 404. Required inputs: personId (UUID) path parameter, an Idempotency-Key header (UUID, required, ADR-0075), and a body with skillCode, issuer (up to 32 characters), issuedOn and an optional expiresOn not before issuedOn; no document is accepted in this version. Emits a PEOPLE_CREDENTIAL_CREATE event and queues one people.person-credential.updated fact in the same transaction; a replay with the same key answers the stored 201 with Idempotency-Replayed: true and writes nothing. Returns 201 with the credential; 400 VALIDATION_ERROR for a missing or non-UUID key, a missing field or expiresOn before issuedOn (fieldErrors names expiresOn); 404 PERSON_NOT_FOUND; 403 LOCATION_SCOPE_DENIED; 409 IDEMPOTENCY_CONFLICT or DUPLICATE_RESOURCE (referenceId the existing credential); and 422 SEMANTIC_VALIDATION_ERROR naming skillCode or EMPLOYEE_TERMINATED.
+     * @endpoint post /v1/people/{personId}/credentials
+     * @param personId Person the credential is recorded for
+     * @param idempotencyKey Required key that makes retries safe; a UUID (ADR-0075). The same key with the same request replays the first answer
+     * @param createPersonCredentialRequest The credential: registry skill code, issuer, issue date and optional expiry date.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public createPersonCredential(personId: string, idempotencyKey: string, createPersonCredentialRequest: CreatePersonCredentialRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PersonCredentialResponse>;
+    public createPersonCredential(personId: string, idempotencyKey: string, createPersonCredentialRequest: CreatePersonCredentialRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PersonCredentialResponse>>;
+    public createPersonCredential(personId: string, idempotencyKey: string, createPersonCredentialRequest: CreatePersonCredentialRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PersonCredentialResponse>>;
+    public createPersonCredential(personId: string, idempotencyKey: string, createPersonCredentialRequest: CreatePersonCredentialRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (personId === null || personId === undefined) {
+            throw new Error('Required parameter personId was null or undefined when calling createPersonCredential.');
+        }
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling createPersonCredential.');
+        }
+        if (createPersonCredentialRequest === null || createPersonCredentialRequest === undefined) {
+            throw new Error('Required parameter createPersonCredentialRequest was null or undefined when calling createPersonCredential.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/people/${this.configuration.encodeParam({name: "personId", value: personId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/credentials`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PersonCredentialResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: createPersonCredentialRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Count Expired And Expiring Credentials Across People
+     * Returns how many credentials are EXPIRED and how many are EXPIRING on today\&#39;s date (UTC, returned as asOfDate), counting exactly the set listCredentialsNeedingAttention pages through for the same locationId and expiringWithinDays. Use this tool for a \&quot;need attention\&quot; badge or summary; do not use it to see which credentials they are, use listCredentialsNeedingAttention instead. Preconditions: none beyond the permission; REVOKED, SUPERSEDED, non-expiring and renewed credentials are never counted, and only people with an ACTIVE staffing assignment today count. Required inputs: none; expiringWithinDays defaults to 30 (1 to 365) and locationId is an optional filter. Location scope: a given locationId must lie within the caller\&#39;s people:employee:view reach; when it is omitted a location-scoped caller counts only people assigned within their reach. Emits a PEOPLE_CREDENTIAL_ATTENTION_COUNTS audit event but changes no state. Returns 200 with asOfDate, expiredCount and expiringCount, 400 VALIDATION_ERROR for a filter out of range, and 403 LOCATION_SCOPE_DENIED when locationId is outside the caller\&#39;s reach.
+     * @endpoint get /v1/people/credentials/counts
+     * @param locationId Keep only people with an ACTIVE staffing assignment at this location; it must lie within the caller\&#39;s location reach (403 LOCATION_SCOPE_DENIED otherwise). When omitted, a location-scoped caller sees only people assigned within their reach
+     * @param expiringWithinDays A credential is EXPIRING when it expires on the as-of date or at most this many days after it; 1 to 365
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getCredentialAttentionCounts(locationId?: string, expiringWithinDays?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CredentialAttentionCounts>;
+    public getCredentialAttentionCounts(locationId?: string, expiringWithinDays?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CredentialAttentionCounts>>;
+    public getCredentialAttentionCounts(locationId?: string, expiringWithinDays?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CredentialAttentionCounts>>;
+    public getCredentialAttentionCounts(locationId?: string, expiringWithinDays?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'locationId',
+            <any>locationId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'expiringWithinDays',
+            <any>expiringWithinDays,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/people/credentials/counts`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<CredentialAttentionCounts>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List Expired And Expiring Credentials Across People
+     * Returns a page of the credentials that need attention on today\&#39;s date (UTC, returned as asOfDate), ordered by expiry date: EXPIRED when the expiry date has passed, EXPIRING when it falls on asOfDate or within expiringWithinDays after it, each row with the person\&#39;s id and display name and the days until expiry. Use this tool to find who must renew a licence or certification; do not use it for every credential of one person (use listPersonCredentials instead) or for the counts alone (use getCredentialAttentionCounts instead). Preconditions: none beyond the permission; REVOKED and SUPERSEDED credentials, credentials without an expiry date and credentials already renewed (a later issuedOn for the same person and skill, any issuer) never appear, and only people with an ACTIVE staffing assignment today are listed. Required inputs: none; attention is EXPIRED, EXPIRING or ALL (both, the default), expiringWithinDays defaults to 30 (1 to 365), locationId is an optional filter, page defaults to 0 and size to 20 with a maximum of 100. Location scope: a given locationId must lie within the caller\&#39;s people:employee:view reach; when it is omitted a location-scoped caller sees only people assigned within their reach (an empty page for an empty reach) while an unscoped caller sees every location. Emits a PEOPLE_CREDENTIAL_ATTENTION_LIST audit event but changes no state. Returns 200 with the page and asOfDate, 400 VALIDATION_ERROR for a filter or paging value out of range, and 403 LOCATION_SCOPE_DENIED when locationId is outside the caller\&#39;s reach.
+     * @endpoint get /v1/people/credentials
+     * @param locationId Keep only people with an ACTIVE staffing assignment at this location; it must lie within the caller\&#39;s location reach (403 LOCATION_SCOPE_DENIED otherwise). When omitted, a location-scoped caller sees only people assigned within their reach
+     * @param attention EXPIRED, EXPIRING, or ALL for both (the default)
+     * @param expiringWithinDays A credential is EXPIRING when it expires on the as-of date or at most this many days after it; 1 to 365
+     * @param page Zero-based page index
+     * @param size Page size, up to 100
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listCredentialsNeedingAttention(locationId?: string, attention?: 'EXPIRED' | 'EXPIRING' | 'ALL', expiringWithinDays?: number, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CredentialAttentionPage>;
+    public listCredentialsNeedingAttention(locationId?: string, attention?: 'EXPIRED' | 'EXPIRING' | 'ALL', expiringWithinDays?: number, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CredentialAttentionPage>>;
+    public listCredentialsNeedingAttention(locationId?: string, attention?: 'EXPIRED' | 'EXPIRING' | 'ALL', expiringWithinDays?: number, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CredentialAttentionPage>>;
+    public listCredentialsNeedingAttention(locationId?: string, attention?: 'EXPIRED' | 'EXPIRING' | 'ALL', expiringWithinDays?: number, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'locationId',
+            <any>locationId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'attention',
+            <any>attention,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'expiringWithinDays',
+            <any>expiringWithinDays,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/people/credentials`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<CredentialAttentionPage>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * List a Person\&#39;s Credentials
-     * Returns every credential the person holds or held, newest issue first, each with the registry skill it certifies and its status as of today: ACTIVE or EXPIRED from the dates, REVOKED or SUPERSEDED when set deliberately. A renewal appears as its own row beside the one it renewed, so a past date\&#39;s qualification stays visible. Use this tool to see what a technician is certified to do, or to audit an inspector\&#39;s qualification on a past date; for a shop\&#39;s roster use shop management\&#39;s technician roster instead, which reads a replica of the same credentials. Preconditions: the caller holds people:employee:view. Required inputs: personId (UUID) as a path parameter; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with the list, empty when the person holds none, and 403 without the authority.
+     * Returns every credential the person holds or held, newest issue first, each with the registry skill it certifies and its status as of today (UTC): ACTIVE or EXPIRED from the dates, REVOKED or SUPERSEDED when set deliberately. A renewal appears as its own row beside the one it renewed, so a past date\&#39;s qualification stays visible; the renewed row names its renewal in renewedByCredentialId, and hasDocument says whether evidence is on record. Use this tool to see what a technician is certified to do, or to audit an inspector\&#39;s qualification on a past date; do not use it to find expired and expiring credentials across people, use listCredentialsNeedingAttention instead, and for a shop\&#39;s roster use shop management\&#39;s technician roster instead. Preconditions: the caller holds people:employee:view. Required inputs: personId (UUID) as a path parameter; there is no request body. Emits a PEOPLE_CREDENTIAL_LIST audit event but changes no state. Returns 200 with the list, empty when the person holds none, and 403 without the authority.
      * @endpoint get /v1/people/{personId}/credentials
      * @param personId Person id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

@@ -10,40 +10,47 @@
 
 
 /**
- * Aggregated approval state for a person within a time period
+ * A recorded pay-period attendance decision for one person
  */
 export interface TimePeriodApprovalDto {
     /**
-     * Number of approved entries
+     * Approval record identifier
      */
-    approvedCount: number;
+    approvalId: string;
     /**
-     * Overall approval status for the person in the period
+     * When the decision was made
      */
-    overallStatus: TimePeriodApprovalDtoOverallStatusEnum;
+    decidedAt: string;
     /**
-     * Number of entries still pending approval
+     * Username of the deciding user, from the authenticated caller
      */
-    pendingCount: number;
+    decidedBy: string;
     /**
-     * Person identifier
+     * Person linked to the deciding user; null for a user with no linked person
+     */
+    decidedByPersonId?: string | null;
+    /**
+     * Number of PENDING_APPROVAL entries the decision moved
+     */
+    entryCount: number;
+    /**
+     * Outcome of the decision
+     */
+    outcome: TimePeriodApprovalDtoOutcomeEnum;
+    /**
+     * Person whose attendance was decided
      */
     personId: string;
     /**
-     * Number of rejected entries
+     * Reason given on a rejection; null on an approval
      */
-    rejectedCount: number;
+    reason?: string | null;
     /**
-     * Time period identifier
+     * Pay period the decision covers
      */
     timePeriodId: string;
-    /**
-     * Total number of entries in the period
-     */
-    totalCount: number;
 }
-export enum TimePeriodApprovalDtoOverallStatusEnum {
-    PendingApproval = 'PENDING_APPROVAL',
+export enum TimePeriodApprovalDtoOutcomeEnum {
     Approved = 'APPROVED',
     Rejected = 'REJECTED'
 };
@@ -88,9 +95,9 @@ export function instanceOfTimePeriodApprovalDto(value: object): value is TimePer
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTimePeriodApprovalDtoPropertyNames('approvedCount', 'overallStatus', 'pendingCount', 'personId', 'rejectedCount', 'timePeriodId', 'totalCount', );
-    const optionalStringProperties = createTimePeriodApprovalDtoOptionalProperties({ name: 'overallStatus', nullable: false }, { name: 'personId', nullable: false }, { name: 'timePeriodId', nullable: false }, );
-    const optionalNumberProperties = createTimePeriodApprovalDtoOptionalProperties({ name: 'approvedCount', nullable: false }, { name: 'pendingCount', nullable: false }, { name: 'rejectedCount', nullable: false }, { name: 'totalCount', nullable: false }, );
+    const requiredProperties = createTimePeriodApprovalDtoPropertyNames('approvalId', 'decidedAt', 'decidedBy', 'entryCount', 'outcome', 'personId', 'timePeriodId', );
+    const optionalStringProperties = createTimePeriodApprovalDtoOptionalProperties({ name: 'approvalId', nullable: false }, { name: 'decidedAt', nullable: false }, { name: 'decidedBy', nullable: false }, { name: 'decidedByPersonId', nullable: true }, { name: 'outcome', nullable: false }, { name: 'personId', nullable: false }, { name: 'reason', nullable: true }, { name: 'timePeriodId', nullable: false }, );
+    const optionalNumberProperties = createTimePeriodApprovalDtoOptionalProperties({ name: 'entryCount', nullable: false }, );
     const optionalBooleanProperties = createTimePeriodApprovalDtoOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

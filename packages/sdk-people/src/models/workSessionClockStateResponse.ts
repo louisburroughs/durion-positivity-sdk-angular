@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ShiftResponse } from './shiftResponse';
 
 
 /**
@@ -29,6 +30,7 @@ export interface WorkSessionClockStateResponse {
      * Person the state belongs to
      */
     personId: string;
+    todayShift?: ShiftResponse;
     /**
      * The open work session; non-null exactly when clockState is CLOCKED_IN or ON_BREAK. The break endpoints are keyed by this id.
      */

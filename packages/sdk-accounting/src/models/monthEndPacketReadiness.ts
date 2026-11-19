@@ -10,29 +10,45 @@
 
 
 /**
- * What a month-end packet for a date range would hold: the vendor bills and vendor credit notes posted in the range and how many of them have a document, the bills dated in the range that are not yet approved, the drafts still in review, and whether the range\'s periods are closed
+ * What a month-end packet for a date range would hold: the vendor bills (invoices) posted in the range, how many of them have a document, no due date, or were voided since; the same for the vendor credit notes posted in the range, counted separately; the bills and credit notes dated in the range that are not yet approved; the drafts still in review; and whether the range\'s periods are closed
  */
 export interface MonthEndPacketReadiness {
     /**
-     * Bills dated in the range that have not posted and are neither REJECTED nor VOIDED; never counted in billsPosted
+     * Vendor bills and vendor credit notes together, dated in the range, that have not posted and are neither REJECTED nor VOIDED; never counted in billsPosted or creditNotesPosted
      */
     billsNotYetApproved: number;
     /**
-     * Vendor bills and vendor credit notes whose posting date is in the range. A bill posts at approval, so its posting date, not its bill date, decides
+     * Vendor bills (invoices only; vendor credit notes are in creditNotesPosted) whose posting date is in the range. A bill posts at approval, so its posting date, not its bill date, decides. A bill voided after it posted is still counted, and once more in billsVoided
      */
     billsPosted: number;
     /**
-     * Of billsPosted, those with a stored document (sourceFileId names a file that is neither quarantined, rejected nor purged)
+     * Of billsPosted, the invoices whose posting carries a reversal when the read is made: voided after they posted, whatever the void date, inside the range or after it. A voided credit note is not counted here
+     */
+    billsVoided: number;
+    /**
+     * Of billsPosted (invoices only), those with a stored document (sourceFileId names a file that is neither quarantined, rejected nor purged). A stored CSV or XLSX import file counts as a document
      */
     billsWithDocument: number;
     /**
-     * Of billsPosted, those with no document, or whose file is quarantined, rejected or purged; billsWithDocument + billsWithoutDocument = billsPosted
+     * Of billsPosted (invoices only), those with no document, or whose file is quarantined, rejected or purged; billsWithDocument + billsWithoutDocument = billsPosted. Credit notes without a document are in creditNotesWithoutDocument
      */
     billsWithoutDocument: number;
     /**
-     * Of billsPosted, those with no due date
+     * Of billsPosted (invoices only), those with no due date. A credit note is never paid, so a credit note without a due date is not counted
      */
     billsWithoutDueDate: number;
+    /**
+     * Vendor credit notes whose posting date is in the range; never counted in billsPosted. A credit note voided after it posted is still counted
+     */
+    creditNotesPosted: number;
+    /**
+     * Of creditNotesPosted, those with a stored document (sourceFileId names a file that is neither quarantined, rejected nor purged)
+     */
+    creditNotesWithDocument: number;
+    /**
+     * Of creditNotesPosted, those with no document, or whose file is quarantined, rejected or purged; creditNotesWithDocument + creditNotesWithoutDocument = creditNotesPosted
+     */
+    creditNotesWithoutDocument: number;
     /**
      * Bill drafts in READY_FOR_REVIEW that were uploaded in the range, by the tenant\'s accounting calendar
      */
@@ -81,9 +97,9 @@ export function instanceOfMonthEndPacketReadiness(value: object): value is Month
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createMonthEndPacketReadinessPropertyNames('billsNotYetApproved', 'billsPosted', 'billsWithDocument', 'billsWithoutDocument', 'billsWithoutDueDate', 'draftsAwaitingReview', 'periodClosed', );
+    const requiredProperties = createMonthEndPacketReadinessPropertyNames('billsNotYetApproved', 'billsPosted', 'billsVoided', 'billsWithDocument', 'billsWithoutDocument', 'billsWithoutDueDate', 'creditNotesPosted', 'creditNotesWithDocument', 'creditNotesWithoutDocument', 'draftsAwaitingReview', 'periodClosed', );
     const optionalStringProperties = createMonthEndPacketReadinessOptionalProperties();
-    const optionalNumberProperties = createMonthEndPacketReadinessOptionalProperties({ name: 'billsNotYetApproved', nullable: false }, { name: 'billsPosted', nullable: false }, { name: 'billsWithDocument', nullable: false }, { name: 'billsWithoutDocument', nullable: false }, { name: 'billsWithoutDueDate', nullable: false }, { name: 'draftsAwaitingReview', nullable: false }, );
+    const optionalNumberProperties = createMonthEndPacketReadinessOptionalProperties({ name: 'billsNotYetApproved', nullable: false }, { name: 'billsPosted', nullable: false }, { name: 'billsVoided', nullable: false }, { name: 'billsWithDocument', nullable: false }, { name: 'billsWithoutDocument', nullable: false }, { name: 'billsWithoutDueDate', nullable: false }, { name: 'creditNotesPosted', nullable: false }, { name: 'creditNotesWithDocument', nullable: false }, { name: 'creditNotesWithoutDocument', nullable: false }, { name: 'draftsAwaitingReview', nullable: false }, );
     const optionalBooleanProperties = createMonthEndPacketReadinessOptionalProperties({ name: 'periodClosed', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
