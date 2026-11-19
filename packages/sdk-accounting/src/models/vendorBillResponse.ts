@@ -26,6 +26,10 @@ import { VendorBillPosting } from './vendorBillPosting';
  * Vendor bill details
  */
 export interface VendorBillResponse {
+    /**
+     * For a bill whose document was attached to it: the document\'s total less the bill\'s total as it is now (totalAmount), so it follows a later change of the bill\'s total; 0 when they agree. Null for a bill with no attached document (one confirmed from its draft included), and when the document stated no total or another currency than the bill\'s (a document that states no currency is compared as the ledger currency). The bill\'s amounts were not changed by the attach
+     */
+    amountDifference?: number | null;
     approval?: VendorBillApproval;
     /**
      * The decisions valid for the bill\'s status that the caller holds a permission for (P5)
@@ -118,6 +122,10 @@ export interface VendorBillResponse {
      */
     reissues: Array<VendorBillReissue>;
     rejection?: VendorBillRejection;
+    /**
+     * The bill\'s document: the stored file its draft was read from, set at confirmation, or the one attached to it later (attachBillIntake); null when the bill has no document. Ask previewBillSourceFile or downloadBillSourceFile for it
+     */
+    sourceFileId?: string | null;
     /**
      * Bill status
      */
@@ -216,8 +224,8 @@ export function instanceOfVendorBillResponse(value: object): value is VendorBill
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createVendorBillResponsePropertyNames('availableActions', 'billNumber', 'checks', 'createdAt', 'lines', 'openAmount', 'openCandidates', 'reissues', 'status', 'taxByType', 'totalAmount', 'vendorBillId', 'vendorId', );
-    const optionalStringProperties = createVendorBillResponseOptionalProperties({ name: 'billDate', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'channel', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'createdByName', nullable: false }, { name: 'currency', nullable: true }, { name: 'documentType', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'journalEntryId', nullable: false }, { name: 'originEventId', nullable: false }, { name: 'originEventType', nullable: false }, { name: 'paymentTransactionId', nullable: false }, { name: 'status', nullable: false }, { name: 'statusExplanation', nullable: false }, { name: 'vendorBillId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, );
-    const optionalNumberProperties = createVendorBillResponseOptionalProperties({ name: 'freightAmount', nullable: false }, { name: 'netAmount', nullable: false }, { name: 'openAmount', nullable: false }, { name: 'taxAmount', nullable: false }, { name: 'totalAmount', nullable: false }, );
+    const optionalStringProperties = createVendorBillResponseOptionalProperties({ name: 'billDate', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'channel', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'createdByName', nullable: false }, { name: 'currency', nullable: true }, { name: 'documentType', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'journalEntryId', nullable: false }, { name: 'originEventId', nullable: false }, { name: 'originEventType', nullable: false }, { name: 'paymentTransactionId', nullable: false }, { name: 'sourceFileId', nullable: true }, { name: 'status', nullable: false }, { name: 'statusExplanation', nullable: false }, { name: 'vendorBillId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, );
+    const optionalNumberProperties = createVendorBillResponseOptionalProperties({ name: 'amountDifference', nullable: true }, { name: 'freightAmount', nullable: false }, { name: 'netAmount', nullable: false }, { name: 'openAmount', nullable: false }, { name: 'taxAmount', nullable: false }, { name: 'totalAmount', nullable: false }, );
     const optionalBooleanProperties = createVendorBillResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

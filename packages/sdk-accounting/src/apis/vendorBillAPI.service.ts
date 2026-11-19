@@ -501,7 +501,7 @@ export class VendorBillAPIService extends BaseService {
 
     /**
      * List Vendor Bills By Due Date
-     * Lists vendor bills whose due date falls in [dueFrom, dueTo], optionally filtered by status, ordered by due date ascending. Use this tool to browse or triage upcoming/overdue payables across vendors; do not use listApBills for this, which is scoped to APPROVED-only bills sorted for payment selection, and use getVendorBillById when the bill id is already known. Preconditions: none beyond the caller holding accounting:analytics:view. Required inputs: dueFrom and dueTo (ISO dates, dueTo on or after dueFrom); the window cannot exceed 366 days, to bound the scan. status is an optional filter (PENDING_RECEIPT_MATCH, MATCH_EXCEPTION, CURRENCY_HOLD, APPROVED, REJECTED, PAID, VOIDED); page/size/sort are standard, though the due-date-ascending sort is server-controlled and any caller-supplied sort is ignored. Emits an ACCOUNTING_VENDOR_BILL_LIST_VIEW audit event; no state changes. Returns 400 when dueTo is before dueFrom, the window exceeds 366 days, or status is not a recognized VendorBillStatus value.
+     * Lists vendor bills whose due date falls in [dueFrom, dueTo], optionally filtered by status, ordered by due date ascending. Use this tool to browse or triage upcoming/overdue payables across vendors; do not use listApBills for this, which is scoped to APPROVED-only bills sorted for payment selection, and use getVendorBillById when the bill id is already known. Preconditions: none beyond the caller holding accounting:analytics:view. Required inputs: dueFrom and dueTo (ISO dates, dueTo on or after dueFrom); the window cannot exceed 366 days, to bound the scan. status is an optional filter (PENDING_RECEIPT_MATCH, MATCH_EXCEPTION, CURRENCY_HOLD, AWAITING_APPROVAL, APPROVED, REJECTED, PAID, VOIDED); page/size/sort are standard, though the due-date-ascending sort is server-controlled and any caller-supplied sort is ignored. Emits an ACCOUNTING_VENDOR_BILL_LIST_VIEW audit event; no state changes. Returns 400 when dueTo is before dueFrom, the window exceeds 366 days, or status is not a recognized VendorBillStatus value.
      * @endpoint get /v1/accounting/vendor-bills
      * @param dueFrom Due-date window start (YYYY-MM-DD)
      * @param dueTo Due-date window end (YYYY-MM-DD)
@@ -626,19 +626,20 @@ export class VendorBillAPIService extends BaseService {
 
     /**
      * List Vendor Bills By Stage
-     * Lists the vendor bills of one stage of Bills to pay, each with its bill number, vendor name, total, currency, bill and due dates, status, channel, submittedAt, open amount and, in review, the requiredTier from the current clerk limit. The server sets the order: CHECK and APPROVE oldest first, PAY by due date with bills without one last, DONE newest paid first. There is no due-date window. Use this tool for the bills behind one count of getVendorBillStageCounts; use getVendorBillById instead for one bill\&#39;s full review read. Preconditions: none beyond the caller holding accounting:ap:view. Required inputs: stage (CHECK, APPROVE, PAY or DONE); page (from 0) and size (capped at 100) are optional. Emits an ACCOUNTING_VENDOR_BILL_STAGE_LIST audit event; no state changes. Returns 200 with a page of rows, 400 VALIDATION_ERROR for an unknown stage, 401 without a valid token, and 403 FORBIDDEN without accounting:ap:view.
+     * Lists the vendor bills of one stage of Bills to pay, each with its bill number, vendor name, total, currency, bill and due dates, status, channel, submittedAt, open amount, sourceFileId (its document, null when it has none) and, in review, the requiredTier from the current clerk limit. The server sets the order: CHECK and APPROVE oldest first, PAY by due date with bills without one last, DONE newest paid first. There is no due-date window. Use this tool for the bills behind one count of getVendorBillStageCounts; use getVendorBillById instead for one bill\&#39;s full review read. Preconditions: none beyond the caller holding accounting:ap:view. Required inputs: stage (CHECK, APPROVE, PAY or DONE); page (from 0) and size (capped at 100) are optional, and so is hasDocument: true lists only the bills that have a document, false only those that have none. Emits an ACCOUNTING_VENDOR_BILL_STAGE_LIST audit event; no state changes. Returns 200 with a page of rows, 400 VALIDATION_ERROR for an unknown stage, 401 without a valid token, and 403 FORBIDDEN without accounting:ap:view.
      * @endpoint get /v1/accounting/vendor-bills/by-stage
      * @param stage Stage
      * @param page Page number, from 0
      * @param size Page size, capped at 100
+     * @param hasDocument Only bills that have a document (true) or that have none (false); omit for both
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listVendorBillsByStage(stage: 'CHECK' | 'APPROVE' | 'PAY' | 'DONE', page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageVendorBillStageRow>;
-    public listVendorBillsByStage(stage: 'CHECK' | 'APPROVE' | 'PAY' | 'DONE', page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageVendorBillStageRow>>;
-    public listVendorBillsByStage(stage: 'CHECK' | 'APPROVE' | 'PAY' | 'DONE', page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageVendorBillStageRow>>;
-    public listVendorBillsByStage(stage: 'CHECK' | 'APPROVE' | 'PAY' | 'DONE', page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listVendorBillsByStage(stage: 'CHECK' | 'APPROVE' | 'PAY' | 'DONE', page?: number, size?: number, hasDocument?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageVendorBillStageRow>;
+    public listVendorBillsByStage(stage: 'CHECK' | 'APPROVE' | 'PAY' | 'DONE', page?: number, size?: number, hasDocument?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageVendorBillStageRow>>;
+    public listVendorBillsByStage(stage: 'CHECK' | 'APPROVE' | 'PAY' | 'DONE', page?: number, size?: number, hasDocument?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageVendorBillStageRow>>;
+    public listVendorBillsByStage(stage: 'CHECK' | 'APPROVE' | 'PAY' | 'DONE', page?: number, size?: number, hasDocument?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (stage === null || stage === undefined) {
             throw new Error('Required parameter stage was null or undefined when calling listVendorBillsByStage.');
         }
@@ -667,6 +668,15 @@ export class VendorBillAPIService extends BaseService {
             localVarQueryParameters,
             'size',
             <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'hasDocument',
+            <any>hasDocument,
             QueryParamStyle.Form,
             true,
         );

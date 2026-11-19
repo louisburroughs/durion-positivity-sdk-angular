@@ -22,6 +22,10 @@ export interface BillIntakeSummary {
      * Pages (or frames) of the document once it is inspected; null before then and when there is no document
      */
     pageCount?: number | null;
+    /**
+     * Whether the draft is ready to confirm: it is READY_FOR_REVIEW, its vendor is found, no required or valued field is CHECK_THIS, and billNumber, billDate, currency and totalAmount are present. Derived by the server; false in every other status. It covers no more: values are not validated and lines not checked for completeness, so confirmation may still answer a validation error, a duplicate, an inactive vendor or a newer version
+     */
+    readyToConfirm: boolean;
     rejectionReason?: string;
     /**
      * The uploaded or emailed document, for its page previews (GET /v1/accounting/bill-source-files/{fileId}/preview); null for a spreadsheet import and an EDI draft
@@ -48,7 +52,8 @@ export enum BillIntakeSummaryStatusEnum {
     Extracting = 'EXTRACTING',
     ReadyForReview = 'READY_FOR_REVIEW',
     Confirmed = 'CONFIRMED',
-    Discarded = 'DISCARDED'
+    Discarded = 'DISCARDED',
+    Attached = 'ATTACHED'
 };
 export enum BillIntakeSummaryVendorResolutionEnum {
     Read = 'READ',
@@ -97,10 +102,10 @@ export function instanceOfBillIntakeSummary(value: object): value is BillIntakeS
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createBillIntakeSummaryPropertyNames();
+    const requiredProperties = createBillIntakeSummaryPropertyNames('readyToConfirm', );
     const optionalStringProperties = createBillIntakeSummaryOptionalProperties({ name: 'billNumber', nullable: false }, { name: 'channel', nullable: false }, { name: 'currency', nullable: false }, { name: 'intakeId', nullable: false }, { name: 'intakeReference', nullable: false }, { name: 'rejectionReason', nullable: false }, { name: 'sourceFileId', nullable: true }, { name: 'status', nullable: false }, { name: 'uploadedAt', nullable: false }, { name: 'vendorName', nullable: true }, { name: 'vendorResolution', nullable: false }, );
     const optionalNumberProperties = createBillIntakeSummaryOptionalProperties({ name: 'pageCount', nullable: true }, { name: 'totalAmount', nullable: false }, );
-    const optionalBooleanProperties = createBillIntakeSummaryOptionalProperties();
+    const optionalBooleanProperties = createBillIntakeSummaryOptionalProperties({ name: 'readyToConfirm', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalBillIntakeSummaryPropertyOfType(_v, property.name, 'string', property.nullable))
