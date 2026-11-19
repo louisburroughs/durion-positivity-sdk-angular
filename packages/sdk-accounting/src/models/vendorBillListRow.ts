@@ -34,6 +34,10 @@ export interface VendorBillListRow {
      */
     dueDate?: string;
     /**
+     * The bill\'s document: the stored file its draft was read from, or the one attached to it later; null when the bill has no document
+     */
+    sourceFileId?: string | null;
+    /**
      * Bill lifecycle status
      */
     status: VendorBillListRowStatusEnum;
@@ -102,7 +106,7 @@ export function instanceOfVendorBillListRow(value: object): value is VendorBillL
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createVendorBillListRowPropertyNames('amount', 'billId', 'billNumber', 'documentType', 'status', 'vendorId', );
-    const optionalStringProperties = createVendorBillListRowOptionalProperties({ name: 'billId', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'documentType', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'status', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: true }, );
+    const optionalStringProperties = createVendorBillListRowOptionalProperties({ name: 'billId', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'documentType', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'sourceFileId', nullable: true }, { name: 'status', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: true }, );
     const optionalNumberProperties = createVendorBillListRowOptionalProperties({ name: 'amount', nullable: false }, );
     const optionalBooleanProperties = createVendorBillListRowOptionalProperties();
 

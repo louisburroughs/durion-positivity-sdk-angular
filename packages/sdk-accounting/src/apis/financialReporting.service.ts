@@ -33,6 +33,8 @@ import { IncomeStatementReport } from '../models/incomeStatementReport';
 // @ts-ignore
 import { JournalLineDrilldownResponse } from '../models/journalLineDrilldownResponse';
 // @ts-ignore
+import { MonthEndPacketReadiness } from '../models/monthEndPacketReadiness';
+// @ts-ignore
 import { PageReportExportResponse } from '../models/pageReportExportResponse';
 // @ts-ignore
 import { ReportExportRequest } from '../models/reportExportRequest';
@@ -381,7 +383,7 @@ export class FinancialReportingService extends BaseService {
 
     /**
      * Generate Aged Payables
-     * Generates the Aged Payables report as of a date: per-vendor open vendor-bill balances bucketed by days past due (0-30, 31-60, 61-90, 90+) with grand totals. Approved open vendor credit notes and unapplied AP payments are negative netting columns in addition to the buckets. Buckets are days past the bill\&#39;s DUE date, falling back to the bill date when a bill carries no due date — the same rule generateAgedReceivables uses — and not-yet-due bills are INCLUDED in the 0-30 bucket, which therefore means \&quot;not yet due, or up to 30 days past due\&quot;. Use this tool to review what is owed to vendors and how overdue it is; do not use generateAgedReceivables, which is the customer-side mirror, and use listApBills to pick individual bills for payment. Preconditions: none; rows are empty when no open payables exist. Required inputs: asOfDate (ISO date) as a query parameter. Emits a REPORT_AGED_PAYABLES_GENERATE audit event; no state changes. Returns 400 when the asOfDate is missing or malformed.
+     * Generates the Aged Payables report as of a date: per-vendor open vendor-bill balances bucketed by days past due, with grand totals, as notYetDue (due on the as-of date or later), days1To30, days31To60, days61To90, days90Plus, overdue (the sum of the four late buckets) and totalOutstanding (notYetDue plus overdue). Approved open vendor credit notes and unapplied AP payments are negative netting columns in addition to the buckets. Buckets are days past the bill\&#39;s DUE date, falling back to the bill date when a bill carries no due date — the same rule generateAgedReceivables uses — and a bill that is not yet due is in notYetDue, never in days1To30. Use this tool to review what is owed to vendors and how overdue it is; do not use generateAgedReceivables, which is the customer-side mirror, and use listApBills to pick individual bills for payment. Preconditions: none; rows are empty when no open payables exist. Required inputs: asOfDate (ISO date) as a query parameter. Emits a REPORT_AGED_PAYABLES_GENERATE audit event; no state changes. Returns 400 when the asOfDate is missing or malformed.
      * @endpoint get /v1/accounting/reports/financial/aged-payables
      * @param asOfDate As-of date (YYYY-MM-DD)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -453,7 +455,7 @@ export class FinancialReportingService extends BaseService {
 
     /**
      * Generate Aged Receivables
-     * Generates the Aged Receivables report as of a date: per-customer open invoice balances bucketed by days past due (0-30, 31-60, 61-90, 90+) with grand totals, leaving out the CASH walk-in house account, whose open sales getUnpaidWalkInSales reports. Buckets are days past the invoice\&#39;s DUE date, falling back to the invoice date when an invoice carries no due date — the same rule generateAgedPayables uses — and not-yet-due balances are INCLUDED in the 0-30 bucket, which therefore means \&quot;not yet due, or up to 30 days past due\&quot;. Use this tool to review customer collection exposure; do not use generateAgedPayables, which is the vendor-side mirror of this report. Preconditions: none; rows are empty when no open receivables exist. Required inputs: asOfDate (ISO date) as a query parameter. Emits a REPORT_AGED_RECEIVABLES_GENERATE audit event; no state changes. Returns 400 when the asOfDate is missing or malformed.
+     * Generates the Aged Receivables report as of a date: per-customer open invoice balances bucketed by days past due, with grand totals, as notYetDue (due on the as-of date or later), days1To30, days31To60, days61To90, days90Plus, overdue (the sum of the four late buckets) and totalOutstanding (notYetDue plus overdue), leaving out the CASH walk-in house account, whose open sales getUnpaidWalkInSales reports. Buckets are days past the invoice\&#39;s DUE date, falling back to the invoice date when an invoice carries no due date — the same rule generateAgedPayables uses — and a balance that is not yet due is in notYetDue, never in days1To30. Use this tool to review customer collection exposure; do not use generateAgedPayables, which is the vendor-side mirror of this report. Preconditions: none; rows are empty when no open receivables exist. Required inputs: asOfDate (ISO date) as a query parameter. Emits a REPORT_AGED_RECEIVABLES_GENERATE audit event; no state changes. Returns 400 when the asOfDate is missing or malformed.
      * @endpoint get /v1/accounting/reports/financial/aged-receivables
      * @param asOfDate As-of date (YYYY-MM-DD)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -919,6 +921,91 @@ export class FinancialReportingService extends BaseService {
         let localVarPath = `/v1/accounting/reports/financial/trial-balance`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<TrialBalanceReport>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get Month-End Packet Readiness
+     * Counts what a month-end packet for a date range would hold: the vendor bills and vendor credit notes posted in the range (billsPosted), how many of them have a stored document or none, how many have no due date, the bills dated in the range that are not yet approved, the bill drafts uploaded in the range that still wait for review, and whether every accounting period the range touches is closed. Use this tool to see what still needs a document, an approval or a review before the month is handed over; do not use getBillIntakeCounts, which counts every open draft whatever its date, or getVendorBillStageCounts, which counts bills by stage and not by posting date. Preconditions: the caller holds accounting:report:export; a bill posts at approval, so a bill is counted by its posting date, never by its bill date. Required inputs: startDate and endDate (ISO dates, both inclusive, endDate on or after startDate, at most 366 days). Emits an ACCOUNTING_MONTH_END_PACKET_READINESS event, which carries no parameter, and changes nothing. Returns 200 with the counts and periodClosed, 400 VALIDATION_ERROR when a date is missing or malformed, startDate is after endDate or the range is longer than 366 days, 401 without a valid token, and 403 without accounting:report:export.
+     * @endpoint get /v1/accounting/reports/month-end-packet/readiness
+     * @param startDate First day of the range (YYYY-MM-DD)
+     * @param endDate Last day of the range (YYYY-MM-DD)
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getMonthEndPacketReadiness(startDate: string, endDate: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<MonthEndPacketReadiness>;
+    public getMonthEndPacketReadiness(startDate: string, endDate: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MonthEndPacketReadiness>>;
+    public getMonthEndPacketReadiness(startDate: string, endDate: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MonthEndPacketReadiness>>;
+    public getMonthEndPacketReadiness(startDate: string, endDate: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (startDate === null || startDate === undefined) {
+            throw new Error('Required parameter startDate was null or undefined when calling getMonthEndPacketReadiness.');
+        }
+        if (endDate === null || endDate === undefined) {
+            throw new Error('Required parameter endDate was null or undefined when calling getMonthEndPacketReadiness.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'startDate',
+            <any>startDate,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'endDate',
+            <any>endDate,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/accounting/reports/month-end-packet/readiness`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<MonthEndPacketReadiness>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),

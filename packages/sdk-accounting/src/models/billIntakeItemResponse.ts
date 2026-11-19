@@ -54,7 +54,8 @@ export enum BillIntakeItemResponseStatusEnum {
     Extracting = 'EXTRACTING',
     ReadyForReview = 'READY_FOR_REVIEW',
     Confirmed = 'CONFIRMED',
-    Discarded = 'DISCARDED'
+    Discarded = 'DISCARDED',
+    Attached = 'ATTACHED'
 };
 
 

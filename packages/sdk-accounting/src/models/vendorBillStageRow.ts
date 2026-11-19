@@ -42,6 +42,10 @@ export interface VendorBillStageRow {
      */
     requiredTier?: VendorBillStageRowRequiredTierEnum;
     /**
+     * The bill\'s document: the stored file its draft was read from, or the one attached to it later; null when the bill has no document
+     */
+    sourceFileId?: string | null;
+    /**
      * Status
      */
     status: VendorBillStageRowStatusEnum;
@@ -126,7 +130,7 @@ export function instanceOfVendorBillStageRow(value: object): value is VendorBill
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createVendorBillStageRowPropertyNames('billDate', 'billNumber', 'currencyCode', 'openAmount', 'status', 'totalAmount', 'vendorApHold', 'vendorBillId', );
-    const optionalStringProperties = createVendorBillStageRowOptionalProperties({ name: 'billDate', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'channel', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'requiredTier', nullable: false }, { name: 'status', nullable: false }, { name: 'submittedAt', nullable: false }, { name: 'vendorBillId', nullable: false }, { name: 'vendorName', nullable: false }, );
+    const optionalStringProperties = createVendorBillStageRowOptionalProperties({ name: 'billDate', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'channel', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'requiredTier', nullable: false }, { name: 'sourceFileId', nullable: true }, { name: 'status', nullable: false }, { name: 'submittedAt', nullable: false }, { name: 'vendorBillId', nullable: false }, { name: 'vendorName', nullable: false }, );
     const optionalNumberProperties = createVendorBillStageRowOptionalProperties({ name: 'openAmount', nullable: false }, { name: 'totalAmount', nullable: false }, );
     const optionalBooleanProperties = createVendorBillStageRowOptionalProperties({ name: 'vendorApHold', nullable: false }, );
 

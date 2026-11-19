@@ -18,6 +18,18 @@ import { BillIntakeVendorView } from './billIntakeVendorView';
  * A bill draft: header fields, vendor, tax by type, lines, what the checks found, and its life.
  */
 export interface BillIntakeResponse {
+    /**
+     * When it was attached
+     */
+    attachedAt?: string | null;
+    /**
+     * The existing bill this draft\'s document was attached to, once ATTACHED
+     */
+    attachedBillId?: string | null;
+    /**
+     * Who attached it
+     */
+    attachedBy?: string | null;
     channel?: BillIntakeResponseChannelEnum;
     confirmedAt?: string;
     /**
@@ -119,7 +131,7 @@ export interface BillIntakeResponse {
      */
     vendorResolution?: BillIntakeResponseVendorResolutionEnum | null;
     /**
-     * Send this back with an edit or a confirmation: a draft changed since is 409 OPTIMISTIC_LOCK
+     * Send this back with an edit, a confirmation or an attach: a draft changed since is 409 OPTIMISTIC_LOCK
      */
     version?: number;
 }
@@ -139,7 +151,8 @@ export enum BillIntakeResponseStatusEnum {
     Extracting = 'EXTRACTING',
     ReadyForReview = 'READY_FOR_REVIEW',
     Confirmed = 'CONFIRMED',
-    Discarded = 'DISCARDED'
+    Discarded = 'DISCARDED',
+    Attached = 'ATTACHED'
 };
 export enum BillIntakeResponseVendorResolutionEnum {
     Read = 'READ',
@@ -189,7 +202,7 @@ export function instanceOfBillIntakeResponse(value: object): value is BillIntake
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBillIntakeResponsePropertyNames();
-    const optionalStringProperties = createBillIntakeResponseOptionalProperties({ name: 'channel', nullable: false }, { name: 'confirmedAt', nullable: false }, { name: 'confirmedBillId', nullable: true }, { name: 'confirmedBy', nullable: false }, { name: 'discardReason', nullable: true }, { name: 'discardedAt', nullable: false }, { name: 'discardedBy', nullable: false }, { name: 'extractionOutcome', nullable: true }, { name: 'intakeId', nullable: false }, { name: 'intakeReference', nullable: false }, { name: 'rejectionReason', nullable: true }, { name: 'sourceFileId', nullable: true }, { name: 'splitOf', nullable: true }, { name: 'status', nullable: false }, { name: 'uploadedAt', nullable: false }, { name: 'uploadedBy', nullable: false }, { name: 'vendorResolution', nullable: true }, );
+    const optionalStringProperties = createBillIntakeResponseOptionalProperties({ name: 'attachedAt', nullable: true }, { name: 'attachedBillId', nullable: true }, { name: 'attachedBy', nullable: true }, { name: 'channel', nullable: false }, { name: 'confirmedAt', nullable: false }, { name: 'confirmedBillId', nullable: true }, { name: 'confirmedBy', nullable: false }, { name: 'discardReason', nullable: true }, { name: 'discardedAt', nullable: false }, { name: 'discardedBy', nullable: false }, { name: 'extractionOutcome', nullable: true }, { name: 'intakeId', nullable: false }, { name: 'intakeReference', nullable: false }, { name: 'rejectionReason', nullable: true }, { name: 'sourceFileId', nullable: true }, { name: 'splitOf', nullable: true }, { name: 'status', nullable: false }, { name: 'uploadedAt', nullable: false }, { name: 'uploadedBy', nullable: false }, { name: 'vendorResolution', nullable: true }, );
     const optionalNumberProperties = createBillIntakeResponseOptionalProperties({ name: 'pageCount', nullable: true }, { name: 'rowFrom', nullable: true }, { name: 'rowTo', nullable: true }, { name: 'version', nullable: false }, );
     const optionalBooleanProperties = createBillIntakeResponseOptionalProperties({ name: 'edited', nullable: false }, { name: 'lastExtractionFailed', nullable: false }, { name: 'mappingRequired', nullable: false }, );
 
