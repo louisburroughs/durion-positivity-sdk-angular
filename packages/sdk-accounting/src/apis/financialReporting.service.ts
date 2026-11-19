@@ -73,7 +73,7 @@ export class FinancialReportingService extends BaseService {
 
     /**
      * Download Report Export Artifact
-     * Downloads the rendered artifact of a COMPLETED export job as an attachment whose content type matches the requested format, for example text/csv or application/pdf. Use this tool after getReportExportStatus reports COMPLETED; do not use it earlier, and note it requires reporting:view:financial-statements because the artifact carries actual financial figures. Preconditions: the export job must exist, be COMPLETED and still have its artifact. Required inputs: exportId (UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_REPORT_EXPORT_DOWNLOAD audit event; no state changes. Returns 404 when the job or its artifact is missing, and 409 when the job is not COMPLETED.
+     * Downloads the stored file of a COMPLETED export job as an attachment whose content type matches the requested format, for example text/csv or application/pdf. Use this tool after getReportExportStatus reports COMPLETED; do not use it earlier, and note it requires reporting:view:financial-statements because the artifact carries actual financial figures. Preconditions: the export job must exist in the caller\&#39;s tenant, be COMPLETED and still have its file (kept 30 days after completion by default). Required inputs: exportId (UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_REPORT_EXPORT_DOWNLOAD event and, when the file is served, writes an audit row naming the export and the downloading user; a refused download writes none. Returns 404 EXPORT_JOB_NOT_FOUND when the caller\&#39;s tenant has no such job, whatever its state; then 409 EXPORT_NOT_READY while the job is not COMPLETED (a FAILED job included), and 409 EXPORT_EXPIRED once the file was purged.
      * @endpoint get /v1/accounting/reports/export/{exportId}/download
      * @param exportId Export job UUID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -1021,7 +1021,7 @@ export class FinancialReportingService extends BaseService {
 
     /**
      * Get Report Export Status
-     * Returns the current status of an asynchronous report export job: PENDING, IN_PROGRESS, COMPLETED or FAILED. Use this tool to poll a job created by requestReportExport; do not use downloadReportExport until the status is COMPLETED. Preconditions: the export job must exist. Required inputs: exportId (UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_REPORT_EXPORT_STATUS audit event; no state changes. Returns 404 EXPORT_JOB_NOT_FOUND when no export job exists for the supplied id.
+     * Returns the stored state of an asynchronous report export job: PENDING, IN_PROGRESS, COMPLETED (with downloadUrl and expiresAt) or FAILED (with failureReason, a code). Use this tool to poll a job created by requestReportExport; do not use downloadReportExport until the status is COMPLETED. Preconditions: the export job must exist in the caller\&#39;s tenant; any holder of accounting:report:export in the tenant can read another user\&#39;s export. Required inputs: exportId (UUID) as a path parameter; there is no request body. Emits an ACCOUNTING_REPORT_EXPORT_STATUS audit event; no state changes. Returns 404 EXPORT_JOB_NOT_FOUND when the caller\&#39;s tenant has no export job with the supplied id. A job is never deleted: it reads back with its outcome after its file was purged, then without a downloadUrl.
      * @endpoint get /v1/accounting/reports/export/{exportId}
      * @param exportId Export job UUID
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -1279,7 +1279,7 @@ export class FinancialReportingService extends BaseService {
 
     /**
      * List Report Export History
-     * Lists all asynchronous report export jobs as a paginated projection, most recent first. Use this tool to review past exports and their statuses; do not use getReportExportStatus, which polls a single job by id. Preconditions: none beyond the caller holding accounting:report:export. Required inputs: none; the page defaults to 20 items and only requestedAt is a supported sort property. Emits an ACCOUNTING_REPORT_EXPORT_LIST audit event; no state changes. Returns 400 when an unsupported sort property is requested.
+     * Lists the caller\&#39;s tenant\&#39;s asynchronous report export jobs as a paginated projection, most recent first; jobs are kept after their files are purged. Use this tool to review past exports and their statuses; do not use getReportExportStatus, which polls a single job by id. Preconditions: none beyond the caller holding accounting:report:export. Required inputs: none; the page defaults to 20 items and only requestedAt is a supported sort property. Emits an ACCOUNTING_REPORT_EXPORT_LIST audit event; no state changes. Returns 400 UNSUPPORTED_SORT_PROPERTY when a sort property other than requestedAt is requested.
      * @endpoint get /v1/accounting/reports/export
      * @param page Zero-based page index (0..N)
      * @param size The size of the page to be returned
@@ -1437,22 +1437,26 @@ export class FinancialReportingService extends BaseService {
 
     /**
      * Request Async Report Export
-     * Submits an asynchronous export job that renders a financial report to a downloadable artifact, returning immediately with status PENDING. Use this tool to produce a file for one of the reporting endpoints\&#39; outputs; do not use the synchronous generate operations such as generateIncomeStatement when a file artifact is what is needed, and poll getReportExportStatus for completion. Preconditions: none; as-of report types use the request\&#39;s endDate as the as-of date. Required inputs: format (PDF, CSV, XLSX or JSON), reportType (TAX_LIABILITY, INCOME_STATEMENT, BALANCE_SHEET, TRIAL_BALANCE, GENERAL_LEDGER, AGED_RECEIVABLES or AGED_PAYABLES), startDate and endDate (endDate on or after startDate); accountId and filename are optional. Emits an ACCOUNTING_REPORT_EXPORT_REQUEST event and records the requesting operator. Returns 400 when the payload is invalid or the end date precedes the start date.
+     * Stores an asynchronous export job that renders a financial report to a downloadable file, and returns at once with status PENDING and no downloadUrl; a worker renders it afterwards. Use this tool to produce a file for one of the reporting endpoints\&#39; outputs; do not use the synchronous generate operations such as generateIncomeStatement when a file artifact is what is needed, and poll getReportExportStatus until the status is COMPLETED or FAILED. Preconditions: none; as-of report types use the request\&#39;s endDate as the as-of date. Required inputs: format (PDF or CSV), reportType (TAX_LIABILITY, INCOME_STATEMENT, BALANCE_SHEET, TRIAL_BALANCE, GENERAL_LEDGER, AGED_RECEIVABLES or AGED_PAYABLES), startDate and endDate (endDate on or after startDate); accountId, filename and the Idempotency-Key header (a UUID) are optional. Emits an ACCOUNTING_REPORT_EXPORT_REQUEST event and writes an audit row naming the export, its type, format and range and the requesting user; a replay of the same Idempotency-Key answers the first job with Idempotency-Replayed: true and stores nothing. Returns 400 VALIDATION_ERROR, storing nothing, when the payload is invalid, the end date precedes the start date, reportType is not one of the listed values (fieldErrors names reportType), the format is not rendered for the type, such as XLSX or JSON (fieldErrors names format), or the Idempotency-Key is not a UUID; 409 IDEMPOTENCY_CONFLICT when the key was used with another request or by another caller.
      * @endpoint post /v1/accounting/reports/export
      * @param reportExportRequest Report type, format and date range to render asynchronously.
+     * @param idempotencyKey Optional idempotency key: a UUID generated once per intent. A replay answers the first job with Idempotency-Replayed: true and stores no second one; the same key with another request or by another caller is 409 IDEMPOTENCY_CONFLICT; a value that is not a UUID is 400 VALIDATION_ERROR
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public requestReportExport(reportExportRequest: ReportExportRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ReportExportResponse>;
-    public requestReportExport(reportExportRequest: ReportExportRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ReportExportResponse>>;
-    public requestReportExport(reportExportRequest: ReportExportRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ReportExportResponse>>;
-    public requestReportExport(reportExportRequest: ReportExportRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public requestReportExport(reportExportRequest: ReportExportRequest, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ReportExportResponse>;
+    public requestReportExport(reportExportRequest: ReportExportRequest, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ReportExportResponse>>;
+    public requestReportExport(reportExportRequest: ReportExportRequest, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ReportExportResponse>>;
+    public requestReportExport(reportExportRequest: ReportExportRequest, idempotencyKey?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (reportExportRequest === null || reportExportRequest === undefined) {
             throw new Error('Required parameter reportExportRequest was null or undefined when calling requestReportExport.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');

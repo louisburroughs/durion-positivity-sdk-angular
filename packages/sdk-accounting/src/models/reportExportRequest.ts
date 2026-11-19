@@ -26,13 +26,13 @@ export interface ReportExportRequest {
      */
     filename?: string;
     /**
-     * Export format
+     * Export format. Every report type renders CSV and PDF; a format the report type does not render (today XLSX and JSON) is refused with 400 VALIDATION_ERROR naming format.
      */
     format: ReportExportRequestFormatEnum;
     /**
-     * Report type key. Renderable types: TAX_LIABILITY, INCOME_STATEMENT, BALANCE_SHEET, TRIAL_BALANCE, GENERAL_LEDGER, AGED_RECEIVABLES, AGED_PAYABLES.
+     * The report to export. A value outside the list is refused with 400 VALIDATION_ERROR naming reportType; no job is stored for it.
      */
-    reportType: string;
+    reportType: ReportExportRequestReportTypeEnum;
     /**
      * Period start date (inclusive, YYYY-MM-DD)
      */
@@ -43,6 +43,15 @@ export enum ReportExportRequestFormatEnum {
     Csv = 'CSV',
     Xlsx = 'XLSX',
     Json = 'JSON'
+};
+export enum ReportExportRequestReportTypeEnum {
+    TaxLiability = 'TAX_LIABILITY',
+    IncomeStatement = 'INCOME_STATEMENT',
+    BalanceSheet = 'BALANCE_SHEET',
+    TrialBalance = 'TRIAL_BALANCE',
+    GeneralLedger = 'GENERAL_LEDGER',
+    AgedReceivables = 'AGED_RECEIVABLES',
+    AgedPayables = 'AGED_PAYABLES'
 };
 
 

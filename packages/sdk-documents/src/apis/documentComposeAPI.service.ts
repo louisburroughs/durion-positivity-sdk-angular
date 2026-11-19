@@ -19,6 +19,8 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 // @ts-ignore
 import { ApiError } from '../models/apiError';
 // @ts-ignore
+import { ComposeMultipartForm } from '../models/composeMultipartForm';
+// @ts-ignore
 import { ComposeRequest } from '../models/composeRequest';
 
 // @ts-ignore
@@ -39,9 +41,9 @@ export class DocumentComposeAPIService extends BaseService {
 
     /**
      * Compose Sections Into One PDF
-     * Composes an ordered list of text and table sections into one PDF document and streams it back. Use this tool when one complete document must be built from several parts or from a table of any length; do not use it to convert a single piece of source content through a template (use renderDocument) or to retrieve an earlier document, because nothing is stored. Preconditions: a service caller holding documents:render; the request must fit the configured documents.compose limits. Required inputs: title and at least one section; each section needs type and heading, a TEXT section takes paragraphs and fields, a TABLE section takes columns then rows, and members must be sent in the documented order because the body is read as a stream. Emits a DOCUMENT_COMPOSE event; every table row is drawn, nothing is persisted and the response is either the complete PDF or an error, never a shortened document. Returns 400 when the request is malformed, out of order or holds a character the document font cannot draw, 415 when the body is not application/json, 422 DOCUMENT_TOO_LARGE naming the limit when any limit is exceeded, 503 COMPOSE_BUSY with Retry-After when every compose slot is in use, and 500 when composing fails.
+     * Composes an ordered list of text, table and image-page sections into one PDF document and streams it back. Use this tool when one complete document must be built from several parts, from a table of any length or from page images; do not use it to convert a single piece of source content through a template (use renderDocument) or to retrieve an earlier document, because nothing is stored. Preconditions: a service caller holding documents:render; the request must fit the configured documents.compose limits; image pages need the multipart/form-data form of the request. Required inputs: title and at least one section; each section needs type and heading, a TEXT section takes paragraphs and fields, a TABLE section takes columns then rows, an IMAGE_PAGES section takes pages, and members must be sent in the documented order because the body is read as a stream. As multipart/form-data the same JSON is the part named document, and every other part is one PNG page image that exactly one pages entry refers to by its part name. Emits a DOCUMENT_COMPOSE event; every table row and every image is drawn, nothing is persisted and the response is either the complete PDF or an error, never a shortened document. Returns 400 when the request is malformed, out of order, holds a character the document font cannot draw or its page references and parts disagree, 415 when the body is neither application/json nor multipart/form-data, 422 DOCUMENT_TOO_LARGE naming the limit when any limit is exceeded, 422 UNSUPPORTED_IMAGE when a part is not an accepted PNG, 503 COMPOSE_BUSY with Retry-After when every compose slot is in use, and 500 when composing fails.
      * @endpoint post /v1/documents/compose
-     * @param composeRequest The document to compose: a title, an optional page label and the ordered sections.
+     * @param composeRequest The document to compose: a title, an optional page label and the ordered sections. As application/json, the document itself. As multipart/form-data, the same JSON in the part named document and one part for each page image.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -74,7 +76,8 @@ export class DocumentComposeAPIService extends BaseService {
 
         // to determine the Content-Type header
         const consumes: string[] = [
-            'application/json'
+            'application/json',
+            'multipart/form-data'
         ];
         const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
         if (httpContentTypeSelected !== undefined) {
