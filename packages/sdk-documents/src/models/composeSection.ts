@@ -12,7 +12,7 @@ import { ComposeField } from './composeField';
 
 
 /**
- * One section of a composed document; it starts on a new page. The members type, heading and pageLabel must be sent before the content members of the type: paragraphs and fields for TEXT, columns then rows for TABLE. A content member of the other type must be omitted or null.
+ * One section of a composed document; it starts on a new page. The members type, heading and pageLabel must be sent before the content members of the type: paragraphs and fields for TEXT, columns then rows for TABLE, pages for IMAGE_PAGES. A content member of another type must be omitted or null.
  */
 export interface ComposeSection {
     /**
@@ -32,6 +32,10 @@ export interface ComposeSection {
      */
     pageLabel?: string | null;
     /**
+     * IMAGE_PAGES only, required for it, multipart/form-data requests only: the pages, in the order they are to appear, each the name of one image part of the request. At least one. Each image is drawn on a page of its own, scaled to fit; the first shares its page with the heading. A name with no part, and a part named twice, are refused.
+     */
+    pages?: Array<string>;
+    /**
      * TEXT only: paragraphs, drawn in order as text. A line feed starts a new line.
      */
     paragraphs?: Array<string>;
@@ -46,7 +50,8 @@ export interface ComposeSection {
 }
 export enum ComposeSectionTypeEnum {
     Text = 'TEXT',
-    Table = 'TABLE'
+    Table = 'TABLE',
+    ImagePages = 'IMAGE_PAGES'
 };
 
 

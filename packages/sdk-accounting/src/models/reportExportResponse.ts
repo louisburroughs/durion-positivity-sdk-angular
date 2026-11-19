@@ -18,17 +18,21 @@ export interface ReportExportResponse {
      */
     completedAt?: string;
     /**
-     * Download URL (only present when status is COMPLETED)
+     * Path of this export\'s download endpoint, relative to the API root. Present only when status is COMPLETED and the file is still stored: absent while PENDING or IN_PROGRESS, when FAILED, and after the file was purged at expiresAt.
      */
     downloadUrl?: string;
+    /**
+     * ISO-8601 timestamp after which the file is purged and its download answers 409 EXPORT_EXPIRED (completion plus the retention period, 30 days by default). The job itself stays readable. Null unless status is COMPLETED.
+     */
+    expiresAt?: string;
     /**
      * Unique export job identifier
      */
     exportId: string;
     /**
-     * Failure reason (only present when status is FAILED)
+     * Why the job failed, as a code (only present when status is FAILED): DOCUMENT_SERVICE_REFUSED (pos-documents refused the document), DOCUMENT_SERVICE_UNAVAILABLE (pos-documents unreachable or failing, after the last attempt), RENDERING_FAILED (the renderer failed, after the last attempt), ARTIFACT_TOO_LARGE (the file is over the size cap), ABANDONED (the worker stopped on the last attempt). Never a message, an upstream status or an id.
      */
-    failureReason?: string;
+    failureReason?: ReportExportResponseFailureReasonEnum;
     /**
      * Export format
      */
@@ -36,21 +40,37 @@ export interface ReportExportResponse {
     /**
      * Report type that was exported
      */
-    reportType?: string;
+    reportType?: ReportExportResponseReportTypeEnum;
     /**
      * ISO-8601 timestamp when the export was requested
      */
     requestedAt?: string;
     /**
-     * Current export status
+     * Current export status: PENDING when requested, IN_PROGRESS while a worker renders it, then COMPLETED or FAILED. A job waiting to be retried reads PENDING again.
      */
     status: ReportExportResponseStatusEnum;
 }
+export enum ReportExportResponseFailureReasonEnum {
+    DocumentServiceRefused = 'DOCUMENT_SERVICE_REFUSED',
+    DocumentServiceUnavailable = 'DOCUMENT_SERVICE_UNAVAILABLE',
+    RenderingFailed = 'RENDERING_FAILED',
+    ArtifactTooLarge = 'ARTIFACT_TOO_LARGE',
+    Abandoned = 'ABANDONED'
+};
 export enum ReportExportResponseFormatEnum {
     Pdf = 'PDF',
     Csv = 'CSV',
     Xlsx = 'XLSX',
     Json = 'JSON'
+};
+export enum ReportExportResponseReportTypeEnum {
+    TaxLiability = 'TAX_LIABILITY',
+    IncomeStatement = 'INCOME_STATEMENT',
+    BalanceSheet = 'BALANCE_SHEET',
+    TrialBalance = 'TRIAL_BALANCE',
+    GeneralLedger = 'GENERAL_LEDGER',
+    AgedReceivables = 'AGED_RECEIVABLES',
+    AgedPayables = 'AGED_PAYABLES'
 };
 export enum ReportExportResponseStatusEnum {
     Pending = 'PENDING',
@@ -100,7 +120,7 @@ export function instanceOfReportExportResponse(value: object): value is ReportEx
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createReportExportResponsePropertyNames('exportId', 'status', );
-    const optionalStringProperties = createReportExportResponseOptionalProperties({ name: 'completedAt', nullable: false }, { name: 'downloadUrl', nullable: false }, { name: 'exportId', nullable: false }, { name: 'failureReason', nullable: false }, { name: 'format', nullable: false }, { name: 'reportType', nullable: false }, { name: 'requestedAt', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createReportExportResponseOptionalProperties({ name: 'completedAt', nullable: false }, { name: 'downloadUrl', nullable: false }, { name: 'expiresAt', nullable: false }, { name: 'exportId', nullable: false }, { name: 'failureReason', nullable: false }, { name: 'format', nullable: false }, { name: 'reportType', nullable: false }, { name: 'requestedAt', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createReportExportResponseOptionalProperties();
     const optionalBooleanProperties = createReportExportResponseOptionalProperties();
 
