@@ -26,7 +26,7 @@ export interface StaffingCoverageRole {
      */
     role: string;
     /**
-     * SCHEDULED shifts in this role whose shift date is the coverage date and whose person still holds the matching ACTIVE staffing assignment
+     * SCHEDULED shifts in this role whose shift date is the coverage date and whose person still holds the matching ACTIVE staffing assignment, excluding shifts covered by the person\'s APPROVED time off (status TIME_OFF)
      */
     scheduled: number;
     /**

@@ -1,4 +1,4 @@
-# @durion-sdk/platform-sender@0.308.0-alpha
+# @durion-sdk/platform-sender@0.309.0-alpha
 
 Technician-app push device registrations (ADR-0076): register or refresh a device for the authenticated caller, and remove it on sign-out. This is the client-facing document: it publishes the device API only. The shared-secret send API is service-to-service and is never published.
 
@@ -24,7 +24,7 @@ Navigate to the folder of your consuming project and run one of next commands.
 _published:_
 
 ```console
-npm install @durion-sdk/platform-sender@0.308.0-alpha --save
+npm install @durion-sdk/platform-sender@0.309.0-alpha --save
 ```
 
 _without publishing (not recommended):_

@@ -46,6 +46,10 @@ export interface TimePeriodApprovalDto {
      */
     reason?: string | null;
     /**
+     * Whether the decider approved a period carrying a time correction they filed themselves, allowed only as the location\'s sole approver; false on a rejection
+     */
+    readonly selfApproved: boolean;
+    /**
      * Pay period the decision covers
      */
     timePeriodId: string;
@@ -95,10 +99,10 @@ export function instanceOfTimePeriodApprovalDto(value: object): value is TimePer
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTimePeriodApprovalDtoPropertyNames('approvalId', 'decidedAt', 'decidedBy', 'entryCount', 'outcome', 'personId', 'timePeriodId', );
+    const requiredProperties = createTimePeriodApprovalDtoPropertyNames('approvalId', 'decidedAt', 'decidedBy', 'entryCount', 'outcome', 'personId', 'selfApproved', 'timePeriodId', );
     const optionalStringProperties = createTimePeriodApprovalDtoOptionalProperties({ name: 'approvalId', nullable: false }, { name: 'decidedAt', nullable: false }, { name: 'decidedBy', nullable: false }, { name: 'decidedByPersonId', nullable: true }, { name: 'outcome', nullable: false }, { name: 'personId', nullable: false }, { name: 'reason', nullable: true }, { name: 'timePeriodId', nullable: false }, );
     const optionalNumberProperties = createTimePeriodApprovalDtoOptionalProperties({ name: 'entryCount', nullable: false }, );
-    const optionalBooleanProperties = createTimePeriodApprovalDtoOptionalProperties();
+    const optionalBooleanProperties = createTimePeriodApprovalDtoOptionalProperties({ name: 'selfApproved', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalTimePeriodApprovalDtoPropertyOfType(_v, property.name, 'string', property.nullable))

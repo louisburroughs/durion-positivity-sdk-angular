@@ -30,7 +30,7 @@ export interface ReportExportResponse {
      */
     exportId: string;
     /**
-     * Why the job failed, as a code (only present when status is FAILED): DOCUMENT_SERVICE_REFUSED (pos-documents refused the document), DOCUMENT_SERVICE_UNAVAILABLE (pos-documents unreachable or failing, after the last attempt), RENDERING_FAILED (the renderer failed, after the last attempt), ARTIFACT_TOO_LARGE (the file is over the size cap), ABANDONED (the worker stopped on the last attempt). Never a message, an upstream status or an id.
+     * Why the job failed, as a code (only present when status is FAILED): DOCUMENT_SERVICE_REFUSED (pos-documents refused the document), DOCUMENT_SERVICE_UNAVAILABLE (pos-documents unreachable or failing, after the last attempt), RENDERING_FAILED (the renderer failed, after the last attempt), ARTIFACT_TOO_LARGE (the file is over the size cap), PACKET_TOO_LARGE (a month-end packet is over a document or size limit; it is never shortened to fit), ABANDONED (the worker stopped on the last attempt). Never a message, an upstream status or an id.
      */
     failureReason?: ReportExportResponseFailureReasonEnum;
     /**
@@ -55,6 +55,7 @@ export enum ReportExportResponseFailureReasonEnum {
     DocumentServiceUnavailable = 'DOCUMENT_SERVICE_UNAVAILABLE',
     RenderingFailed = 'RENDERING_FAILED',
     ArtifactTooLarge = 'ARTIFACT_TOO_LARGE',
+    PacketTooLarge = 'PACKET_TOO_LARGE',
     Abandoned = 'ABANDONED'
 };
 export enum ReportExportResponseFormatEnum {
@@ -70,7 +71,8 @@ export enum ReportExportResponseReportTypeEnum {
     TrialBalance = 'TRIAL_BALANCE',
     GeneralLedger = 'GENERAL_LEDGER',
     AgedReceivables = 'AGED_RECEIVABLES',
-    AgedPayables = 'AGED_PAYABLES'
+    AgedPayables = 'AGED_PAYABLES',
+    MonthEndPacket = 'MONTH_END_PACKET'
 };
 export enum ReportExportResponseStatusEnum {
     Pending = 'PENDING',

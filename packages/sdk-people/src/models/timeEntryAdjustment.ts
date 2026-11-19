@@ -54,6 +54,10 @@ export interface TimeEntryAdjustment {
      */
     reasonCode: string;
     /**
+     * Whether the adjustment was approved by the user who filed it, allowed only as the location\'s sole approver; false while pending and on a rejection
+     */
+    readonly selfApproved: boolean;
+    /**
      * Current status of the adjustment
      */
     status: TimeEntryAdjustmentStatusEnum;
@@ -109,10 +113,10 @@ export function instanceOfTimeEntryAdjustment(value: object): value is TimeEntry
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTimeEntryAdjustmentPropertyNames('reasonCode', 'status', 'timeEntryId', );
+    const requiredProperties = createTimeEntryAdjustmentPropertyNames('reasonCode', 'selfApproved', 'status', 'timeEntryId', );
     const optionalStringProperties = createTimeEntryAdjustmentOptionalProperties({ name: 'adjustmentId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'decidedAt', nullable: false }, { name: 'decidedBy', nullable: false }, { name: 'notes', nullable: false }, { name: 'proposedEndAt', nullable: false }, { name: 'proposedStartAt', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'status', nullable: false }, { name: 'timeEntryId', nullable: false }, );
     const optionalNumberProperties = createTimeEntryAdjustmentOptionalProperties({ name: 'minutesDelta', nullable: false }, );
-    const optionalBooleanProperties = createTimeEntryAdjustmentOptionalProperties();
+    const optionalBooleanProperties = createTimeEntryAdjustmentOptionalProperties({ name: 'selfApproved', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalTimeEntryAdjustmentPropertyOfType(_v, property.name, 'string', property.nullable))
