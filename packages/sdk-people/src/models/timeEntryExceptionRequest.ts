@@ -10,37 +10,37 @@
 
 
 /**
- * Request to create a time entry exception
+ * Request to record a time exception manually; the severity follows from the code
  */
 export interface TimeEntryExceptionRequest {
     /**
-     * Timestamp when the exception was detected
+     * When the exception was detected; defaults to the current server time
      */
     detectedAt?: string;
     /**
-     * Employee identifier associated with the exception
+     * Exception code from the closed vocabulary; any other value is refused with 400
      */
-    employeeId: string;
+    exceptionCode: TimeEntryExceptionRequestExceptionCodeEnum;
     /**
-     * Exception code identifying the type of exception
+     * Person the exception concerns
      */
-    exceptionCode: string;
+    personId: string;
     /**
      * Notes describing the exception or initial resolution steps
      */
     resolutionNotes?: string;
     /**
-     * Severity level of the exception
-     */
-    severity?: TimeEntryExceptionRequestSeverityEnum;
-    /**
-     * Time entry identifier associated with the exception
+     * Time entry the exception concerns, when there is one; it must be one of the person\'s time entries and, with workSessionId, that session\'s time entry (422 SEMANTIC_VALIDATION_ERROR otherwise)
      */
     timeEntryId?: string;
+    /**
+     * Work session the exception concerns, when there is one; it must be one of the person\'s sessions (422 SEMANTIC_VALIDATION_ERROR otherwise). The exception then takes its location and work date from the session and names it as its subject, so closing the session resolves a MISSED_CLOCK_OUT, and a second exception with the same code for the same session is refused
+     */
+    workSessionId?: string;
 }
-export enum TimeEntryExceptionRequestSeverityEnum {
-    Warning = 'WARNING',
-    Blocking = 'BLOCKING'
+export enum TimeEntryExceptionRequestExceptionCodeEnum {
+    MissedClockOut = 'MISSED_CLOCK_OUT',
+    LongBreak = 'LONG_BREAK'
 };
 
 
@@ -83,8 +83,8 @@ export function instanceOfTimeEntryExceptionRequest(value: object): value is Tim
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTimeEntryExceptionRequestPropertyNames('employeeId', 'exceptionCode', );
-    const optionalStringProperties = createTimeEntryExceptionRequestOptionalProperties({ name: 'detectedAt', nullable: false }, { name: 'employeeId', nullable: false }, { name: 'exceptionCode', nullable: false }, { name: 'resolutionNotes', nullable: false }, { name: 'severity', nullable: false }, { name: 'timeEntryId', nullable: false }, );
+    const requiredProperties = createTimeEntryExceptionRequestPropertyNames('exceptionCode', 'personId', );
+    const optionalStringProperties = createTimeEntryExceptionRequestOptionalProperties({ name: 'detectedAt', nullable: false }, { name: 'exceptionCode', nullable: false }, { name: 'personId', nullable: false }, { name: 'resolutionNotes', nullable: false }, { name: 'timeEntryId', nullable: false }, { name: 'workSessionId', nullable: false }, );
     const optionalNumberProperties = createTimeEntryExceptionRequestOptionalProperties();
     const optionalBooleanProperties = createTimeEntryExceptionRequestOptionalProperties();
 

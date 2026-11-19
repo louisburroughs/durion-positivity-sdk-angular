@@ -16,13 +16,13 @@ export interface PersonCredentialResponse {
     competenceCode: string;
     credentialId: string;
     /**
-     * Retained evidence document (49 CFR 396.19)
-     */
-    evidenceRef?: string;
-    /**
      * Null: does not expire
      */
     expiresOn?: string;
+    /**
+     * Whether a document (retained evidence, 49 CFR 396.19) is on record; the document reference itself is never returned
+     */
+    hasDocument: boolean;
     issuedOn: string;
     issuer: string;
     /**
@@ -38,6 +38,10 @@ export interface PersonCredentialResponse {
      * Display metadata only; nothing thresholds on it
      */
     proficiency?: number;
+    /**
+     * Credential that renewed this one: the person\'s next credential for the same skill (any issuer, not REVOKED or SUPERSEDED) with a later issuedOn; null when not renewed
+     */
+    renewedByCredentialId?: string;
     /**
      * Durion skill code
      */
@@ -100,10 +104,10 @@ export function instanceOfPersonCredentialResponse(value: object): value is Pers
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPersonCredentialResponsePropertyNames('competenceCode', 'credentialId', 'issuedOn', 'issuer', 'maxGvwrClass', 'minGvwrClass', 'personId', 'skillCode', 'skillId', 'status', );
-    const optionalStringProperties = createPersonCredentialResponseOptionalProperties({ name: 'competenceCode', nullable: false }, { name: 'credentialId', nullable: false }, { name: 'evidenceRef', nullable: false }, { name: 'expiresOn', nullable: false }, { name: 'issuedOn', nullable: false }, { name: 'issuer', nullable: false }, { name: 'personId', nullable: false }, { name: 'skillCode', nullable: false }, { name: 'skillId', nullable: false }, { name: 'sourceCode', nullable: false }, { name: 'sourceCredentialCode', nullable: false }, { name: 'status', nullable: false }, );
+    const requiredProperties = createPersonCredentialResponsePropertyNames('competenceCode', 'credentialId', 'hasDocument', 'issuedOn', 'issuer', 'maxGvwrClass', 'minGvwrClass', 'personId', 'skillCode', 'skillId', 'status', );
+    const optionalStringProperties = createPersonCredentialResponseOptionalProperties({ name: 'competenceCode', nullable: false }, { name: 'credentialId', nullable: false }, { name: 'expiresOn', nullable: false }, { name: 'issuedOn', nullable: false }, { name: 'issuer', nullable: false }, { name: 'personId', nullable: false }, { name: 'renewedByCredentialId', nullable: false }, { name: 'skillCode', nullable: false }, { name: 'skillId', nullable: false }, { name: 'sourceCode', nullable: false }, { name: 'sourceCredentialCode', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createPersonCredentialResponseOptionalProperties({ name: 'maxGvwrClass', nullable: false }, { name: 'minGvwrClass', nullable: false }, { name: 'proficiency', nullable: false }, );
-    const optionalBooleanProperties = createPersonCredentialResponseOptionalProperties();
+    const optionalBooleanProperties = createPersonCredentialResponseOptionalProperties({ name: 'hasDocument', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalPersonCredentialResponsePropertyOfType(_v, property.name, 'string', property.nullable))

@@ -10,13 +10,9 @@
 
 
 /**
- * Request to create a time entry adjustment
+ * Request to create a time entry adjustment; the author is the authenticated caller, never a request field
  */
 export interface TimeEntryAdjustmentRequest {
-    /**
-     * User creating the adjustment request
-     */
-    createdBy?: string;
     /**
      * Adjustment in minutes (positive to add time, negative to subtract)
      */
@@ -82,7 +78,7 @@ export function instanceOfTimeEntryAdjustmentRequest(value: object): value is Ti
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createTimeEntryAdjustmentRequestPropertyNames('reasonCode', 'timeEntryId', );
-    const optionalStringProperties = createTimeEntryAdjustmentRequestOptionalProperties({ name: 'createdBy', nullable: false }, { name: 'notes', nullable: false }, { name: 'proposedEndAt', nullable: false }, { name: 'proposedStartAt', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'timeEntryId', nullable: false }, );
+    const optionalStringProperties = createTimeEntryAdjustmentRequestOptionalProperties({ name: 'notes', nullable: false }, { name: 'proposedEndAt', nullable: false }, { name: 'proposedStartAt', nullable: false }, { name: 'reasonCode', nullable: false }, { name: 'timeEntryId', nullable: false }, );
     const optionalNumberProperties = createTimeEntryAdjustmentRequestOptionalProperties({ name: 'minutesDelta', nullable: false }, );
     const optionalBooleanProperties = createTimeEntryAdjustmentRequestOptionalProperties();
 

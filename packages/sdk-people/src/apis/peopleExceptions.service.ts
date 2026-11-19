@@ -19,7 +19,7 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 // @ts-ignore
 import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { TimeEntryException } from '../models/timeEntryException';
+import { PagedResponseTimeEntryException } from '../models/pagedResponseTimeEntryException';
 // @ts-ignore
 import { TimeEntryExceptionRequest } from '../models/timeEntryExceptionRequest';
 // @ts-ignore
@@ -46,19 +46,20 @@ export class PeopleExceptionsService extends BaseService {
     }
 
     /**
-     * Acknowledge An Open Time Entry Exception
-     * Marks an OPEN time entry exception as ACKNOWLEDGED, stamping the acting user and timestamp. Use this tool to signal an exception has been seen but not yet fixed; use resolveTimeEntryException or waiveTimeEntryException instead to close it. Preconditions: the exception must exist and must not already be RESOLVED or WAIVED, which are terminal states. Required inputs: exceptionId (UUID) path parameter; there is no request body, and an optional X-Correlation-Id header is carried into the audit trail. Emits a PEOPLE_TIME_ENTRY_EXCEPTION_ACKNOWLEDGE event and writes an EXCEPTION_ACKNOWLEDGED audit row. Returns 404 when the exception does not exist, and 409 when it is already RESOLVED or WAIVED.
+     * Acknowledge An Open Time Exception
+     * Marks a time exception as ACKNOWLEDGED, stamping the acting user and timestamp. Use this tool to signal an exception has been seen but not yet fixed; use resolveTimeEntryException or waiveTimeEntryException instead to close it. Preconditions: the exception must exist, its location must lie within the caller\&#39;s reach for people:timeException:acknowledge (one with no location only when that permission is not location-scoped for the caller), and it must not already be RESOLVED or WAIVED, which are terminal states. Required inputs: exceptionId (UUID) path parameter; there is no request body. An optional X-Correlation-Id header is carried into the audit trail, and an optional Idempotency-Key header (ADR-0075) makes retries safe: a replay answers the stored 200 with Idempotency-Replayed: true and changes nothing. Emits a PEOPLE_TIME_ENTRY_EXCEPTION_ACKNOWLEDGE event and writes an EXCEPTION_ACKNOWLEDGED audit row; an acknowledged BLOCKING exception still holds back period approval. Returns 200 with no body, 400 VALIDATION_ERROR when the Idempotency-Key is not a UUID, 404 when the exception does not exist, 403 LOCATION_SCOPE_DENIED when it is outside the caller\&#39;s reach (404 is checked first, and both before the key is claimed), and 409 RESOURCE_STATE_CONFLICT when it is already RESOLVED or WAIVED or IDEMPOTENCY_CONFLICT when the key was already used with a different request.
      * @endpoint post /v1/people/exceptions/{exceptionId}/acknowledge
-     * @param exceptionId
-     * @param xCorrelationId
+     * @param exceptionId Exception to acknowledge
+     * @param xCorrelationId Correlation id carried into the audit trail
+     * @param idempotencyKey Optional key that makes retries safe; a UUID (ADR-0075)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public acknowledgeTimeEntryException(exceptionId: string, xCorrelationId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
-    public acknowledgeTimeEntryException(exceptionId: string, xCorrelationId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
-    public acknowledgeTimeEntryException(exceptionId: string, xCorrelationId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
-    public acknowledgeTimeEntryException(exceptionId: string, xCorrelationId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public acknowledgeTimeEntryException(exceptionId: string, xCorrelationId?: string, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
+    public acknowledgeTimeEntryException(exceptionId: string, xCorrelationId?: string, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
+    public acknowledgeTimeEntryException(exceptionId: string, xCorrelationId?: string, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
+    public acknowledgeTimeEntryException(exceptionId: string, xCorrelationId?: string, idempotencyKey?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (exceptionId === null || exceptionId === undefined) {
             throw new Error('Required parameter exceptionId was null or undefined when calling acknowledgeTimeEntryException.');
         }
@@ -66,6 +67,9 @@ export class PeopleExceptionsService extends BaseService {
         let localVarHeaders = this.defaultHeaders;
         if (xCorrelationId !== undefined && xCorrelationId !== null) {
             localVarHeaders = localVarHeaders.set('X-Correlation-Id', String(xCorrelationId));
+        }
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
         }
 
         // authentication (bearerAuth) required
@@ -110,23 +114,27 @@ export class PeopleExceptionsService extends BaseService {
     }
 
     /**
-     * Create A Time Entry Exception
-     * Records a timekeeping exception in OPEN status for an employee, such as a missed clock-out. Use this tool when a timekeeping anomaly is detected; do not use resolveTimeEntryException or waiveTimeEntryException, which close an existing exception. Preconditions: none are checked against other records; employeeId and timeEntryId are stored as given without referential validation. Required inputs: employeeId and exceptionCode; severity accepts WARNING or BLOCKING and silently falls back to WARNING on any other value, and detectedAt defaults to the current server time. Emits a PEOPLE_TIME_ENTRY_EXCEPTION_CREATE event; the exception starts in OPEN status. Returns 200 with the new exceptionId, and 400 when the JSON payload is malformed.
+     * Record A Time Exception Manually
+     * Records a time exception in OPEN status for a person, with the severity fixed by its code: MISSED_CLOCK_OUT is BLOCKING and LONG_BREAK is WARNING. Use this tool to record an anomaly a manager noticed that detection did not raise; detection raises MISSED_CLOCK_OUT and LONG_BREAK by itself on a schedule (every 15 minutes by default), so do not use this to repeat them, and do not use resolveTimeEntryException or waiveTimeEntryException, which close an existing exception. Preconditions: the person must exist, and unless people:timeException:create is unscoped for the caller one of the person\&#39;s ACTIVE staffing-assignment locations today must lie within its reach; a given workSessionId must be one of the person\&#39;s work sessions, and a given timeEntryId one of the person\&#39;s time entries and, with workSessionId, that session\&#39;s entry. Required inputs: personId (UUID) and exceptionCode (MISSED_CLOCK_OUT or LONG_BREAK; severity is not accepted); timeEntryId, workSessionId, resolutionNotes and detectedAt are optional, detectedAt defaulting to the current server time. With workSessionId the location and work date come from the session, and a MISSED_CLOCK_OUT also takes the session as its subject, so closing the session resolves it; a manual LONG_BREAK has no subject (it names no break) and is never resolved by a close; without workSessionId the location is the person\&#39;s ACTIVE assignment on the UTC date of detectedAt and the work date and subject are null. An optional Idempotency-Key header (ADR-0075) makes retries safe: a replay answers the stored 201 with Idempotency-Replayed: true and records nothing. Emits a PEOPLE_TIME_ENTRY_EXCEPTION_CREATE event; the exception never changes recorded minutes or exported time, and an open BLOCKING one holds back period attendance approval. Returns 201 with the new exceptionId, 400 VALIDATION_ERROR when the body is malformed, personId or exceptionCode is missing, exceptionCode is outside the vocabulary (fieldErrors names exceptionCode) or the Idempotency-Key is not a UUID, 403 LOCATION_SCOPE_DENIED when the person is outside the caller\&#39;s reach, 404 PERSON_NOT_FOUND for an unknown person (checked before 403 and before the key is claimed), 409 DUPLICATE_RESOURCE when a MISSED_CLOCK_OUT already names the work session or IDEMPOTENCY_CONFLICT when the key was already used with a different body, and 422 SEMANTIC_VALIDATION_ERROR when workSessionId is not one of the person\&#39;s sessions or timeEntryId is not one of the person\&#39;s time entries or not that session\&#39;s entry.
      * @endpoint post /v1/people/exceptions
-     * @param timeEntryExceptionRequest Timekeeping anomaly to record against an employee, optionally tied to a specific time entry.
+     * @param timeEntryExceptionRequest Time anomaly to record against a person, optionally tied to a time entry or work session; the severity follows from the code.
+     * @param idempotencyKey Optional key that makes retries safe; a UUID (ADR-0075)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createTimeEntryException(timeEntryExceptionRequest: TimeEntryExceptionRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TimeEntryExceptionResponse>;
-    public createTimeEntryException(timeEntryExceptionRequest: TimeEntryExceptionRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TimeEntryExceptionResponse>>;
-    public createTimeEntryException(timeEntryExceptionRequest: TimeEntryExceptionRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TimeEntryExceptionResponse>>;
-    public createTimeEntryException(timeEntryExceptionRequest: TimeEntryExceptionRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createTimeEntryException(timeEntryExceptionRequest: TimeEntryExceptionRequest, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TimeEntryExceptionResponse>;
+    public createTimeEntryException(timeEntryExceptionRequest: TimeEntryExceptionRequest, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TimeEntryExceptionResponse>>;
+    public createTimeEntryException(timeEntryExceptionRequest: TimeEntryExceptionRequest, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TimeEntryExceptionResponse>>;
+    public createTimeEntryException(timeEntryExceptionRequest: TimeEntryExceptionRequest, idempotencyKey?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (timeEntryExceptionRequest === null || timeEntryExceptionRequest === undefined) {
             throw new Error('Required parameter timeEntryExceptionRequest was null or undefined when calling createTimeEntryException.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
@@ -180,25 +188,65 @@ export class PeopleExceptionsService extends BaseService {
     }
 
     /**
-     * List Time Entry Exceptions By Employee
-     * Lists time entry exceptions, either all of them or those recorded for one employee. Use this tool to review open and historical exceptions; use createTimeEntryException instead to record a new one. Preconditions: none; when employeeId is omitted every exception in the system is returned without pagination. Required inputs: none; employeeId (string) is an optional filter. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when nothing matches.
+     * List Time Exceptions For A Location
+     * Returns a page of time exceptions, newest detectedAt first, each with the person\&#39;s id and display name, its location and work session, code, severity and status. Use this tool to show the exceptions a manager may act on, such as the open ones at one location; read totalElements with status&#x3D;OPEN for an open-exception count, there is no separate count endpoint. Use acknowledgeTimeEntryException, resolveTimeEntryException or waiveTimeEntryException to act on a row. Preconditions: none beyond the permission; an empty page is returned rather than an error when nothing matches. Required inputs: none; locationId, personId and status are optional filters, ANDed; status may be repeated (OPEN, ACKNOWLEDGED, RESOLVED, WAIVED) and is every status when omitted; page defaults to 0 and size to 20 with a maximum of 100. Location scope: a given locationId must lie within the caller\&#39;s location reach for people:timeException:view; when it is omitted a location-scoped caller sees only exceptions at locations within their reach (an empty page for an empty reach), while exceptions with no location are listed only to an unscoped caller. Emits a PEOPLE_TIME_ENTRY_EXCEPTION_LIST audit event but changes no state. Returns 200 with the page envelope, 400 VALIDATION_ERROR for an unknown status, a malformed UUID or out-of-range paging parameters, and 403 LOCATION_SCOPE_DENIED when locationId is outside the caller\&#39;s reach.
      * @endpoint get /v1/people/exceptions
-     * @param employeeId
+     * @param locationId Keep only exceptions at this location; it must lie within the caller\&#39;s location reach (403 LOCATION_SCOPE_DENIED otherwise). When omitted, a location-scoped caller sees only exceptions within their reach
+     * @param status Keep only exceptions in these statuses; repeat the parameter for several, omit for every status
+     * @param personId Keep only this person\&#39;s exceptions
+     * @param page Zero-based page index
+     * @param size Page size, up to 100
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listTimeEntryExceptions(employeeId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<TimeEntryException>>;
-    public listTimeEntryExceptions(employeeId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<TimeEntryException>>>;
-    public listTimeEntryExceptions(employeeId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<TimeEntryException>>>;
-    public listTimeEntryExceptions(employeeId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listTimeEntryExceptions(locationId?: string, status?: Array<'OPEN' | 'ACKNOWLEDGED' | 'RESOLVED' | 'WAIVED'>, personId?: string, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponseTimeEntryException>;
+    public listTimeEntryExceptions(locationId?: string, status?: Array<'OPEN' | 'ACKNOWLEDGED' | 'RESOLVED' | 'WAIVED'>, personId?: string, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponseTimeEntryException>>;
+    public listTimeEntryExceptions(locationId?: string, status?: Array<'OPEN' | 'ACKNOWLEDGED' | 'RESOLVED' | 'WAIVED'>, personId?: string, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponseTimeEntryException>>;
+    public listTimeEntryExceptions(locationId?: string, status?: Array<'OPEN' | 'ACKNOWLEDGED' | 'RESOLVED' | 'WAIVED'>, personId?: string, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
         localVarQueryParameters = this.addToHttpParams(
             localVarQueryParameters,
-            'employeeId',
-            <any>employeeId,
+            'locationId',
+            <any>locationId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'status',
+            <any>status,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'personId',
+            <any>personId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
             QueryParamStyle.Form,
             true,
         );
@@ -234,7 +282,7 @@ export class PeopleExceptionsService extends BaseService {
 
         let localVarPath = `/v1/people/exceptions`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<TimeEntryException>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<PagedResponseTimeEntryException>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),
@@ -249,20 +297,21 @@ export class PeopleExceptionsService extends BaseService {
     }
 
     /**
-     * Resolve A Time Entry Exception
-     * Marks a time entry exception as RESOLVED with optional resolution notes, stamping the acting user and timestamp. Use this tool when the underlying issue has been fixed; use waiveTimeEntryException instead to close it without a fix, or acknowledgeTimeEntryException to flag it as merely seen. Preconditions: the exception must exist and must not already be RESOLVED or WAIVED, which are terminal states. Required inputs: exceptionId (UUID) path parameter; the body is optional and may carry resolutionNotes. Emits a PEOPLE_TIME_ENTRY_EXCEPTION_RESOLVE event and writes an EXCEPTION_RESOLVED audit row. Returns 404 when the exception does not exist, and 409 when it is already RESOLVED or WAIVED.
+     * Resolve A Time Exception
+     * Marks a time exception as RESOLVED with optional resolution notes, stamping the acting user and timestamp. Use this tool when the underlying issue has been fixed; use waiveTimeEntryException instead to close it without a fix, or acknowledgeTimeEntryException to flag it as merely seen. A MISSED_CLOCK_OUT raised by detection is also resolved by itself when its session is stopped or closed through closeMissedWorkSessionClockOut. Preconditions: the exception must exist, its location must lie within the caller\&#39;s reach for people:timeException:resolve (one with no location only when that permission is not location-scoped for the caller), and it must not already be RESOLVED or WAIVED, which are terminal states. Required inputs: exceptionId (UUID) path parameter; the body is optional and may carry resolutionNotes. An optional Idempotency-Key header (ADR-0075) makes retries safe: a replay answers the stored 200 with Idempotency-Replayed: true and changes nothing. Emits a PEOPLE_TIME_ENTRY_EXCEPTION_RESOLVE event and writes an EXCEPTION_RESOLVED audit row. Returns 200 with no body, 400 VALIDATION_ERROR when the Idempotency-Key is not a UUID, 404 when the exception does not exist, 403 LOCATION_SCOPE_DENIED when it is outside the caller\&#39;s reach (404 is checked first, and both before the key is claimed), and 409 RESOURCE_STATE_CONFLICT when it is already RESOLVED or WAIVED or IDEMPOTENCY_CONFLICT when the key was already used with a different request.
      * @endpoint post /v1/people/exceptions/{exceptionId}/resolve
-     * @param exceptionId
-     * @param xCorrelationId
+     * @param exceptionId Exception to resolve
+     * @param xCorrelationId Correlation id carried into the audit trail
+     * @param idempotencyKey Optional key that makes retries safe; a UUID (ADR-0075)
      * @param timeEntryExceptionResolveRequest Optional resolution details; when present, resolutionNotes replaces the notes stored on the exception.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public resolveTimeEntryException(exceptionId: string, xCorrelationId?: string, timeEntryExceptionResolveRequest?: TimeEntryExceptionResolveRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
-    public resolveTimeEntryException(exceptionId: string, xCorrelationId?: string, timeEntryExceptionResolveRequest?: TimeEntryExceptionResolveRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
-    public resolveTimeEntryException(exceptionId: string, xCorrelationId?: string, timeEntryExceptionResolveRequest?: TimeEntryExceptionResolveRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
-    public resolveTimeEntryException(exceptionId: string, xCorrelationId?: string, timeEntryExceptionResolveRequest?: TimeEntryExceptionResolveRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public resolveTimeEntryException(exceptionId: string, xCorrelationId?: string, idempotencyKey?: string, timeEntryExceptionResolveRequest?: TimeEntryExceptionResolveRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
+    public resolveTimeEntryException(exceptionId: string, xCorrelationId?: string, idempotencyKey?: string, timeEntryExceptionResolveRequest?: TimeEntryExceptionResolveRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
+    public resolveTimeEntryException(exceptionId: string, xCorrelationId?: string, idempotencyKey?: string, timeEntryExceptionResolveRequest?: TimeEntryExceptionResolveRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
+    public resolveTimeEntryException(exceptionId: string, xCorrelationId?: string, idempotencyKey?: string, timeEntryExceptionResolveRequest?: TimeEntryExceptionResolveRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (exceptionId === null || exceptionId === undefined) {
             throw new Error('Required parameter exceptionId was null or undefined when calling resolveTimeEntryException.');
         }
@@ -270,6 +319,9 @@ export class PeopleExceptionsService extends BaseService {
         let localVarHeaders = this.defaultHeaders;
         if (xCorrelationId !== undefined && xCorrelationId !== null) {
             localVarHeaders = localVarHeaders.set('X-Correlation-Id', String(xCorrelationId));
+        }
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
         }
 
         // authentication (bearerAuth) required
@@ -324,20 +376,21 @@ export class PeopleExceptionsService extends BaseService {
     }
 
     /**
-     * Waive A Time Entry Exception
-     * Marks a time entry exception as WAIVED with a mandatory reason, closing it without a correction. Use this tool to deliberately dismiss an exception; use resolveTimeEntryException instead when the underlying issue was actually fixed. Preconditions: the exception must exist and must not already be RESOLVED or WAIVED, which are terminal states. Required inputs: exceptionId (UUID) path parameter and a body with a non-blank waiveReason, which is stored as the exception\&#39;s resolution notes. Emits a PEOPLE_TIME_ENTRY_EXCEPTION_WAIVE event and writes an EXCEPTION_WAIVED audit row. Returns 404 when the exception does not exist, 400 when waiveReason is blank, and 409 when the exception is already RESOLVED or WAIVED.
+     * Waive A Time Exception
+     * Marks a time exception as WAIVED with a mandatory reason, closing it without a correction. Use this tool to deliberately dismiss an exception; use resolveTimeEntryException instead when the underlying issue was actually fixed. Preconditions: the exception must exist, its location must lie within the caller\&#39;s reach for people:timeException:resolve (there is no separate waive permission; one with no location only when that permission is not location-scoped for the caller), and it must not already be RESOLVED or WAIVED, which are terminal states. Required inputs: exceptionId (UUID) path parameter and a body with a non-blank waiveReason, which is stored as the exception\&#39;s resolution notes. An optional Idempotency-Key header (ADR-0075) makes retries safe: a replay answers the stored 200 with Idempotency-Replayed: true and changes nothing. Emits a PEOPLE_TIME_ENTRY_EXCEPTION_WAIVE event and writes an EXCEPTION_WAIVED audit row. Returns 200 with no body, 400 VALIDATION_ERROR when waiveReason is blank or the Idempotency-Key is not a UUID, 404 when the exception does not exist, 403 LOCATION_SCOPE_DENIED when it is outside the caller\&#39;s reach (404 is checked first, and both before the key is claimed), and 409 RESOURCE_STATE_CONFLICT when it is already RESOLVED or WAIVED or IDEMPOTENCY_CONFLICT when the key was already used with a different request.
      * @endpoint post /v1/people/exceptions/{exceptionId}/waive
-     * @param exceptionId
+     * @param exceptionId Exception to waive
      * @param timeEntryExceptionWaiveRequest Waiver justification; the reason is mandatory and becomes the exception\&#39;s resolution notes.
-     * @param xCorrelationId
+     * @param xCorrelationId Correlation id carried into the audit trail
+     * @param idempotencyKey Optional key that makes retries safe; a UUID (ADR-0075)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public waiveTimeEntryException(exceptionId: string, timeEntryExceptionWaiveRequest: TimeEntryExceptionWaiveRequest, xCorrelationId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
-    public waiveTimeEntryException(exceptionId: string, timeEntryExceptionWaiveRequest: TimeEntryExceptionWaiveRequest, xCorrelationId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
-    public waiveTimeEntryException(exceptionId: string, timeEntryExceptionWaiveRequest: TimeEntryExceptionWaiveRequest, xCorrelationId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
-    public waiveTimeEntryException(exceptionId: string, timeEntryExceptionWaiveRequest: TimeEntryExceptionWaiveRequest, xCorrelationId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public waiveTimeEntryException(exceptionId: string, timeEntryExceptionWaiveRequest: TimeEntryExceptionWaiveRequest, xCorrelationId?: string, idempotencyKey?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<object>;
+    public waiveTimeEntryException(exceptionId: string, timeEntryExceptionWaiveRequest: TimeEntryExceptionWaiveRequest, xCorrelationId?: string, idempotencyKey?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<object>>;
+    public waiveTimeEntryException(exceptionId: string, timeEntryExceptionWaiveRequest: TimeEntryExceptionWaiveRequest, xCorrelationId?: string, idempotencyKey?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<object>>;
+    public waiveTimeEntryException(exceptionId: string, timeEntryExceptionWaiveRequest: TimeEntryExceptionWaiveRequest, xCorrelationId?: string, idempotencyKey?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (exceptionId === null || exceptionId === undefined) {
             throw new Error('Required parameter exceptionId was null or undefined when calling waiveTimeEntryException.');
         }
@@ -348,6 +401,9 @@ export class PeopleExceptionsService extends BaseService {
         let localVarHeaders = this.defaultHeaders;
         if (xCorrelationId !== undefined && xCorrelationId !== null) {
             localVarHeaders = localVarHeaders.set('X-Correlation-Id', String(xCorrelationId));
+        }
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
         }
 
         // authentication (bearerAuth) required

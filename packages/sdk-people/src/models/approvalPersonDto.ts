@@ -7,24 +7,32 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { TimeEntryStatusCounts } from './timeEntryStatusCounts';
+import { TimePeriodApprovalDto } from './timePeriodApprovalDto';
 
 
 /**
- * Person summary shown in timekeeping approval workflows
+ * A person with attendance time in a pay period, with figures and the latest decision
  */
 export interface ApprovalPersonDto {
+    countsByStatus: TimeEntryStatusCounts;
     /**
-     * Person display name
+     * Person display name from the local person replica; the person id as text when the replica has no name yet
      */
     displayName: string;
     /**
-     * Employee number
+     * Employee number, when the person has an employee record
      */
-    employeeNumber?: string;
+    employeeNumber?: string | null;
+    latestApproval?: TimePeriodApprovalDto;
     /**
      * Person identifier
      */
     personId: string;
+    /**
+     * Whole minutes worked in the period less breaks, across SUBMITTED, PENDING_APPROVAL and APPROVED entries (DRAFT and REJECTED never count); an entry with no clock-out is measured up to now. Same rule as periodTime.workedMinutes on the employee register
+     */
+    totalWorkedMinutes: number;
 }
 
 function isOptionalApprovalPersonDtoPropertyOfType(
@@ -65,9 +73,9 @@ export function instanceOfApprovalPersonDto(value: object): value is ApprovalPer
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createApprovalPersonDtoPropertyNames('displayName', 'personId', );
-    const optionalStringProperties = createApprovalPersonDtoOptionalProperties({ name: 'displayName', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'personId', nullable: false }, );
-    const optionalNumberProperties = createApprovalPersonDtoOptionalProperties();
+    const requiredProperties = createApprovalPersonDtoPropertyNames('countsByStatus', 'displayName', 'personId', 'totalWorkedMinutes', );
+    const optionalStringProperties = createApprovalPersonDtoOptionalProperties({ name: 'displayName', nullable: false }, { name: 'employeeNumber', nullable: true }, { name: 'personId', nullable: false }, );
+    const optionalNumberProperties = createApprovalPersonDtoOptionalProperties({ name: 'totalWorkedMinutes', nullable: false }, );
     const optionalBooleanProperties = createApprovalPersonDtoOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

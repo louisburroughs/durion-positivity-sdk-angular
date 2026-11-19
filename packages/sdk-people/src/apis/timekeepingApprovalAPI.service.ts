@@ -19,13 +19,11 @@ import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 // @ts-ignore
 import { ApiError } from '../models/apiError';
 // @ts-ignore
-import { ApprovalPersonDto } from '../models/approvalPersonDto';
+import { PagedResponseApprovalPersonDto } from '../models/pagedResponseApprovalPersonDto';
 // @ts-ignore
 import { RejectTimePeriodRequest } from '../models/rejectTimePeriodRequest';
 // @ts-ignore
 import { TimePeriodApprovalDto } from '../models/timePeriodApprovalDto';
-// @ts-ignore
-import { TimePeriodDecisionResponse } from '../models/timePeriodDecisionResponse';
 // @ts-ignore
 import { TimePeriodDto } from '../models/timePeriodDto';
 // @ts-ignore
@@ -48,27 +46,38 @@ export class TimekeepingApprovalAPIService extends BaseService {
     }
 
     /**
-     * Approve All Pending Entries In Period
-     * Bulk-approves every PENDING_APPROVAL timekeeping entry for a person within a pay period\&#39;s date range. Use this tool for pay-period sign-off; do not use approveTimeEntriesBatch, which decides individually selected time entries instead of a whole period. Preconditions: the time period must exist; only entries currently in PENDING_APPROVAL are touched, so already decided entries are left as they are. Required inputs: timePeriodId (UUID) and personId (UUID) path parameters; there is no request body. No events are emitted; entries are flipped to APPROVED in place and the response reports the processed count. Returns 200 with processedCount 0 when nothing was pending, and 404 when the time period does not exist.
+     * Approve A Person\&#39;s Pending Attendance For A Period
+     * Approves every PENDING_APPROVAL attendance time entry of the person in the pay period in one transaction and appends a decision record naming the approver (from the authenticated caller) and the time; a partial outcome never exists. Use this tool for pay-period sign-off of one person; do not use approveTimeEntriesBatch, which decides individually selected entries, and use rejectTimePeriod to send the period back. Preconditions: the period must be OPEN or SUBMISSION_CLOSED, the person must have at least one PENDING_APPROVAL entry in it, the caller must not be that person, every location of those entries must lie within the caller\&#39;s people:timeEntry:approve reach, and the person must have no OPEN or ACKNOWLEDGED BLOCKING time exception (such as MISSED_CLOCK_OUT) dated in the period. Required inputs: timePeriodId and personId (UUID) path parameters and an Idempotency-Key header (UUID, required); there is no request body; an optional X-Correlation-Id is carried into the audit trail. A replay with the same key answers the stored 200 with Idempotency-Replayed: true and changes nothing. Emits a PEOPLE_TIME_PERIOD_APPROVE event; in the same transaction writes one audit row per entry and stores one decision record; publishes no attendance fact. Returns 200 with the decision record; 400 for a missing or non-UUID Idempotency-Key; 404 NOT_FOUND or PERSON_NOT_FOUND (checked first); 403 TIME_SELF_APPROVAL, then 403 LOCATION_SCOPE_DENIED; 409 RESOURCE_STATE_CONFLICT when the period is PAYROLL_CLOSED or nothing is pending, or IDEMPOTENCY_CONFLICT; and 422 TIME_EXCEPTIONS_OPEN with one blocker per open BLOCKING exception (code &#x3D; exception code, subject &#x3D; exceptionId) — resolve those exceptions first. The nothing-pending 409 names the earlier decision (referenceId &#x3D; its approvalId) only for a caller whose people:timeEntry:approve grant is unscoped or whose reach covers the location of one of the person\&#39;s entries in the period; any other caller gets a plain message and no referenceId; the 422 blockers cover the person\&#39;s whole period and may name exceptions at locations outside the caller\&#39;s reach.
      * @endpoint post /v1/people/timekeeping/time-periods/{timePeriodId}/people/{personId}/approve
-     * @param timePeriodId
-     * @param personId
+     * @param timePeriodId Pay period being decided
+     * @param personId Person whose attendance is approved
+     * @param idempotencyKey Required key that makes retries safe; a UUID (ADR-0075: a decision moves recorded time). The same key with the same request replays the first answer
+     * @param xCorrelationId Correlation id carried into the audit trail
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public approveTimePeriod(timePeriodId: string, personId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TimePeriodDecisionResponse>;
-    public approveTimePeriod(timePeriodId: string, personId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TimePeriodDecisionResponse>>;
-    public approveTimePeriod(timePeriodId: string, personId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TimePeriodDecisionResponse>>;
-    public approveTimePeriod(timePeriodId: string, personId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public approveTimePeriod(timePeriodId: string, personId: string, idempotencyKey: string, xCorrelationId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TimePeriodApprovalDto>;
+    public approveTimePeriod(timePeriodId: string, personId: string, idempotencyKey: string, xCorrelationId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TimePeriodApprovalDto>>;
+    public approveTimePeriod(timePeriodId: string, personId: string, idempotencyKey: string, xCorrelationId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TimePeriodApprovalDto>>;
+    public approveTimePeriod(timePeriodId: string, personId: string, idempotencyKey: string, xCorrelationId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (timePeriodId === null || timePeriodId === undefined) {
             throw new Error('Required parameter timePeriodId was null or undefined when calling approveTimePeriod.');
         }
         if (personId === null || personId === undefined) {
             throw new Error('Required parameter personId was null or undefined when calling approveTimePeriod.');
         }
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling approveTimePeriod.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
+        if (xCorrelationId !== undefined && xCorrelationId !== null) {
+            localVarHeaders = localVarHeaders.set('X-Correlation-Id', String(xCorrelationId));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
@@ -98,7 +107,7 @@ export class TimekeepingApprovalAPIService extends BaseService {
 
         let localVarPath = `/v1/people/timekeeping/time-periods/${this.configuration.encodeParam({name: "timePeriodId", value: timePeriodId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/people/${this.configuration.encodeParam({name: "personId", value: personId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/approve`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<TimePeriodDecisionResponse>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<TimePeriodApprovalDto>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -112,18 +121,18 @@ export class TimekeepingApprovalAPIService extends BaseService {
     }
 
     /**
-     * Get Time Period Approval Summary
-     * Summarises a person\&#39;s timekeeping approval state for a pay period: total, pending, approved, and rejected counts plus an overall status. Use this tool for a status badge or gate; use listTimekeepingEntries instead when the individual entries are needed. Preconditions: the time period must exist; the overall status is PENDING_APPROVAL while any entry is pending, else REJECTED if any entry was rejected, else APPROVED. Required inputs: personId (UUID) and timePeriodId (UUID) query parameters; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the time period does not exist.
+     * List Recorded Pay-Period Decisions For A Person
+     * Returns the recorded attendance decisions for one person in one pay period, newest first, so the first element is the current state; each names the outcome (APPROVED or REJECTED), the reason of a rejection, who decided, when, and how many entries it moved. Use this tool to answer who decided a person\&#39;s period and when, including earlier rejections; use listTimekeepingApprovalPeople instead for the latest decision of every person in a period, and do not use it to decide (approveTimePeriod or rejectTimePeriod record a new decision). Preconditions: the pay period and the person must exist; a person never decided for the period yields an empty list. Required inputs: timePeriodId (UUID) and personId (UUID) query parameters; there is no request body. Location scope: a location-scoped caller gets the records only when at least one of the person\&#39;s time entries in the period lies at a location within their people:timeEntry:view reach, otherwise an empty list. Emits a PEOPLE_TIME_PERIOD_APPROVAL_LIST audit event but changes no state; records are append-only. Returns 200 with the list, 400 VALIDATION_ERROR for a missing or malformed id, and 404 NOT_FOUND for an unknown period or PERSON_NOT_FOUND for an unknown person.
      * @endpoint get /v1/people/timekeeping/time-period-approvals
-     * @param personId
-     * @param timePeriodId
+     * @param personId Person whose decisions are read
+     * @param timePeriodId Pay period whose decisions are read
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public getTimePeriodApproval(personId: string, timePeriodId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TimePeriodApprovalDto>;
-    public getTimePeriodApproval(personId: string, timePeriodId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TimePeriodApprovalDto>>;
-    public getTimePeriodApproval(personId: string, timePeriodId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TimePeriodApprovalDto>>;
+    public getTimePeriodApproval(personId: string, timePeriodId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<TimePeriodApprovalDto>>;
+    public getTimePeriodApproval(personId: string, timePeriodId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<TimePeriodApprovalDto>>>;
+    public getTimePeriodApproval(personId: string, timePeriodId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<TimePeriodApprovalDto>>>;
     public getTimePeriodApproval(personId: string, timePeriodId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (personId === null || personId === undefined) {
             throw new Error('Required parameter personId was null or undefined when calling getTimePeriodApproval.');
@@ -182,7 +191,7 @@ export class TimekeepingApprovalAPIService extends BaseService {
 
         let localVarPath = `/v1/people/timekeeping/time-period-approvals`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<TimePeriodApprovalDto>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<Array<TimePeriodApprovalDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),
@@ -198,7 +207,7 @@ export class TimekeepingApprovalAPIService extends BaseService {
 
     /**
      * List Pay Periods For Timekeeping Approval
-     * Lists pay periods with their start and end dates and status, newest first when scoped to a tenant. Use this tool to choose the period for approval screens; use listTimekeepingEntries instead for the entries inside a chosen period. Preconditions: none; tenantId is an optional scope and omitting it returns all periods in repository order. Required inputs: none; tenantId (UUID) is an optional query parameter. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when no pay periods exist.
+     * Lists pay periods with their start and end dates and status, newest first when scoped to a tenant. Use this tool to choose the period for approval screens; use listTimekeepingApprovalPeople instead for the people with attendance time inside a chosen period. Preconditions: none; tenantId is an optional scope and omitting it returns all periods in repository order. Required inputs: none; tenantId (UUID) is an optional query parameter. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when no pay periods exist.
      * @endpoint get /v1/people/timekeeping/time-periods
      * @param tenantId
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -266,17 +275,62 @@ export class TimekeepingApprovalAPIService extends BaseService {
     }
 
     /**
-     * List Employees With Timekeeping Entries
-     * Lists the distinct employees that have at least one timekeeping entry, with display name and employee number. Use this tool to build the person picker for pay-period approval; use listTimekeepingEntries instead for one person\&#39;s entries in a period. Preconditions: none; display names come from the person identity replica, which is eventually consistent. Required inputs: none; there are no parameters and no request body. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when no timekeeping entries exist.
+     * List People With Attendance In A Pay Period
+     * Returns a page of the people with at least one attendance time entry in the pay period, ordered by display name, each with display name, employee number, total worked minutes, entry counts per status and the latest recorded period decision (outcome, decider, time). Use this tool to build the period approval list and find whose attendance is pending; do not use it to decide (use approveTimePeriod or rejectTimePeriod instead), and use getTimePeriodApproval for the full decision history or listTimeEntries for the individual entries. Preconditions: the pay period must exist, in any status; an entry belongs to the period when its attendance start is on or after startDate 00:00 UTC and before endDate + 1 day 00:00 UTC. Required inputs: timePeriodId (UUID); locationId is an optional filter; page defaults to 0 and size to 20 with a maximum of 100. Location scope: a given locationId must lie within the caller\&#39;s reach for people:timeEntry:view; when it is omitted a location-scoped caller sees only entries at locations within their reach (an empty page for an empty reach), and entries with no location count only for an unscoped caller; the minutes and counts cover the entries that pass this filter, while latestApproval is the person\&#39;s latest decision whatever the filter. Emits a PEOPLE_TIME_PERIOD_APPROVAL_PEOPLE_LIST audit event but changes no state. Returns 200 with the page envelope, 400 VALIDATION_ERROR when timePeriodId is missing, a UUID is malformed or paging is out of range, 404 NOT_FOUND for an unknown period (checked first), and 403 LOCATION_SCOPE_DENIED when locationId is outside the caller\&#39;s reach.
      * @endpoint get /v1/people/timekeeping/approvals/people
+     * @param timePeriodId Pay period whose attendance is listed
+     * @param locationId Keep only entries at this location; it must lie within the caller\&#39;s location reach (403 LOCATION_SCOPE_DENIED otherwise). When omitted, a location-scoped caller sees only entries within their reach
+     * @param page Zero-based page index
+     * @param size Page size, up to 100
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listTimekeepingApprovalPeople(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ApprovalPersonDto>>;
-    public listTimekeepingApprovalPeople(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ApprovalPersonDto>>>;
-    public listTimekeepingApprovalPeople(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ApprovalPersonDto>>>;
-    public listTimekeepingApprovalPeople(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listTimekeepingApprovalPeople(timePeriodId: string, locationId?: string, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedResponseApprovalPersonDto>;
+    public listTimekeepingApprovalPeople(timePeriodId: string, locationId?: string, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedResponseApprovalPersonDto>>;
+    public listTimekeepingApprovalPeople(timePeriodId: string, locationId?: string, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedResponseApprovalPersonDto>>;
+    public listTimekeepingApprovalPeople(timePeriodId: string, locationId?: string, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (timePeriodId === null || timePeriodId === undefined) {
+            throw new Error('Required parameter timePeriodId was null or undefined when calling listTimekeepingApprovalPeople.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'timePeriodId',
+            <any>timePeriodId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'locationId',
+            <any>locationId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -308,9 +362,10 @@ export class TimekeepingApprovalAPIService extends BaseService {
 
         let localVarPath = `/v1/people/timekeeping/approvals/people`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<ApprovalPersonDto>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<PagedResponseApprovalPersonDto>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -323,7 +378,7 @@ export class TimekeepingApprovalAPIService extends BaseService {
 
     /**
      * List Timekeeping Entries For Person And Period
-     * Lists a person\&#39;s timekeeping entries whose sessions fall entirely within the given pay period\&#39;s date range, evaluated in UTC. Use this tool to review entries before deciding a period; use getTimePeriodApproval instead for just the status counts. Preconditions: the time period must exist; sessions straddling the period boundary are excluded because both start and end must fall inside it. Required inputs: personId (UUID) and timePeriodId (UUID) query parameters; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the time period does not exist.
+     * Lists a person\&#39;s timekeeping entries whose sessions fall entirely within the given pay period\&#39;s date range, evaluated in UTC. Use this tool to review entries before deciding a period; use listTimekeepingApprovalPeople instead for attendance counts per person. Preconditions: the time period must exist; sessions straddling the period boundary are excluded because both start and end must fall inside it. Required inputs: personId (UUID) and timePeriodId (UUID) query parameters; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the time period does not exist.
      * @endpoint get /v1/people/timekeeping/timekeeping-entries
      * @param personId
      * @param timePeriodId
@@ -407,31 +462,42 @@ export class TimekeepingApprovalAPIService extends BaseService {
     }
 
     /**
-     * Reject All Pending Entries In Period
-     * Bulk-rejects every PENDING_APPROVAL timekeeping entry for a person within a pay period, storing the reason on each entry as its correctionReason. Use this tool to send a whole period back for correction; do not use rejectTimeEntriesBatch, which rejects individually selected time entries. Preconditions: the time period must exist; only entries currently in PENDING_APPROVAL are touched. Required inputs: timePeriodId (UUID) and personId (UUID) path parameters and a body with a non-blank reason. No events are emitted; entries are flipped to REJECTED in place and the response reports the processed count. Returns 400 when reason is blank, and 404 when the time period does not exist.
+     * Reject A Person\&#39;s Pending Attendance For A Period
+     * Rejects every PENDING_APPROVAL attendance time entry of the person in the pay period in one transaction, storing the reason on each entry and on a new decision record that names the rejecting user and the time. Use this tool to send a person\&#39;s period back for correction; do not use rejectTimeEntriesBatch, which rejects individually selected entries, and use approveTimePeriod to sign the period off. A rejection is never blocked by open time exceptions. Preconditions: the period must be OPEN or SUBMISSION_CLOSED, the person must have at least one PENDING_APPROVAL entry in it, the caller must not be that person, and every location of those entries must lie within the caller\&#39;s people:timeEntry:reject reach. Required inputs: timePeriodId and personId (UUID) path parameters, an Idempotency-Key header (UUID, required), and a body with reason (1 to 500 characters, not blank); an optional X-Correlation-Id is carried into the audit trail. A replay with the same key and body answers the stored 200 with Idempotency-Replayed: true and changes nothing. Emits a PEOPLE_TIME_PERIOD_REJECT event; in the same transaction writes one audit row per entry and stores one decision record; publishes no attendance fact; corrected entries can be approved later, which appends a second record. Returns 200 with the decision record; 400 VALIDATION_ERROR when reason is missing, blank or longer than 500 characters or the Idempotency-Key is missing or not a UUID; 404 NOT_FOUND or PERSON_NOT_FOUND (checked first); 403 TIME_SELF_APPROVAL, then 403 LOCATION_SCOPE_DENIED; and 409 RESOURCE_STATE_CONFLICT when the period is PAYROLL_CLOSED or nothing is pending, or IDEMPOTENCY_CONFLICT; the nothing-pending 409 names the earlier decision (referenceId &#x3D; its approvalId) only for a caller whose people:timeEntry:reject grant is unscoped or whose reach covers the location of one of the person\&#39;s entries in the period; any other caller gets a plain message and no referenceId.
      * @endpoint post /v1/people/timekeeping/time-periods/{timePeriodId}/people/{personId}/reject
-     * @param timePeriodId
-     * @param personId
-     * @param rejectTimePeriodRequest Rejection justification applied as the correctionReason on every pending entry in the period.
+     * @param timePeriodId Pay period being decided
+     * @param personId Person whose attendance is rejected
+     * @param idempotencyKey Required key that makes retries safe; a UUID (ADR-0075: a decision moves recorded time). The same key with the same request replays the first answer
+     * @param rejectTimePeriodRequest Why the attendance is sent back; stored on the decision record and on every rejected entry.
+     * @param xCorrelationId Correlation id carried into the audit trail
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public rejectTimePeriod(timePeriodId: string, personId: string, rejectTimePeriodRequest: RejectTimePeriodRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TimePeriodDecisionResponse>;
-    public rejectTimePeriod(timePeriodId: string, personId: string, rejectTimePeriodRequest: RejectTimePeriodRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TimePeriodDecisionResponse>>;
-    public rejectTimePeriod(timePeriodId: string, personId: string, rejectTimePeriodRequest: RejectTimePeriodRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TimePeriodDecisionResponse>>;
-    public rejectTimePeriod(timePeriodId: string, personId: string, rejectTimePeriodRequest: RejectTimePeriodRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public rejectTimePeriod(timePeriodId: string, personId: string, idempotencyKey: string, rejectTimePeriodRequest: RejectTimePeriodRequest, xCorrelationId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<TimePeriodApprovalDto>;
+    public rejectTimePeriod(timePeriodId: string, personId: string, idempotencyKey: string, rejectTimePeriodRequest: RejectTimePeriodRequest, xCorrelationId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TimePeriodApprovalDto>>;
+    public rejectTimePeriod(timePeriodId: string, personId: string, idempotencyKey: string, rejectTimePeriodRequest: RejectTimePeriodRequest, xCorrelationId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TimePeriodApprovalDto>>;
+    public rejectTimePeriod(timePeriodId: string, personId: string, idempotencyKey: string, rejectTimePeriodRequest: RejectTimePeriodRequest, xCorrelationId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (timePeriodId === null || timePeriodId === undefined) {
             throw new Error('Required parameter timePeriodId was null or undefined when calling rejectTimePeriod.');
         }
         if (personId === null || personId === undefined) {
             throw new Error('Required parameter personId was null or undefined when calling rejectTimePeriod.');
         }
+        if (idempotencyKey === null || idempotencyKey === undefined) {
+            throw new Error('Required parameter idempotencyKey was null or undefined when calling rejectTimePeriod.');
+        }
         if (rejectTimePeriodRequest === null || rejectTimePeriodRequest === undefined) {
             throw new Error('Required parameter rejectTimePeriodRequest was null or undefined when calling rejectTimePeriod.');
         }
 
         let localVarHeaders = this.defaultHeaders;
+        if (idempotencyKey !== undefined && idempotencyKey !== null) {
+            localVarHeaders = localVarHeaders.set('Idempotency-Key', String(idempotencyKey));
+        }
+        if (xCorrelationId !== undefined && xCorrelationId !== null) {
+            localVarHeaders = localVarHeaders.set('X-Correlation-Id', String(xCorrelationId));
+        }
 
         // authentication (bearerAuth) required
         localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
@@ -470,7 +536,7 @@ export class TimekeepingApprovalAPIService extends BaseService {
 
         let localVarPath = `/v1/people/timekeeping/time-periods/${this.configuration.encodeParam({name: "timePeriodId", value: timePeriodId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/people/${this.configuration.encodeParam({name: "personId", value: personId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/reject`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<TimePeriodDecisionResponse>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<TimePeriodApprovalDto>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: rejectTimePeriodRequest,
