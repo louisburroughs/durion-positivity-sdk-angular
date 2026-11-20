@@ -26,10 +26,23 @@ export interface TechnicianCapacityView {
      */
     mechanicPersonId: string;
     /**
-     * One slot per hour of the day\'s window, aligned slot for slot with every BayCapacityView.occupancy on the same date; 1 when the technician is on duty in that hour, else 0. Duty comes from the staffing-assignment replica at the granularity it holds, which is a whole day today, so every slot of a listed technician currently reads 1. PTO is not modeled; a future off-duty hour reads 0.
+     * One slot per hour of the day\'s window, aligned slot for slot with every BayCapacityView.occupancy on the same date; 1 when the hour overlaps the technician\'s available time, else 0. Available time is the technician\'s non-cancelled People shifts at the location that date, or the whole day when the location publishes no shift that date (DECISION-SHOPMGMT-028 rule 4b), plus the part of the previous date\'s overnight shift that runs into this date, minus approved time off. A technician off all day reads 0 in every slot; one the location schedules others but not them that date (NOT_SCHEDULED) reads 0 except in the hours that previous-date tail covers.
      */
     onDuty: Array<number>;
+    /**
+     * The technician\'s day status on this date, as the location technician roster reports it (DECISION-SHOPMGMT-028 rule 6): TIME_OFF when approved time off covers the whole date or all of the day\'s shift time within the date\'s local day (the part of an overnight shift after midnight does not count); NOT_SCHEDULED when the location publishes shifts that date but none for this technician; SCHEDULED; UNKNOWN when the location publishes no shift that date. CLOSED does not occur here, because a holiday date lists no technicians.
+     */
+    shiftStatus: TechnicianCapacityViewShiftStatusEnum;
 }
+export enum TechnicianCapacityViewShiftStatusEnum {
+    Scheduled = 'SCHEDULED',
+    NotScheduled = 'NOT_SCHEDULED',
+    TimeOff = 'TIME_OFF',
+    Closed = 'CLOSED',
+    Unknown = 'UNKNOWN'
+};
+
+
 
 function isOptionalTechnicianCapacityViewPropertyOfType(
     value: Record<string, unknown>,
@@ -69,8 +82,8 @@ export function instanceOfTechnicianCapacityView(value: object): value is Techni
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTechnicianCapacityViewPropertyNames('assigned', 'assignedMinutes', 'mechanicPersonId', 'onDuty', );
-    const optionalStringProperties = createTechnicianCapacityViewOptionalProperties({ name: 'mechanicPersonId', nullable: false }, );
+    const requiredProperties = createTechnicianCapacityViewPropertyNames('assigned', 'assignedMinutes', 'mechanicPersonId', 'onDuty', 'shiftStatus', );
+    const optionalStringProperties = createTechnicianCapacityViewOptionalProperties({ name: 'mechanicPersonId', nullable: false }, { name: 'shiftStatus', nullable: false }, );
     const optionalNumberProperties = createTechnicianCapacityViewOptionalProperties({ name: 'assignedMinutes', nullable: false }, );
     const optionalBooleanProperties = createTechnicianCapacityViewOptionalProperties();
 

@@ -7,12 +7,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { CredentialDocumentPayload } from './credentialDocumentPayload';
 
 
 /**
  * A credential to record for a person: a new one, or a renewal with a later issuedOn
  */
 export interface CreatePersonCredentialRequest {
+    document?: CredentialDocumentPayload;
     /**
      * Date the credential expires (yyyy-MM-dd), not before issuedOn; omit or null when it does not expire
      */

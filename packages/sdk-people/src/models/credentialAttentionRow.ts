@@ -34,7 +34,7 @@ export interface CredentialAttentionRow {
      */
     expiresOn: string;
     /**
-     * Whether a document is on record for the credential; the document itself is never returned here
+     * Whether a photographed document is stored for the credential and can be revealed with revealCredentialDocument; the document itself is never returned here
      */
     hasDocument: boolean;
     /**
