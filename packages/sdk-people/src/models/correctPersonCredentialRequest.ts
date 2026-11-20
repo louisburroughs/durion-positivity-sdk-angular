@@ -7,12 +7,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { CredentialDocumentPayload } from './credentialDocumentPayload';
 
 
 /**
- * A correction of a recorded credential: only expiresOn changes
+ * A correction of a recorded credential: expiresOn changes, and an optional document replaces the stored one
  */
 export interface CorrectPersonCredentialRequest {
+    document?: CredentialDocumentPayload;
     /**
      * New expiry date (yyyy-MM-dd), not before the stored issuedOn (422 SEMANTIC_VALIDATION_ERROR naming expiresOn otherwise); omit or null when the credential does not expire
      */

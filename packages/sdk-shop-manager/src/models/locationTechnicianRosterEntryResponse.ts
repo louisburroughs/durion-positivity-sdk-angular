@@ -8,10 +8,12 @@
  * Do not edit the class manually.
  */
 import { TechnicianCredentialResponse } from './technicianCredentialResponse';
+import { TechnicianShiftResponse } from './technicianShiftResponse';
+import { TechnicianTimeOffResponse } from './technicianTimeOffResponse';
 
 
 /**
- * A technician with an ACTIVE staffing assignment at the location, from the HR-synchronized mechanic roster
+ * A technician with an ACTIVE staffing assignment at the location, from the HR-synchronized mechanic roster, with their People shifts and approved time off on the roster date
  */
 export interface LocationTechnicianRosterEntryResponse {
     credentials?: Array<TechnicianCredentialResponse>;
@@ -29,33 +31,35 @@ export interface LocationTechnicianRosterEntryResponse {
      */
     mechanicRecordId: string;
     /**
-     * PLACEHOLDER: end of the technician\'s shift window on the roster date, as a UTC instant. Derived from the shop location\'s operating hours (its close time in the location\'s timezone), not from the person\'s own schedule, so every technician at the location carries the same value. Null when shiftStatus is CLOSED or UNKNOWN.
+     * Sum of shifts[].minutes in real elapsed minutes, not reduced by time off. 0 when status is NOT_SCHEDULED. Null when no person schedule applies to the date: status CLOSED or UNKNOWN, or TIME_OFF on a date the location publishes no shift for. Never derived from operating hours.
      */
-    shiftEnd?: string;
+    scheduledMinutes?: number | null;
     /**
-     * PLACEHOLDER: minutes between shiftStart and shiftEnd, for the board to subtract committed time from. Derived from the shop location\'s operating hours, not from the person\'s own schedule. Null whenever either bound is null; never negative.
+     * Where the shift windows came from: PERSON_SCHEDULE (the person\'s own People shifts) whenever shifts is not empty, otherwise null.
      */
-    shiftMinutes?: number;
+    shiftSource?: LocationTechnicianRosterEntryResponseShiftSourceEnum | null;
     /**
-     * PLACEHOLDER: where the shift window came from. LOCATION_HOURS means the window is the shop location\'s operating hours, the same for every technician there, and not the person\'s roster. A consumer must read this to tell a placeholder window from a real per-person one; PERSON_SCHEDULE is reserved for that (#71).
-     */
-    shiftSource: LocationTechnicianRosterEntryResponseShiftSourceEnum;
-    /**
-     * PLACEHOLDER: start of the technician\'s shift window on the roster date, as a UTC instant. Derived from the shop location\'s operating hours (its open time in the location\'s timezone), not from the person\'s own schedule, so every technician at the location carries the same value. Null when shiftStatus is CLOSED or UNKNOWN.
-     */
-    shiftStart?: string;
-    /**
-     * PLACEHOLDER: whether a shift window could be derived from the shop location\'s operating hours (not from the person\'s own schedule). DERIVED carries a window; CLOSED means a dated holiday closure covers the day; UNKNOWN means the location\'s timezone or hours are missing or unreadable, or the weekday has no entry — no default window is ever substituted.
+     * Day status of the technician on the roster date. Precedence, first match wins: CLOSED (a dated holiday closure of the location); UNKNOWN when the location\'s time zone is unknown (no window and no time off are placed); TIME_OFF (approved time off covers the whole date or all of the day\'s shift time within the date\'s local day; the part of an overnight shift after midnight does not count); NOT_SCHEDULED (the location publishes shifts that date, but none for this technician); SCHEDULED; UNKNOWN when the location publishes no shift that date (the technician counts as available the whole day). Partial time off keeps SCHEDULED or UNKNOWN and is listed in timeOff. The technician is listed whatever the status.
      */
     shiftStatus: LocationTechnicianRosterEntryResponseShiftStatusEnum;
+    /**
+     * The technician\'s non-cancelled shifts at the location whose shift date is the roster date, ordered by start; several when the day is split. Empty when status is NOT_SCHEDULED or CLOSED, when the location\'s time zone is unknown, and when the location publishes no shift that date. Shifts covered by approved time off are still listed.
+     */
+    shifts: Array<TechnicianShiftResponse>;
     status?: LocationTechnicianRosterEntryResponseStatusEnum;
     terminationDate?: string;
+    /**
+     * The technician\'s approved time off on the roster date, ordered by start: each interval clipped to the date\'s local day in the location\'s time zone. A full-day absence is one interval covering the whole local day. Empty when there is none, when status is CLOSED, and when the location\'s time zone is unknown. Available time on the date is the shifts (or the whole day when the location publishes no shift that date), plus the part of the previous date\'s overnight shift that runs into this date, minus these intervals, within the date\'s local day.
+     */
+    timeOff: Array<TechnicianTimeOffResponse>;
 }
 export enum LocationTechnicianRosterEntryResponseShiftSourceEnum {
-    LocationHours = 'LOCATION_HOURS'
+    PersonSchedule = 'PERSON_SCHEDULE'
 };
 export enum LocationTechnicianRosterEntryResponseShiftStatusEnum {
-    Derived = 'DERIVED',
+    Scheduled = 'SCHEDULED',
+    NotScheduled = 'NOT_SCHEDULED',
+    TimeOff = 'TIME_OFF',
     Closed = 'CLOSED',
     Unknown = 'UNKNOWN'
 };
@@ -105,9 +109,9 @@ export function instanceOfLocationTechnicianRosterEntryResponse(value: object): 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createLocationTechnicianRosterEntryResponsePropertyNames('mechanicPersonId', 'mechanicRecordId', 'shiftSource', 'shiftStatus', );
-    const optionalStringProperties = createLocationTechnicianRosterEntryResponseOptionalProperties({ name: 'firstName', nullable: false }, { name: 'hireDate', nullable: false }, { name: 'lastName', nullable: false }, { name: 'lastSyncedAt', nullable: false }, { name: 'locationId', nullable: false }, { name: 'mechanicPersonId', nullable: false }, { name: 'mechanicRecordId', nullable: false }, { name: 'shiftEnd', nullable: false }, { name: 'shiftSource', nullable: false }, { name: 'shiftStart', nullable: false }, { name: 'shiftStatus', nullable: false }, { name: 'status', nullable: false }, { name: 'terminationDate', nullable: false }, );
-    const optionalNumberProperties = createLocationTechnicianRosterEntryResponseOptionalProperties({ name: 'shiftMinutes', nullable: false }, );
+    const requiredProperties = createLocationTechnicianRosterEntryResponsePropertyNames('mechanicPersonId', 'mechanicRecordId', 'shiftStatus', 'shifts', 'timeOff', );
+    const optionalStringProperties = createLocationTechnicianRosterEntryResponseOptionalProperties({ name: 'firstName', nullable: false }, { name: 'hireDate', nullable: false }, { name: 'lastName', nullable: false }, { name: 'lastSyncedAt', nullable: false }, { name: 'locationId', nullable: false }, { name: 'mechanicPersonId', nullable: false }, { name: 'mechanicRecordId', nullable: false }, { name: 'shiftSource', nullable: true }, { name: 'shiftStatus', nullable: false }, { name: 'status', nullable: false }, { name: 'terminationDate', nullable: false }, );
+    const optionalNumberProperties = createLocationTechnicianRosterEntryResponseOptionalProperties({ name: 'scheduledMinutes', nullable: true }, );
     const optionalBooleanProperties = createLocationTechnicianRosterEntryResponseOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

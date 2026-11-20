@@ -26,8 +26,6 @@ import { RejectTimePeriodRequest } from '../models/rejectTimePeriodRequest';
 import { TimePeriodApprovalDto } from '../models/timePeriodApprovalDto';
 // @ts-ignore
 import { TimePeriodDto } from '../models/timePeriodDto';
-// @ts-ignore
-import { TimekeepingEntryDto } from '../models/timekeepingEntryDto';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -363,91 +361,6 @@ export class TimekeepingApprovalAPIService extends BaseService {
         let localVarPath = `/v1/people/timekeeping/approvals/people`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<PagedResponseApprovalPersonDto>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                params: localVarQueryParameters.toHttpParams(),
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * List Timekeeping Entries For Person And Period
-     * Lists a person\&#39;s timekeeping entries whose sessions fall entirely within the given pay period\&#39;s date range, evaluated in UTC. Use this tool to review entries before deciding a period; use listTimekeepingApprovalPeople instead for attendance counts per person. Preconditions: the time period must exist; sessions straddling the period boundary are excluded because both start and end must fall inside it. Required inputs: personId (UUID) and timePeriodId (UUID) query parameters; there is no request body. No events are emitted and no state changes; this is a read-only projection. Returns 404 when the time period does not exist.
-     * @endpoint get /v1/people/timekeeping/timekeeping-entries
-     * @param personId
-     * @param timePeriodId
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public listTimekeepingEntries(personId: string, timePeriodId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<TimekeepingEntryDto>>;
-    public listTimekeepingEntries(personId: string, timePeriodId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<TimekeepingEntryDto>>>;
-    public listTimekeepingEntries(personId: string, timePeriodId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<TimekeepingEntryDto>>>;
-    public listTimekeepingEntries(personId: string, timePeriodId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (personId === null || personId === undefined) {
-            throw new Error('Required parameter personId was null or undefined when calling listTimekeepingEntries.');
-        }
-        if (timePeriodId === null || timePeriodId === undefined) {
-            throw new Error('Required parameter timePeriodId was null or undefined when calling listTimekeepingEntries.');
-        }
-
-        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
-
-        localVarQueryParameters = this.addToHttpParams(
-            localVarQueryParameters,
-            'personId',
-            <any>personId,
-            QueryParamStyle.Form,
-            true,
-        );
-
-
-        localVarQueryParameters = this.addToHttpParams(
-            localVarQueryParameters,
-            'timePeriodId',
-            <any>timePeriodId,
-            QueryParamStyle.Form,
-            true,
-        );
-
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/people/timekeeping/timekeeping-entries`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<TimekeepingEntryDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters.toHttpParams(),

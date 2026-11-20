@@ -27,7 +27,13 @@ import { CredentialAttentionCounts } from '../models/credentialAttentionCounts';
 // @ts-ignore
 import { CredentialAttentionPage } from '../models/credentialAttentionPage';
 // @ts-ignore
+import { CredentialDocumentRevealPage } from '../models/credentialDocumentRevealPage';
+// @ts-ignore
 import { PersonCredentialResponse } from '../models/personCredentialResponse';
+// @ts-ignore
+import { RevealCredentialDocumentRequest } from '../models/revealCredentialDocumentRequest';
+// @ts-ignore
+import { RevealCredentialDocumentResponse } from '../models/revealCredentialDocumentResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -47,11 +53,11 @@ export class PersonCredentialAPIService extends BaseService {
 
     /**
      * Correct A Credential\&#39;s Expiry Date
-     * Corrects the expiry date of a credential the person holds and returns it with its status re-derived as of today (UTC); expiresOn is replaced, so omitting it or sending null records that the credential does not expire. Use this tool to fix a mistyped or changed expiry; do not use it to renew, which is createPersonCredential with a later issuedOn, because skill, issuer and issuedOn identify the credential and cannot change here. Preconditions: the credential must belong to the person and be neither REVOKED nor SUPERSEDED, the person must not be TERMINATED, expiresOn must not be before the stored issuedOn, and one of the person\&#39;s ACTIVE staffing-assignment locations must lie within the caller\&#39;s people:credential:manage reach, checked after the 404s; the credential row is locked before these checks, so a concurrent renewal or correction is seen, not overwritten. Required inputs: personId and credentialId (UUID) path parameters and a body with expiresOn; skillCode, issuer and issuedOn may be echoed but must equal the stored values; no document is accepted in this version. Emits a PEOPLE_CREDENTIAL_UPDATE event and queues one people.person-credential.updated fact in the same transaction. Returns 200 with the credential; 404 PERSON_NOT_FOUND or CREDENTIAL_NOT_FOUND; 403 LOCATION_SCOPE_DENIED; 400 VALIDATION_ERROR for a malformed body; 422 SEMANTIC_VALIDATION_ERROR naming skillCode, issuer or issuedOn when it differs from the stored value, or expiresOn when it is before the stored issuedOn; 409 RESOURCE_STATE_CONFLICT when the credential is REVOKED or SUPERSEDED; and 422 EMPLOYEE_TERMINATED.
+     * Corrects the expiry date of a credential the person holds, and optionally replaces its photographed document, and returns it with its status re-derived as of today (UTC); expiresOn is replaced, so omitting it or sending null records that the credential does not expire. Use this tool to fix a mistyped or changed expiry; do not use it to renew, which is createPersonCredential with a later issuedOn, because skill, issuer and issuedOn identify the credential and cannot change here. Preconditions: the credential must belong to the person and be neither REVOKED nor SUPERSEDED, the person must not be TERMINATED, expiresOn must not be before the stored issuedOn, and one of the person\&#39;s ACTIVE staffing-assignment locations must lie within the caller\&#39;s people:credential:manage reach, checked after the 404s; the credential row is locked before these checks, so a concurrent renewal or correction is seen, not overwritten. Required inputs: personId and credentialId (UUID) path parameters and a body with expiresOn; skillCode, issuer and issuedOn may be echoed but must equal the stored values; an optional document (base64 JPEG, PNG or WebP) replaces the stored one, and omitting it keeps it. Emits a PEOPLE_CREDENTIAL_UPDATE event and queues one people.person-credential.updated fact in the same transaction, never carrying the document. Returns 200 with the credential; 404 PERSON_NOT_FOUND or CREDENTIAL_NOT_FOUND; 403 LOCATION_SCOPE_DENIED; 400 VALIDATION_ERROR for a malformed body; 422 SEMANTIC_VALIDATION_ERROR naming skillCode, issuer or issuedOn when it differs from the stored value, or expiresOn when it is before the stored issuedOn; 409 RESOURCE_STATE_CONFLICT when the credential is REVOKED or SUPERSEDED; and 422 EMPLOYEE_TERMINATED, CREDENTIAL_DOCUMENT_UNSUPPORTED_TYPE or CREDENTIAL_DOCUMENT_TOO_LARGE.
      * @endpoint put /v1/people/{personId}/credentials/{credentialId}
      * @param personId Person who holds the credential
      * @param credentialId Credential to correct
-     * @param correctPersonCredentialRequest The new expiry date; skill, issuer and issue date may be echoed unchanged.
+     * @param correctPersonCredentialRequest The new expiry date and an optional replacement document; skill, issuer and issue date may be echoed unchanged.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -125,11 +131,11 @@ export class PersonCredentialAPIService extends BaseService {
 
     /**
      * Record Or Renew A Person\&#39;s Credential
-     * Records a credential the person holds, naming the registry skill it certifies, the issuer and the issue and expiry dates, and returns it with its status as of today (UTC). A renewal is this same call with a later issuedOn: it adds a new row and leaves the renewed one as it is, so the earlier qualification stays on record and stops needing attention. Use this tool to add or renew a licence or certification; do not use correctPersonCredential, which only changes the expiry of an existing row, and do not use the bulk credential ingest, which loads a vendor feed. Preconditions: the person must have an employee record that is not TERMINATED, skillCode must name an active registry skill, no credential may already have the same person, skill, issuer and issuedOn, and one of the person\&#39;s ACTIVE staffing-assignment locations must lie within the caller\&#39;s people:credential:manage reach, checked after the 404. Required inputs: personId (UUID) path parameter, an Idempotency-Key header (UUID, required, ADR-0075), and a body with skillCode, issuer (up to 32 characters), issuedOn and an optional expiresOn not before issuedOn; no document is accepted in this version. Emits a PEOPLE_CREDENTIAL_CREATE event and queues one people.person-credential.updated fact in the same transaction; a replay with the same key answers the stored 201 with Idempotency-Replayed: true and writes nothing. Returns 201 with the credential; 400 VALIDATION_ERROR for a missing or non-UUID key, a missing field or expiresOn before issuedOn (fieldErrors names expiresOn); 404 PERSON_NOT_FOUND; 403 LOCATION_SCOPE_DENIED; 409 IDEMPOTENCY_CONFLICT or DUPLICATE_RESOURCE (referenceId the existing credential); and 422 SEMANTIC_VALIDATION_ERROR naming skillCode or EMPLOYEE_TERMINATED.
+     * Records a credential the person holds, naming the registry skill it certifies, the issuer and the issue and expiry dates, with an optional photographed document, and returns it with its status as of today (UTC). A renewal is this same call with a later issuedOn: it adds a new row and leaves the renewed one as it is, so the earlier qualification stays on record and stops needing attention. Use this tool to add or renew a licence or certification; do not use correctPersonCredential, which only changes the expiry of an existing row, and do not use the bulk credential ingest, which loads a vendor feed. Preconditions: the person must have an employee record that is not TERMINATED, skillCode must name an active registry skill, no credential may already have the same person, skill, issuer and issuedOn, and one of the person\&#39;s ACTIVE staffing-assignment locations must lie within the caller\&#39;s people:credential:manage reach, checked after the 404. Required inputs: personId (UUID) path parameter, an Idempotency-Key header (UUID, required, ADR-0075), and a body with skillCode, issuer (up to 32 characters), issuedOn and an optional expiresOn not before issuedOn; document is optional, a base64 JPEG, PNG or WebP image (5 MiB decoded by default) that is stored encrypted without its metadata and is never returned by a read, only by revealCredentialDocument. Emits a PEOPLE_CREDENTIAL_CREATE event and queues one people.person-credential.updated fact in the same transaction, never carrying the document; a replay with the same key answers the stored 201 with Idempotency-Replayed: true and writes nothing. Returns 201 with the credential; 400 VALIDATION_ERROR for a missing or non-UUID key, a missing field or expiresOn before issuedOn (fieldErrors names expiresOn); 404 PERSON_NOT_FOUND; 403 LOCATION_SCOPE_DENIED; 409 IDEMPOTENCY_CONFLICT or DUPLICATE_RESOURCE (referenceId the existing credential); and 422 SEMANTIC_VALIDATION_ERROR naming skillCode, EMPLOYEE_TERMINATED, CREDENTIAL_DOCUMENT_UNSUPPORTED_TYPE or CREDENTIAL_DOCUMENT_TOO_LARGE.
      * @endpoint post /v1/people/{personId}/credentials
      * @param personId Person the credential is recorded for
      * @param idempotencyKey Required key that makes retries safe; a UUID (ADR-0075). The same key with the same request replays the first answer
-     * @param createPersonCredentialRequest The credential: registry skill code, issuer, issue date and optional expiry date.
+     * @param createPersonCredentialRequest The credential: registry skill code, issuer, issue date, optional expiry date and optional photographed document.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -284,6 +290,115 @@ export class PersonCredentialAPIService extends BaseService {
     }
 
     /**
+     * List Credential Document Reveals Across The Tenant
+     * Returns a page of the tenant\&#39;s credential-document reveals, newest first: who revealed which person\&#39;s document, their roles, the reason, the correlation id, when, and whether it was REVEALED or UNREADABLE (an UNREADABLE row keeps no reason). Use this tool to review who saw people\&#39;s licence and certificate images; do not use it to see a document, which only revealCredentialDocument returns, or to list credentials, which listPersonCredentials does. Preconditions: none beyond the permission; every location is included, and reveals of people no longer employed stay listed. Required inputs: none; personId filters to one person (an unknown one is an empty page), from (inclusive) and to (exclusive) are optional ISO-8601 instants bounding revealedAt, page defaults to 0 and size to 20 with a maximum of 100. Emits a PEOPLE_CREDENTIAL_DOCUMENT_REVEAL_LIST audit event but changes no state; no row carries the image, its type or its size. Returns 200 with the page, possibly empty, 400 VALIDATION_ERROR for a malformed parameter, from after to, or paging out of range, and 403 without the permission.
+     * @endpoint get /v1/people/credential-document-reveals
+     * @param personId Keep only reveals of this person\&#39;s documents
+     * @param from Keep only reveals recorded at or after this instant (ISO-8601)
+     * @param to Keep only reveals recorded before this instant (ISO-8601)
+     * @param page Zero-based page index
+     * @param size Page size, up to 100
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listCredentialDocumentReveals(personId?: string, from?: string, to?: string, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CredentialDocumentRevealPage>;
+    public listCredentialDocumentReveals(personId?: string, from?: string, to?: string, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CredentialDocumentRevealPage>>;
+    public listCredentialDocumentReveals(personId?: string, from?: string, to?: string, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CredentialDocumentRevealPage>>;
+    public listCredentialDocumentReveals(personId?: string, from?: string, to?: string, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'personId',
+            <any>personId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'from',
+            <any>from,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'to',
+            <any>to,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/people/credential-document-reveals`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<CredentialDocumentRevealPage>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * List Expired And Expiring Credentials Across People
      * Returns a page of the credentials that need attention on today\&#39;s date (UTC, returned as asOfDate), ordered by expiry date: EXPIRED when the expiry date has passed, EXPIRING when it falls on asOfDate or within expiringWithinDays after it, each row with the person\&#39;s id and display name and the days until expiry. Use this tool to find who must renew a licence or certification; do not use it for every credential of one person (use listPersonCredentials instead) or for the counts alone (use getCredentialAttentionCounts instead). Preconditions: none beyond the permission; REVOKED and SUPERSEDED credentials, credentials without an expiry date and credentials already renewed (a later issuedOn for the same person and skill, any issuer) never appear, and only people with an ACTIVE staffing assignment today are listed. Required inputs: none; attention is EXPIRED, EXPIRING or ALL (both, the default), expiringWithinDays defaults to 30 (1 to 365), locationId is an optional filter, page defaults to 0 and size to 20 with a maximum of 100. Location scope: a given locationId must lie within the caller\&#39;s people:employee:view reach; when it is omitted a location-scoped caller sees only people assigned within their reach (an empty page for an empty reach) while an unscoped caller sees every location. Emits a PEOPLE_CREDENTIAL_ATTENTION_LIST audit event but changes no state. Returns 200 with the page and asOfDate, 400 VALIDATION_ERROR for a filter or paging value out of range, and 403 LOCATION_SCOPE_DENIED when locationId is outside the caller\&#39;s reach.
      * @endpoint get /v1/people/credentials
@@ -394,7 +509,7 @@ export class PersonCredentialAPIService extends BaseService {
 
     /**
      * List a Person\&#39;s Credentials
-     * Returns every credential the person holds or held, newest issue first, each with the registry skill it certifies and its status as of today (UTC): ACTIVE or EXPIRED from the dates, REVOKED or SUPERSEDED when set deliberately. A renewal appears as its own row beside the one it renewed, so a past date\&#39;s qualification stays visible; the renewed row names its renewal in renewedByCredentialId, and hasDocument says whether evidence is on record. Use this tool to see what a technician is certified to do, or to audit an inspector\&#39;s qualification on a past date; do not use it to find expired and expiring credentials across people, use listCredentialsNeedingAttention instead, and for a shop\&#39;s roster use shop management\&#39;s technician roster instead. Preconditions: the caller holds people:employee:view. Required inputs: personId (UUID) as a path parameter; there is no request body. Emits a PEOPLE_CREDENTIAL_LIST audit event but changes no state. Returns 200 with the list, empty when the person holds none, and 403 without the authority.
+     * Returns every credential the person holds or held, newest issue first, each with the registry skill it certifies and its status as of today (UTC): ACTIVE or EXPIRED from the dates, REVOKED or SUPERSEDED when set deliberately. A renewal appears as its own row beside the one it renewed, so a past date\&#39;s qualification stays visible; the renewed row names its renewal in renewedByCredentialId, and hasDocument says whether a photographed document is stored. Use this tool to see what a technician is certified to do, or to audit an inspector\&#39;s qualification on a past date; do not use it to find expired and expiring credentials across people, use listCredentialsNeedingAttention instead, and for a shop\&#39;s roster use shop management\&#39;s technician roster instead. Preconditions: the caller holds people:employee:view. Required inputs: personId (UUID) as a path parameter; there is no request body. Emits a PEOPLE_CREDENTIAL_LIST audit event but changes no state. Returns 200 with the list, empty when the person holds none, and 403 without the authority.
      * @endpoint get /v1/people/{personId}/credentials
      * @param personId Person id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -442,6 +557,88 @@ export class PersonCredentialAPIService extends BaseService {
         return this.httpClient.request<Array<PersonCredentialResponse>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Reveal A Credential\&#39;s Photographed Document
+     * Returns the photographed document stored with a credential, after recording who revealed it, their roles, the reason and the correlation id in an append-only audit row that commits before the answer. Use this operation only when a person must see the licence or certificate itself, for example for a roadside inspection; do not call it to learn whether a document exists, which hasDocument on listPersonCredentials answers without revealing anything. Preconditions: the credential must belong to the person and have a document stored here, and one of the person\&#39;s ACTIVE staffing-assignment locations today must lie within the caller\&#39;s people:credential_document:reveal reach (a person with none needs an unscoped grant), checked after the 404s and before the document 404. Required inputs: personId and credentialId (UUID) path parameters and a reason of 10 to 500 characters once trimmed; there is no Idempotency-Key, each reveal is its own audited act. Emits a PEOPLE_CREDENTIAL_DOCUMENT_REVEAL event and writes one reveal audit row; the answer carries Cache-Control: no-store and must never be cached, logged or put in a URL. Returns 200 with the document; 400 JUSTIFICATION_REQUIRED or VALIDATION_ERROR for the reason; 404 PERSON_NOT_FOUND, CREDENTIAL_NOT_FOUND or CREDENTIAL_DOCUMENT_NOT_FOUND; 403 LOCATION_SCOPE_DENIED; and 500 CREDENTIAL_DOCUMENT_UNREADABLE, which is still recorded.
+     * @endpoint post /v1/people/{personId}/credentials/{credentialId}/document/reveal
+     * @param personId Person who holds the credential
+     * @param credentialId Credential whose document is revealed
+     * @param revealCredentialDocumentRequest Why the document is needed; kept on the reveal audit row.
+     * @param xCorrelationId Correlation id kept on the reveal audit row
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public revealCredentialDocument(personId: string, credentialId: string, revealCredentialDocumentRequest: RevealCredentialDocumentRequest, xCorrelationId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RevealCredentialDocumentResponse>;
+    public revealCredentialDocument(personId: string, credentialId: string, revealCredentialDocumentRequest: RevealCredentialDocumentRequest, xCorrelationId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RevealCredentialDocumentResponse>>;
+    public revealCredentialDocument(personId: string, credentialId: string, revealCredentialDocumentRequest: RevealCredentialDocumentRequest, xCorrelationId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RevealCredentialDocumentResponse>>;
+    public revealCredentialDocument(personId: string, credentialId: string, revealCredentialDocumentRequest: RevealCredentialDocumentRequest, xCorrelationId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (personId === null || personId === undefined) {
+            throw new Error('Required parameter personId was null or undefined when calling revealCredentialDocument.');
+        }
+        if (credentialId === null || credentialId === undefined) {
+            throw new Error('Required parameter credentialId was null or undefined when calling revealCredentialDocument.');
+        }
+        if (revealCredentialDocumentRequest === null || revealCredentialDocumentRequest === undefined) {
+            throw new Error('Required parameter revealCredentialDocumentRequest was null or undefined when calling revealCredentialDocument.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+        if (xCorrelationId !== undefined && xCorrelationId !== null) {
+            localVarHeaders = localVarHeaders.set('X-Correlation-Id', String(xCorrelationId));
+        }
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/people/${this.configuration.encodeParam({name: "personId", value: personId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/credentials/${this.configuration.encodeParam({name: "credentialId", value: credentialId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/document/reveal`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<RevealCredentialDocumentResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: revealCredentialDocumentRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
