@@ -5,6 +5,7 @@ export * from './invoice.service';
 export * from './invoiceAnalytics.service';
 export * from './invoiceArtifactController.service';
 export * from './invoiceArtifactDownloadController.service';
+export * from './invoiceAttachments.service';
 export * from './invoiceSearch.service';
 export * from './merchantAccounts.service';
 export * from './payment.service';
