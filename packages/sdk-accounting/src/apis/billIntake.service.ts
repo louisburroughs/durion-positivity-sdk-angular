@@ -548,7 +548,7 @@ export class BillIntakeService extends BaseService {
 
     /**
      * List Bill Drafts
-     * Lists bill drafts, newest first, a page at a time, each with its reference, vendor, bill number, total, status and whether it is ready to confirm; optionally for one status, one channel, one readiness or a search text. Use this tool to find the drafts waiting for review, the ones ready to confirm or the files that were refused, or to find a draft by its vendor or bill number; do not use it for bills, use listVendorBills instead, read one draft with getBillIntake before editing it, and use getBillIntakeCounts for the totals alone. Preconditions: the caller holds accounting:ap:view. Inputs: optional status (QUARANTINED, FILE_REJECTED, EXTRACTING, READY_FOR_REVIEW, CONFIRMED, DISCARDED, ATTACHED), optional channel (UPLOAD, IMPORT, EDI, EMAIL_IN), optional readiness (NEEDS_CHECK or READY_TO_CONFIRM; either implies status READY_FOR_REVIEW), optional q (2 to 100 characters after trimming: a case-insensitive \&quot;contains\&quot; over the vendor name, the bill number and the intake reference; a bill number matches without regard to case, spacing, punctuation or leading zeros), page (0-based) and size (1 to 200). The filters combine. A draft is ready to confirm when its vendor is found, no required or valued field is CHECK_THIS (an empty optional field does not count) and every value is one confirmBillIntake accepts (billNumber, billDate, currency, totalAmount and each invoice line\&#39;s description and amount present; every date, amount, currency, type, class, key and length well formed): the server derives it with the judgement confirmation uses, so a ready draft is not refused for one of its fields, a draft that is not ready has its vendor not found or a field in CHECK_THIS (with a reason when its value is the cause), and confirmation may still answer AP_BILL_DUPLICATE, VENDOR_INACTIVE or OPTIMISTIC_LOCK. Emits an ACCOUNTING_BILL_INTAKE_LIST event, which carries no parameter, and changes nothing. Returns 200 with the page, 400 VALIDATION_ERROR when the page bounds are invalid, q is shorter than 2 or longer than 100 characters or holds a control character, or readiness is sent with a status other than READY_FOR_REVIEW (fieldErrors name the parameter), and 403 without accounting:ap:view.
+     * Lists bill drafts, newest first, a page at a time, each with its reference, vendor, bill number, total, status and whether it is ready to confirm; optionally for one status, one channel, one readiness, a search text or one document kind. Use this tool to find the drafts waiting for review, the ones ready to confirm or the files that were refused, or to find a draft by its vendor or bill number; do not use it for bills, use listVendorBills instead, read one draft with getBillIntake before editing it, and use getBillIntakeCounts for the totals alone. Preconditions: the caller holds accounting:ap:view. Inputs: optional status (QUARANTINED, FILE_REJECTED, EXTRACTING, READY_FOR_REVIEW, CONFIRMED, DISCARDED, ATTACHED), optional channel (UPLOAD, IMPORT, EDI, EMAIL_IN), optional readiness (NEEDS_CHECK or READY_TO_CONFIRM; either implies status READY_FOR_REVIEW), optional q (2 to 100 characters after trimming: a case-insensitive \&quot;contains\&quot; over the vendor name, the bill number and the intake reference; a bill number matches without regard to case, spacing, punctuation or leading zeros), optional documentKind (BILL or RECEIPT; both kinds when left out), page (0-based) and size (1 to 200). The filters combine. A draft is ready to confirm when its vendor is found, no required or valued field is CHECK_THIS (an empty optional field does not count) and every value is one confirmBillIntake accepts (billNumber, billDate, currency, totalAmount and each invoice line\&#39;s description and amount present; every date, amount, currency, type, class, key and length well formed): the server derives it with the judgement confirmation uses, so a ready draft is not refused for one of its fields, a draft that is not ready has its vendor not found or a field in CHECK_THIS (with a reason when its value is the cause), and confirmation may still answer AP_BILL_DUPLICATE, VENDOR_INACTIVE or OPTIMISTIC_LOCK. Emits an ACCOUNTING_BILL_INTAKE_LIST event, which carries no parameter, and changes nothing. Returns 200 with the page, 400 VALIDATION_ERROR when the page bounds are invalid, q is shorter than 2 or longer than 100 characters or holds a control character, or readiness is sent with a status other than READY_FOR_REVIEW (fieldErrors name the parameter), and 403 without accounting:ap:view.
      * @endpoint get /v1/accounting/bill-intake
      * @param status Only drafts in this status
      * @param channel Only drafts that arrived this way
@@ -556,14 +556,15 @@ export class BillIntakeService extends BaseService {
      * @param size Page size, 1 to 200
      * @param readiness Only READY_FOR_REVIEW drafts with something left to check (NEEDS_CHECK) or ready to confirm (READY_TO_CONFIRM: vendor found, nothing in CHECK_THIS, and every value one confirmation accepts); with another status it is 400
      * @param q Search text, 2 to 100 characters after trimming: a case-insensitive \&quot;contains\&quot; over the vendor name, the bill number and the intake reference
+     * @param documentKind Only drafts of this kind: BILL or RECEIPT (a purchase receipt); both when left out
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listBillIntake(status?: 'QUARANTINED' | 'FILE_REJECTED' | 'EXTRACTING' | 'READY_FOR_REVIEW' | 'CONFIRMED' | 'DISCARDED' | 'ATTACHED', channel?: 'UPLOAD' | 'IMPORT' | 'EDI' | 'EMAIL_IN', page?: number, size?: number, readiness?: 'NEEDS_CHECK' | 'READY_TO_CONFIRM', q?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BillIntakePage>;
-    public listBillIntake(status?: 'QUARANTINED' | 'FILE_REJECTED' | 'EXTRACTING' | 'READY_FOR_REVIEW' | 'CONFIRMED' | 'DISCARDED' | 'ATTACHED', channel?: 'UPLOAD' | 'IMPORT' | 'EDI' | 'EMAIL_IN', page?: number, size?: number, readiness?: 'NEEDS_CHECK' | 'READY_TO_CONFIRM', q?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BillIntakePage>>;
-    public listBillIntake(status?: 'QUARANTINED' | 'FILE_REJECTED' | 'EXTRACTING' | 'READY_FOR_REVIEW' | 'CONFIRMED' | 'DISCARDED' | 'ATTACHED', channel?: 'UPLOAD' | 'IMPORT' | 'EDI' | 'EMAIL_IN', page?: number, size?: number, readiness?: 'NEEDS_CHECK' | 'READY_TO_CONFIRM', q?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BillIntakePage>>;
-    public listBillIntake(status?: 'QUARANTINED' | 'FILE_REJECTED' | 'EXTRACTING' | 'READY_FOR_REVIEW' | 'CONFIRMED' | 'DISCARDED' | 'ATTACHED', channel?: 'UPLOAD' | 'IMPORT' | 'EDI' | 'EMAIL_IN', page?: number, size?: number, readiness?: 'NEEDS_CHECK' | 'READY_TO_CONFIRM', q?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listBillIntake(status?: 'QUARANTINED' | 'FILE_REJECTED' | 'EXTRACTING' | 'READY_FOR_REVIEW' | 'CONFIRMED' | 'DISCARDED' | 'ATTACHED', channel?: 'UPLOAD' | 'IMPORT' | 'EDI' | 'EMAIL_IN', page?: number, size?: number, readiness?: 'NEEDS_CHECK' | 'READY_TO_CONFIRM', q?: string, documentKind?: 'BILL' | 'RECEIPT', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BillIntakePage>;
+    public listBillIntake(status?: 'QUARANTINED' | 'FILE_REJECTED' | 'EXTRACTING' | 'READY_FOR_REVIEW' | 'CONFIRMED' | 'DISCARDED' | 'ATTACHED', channel?: 'UPLOAD' | 'IMPORT' | 'EDI' | 'EMAIL_IN', page?: number, size?: number, readiness?: 'NEEDS_CHECK' | 'READY_TO_CONFIRM', q?: string, documentKind?: 'BILL' | 'RECEIPT', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BillIntakePage>>;
+    public listBillIntake(status?: 'QUARANTINED' | 'FILE_REJECTED' | 'EXTRACTING' | 'READY_FOR_REVIEW' | 'CONFIRMED' | 'DISCARDED' | 'ATTACHED', channel?: 'UPLOAD' | 'IMPORT' | 'EDI' | 'EMAIL_IN', page?: number, size?: number, readiness?: 'NEEDS_CHECK' | 'READY_TO_CONFIRM', q?: string, documentKind?: 'BILL' | 'RECEIPT', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BillIntakePage>>;
+    public listBillIntake(status?: 'QUARANTINED' | 'FILE_REJECTED' | 'EXTRACTING' | 'READY_FOR_REVIEW' | 'CONFIRMED' | 'DISCARDED' | 'ATTACHED', channel?: 'UPLOAD' | 'IMPORT' | 'EDI' | 'EMAIL_IN', page?: number, size?: number, readiness?: 'NEEDS_CHECK' | 'READY_TO_CONFIRM', q?: string, documentKind?: 'BILL' | 'RECEIPT', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -616,6 +617,15 @@ export class BillIntakeService extends BaseService {
             localVarQueryParameters,
             'q',
             <any>q,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'documentKind',
+            <any>documentKind,
             QueryParamStyle.Form,
             true,
         );
@@ -991,24 +1001,46 @@ export class BillIntakeService extends BaseService {
 
     /**
      * Upload Bill Documents
-     * Uploads up to 10 documents (PDF, JPEG, PNG, HEIC or TIFF, each at most 25 MB, 100 MB in all) and creates one bill draft per file. Each file is stored apart and waits to be scanned for malware and read; a person checks the draft before any bill exists, and nothing posts. Use this tool to bring in a vendor\&#39;s bill that arrived as a document; do not use it for a spreadsheet of bills (an import), for a bank statement (createBankImport), or for a goods receipt (createVendorBillFromGoodsReceived). Preconditions: the caller holds accounting:bill_intake:create; the file\&#39;s type is judged by its content, never by its name or declared type, and a file of any other type is refused at once with status FILE_REJECTED and reason TYPE_NOT_ALLOWED. Required inputs: files (1 to 10 parts) and the Idempotency-Key header, a UUID generated once per upload. Replay: the same key with the same files, in the same order and number, answers the first request\&#39;s drafts with Idempotency-Replayed: true and stores nothing new; any other files, or another caller, under that key is 409 IDEMPOTENCY_CONFLICT. Emits an ACCOUNTING_BILL_INTAKE_UPLOAD event once, on the request that stores the drafts, and one BILL_INTAKE audit row per file naming its sha-256. Returns 201 with one item per file (QUARANTINED, or FILE_REJECTED with a reason); an outage of the scanner or the reader never rejects a file, it stays QUARANTINED. 400 when no file or more than 10 are sent, or when the Idempotency-Key header is missing or not a UUID, 409 IDEMPOTENCY_CONFLICT when the key was used for another request, 413 PAYLOAD_TOO_LARGE over the size limits, 403 without the permission.
+     * Uploads up to 10 documents (PDF, JPEG, PNG, HEIC or TIFF, each at most 25 MB, 100 MB in all) and creates one bill draft per file. Each file is stored apart and waits to be scanned for malware and read; a person checks the draft before any bill exists, and nothing posts. Use this tool to bring in a vendor\&#39;s bill that arrived as a document, or a purchase receipt (the paper a shop hands a buyer) for something the business bought and did not pay from the cash drawer; do not use it for a spreadsheet of bills (an import), for a bank statement (createBankImport), for a goods receipt (createVendorBillFromGoodsReceived), or for a receipt paid from the cash drawer, which the cashier records at the register as a petty expense. Preconditions: the caller holds accounting:bill_intake:create; the file\&#39;s type is judged by its content, never by its name or declared type, and a file of any other type is refused at once with status FILE_REJECTED and reason TYPE_NOT_ALLOWED. Required inputs: files (1 to 10 parts) and the Idempotency-Key header, a UUID generated once per upload; optionally documentKind (BILL or RECEIPT, one kind for the whole request, BILL when left out) and, for a RECEIPT only and then required, paidFromDrawer, which must be false (the person\&#39;s statement that the receipt was not paid from the cash drawer); a RECEIPT draft is read, checked and confirmed as a bill is, becomes a vendor bill that is an expense, and keeps its kind. Replay: the same key with the same files, in the same order and number, and the same documentKind and paidFromDrawer, answers the first request\&#39;s drafts with Idempotency-Replayed: true and stores nothing new; any other files, another documentKind, or another caller, under that key is 409 IDEMPOTENCY_CONFLICT. Emits an ACCOUNTING_BILL_INTAKE_UPLOAD event once, on the request that stores the drafts, and one BILL_INTAKE audit row per file naming its sha-256 and its documentKind. Returns 201 with one item per file (QUARANTINED, or FILE_REJECTED with a reason), each with its documentKind; an outage of the scanner or the reader never rejects a file, it stays QUARANTINED. 400 when no file or more than 10 are sent, when the Idempotency-Key header is missing or not a UUID, when documentKind is not BILL or RECEIPT, when paidFromDrawer is sent with a BILL, is missing for a RECEIPT or is not true or false (fieldErrors name the field), 409 IDEMPOTENCY_CONFLICT when the key was used for another request, 413 PAYLOAD_TOO_LARGE over the size limits, 422 BILL_INTAKE_RECEIPT_PAID_FROM_DRAWER for a RECEIPT with paidFromDrawer true (nothing is stored and the key stays free), 403 without the permission.
      * @endpoint post /v1/accounting/bill-intake/uploads
      * @param idempotencyKey The request\&#39;s idempotency key: a UUID generated once per upload. A replay answers the first request\&#39;s drafts with Idempotency-Replayed: true; the same key with other content or by another caller is 409 IDEMPOTENCY_CONFLICT
      * @param files The documents, 1 to 10 parts named files
+     * @param documentKind What the documents are, one kind for the whole request: BILL (the default when left out) or RECEIPT, a purchase receipt not paid from the cash drawer
+     * @param paidFromDrawer For a RECEIPT only, and then required: whether the receipt was paid from the cash drawer. It must be false; true is 422 BILL_INTAKE_RECEIPT_PAID_FROM_DRAWER. Sent with a BILL it is 400
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public uploadBillDocuments(idempotencyKey: string, files: Array<Blob>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BillIntakeUploadResponse>;
-    public uploadBillDocuments(idempotencyKey: string, files: Array<Blob>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BillIntakeUploadResponse>>;
-    public uploadBillDocuments(idempotencyKey: string, files: Array<Blob>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BillIntakeUploadResponse>>;
-    public uploadBillDocuments(idempotencyKey: string, files: Array<Blob>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public uploadBillDocuments(idempotencyKey: string, files: Array<Blob>, documentKind?: 'BILL' | 'RECEIPT', paidFromDrawer?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BillIntakeUploadResponse>;
+    public uploadBillDocuments(idempotencyKey: string, files: Array<Blob>, documentKind?: 'BILL' | 'RECEIPT', paidFromDrawer?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BillIntakeUploadResponse>>;
+    public uploadBillDocuments(idempotencyKey: string, files: Array<Blob>, documentKind?: 'BILL' | 'RECEIPT', paidFromDrawer?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BillIntakeUploadResponse>>;
+    public uploadBillDocuments(idempotencyKey: string, files: Array<Blob>, documentKind?: 'BILL' | 'RECEIPT', paidFromDrawer?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (idempotencyKey === null || idempotencyKey === undefined) {
             throw new Error('Required parameter idempotencyKey was null or undefined when calling uploadBillDocuments.');
         }
         if (files === null || files === undefined) {
             throw new Error('Required parameter files was null or undefined when calling uploadBillDocuments.');
         }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'documentKind',
+            <any>documentKind,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'paidFromDrawer',
+            <any>paidFromDrawer,
+            QueryParamStyle.Form,
+            true,
+        );
+
 
         let localVarHeaders = this.defaultHeaders;
         if (idempotencyKey !== undefined && idempotencyKey !== null) {
@@ -1075,6 +1107,7 @@ export class BillIntakeService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: localVarConvertFormParamsToString ? localVarFormParams.toString() : localVarFormParams,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

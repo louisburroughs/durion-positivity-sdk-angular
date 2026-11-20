@@ -16,6 +16,10 @@ export interface BillIntakeSummary {
     billNumber?: string;
     channel?: BillIntakeSummaryChannelEnum;
     currency?: string;
+    /**
+     * What the document is: BILL, or RECEIPT for a purchase receipt not paid from the cash drawer, which becomes a vendor bill that is an expense. Always sent
+     */
+    documentKind?: BillIntakeSummaryDocumentKindEnum;
     intakeId?: string;
     intakeReference?: string;
     /**
@@ -45,6 +49,10 @@ export enum BillIntakeSummaryChannelEnum {
     Import = 'IMPORT',
     Edi = 'EDI',
     EmailIn = 'EMAIL_IN'
+};
+export enum BillIntakeSummaryDocumentKindEnum {
+    Bill = 'BILL',
+    Receipt = 'RECEIPT'
 };
 export enum BillIntakeSummaryStatusEnum {
     Quarantined = 'QUARANTINED',
@@ -103,7 +111,7 @@ export function instanceOfBillIntakeSummary(value: object): value is BillIntakeS
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBillIntakeSummaryPropertyNames('readyToConfirm', );
-    const optionalStringProperties = createBillIntakeSummaryOptionalProperties({ name: 'billNumber', nullable: false }, { name: 'channel', nullable: false }, { name: 'currency', nullable: false }, { name: 'intakeId', nullable: false }, { name: 'intakeReference', nullable: false }, { name: 'rejectionReason', nullable: false }, { name: 'sourceFileId', nullable: true }, { name: 'status', nullable: false }, { name: 'uploadedAt', nullable: false }, { name: 'vendorName', nullable: true }, { name: 'vendorResolution', nullable: false }, );
+    const optionalStringProperties = createBillIntakeSummaryOptionalProperties({ name: 'billNumber', nullable: false }, { name: 'channel', nullable: false }, { name: 'currency', nullable: false }, { name: 'documentKind', nullable: false }, { name: 'intakeId', nullable: false }, { name: 'intakeReference', nullable: false }, { name: 'rejectionReason', nullable: false }, { name: 'sourceFileId', nullable: true }, { name: 'status', nullable: false }, { name: 'uploadedAt', nullable: false }, { name: 'vendorName', nullable: true }, { name: 'vendorResolution', nullable: false }, );
     const optionalNumberProperties = createBillIntakeSummaryOptionalProperties({ name: 'pageCount', nullable: true }, { name: 'totalAmount', nullable: false }, );
     const optionalBooleanProperties = createBillIntakeSummaryOptionalProperties({ name: 'readyToConfirm', nullable: false }, );
 

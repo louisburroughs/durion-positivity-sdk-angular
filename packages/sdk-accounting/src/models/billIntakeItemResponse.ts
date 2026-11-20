@@ -18,6 +18,10 @@ export interface BillIntakeItemResponse {
      */
     channel?: BillIntakeItemResponseChannelEnum;
     /**
+     * What the document is: BILL, or RECEIPT when the upload said so (a purchase receipt not paid from the cash drawer). Always sent
+     */
+    documentKind?: BillIntakeItemResponseDocumentKindEnum;
+    /**
      * Routing id of the draft
      */
     intakeId: string;
@@ -47,6 +51,10 @@ export enum BillIntakeItemResponseChannelEnum {
     Import = 'IMPORT',
     Edi = 'EDI',
     EmailIn = 'EMAIL_IN'
+};
+export enum BillIntakeItemResponseDocumentKindEnum {
+    Bill = 'BILL',
+    Receipt = 'RECEIPT'
 };
 export enum BillIntakeItemResponseStatusEnum {
     Quarantined = 'QUARANTINED',
@@ -99,7 +107,7 @@ export function instanceOfBillIntakeItemResponse(value: object): value is BillIn
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBillIntakeItemResponsePropertyNames('intakeId', );
-    const optionalStringProperties = createBillIntakeItemResponseOptionalProperties({ name: 'channel', nullable: false }, { name: 'intakeId', nullable: false }, { name: 'intakeReference', nullable: false }, { name: 'rejectionReason', nullable: true }, { name: 'sha256', nullable: true }, { name: 'status', nullable: false }, { name: 'uploadedAt', nullable: false }, );
+    const optionalStringProperties = createBillIntakeItemResponseOptionalProperties({ name: 'channel', nullable: false }, { name: 'documentKind', nullable: false }, { name: 'intakeId', nullable: false }, { name: 'intakeReference', nullable: false }, { name: 'rejectionReason', nullable: true }, { name: 'sha256', nullable: true }, { name: 'status', nullable: false }, { name: 'uploadedAt', nullable: false }, );
     const optionalNumberProperties = createBillIntakeItemResponseOptionalProperties();
     const optionalBooleanProperties = createBillIntakeItemResponseOptionalProperties();
 
