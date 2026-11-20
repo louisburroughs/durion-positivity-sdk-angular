@@ -30,7 +30,7 @@ export interface ReportExportRequest {
      */
     format: ReportExportRequestFormatEnum;
     /**
-     * The report to export. MONTH_END_PACKET is one PDF holding the range\'s reports and the lists of vendor bills and credit notes posted, voided and not yet approved; requesting it also requires accounting:ap:view. A value outside the list is refused with 400 VALIDATION_ERROR naming reportType; no job is stored for it.
+     * The report to export. MONTH_END_PACKET is one PDF holding the range\'s reports and the lists of vendor bills and credit notes posted, voided and not yet approved, with the stored document of each posted bill and credit note embedded as pages after its list (reduced copies for reading; a voided bill\'s document is embedded too); requesting it also requires accounting:ap:view. A value outside the list is refused with 400 VALIDATION_ERROR naming reportType; no job is stored for it.
      */
     reportType: ReportExportRequestReportTypeEnum;
     /**
