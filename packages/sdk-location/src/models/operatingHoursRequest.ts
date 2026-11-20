@@ -14,7 +14,7 @@
  */
 export interface OperatingHoursRequest {
     /**
-     * Closing time (local time)
+     * Closing time (local time). A closeTime before openTime closes on the next day (18:00-02:00 runs overnight); a closeTime equal to openTime is open for 24 hours, so 00:00-00:00 on every day is 24x7. Hours after midnight belong to the day the window opened on, and may not overlap the next day\'s own window.
      */
     closeTime?: string;
     /**

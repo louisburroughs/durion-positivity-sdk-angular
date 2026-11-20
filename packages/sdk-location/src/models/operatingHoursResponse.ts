@@ -14,7 +14,7 @@
  */
 export interface OperatingHoursResponse {
     /**
-     * Closing time, in the location\'s own timezone
+     * Closing time, in the location\'s own timezone. At or before openTime it falls on the next day (an overnight window); equal to openTime means open for 24 hours.
      */
     closeTime?: string | null;
     /**
