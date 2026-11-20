@@ -14,7 +14,7 @@
  */
 export interface RemoveInvoiceAttachmentRequest {
     /**
-     * Why the photo is removed; at least 10 characters (400 JUSTIFICATION_REQUIRED otherwise), at most 500
+     * Why the photo is removed; 10 to 500 characters after trimming (400 JUSTIFICATION_REQUIRED when shorter, 400 VALIDATION_ERROR when longer)
      */
     reason: string;
 }

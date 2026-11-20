@@ -122,6 +122,92 @@ export class ImageAPIService extends BaseService {
     }
 
     /**
+     * Delete an invoice\&#39;s image
+     * Deletes one image of one invoice: the image record, and the stored bytes and thumbnail that no other image record of the tenant names. Use this operation from pos-invoice when a photo is removed from an invoice; do not use it for another owner\&#39;s images, which have no delete path, and it is not for users, because a user token is refused whatever it holds. Preconditions: the caller is a service whose verified assertion carries image:image:delete (today only the invoice issuer), and the image is tagged with exactly the ownerType and ownerId sent. Required inputs: id, ownerType (INVOICE) and ownerId; there is no request body and no Idempotency-Key, because every resend has the same outcome. Emits IMAGE_DELETE; content another record still names is kept, and the idempotency records that answered with this image are forgotten, so a store resent under the same key stores again. An id that names no image in the caller\&#39;s tenant (already deleted, never stored, or another tenant\&#39;s) answers 204 and changes nothing. Returns 400 for a malformed id or a missing or malformed ownerType or ownerId; 403 without image:image:delete or for a user token; 409 IMAGE_OWNER_CONFLICT when the image has another owner or none, with nothing deleted; and 422 IMAGE_OWNER_TYPE_NOT_DELETABLE for an ownerType other than INVOICE.
+     * @endpoint delete /v1/images/{id}
+     * @param id ID of the image to delete
+     * @param ownerType Kind of record the image belongs to; only INVOICE can be deleted
+     * @param ownerId Id of the record the image belongs to: the invoice
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public deleteOwnedImage(id: string, ownerType: 'ESTIMATE_CHECK_IN' | 'WORKORDER' | 'WORKORDER_SERVICE' | 'CHANGE_REQUEST' | 'INVOICE', ownerId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteOwnedImage(id: string, ownerType: 'ESTIMATE_CHECK_IN' | 'WORKORDER' | 'WORKORDER_SERVICE' | 'CHANGE_REQUEST' | 'INVOICE', ownerId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteOwnedImage(id: string, ownerType: 'ESTIMATE_CHECK_IN' | 'WORKORDER' | 'WORKORDER_SERVICE' | 'CHANGE_REQUEST' | 'INVOICE', ownerId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteOwnedImage(id: string, ownerType: 'ESTIMATE_CHECK_IN' | 'WORKORDER' | 'WORKORDER_SERVICE' | 'CHANGE_REQUEST' | 'INVOICE', ownerId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling deleteOwnedImage.');
+        }
+        if (ownerType === null || ownerType === undefined) {
+            throw new Error('Required parameter ownerType was null or undefined when calling deleteOwnedImage.');
+        }
+        if (ownerId === null || ownerId === undefined) {
+            throw new Error('Required parameter ownerId was null or undefined when calling deleteOwnedImage.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'ownerType',
+            <any>ownerType,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'ownerId',
+            <any>ownerId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/images/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Get image by filename
      * Returns image bytes inline for an exact filename match. Use this operation when only the filename is known; do not use it when the image ID is available, use getImageById instead, because filenames are not unique over time. Preconditions: a matching record must exist in the caller\&#39;s tenant; an image that has an owner is served only with image:image:view and reads as 404 otherwise; legacy records are served only when pos.image.legacy-root is configured and the path resolves safely beneath it. Required inputs: filename including its extension; If-None-Match is optional, and there is no body. No events are emitted and no state changes occur. Stored content has a strong ETag and private, no-cache headers; a matching If-None-Match returns 304. Filenames are never immutable. Returns 404 for no matching record, an unconfigured legacy root, a missing file, or an escaping path; variants are not currently supported.
      * @endpoint get /v1/images/filename/{filename}

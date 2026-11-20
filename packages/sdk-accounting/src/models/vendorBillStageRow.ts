@@ -34,6 +34,10 @@ export interface VendorBillStageRow {
      */
     dueDate?: string;
     /**
+     * The kind of the bill draft this bill was confirmed from, as on the single bill read: BILL, or RECEIPT for a purchase receipt (not a goods receipt). A RECEIPT\'s bill is never paid through AP: it stays listed in the PAY stage while it is open, but a payment allocation to it is refused (422 AP_ALLOCATION_TO_RECEIPT_BILL), so do not offer to pay it. Absent for a bill that was not created from a draft
+     */
+    intakeDocumentKind?: VendorBillStageRowIntakeDocumentKindEnum | null;
+    /**
      * Total less allocated payments
      */
     openAmount: number;
@@ -73,6 +77,10 @@ export interface VendorBillStageRow {
 export enum VendorBillStageRowChannelEnum {
     GoodsReceipt = 'GOODS_RECEIPT',
     SupplierConnection = 'SUPPLIER_CONNECTION'
+};
+export enum VendorBillStageRowIntakeDocumentKindEnum {
+    Bill = 'BILL',
+    Receipt = 'RECEIPT'
 };
 export enum VendorBillStageRowRequiredTierEnum {
     Clerk = 'CLERK',
@@ -130,7 +138,7 @@ export function instanceOfVendorBillStageRow(value: object): value is VendorBill
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createVendorBillStageRowPropertyNames('billDate', 'billNumber', 'currencyCode', 'openAmount', 'status', 'totalAmount', 'vendorApHold', 'vendorBillId', );
-    const optionalStringProperties = createVendorBillStageRowOptionalProperties({ name: 'billDate', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'channel', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'requiredTier', nullable: false }, { name: 'sourceFileId', nullable: true }, { name: 'status', nullable: false }, { name: 'submittedAt', nullable: false }, { name: 'vendorBillId', nullable: false }, { name: 'vendorName', nullable: false }, );
+    const optionalStringProperties = createVendorBillStageRowOptionalProperties({ name: 'billDate', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'channel', nullable: false }, { name: 'currencyCode', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'intakeDocumentKind', nullable: true }, { name: 'requiredTier', nullable: false }, { name: 'sourceFileId', nullable: true }, { name: 'status', nullable: false }, { name: 'submittedAt', nullable: false }, { name: 'vendorBillId', nullable: false }, { name: 'vendorName', nullable: false }, );
     const optionalNumberProperties = createVendorBillStageRowOptionalProperties({ name: 'openAmount', nullable: false }, { name: 'totalAmount', nullable: false }, );
     const optionalBooleanProperties = createVendorBillStageRowOptionalProperties({ name: 'vendorApHold', nullable: false }, );
 
