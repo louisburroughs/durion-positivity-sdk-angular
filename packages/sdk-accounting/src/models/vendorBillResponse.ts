@@ -84,6 +84,10 @@ export interface VendorBillResponse {
      */
     inputTaxRecovery?: Array<VendorBillInputTaxRecovery>;
     /**
+     * The kind of the bill draft this bill was confirmed from: BILL, or RECEIPT for a purchase receipt (not a goods receipt) that was not paid from the cash drawer. A RECEIPT\'s bill is an expense whatever its vendor\'s default says (a classification naming another class is 400), and its stated tax is never recovered (inputTaxRecovery reads RECEIPT_NOT_RECOVERED). Absent for a bill that was not created from a draft, one a draft was attached to included
+     */
+    intakeDocumentKind?: VendorBillResponseIntakeDocumentKindEnum | null;
+    /**
      * Journal entry ID (if GL posted)
      */
     journalEntryId?: string;
@@ -172,6 +176,10 @@ export enum VendorBillResponseDocumentTypeEnum {
     Invoice = 'INVOICE',
     CreditNote = 'CREDIT_NOTE'
 };
+export enum VendorBillResponseIntakeDocumentKindEnum {
+    Bill = 'BILL',
+    Receipt = 'RECEIPT'
+};
 export enum VendorBillResponseStatusEnum {
     PendingReceiptMatch = 'PENDING_RECEIPT_MATCH',
     MatchException = 'MATCH_EXCEPTION',
@@ -224,7 +232,7 @@ export function instanceOfVendorBillResponse(value: object): value is VendorBill
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createVendorBillResponsePropertyNames('availableActions', 'billNumber', 'checks', 'createdAt', 'lines', 'openAmount', 'openCandidates', 'reissues', 'status', 'taxByType', 'totalAmount', 'vendorBillId', 'vendorId', );
-    const optionalStringProperties = createVendorBillResponseOptionalProperties({ name: 'billDate', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'channel', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'createdByName', nullable: false }, { name: 'currency', nullable: true }, { name: 'documentType', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'journalEntryId', nullable: false }, { name: 'originEventId', nullable: false }, { name: 'originEventType', nullable: false }, { name: 'paymentTransactionId', nullable: false }, { name: 'sourceFileId', nullable: true }, { name: 'status', nullable: false }, { name: 'statusExplanation', nullable: false }, { name: 'vendorBillId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, );
+    const optionalStringProperties = createVendorBillResponseOptionalProperties({ name: 'billDate', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'channel', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'createdByName', nullable: false }, { name: 'currency', nullable: true }, { name: 'documentType', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'intakeDocumentKind', nullable: true }, { name: 'journalEntryId', nullable: false }, { name: 'originEventId', nullable: false }, { name: 'originEventType', nullable: false }, { name: 'paymentTransactionId', nullable: false }, { name: 'sourceFileId', nullable: true }, { name: 'status', nullable: false }, { name: 'statusExplanation', nullable: false }, { name: 'vendorBillId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, );
     const optionalNumberProperties = createVendorBillResponseOptionalProperties({ name: 'amountDifference', nullable: true }, { name: 'freightAmount', nullable: false }, { name: 'netAmount', nullable: false }, { name: 'openAmount', nullable: false }, { name: 'taxAmount', nullable: false }, { name: 'totalAmount', nullable: false }, );
     const optionalBooleanProperties = createVendorBillResponseOptionalProperties();
 

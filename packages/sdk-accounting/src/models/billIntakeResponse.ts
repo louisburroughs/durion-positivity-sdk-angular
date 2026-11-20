@@ -44,6 +44,10 @@ export interface BillIntakeResponse {
     discardedAt?: string;
     discardedBy?: string;
     /**
+     * What the document is, said at upload and never changed: BILL, or RECEIPT for a purchase receipt not paid from the cash drawer. A RECEIPT is checked and confirmed as a bill is, with three rules of its own: debitClass is EXPENSE (set by the server), a line\'s debitClass is empty or EXPENSE, and documentType is INVOICE. Always sent
+     */
+    documentKind?: BillIntakeResponseDocumentKindEnum;
+    /**
      * True once a person has edited the draft
      */
     edited?: boolean;
@@ -79,6 +83,10 @@ export interface BillIntakeResponse {
      * Pages (or frames) of the document once it is inspected; null before then and when there is no document
      */
     pageCount?: number | null;
+    /**
+     * For a RECEIPT, what the person said at upload: false, it was not paid from the cash drawer (a receipt paid from the drawer is refused). Absent for a BILL
+     */
+    paidFromDrawer?: boolean | null;
     /**
      * Possible duplicates found by the checks
      */
@@ -141,6 +149,10 @@ export enum BillIntakeResponseChannelEnum {
     Edi = 'EDI',
     EmailIn = 'EMAIL_IN'
 };
+export enum BillIntakeResponseDocumentKindEnum {
+    Bill = 'BILL',
+    Receipt = 'RECEIPT'
+};
 export enum BillIntakeResponseExtractionOutcomeEnum {
     Manual = 'MANUAL',
     Extracted = 'EXTRACTED'
@@ -202,9 +214,9 @@ export function instanceOfBillIntakeResponse(value: object): value is BillIntake
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createBillIntakeResponsePropertyNames();
-    const optionalStringProperties = createBillIntakeResponseOptionalProperties({ name: 'attachedAt', nullable: true }, { name: 'attachedBillId', nullable: true }, { name: 'attachedBy', nullable: true }, { name: 'channel', nullable: false }, { name: 'confirmedAt', nullable: false }, { name: 'confirmedBillId', nullable: true }, { name: 'confirmedBy', nullable: false }, { name: 'discardReason', nullable: true }, { name: 'discardedAt', nullable: false }, { name: 'discardedBy', nullable: false }, { name: 'extractionOutcome', nullable: true }, { name: 'intakeId', nullable: false }, { name: 'intakeReference', nullable: false }, { name: 'rejectionReason', nullable: true }, { name: 'sourceFileId', nullable: true }, { name: 'splitOf', nullable: true }, { name: 'status', nullable: false }, { name: 'uploadedAt', nullable: false }, { name: 'uploadedBy', nullable: false }, { name: 'vendorResolution', nullable: true }, );
+    const optionalStringProperties = createBillIntakeResponseOptionalProperties({ name: 'attachedAt', nullable: true }, { name: 'attachedBillId', nullable: true }, { name: 'attachedBy', nullable: true }, { name: 'channel', nullable: false }, { name: 'confirmedAt', nullable: false }, { name: 'confirmedBillId', nullable: true }, { name: 'confirmedBy', nullable: false }, { name: 'discardReason', nullable: true }, { name: 'discardedAt', nullable: false }, { name: 'discardedBy', nullable: false }, { name: 'documentKind', nullable: false }, { name: 'extractionOutcome', nullable: true }, { name: 'intakeId', nullable: false }, { name: 'intakeReference', nullable: false }, { name: 'rejectionReason', nullable: true }, { name: 'sourceFileId', nullable: true }, { name: 'splitOf', nullable: true }, { name: 'status', nullable: false }, { name: 'uploadedAt', nullable: false }, { name: 'uploadedBy', nullable: false }, { name: 'vendorResolution', nullable: true }, );
     const optionalNumberProperties = createBillIntakeResponseOptionalProperties({ name: 'pageCount', nullable: true }, { name: 'rowFrom', nullable: true }, { name: 'rowTo', nullable: true }, { name: 'version', nullable: false }, );
-    const optionalBooleanProperties = createBillIntakeResponseOptionalProperties({ name: 'edited', nullable: false }, { name: 'lastExtractionFailed', nullable: false }, { name: 'mappingRequired', nullable: false }, );
+    const optionalBooleanProperties = createBillIntakeResponseOptionalProperties({ name: 'edited', nullable: false }, { name: 'lastExtractionFailed', nullable: false }, { name: 'mappingRequired', nullable: false }, { name: 'paidFromDrawer', nullable: true }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalBillIntakeResponsePropertyOfType(_v, property.name, 'string', property.nullable))
