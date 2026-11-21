@@ -22,6 +22,10 @@ export interface ReportExportResponse {
      */
     downloadUrl?: string;
     /**
+     * Period end date the export was requested for (inclusive, YYYY-MM-DD), as given in the request. For the as-of reports (BALANCE_SHEET, TRIAL_BALANCE, AGED_RECEIVABLES, AGED_PAYABLES) the as-of date. For MONTH_END_PACKET the last day of the packet\'s range.
+     */
+    endDate: string;
+    /**
      * ISO-8601 timestamp after which the file is purged and its download answers 409 EXPORT_EXPIRED (completion plus the retention period, 30 days by default). The job itself stays readable. Null unless status is COMPLETED.
      */
     expiresAt?: string;
@@ -45,6 +49,10 @@ export interface ReportExportResponse {
      * ISO-8601 timestamp when the export was requested
      */
     requestedAt?: string;
+    /**
+     * Period start date the export was requested for (inclusive, YYYY-MM-DD), as given in the request. For MONTH_END_PACKET the first day of the packet\'s range.
+     */
+    startDate: string;
     /**
      * Current export status: PENDING when requested, IN_PROGRESS while a worker renders it, then COMPLETED or FAILED. A job waiting to be retried reads PENDING again.
      */
@@ -122,8 +130,8 @@ export function instanceOfReportExportResponse(value: object): value is ReportEx
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createReportExportResponsePropertyNames('exportId', 'status', );
-    const optionalStringProperties = createReportExportResponseOptionalProperties({ name: 'completedAt', nullable: false }, { name: 'downloadUrl', nullable: false }, { name: 'expiresAt', nullable: false }, { name: 'exportId', nullable: false }, { name: 'failureReason', nullable: false }, { name: 'format', nullable: false }, { name: 'reportType', nullable: false }, { name: 'requestedAt', nullable: false }, { name: 'status', nullable: false }, );
+    const requiredProperties = createReportExportResponsePropertyNames('endDate', 'exportId', 'startDate', 'status', );
+    const optionalStringProperties = createReportExportResponseOptionalProperties({ name: 'completedAt', nullable: false }, { name: 'downloadUrl', nullable: false }, { name: 'endDate', nullable: false }, { name: 'expiresAt', nullable: false }, { name: 'exportId', nullable: false }, { name: 'failureReason', nullable: false }, { name: 'format', nullable: false }, { name: 'reportType', nullable: false }, { name: 'requestedAt', nullable: false }, { name: 'startDate', nullable: false }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createReportExportResponseOptionalProperties();
     const optionalBooleanProperties = createReportExportResponseOptionalProperties();
 
