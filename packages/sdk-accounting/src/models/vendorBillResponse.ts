@@ -122,6 +122,14 @@ export interface VendorBillResponse {
     paymentTransactionId?: string;
     posting?: VendorBillPosting;
     /**
+     * BANK_DEBIT only (#3848): the BANK_CASH account the receipt was paid from; set at settlement when the draft named none and exactly one account was eligible
+     */
+    receiptPaidFromAccountId?: string | null;
+    /**
+     * How the purchase receipt this bill was confirmed from was paid (#3848): COMPANY_CARD, PERSONAL_FUNDS or BANK_DEBIT. A receipt\'s bill with one is settled at approval against that account (Dr 2000 / Cr 2150, 2160 or the bank account), has nothing open afterwards and is never paid through executeApPayment. Absent for every other bill, and for a receipt\'s bill captured before the statement existed until settleVendorBillReceipt states it
+     */
+    receiptPaidWith?: VendorBillResponseReceiptPaidWithEnum | null;
+    /**
      * Re-issues of this approved bill under its number, held as exception items
      */
     reissues: Array<VendorBillReissue>;
@@ -180,6 +188,11 @@ export enum VendorBillResponseIntakeDocumentKindEnum {
     Bill = 'BILL',
     Receipt = 'RECEIPT'
 };
+export enum VendorBillResponseReceiptPaidWithEnum {
+    CompanyCard = 'COMPANY_CARD',
+    PersonalFunds = 'PERSONAL_FUNDS',
+    BankDebit = 'BANK_DEBIT'
+};
 export enum VendorBillResponseStatusEnum {
     PendingReceiptMatch = 'PENDING_RECEIPT_MATCH',
     MatchException = 'MATCH_EXCEPTION',
@@ -232,7 +245,7 @@ export function instanceOfVendorBillResponse(value: object): value is VendorBill
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createVendorBillResponsePropertyNames('availableActions', 'billNumber', 'checks', 'createdAt', 'lines', 'openAmount', 'openCandidates', 'reissues', 'status', 'taxByType', 'totalAmount', 'vendorBillId', 'vendorId', );
-    const optionalStringProperties = createVendorBillResponseOptionalProperties({ name: 'billDate', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'channel', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'createdByName', nullable: false }, { name: 'currency', nullable: true }, { name: 'documentType', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'intakeDocumentKind', nullable: true }, { name: 'journalEntryId', nullable: false }, { name: 'originEventId', nullable: false }, { name: 'originEventType', nullable: false }, { name: 'paymentTransactionId', nullable: false }, { name: 'sourceFileId', nullable: true }, { name: 'status', nullable: false }, { name: 'statusExplanation', nullable: false }, { name: 'vendorBillId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, );
+    const optionalStringProperties = createVendorBillResponseOptionalProperties({ name: 'billDate', nullable: false }, { name: 'billNumber', nullable: false }, { name: 'channel', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'createdByName', nullable: false }, { name: 'currency', nullable: true }, { name: 'documentType', nullable: false }, { name: 'dueDate', nullable: false }, { name: 'intakeDocumentKind', nullable: true }, { name: 'journalEntryId', nullable: false }, { name: 'originEventId', nullable: false }, { name: 'originEventType', nullable: false }, { name: 'paymentTransactionId', nullable: false }, { name: 'receiptPaidFromAccountId', nullable: true }, { name: 'receiptPaidWith', nullable: true }, { name: 'sourceFileId', nullable: true }, { name: 'status', nullable: false }, { name: 'statusExplanation', nullable: false }, { name: 'vendorBillId', nullable: false }, { name: 'vendorId', nullable: false }, { name: 'vendorName', nullable: false }, );
     const optionalNumberProperties = createVendorBillResponseOptionalProperties({ name: 'amountDifference', nullable: true }, { name: 'freightAmount', nullable: false }, { name: 'netAmount', nullable: false }, { name: 'openAmount', nullable: false }, { name: 'taxAmount', nullable: false }, { name: 'totalAmount', nullable: false }, );
     const optionalBooleanProperties = createVendorBillResponseOptionalProperties();
 

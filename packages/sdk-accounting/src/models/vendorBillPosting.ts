@@ -57,6 +57,18 @@ export interface VendorBillPosting {
      * The rounding plug put on the largest debit, within 0.01 per stated line and 0.05 per bill (AW47); 0.00 when the legs added up
      */
     roundingAdjustment: number;
+    /**
+     * A purchase receipt\'s bill only (#3848): the settlement entry, Dr 2000 / Cr the account the receipt was paid from
+     */
+    settlementJournalEntryId?: string | null;
+    /**
+     * The settlement entry\'s number
+     */
+    settlementReference?: string | null;
+    /**
+     * The settlement\'s reversal entry\'s number after the bill\'s void
+     */
+    settlementReversalReference?: string | null;
 }
 export enum VendorBillPostingDifferenceClassEnum {
     Freight = 'FREIGHT',
@@ -111,7 +123,7 @@ export function instanceOfVendorBillPosting(value: object): value is VendorBillP
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createVendorBillPostingPropertyNames('currencyCode', 'grossAmount', 'journalEntryId', 'postingDate', 'postingDateRule', 'roundingAdjustment', );
-    const optionalStringProperties = createVendorBillPostingOptionalProperties({ name: 'currencyCode', nullable: false }, { name: 'differenceClass', nullable: false }, { name: 'journalEntryId', nullable: false }, { name: 'journalEntryReference', nullable: false }, { name: 'postingDate', nullable: false }, { name: 'postingDateRule', nullable: false }, { name: 'reversalDate', nullable: false }, { name: 'reversalReference', nullable: false }, );
+    const optionalStringProperties = createVendorBillPostingOptionalProperties({ name: 'currencyCode', nullable: false }, { name: 'differenceClass', nullable: false }, { name: 'journalEntryId', nullable: false }, { name: 'journalEntryReference', nullable: false }, { name: 'postingDate', nullable: false }, { name: 'postingDateRule', nullable: false }, { name: 'reversalDate', nullable: false }, { name: 'reversalReference', nullable: false }, { name: 'settlementJournalEntryId', nullable: true }, { name: 'settlementReference', nullable: true }, { name: 'settlementReversalReference', nullable: true }, );
     const optionalNumberProperties = createVendorBillPostingOptionalProperties({ name: 'differenceAmount', nullable: false }, { name: 'grossAmount', nullable: false }, { name: 'roundingAdjustment', nullable: false }, );
     const optionalBooleanProperties = createVendorBillPostingOptionalProperties();
 
