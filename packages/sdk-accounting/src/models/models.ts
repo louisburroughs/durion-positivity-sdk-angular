@@ -378,6 +378,7 @@ export * from './vendorBillMatchCandidateResponse';
 export * from './vendorBillMatchCandidateSummary';
 export * from './vendorBillMatchPoints';
 export * from './vendorBillPosting';
+export * from './vendorBillReceiptSettlementRequest';
 export * from './vendorBillReissue';
 export * from './vendorBillRejectRequest';
 export * from './vendorBillRejection';
