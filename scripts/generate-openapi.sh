@@ -17,6 +17,10 @@ set -euo pipefail
 #   ./scripts/generate-openapi.sh --module security  # Bump, then generate only that module
 #   ./scripts/generate-openapi.sh --no-bump          # Regenerate at the current version
 #
+# After the clients, it writes the access artifacts: each package's
+# requirements/ entry (generate-operation-requirements.mjs) and sdk-security's
+# permission-catalog/ entry (generate-permission-catalog.mjs).
+#
 # Valid module names: security, order, inventory, workorder, supplier, accounting, catalog, customer, invoice, location, people, people-contact, price, shop-manager, image, event-receiver, vehicle-fitment, vehicle-inventory, internal, documents, inquiry, bulk-loader, warranty, marketing, tenant, platform-sender
 
 module=""
@@ -469,6 +473,24 @@ else
 		patch_package_dependencies "$m"
 		patch_package_side_effects "$m"
 	done
+fi
+
+# Access artifacts (ADR-0079 section 8). Both run after the clients are written:
+# the generator and write_src_index rewrite each package's index files, and
+# these scripts put their re-exports back.
+#
+# OPERATION_REQUIREMENTS, per package: what a caller must hold to call each
+# operation, from the x-required-permissions extensions of the spec the client
+# was just generated from. Fails if a key matches no generated service method.
+if [[ -n "$module" ]]; then
+	node scripts/generate-operation-requirements.mjs --module "$module"
+else
+	node scripts/generate-operation-requirements.mjs
+fi
+
+# The permission bit catalog, in @durion-sdk/security only.
+if [[ -z "$module" || "$module" == "security" ]]; then
+	node scripts/generate-permission-catalog.mjs
 fi
 
 echo "Generation complete at version $(node scripts/version.mjs current)."

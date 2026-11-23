@@ -15,6 +15,8 @@ packages/sdk-*/src/provide-api.ts
 packages/sdk-*/src/query.params.ts
 packages/sdk-*/api.base.service.ts
 packages/sdk-*/configuration/
+packages/sdk-*/requirements/
+packages/sdk-security/permission-catalog/
 packages/sdk-*/configuration.ts
 packages/sdk-*/encoder.ts
 packages/sdk-*/variables.ts
