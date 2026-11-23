@@ -19,12 +19,13 @@ npm run lint
 
 ## Package Entry Points
 
-Every generated package (all but `sdk-transport`) has two ng-packagr entry points:
+Every generated package (all but `sdk-transport`) has these ng-packagr entry points:
 
 | Import | Holds |
 | --- | --- |
 | `@durion-sdk/<pkg>` | the generated services, models, `ApiModule`, and a re-export of the configuration entry |
 | `@durion-sdk/<pkg>/configuration` | `Configuration`, `BASE_PATH`, `COLLECTION_FORMATS`, `provideApi`, `Param` and the other support types |
+| `@durion-sdk/<pkg>/requirements` | `OPERATION_REQUIREMENTS`; see "Access Artifacts" |
 
 Import from `@durion-sdk/<pkg>/configuration` in app startup code, e.g. `app.config.ts`:
 
@@ -52,6 +53,74 @@ the services never inject, and every request would silently go to the generated 
   fails if a primary `fesm2022` bundle defines `class Configuration` or
   `new InjectionToken('basePath')`. Run it on its own after a build with
   `npm run check:configuration-entry`.
+
+## Access Artifacts
+
+Two generated artifacts let an app decide what a signed-in user may do without keeping
+its own copy of the backend's rules (ADR-0079 section 8). `npm run generate` writes both
+after the clients; they are generated files, changed only through the scripts below.
+
+### Operation requirements, in every generated package
+
+| Import | Holds |
+| --- | --- |
+| `@durion-sdk/<pkg>/requirements` | `OPERATION_REQUIREMENTS`, `OPERATIONS_WITHOUT_REQUIREMENTS`, the `<Pkg>OperationId` union, `OperationRequirement` |
+| `@durion-sdk/<pkg>` | re-exports the above |
+| `@durion-sdk/transport` | the documented `OperationRequirement` type and `isOperationPermitted` |
+
+```typescript
+import { OPERATION_REQUIREMENTS, type WorkorderOperationId } from '@durion-sdk/workorder/requirements';
+import { isOperationPermitted } from '@durion-sdk/transport';
+
+const allowed = isOperationPermitted(OPERATION_REQUIREMENTS.getWorkorder, heldPermissions); // a Set<string>
+```
+
+- **Key.** The name of the generated service method (`WorkorderService.getWorkorder` →
+  `getWorkorder`), which is the spec's `operationId` as the client generator spells it
+  (`getAuditTrailByOrder_1` → `getAuditTrailByOrder1`). An operation under several tags is
+  one method name on several services and one key. `<Pkg>OperationId` (`WorkorderOperationId`,
+  `PeopleContactOperationId`) is the union of every operation of the package, so a
+  reference to a renamed or removed operation stops compiling.
+- **Value.** `{ anyOf, allOf, authenticated }`. The caller is permitted when it holds every
+  `allOf` code and, if `anyOf` is not empty, at least one `anyOf` code. `authenticated` is
+  `true` when the operation names the `AUTHENTICATED` sentinel; with both lists empty,
+  signing in is all it asks.
+- **Missing entry: refuse.** An operation whose spec has no `x-required-permissions` has
+  unknown requirements. It has no entry (the map is `Partial`, so a lookup is
+  `OperationRequirement | undefined`), it is listed in `OPERATIONS_WITHOUT_REQUIREMENTS`
+  and in a warning at generation time, and a consumer must treat it as not permitted.
+  `isOperationPermitted(undefined, ...)` returns `false`. Never read a missing entry as
+  "open to everyone".
+- **Source.** `scripts/generate-operation-requirements.mjs` reads the same spec files
+  `openapitools.json` gives the client generator: `x-required-permissions` (every code
+  the operation's authorization names) and `x-required-permissions-all` (the subset that
+  are each required; absent means none). `allOf` is the second list; `anyOf` is the first
+  minus `allOf` and the sentinel. The script fails when a key matches no generated service
+  method. Rules and rendering are in `scripts/lib/operation-requirements.mjs`.
+
+Import from the `/requirements` entry in code that runs at app startup (route gates), for
+the reason given under "Package Entry Points": it holds no services.
+
+### Permission catalog, in `@durion-sdk/security`
+
+`@durion-sdk/security/permission-catalog` (re-exported by `@durion-sdk/security`) holds the
+bit table of the JWT `perm_bits` claim (ADR-0040):
+
+- `PERMISSION_CATALOG_VERSION: number`, the backend's `PermissionCode.CATALOG_VERSION`
+- `PERMISSION_BY_BIT: readonly string[]`, the permission code at each bit index
+- `DEPRECATED_PERMISSIONS: readonly string[]`, the retired codes, which keep their bit
+
+`scripts/generate-permission-catalog.mjs` parses
+`pos-security-service/.../internal/enums/PermissionCode.java` in the backend checkout
+(`DURION_BACKEND_PATH`, else the script's argument, else `../durion-positivity-backend`).
+A duplicate bit index or a gap fails the run. When the checkout has no `PermissionCode.java`
+(one that holds only the specs), the committed catalog is kept and a warning says so;
+`DURION_PERMISSION_CATALOG_REQUIRED=true` turns that into an error.
+
+Extension point: the capability catalog of ADR-0079 does not exist yet. When the backend
+publishes it, it belongs beside the permission catalog as another generated file of this
+entry (or a sibling entry of `@durion-sdk/security`), written by its own script from
+`scripts/generate-openapi.sh`.
 
 ## Versioning
 

@@ -1,0 +1,55 @@
+# Fixture for sdk-010: one operation per shape of the x-required-permissions
+# contract, including x-required-permissions-all, which no backend spec emits yet.
+openapi: 3.0.1
+info:
+  title: Fixture
+  version: v1
+paths:
+  /v1/things:
+    get:
+      operationId: listThings
+      x-required-permissions:
+      - thing:thing:view
+    post:
+      operationId: createThing
+      x-required-permissions:
+      - thing:thing:manage
+      - thing:thing:create
+  /v1/things/{id}:
+    parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      operationId: getThing
+      x-required-permissions:
+      - AUTHENTICATED
+    put:
+      operationId: approveThing
+      x-required-permissions:
+      - thing:thing:view
+      - thing:approval:override
+      - thing:approval:approve
+      x-required-permissions-all:
+      - thing:thing:view
+    delete:
+      operationId: deleteThing
+      x-required-permissions:
+      - thing:thing:delete
+      - thing:thing:audit
+      x-required-permissions-all:
+      - thing:thing:delete
+      - thing:thing:audit
+    patch:
+      operationId: patchThing_1
+      x-required-permissions:
+      - AUTHENTICATED
+      - thing:thing:edit
+  /v1/public/things:
+    get:
+      operationId: listPublicThings
+    post:
+      operationId: submitPublicThing
+      x-required-permissions: []
