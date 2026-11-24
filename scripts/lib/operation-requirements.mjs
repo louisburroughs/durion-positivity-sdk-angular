@@ -12,9 +12,21 @@
 //   x-required-permissions-all:  the subset of those codes that are each
 //                                required. Absent means none.
 //
-//   allOf = x-required-permissions-all
-//   anyOf = x-required-permissions - allOf - the sentinel
-//   permitted = holds every allOf code AND (anyOf is empty OR holds one of them)
+//   rest        = x-required-permissions - x-required-permissions-all - the sentinel
+//   allOf       = x-required-permissions-all
+//   anyOf       = rest, when allOf is empty; else empty
+//   conditional = rest, when allOf is not empty; else empty
+//   permitted   = holds every allOf code AND (anyOf is empty OR holds one of them)
+//
+// Why `rest` is not always `anyOf`: beside codes that are each required, the
+// spec does not say what the others are for. `a and (b or c)` asks for one of
+// b and c on every call; `a and (#param == null or b)` asks for b only on some
+// calls. Both publish all = [a] and rest = [b, ...]. Reading `rest` as "at
+// least one of" there would refuse a caller the backend serves, so those codes
+// are listed as `conditional` and never demanded. That can let through a caller
+// the backend then refuses with 403, which is the side the backend's own
+// extension errs on (it leaves out of -all whatever it cannot read with
+// certainty).
 //
 // An operation with no x-required-permissions has unknown requirements. It gets
 // no entry in the map, and consumers must refuse a missing entry (fail closed).
@@ -68,6 +80,9 @@ export function toMethodName(operationId) {
  * is unknown too. `x-required-permissions-all` without `x-required-permissions`
  * is read as that list alone. A code named only in `-all` is still required:
  * the stricter reading is the safe one.
+ *
+ * The codes that are not in `-all` are alternatives (`anyOf`) when nothing is
+ * in `-all`, and `conditional` when something is: see the top of this file.
  */
 export function requirementFor(operation, where = 'operation') {
   const all = readCodeList(operation, REQUIRED_ALL_EXTENSION, where) ?? [];
@@ -77,9 +92,15 @@ export function requirementFor(operation, where = 'operation') {
 
   const allOf = sortedUnique(all.filter((code) => code !== AUTHENTICATED_SENTINEL));
   const required = new Set(allOf);
-  const anyOf = sortedUnique(named.filter((code) => code !== AUTHENTICATED_SENTINEL && !required.has(code)));
+  const rest = sortedUnique(named.filter((code) => code !== AUTHENTICATED_SENTINEL && !required.has(code)));
+  const alternatives = allOf.length === 0;
 
-  return { anyOf, allOf, authenticated: codes.includes(AUTHENTICATED_SENTINEL) };
+  return {
+    anyOf: alternatives ? rest : [],
+    allOf,
+    conditional: alternatives ? [] : rest,
+    authenticated: codes.includes(AUTHENTICATED_SENTINEL),
+  };
 }
 
 /**
@@ -87,7 +108,7 @@ export function requirementFor(operation, where = 'operation') {
  *
  * @returns {{
  *   operationIds: string[],
- *   requirements: Record<string, {anyOf: string[], allOf: string[], authenticated: boolean}>,
+ *   requirements: Record<string, {anyOf: string[], allOf: string[], conditional: string[], authenticated: boolean}>,
  *   missing: string[],
  *   authenticatedOnly: string[],
  * }} `operationIds` is every operation, `missing` those with no requirement
@@ -159,7 +180,7 @@ export function renderOperationRequirementsModule({ moduleName, specLabel, opera
   const entries = Object.entries(requirements)
     .map(
       ([id, r]) =>
-        `  ${id}: { anyOf: ${renderList(r.anyOf)}, allOf: ${renderList(r.allOf)}, authenticated: ${r.authenticated} },`,
+        `  ${id}: { anyOf: ${renderList(r.anyOf)}, allOf: ${renderList(r.allOf)}, conditional: ${renderList(r.conditional)}, authenticated: ${r.authenticated} },`,
     )
     .join('\n');
   const missingList = missing.length === 0 ? '[]' : `[\n${missing.map((id) => `  ${quote(id)},`).join('\n')}\n]`;
@@ -178,6 +199,7 @@ export function renderOperationRequirementsModule({ moduleName, specLabel, opera
 export interface OperationRequirement {
   readonly anyOf: readonly string[];
   readonly allOf: readonly string[];
+  readonly conditional: readonly string[];
   readonly authenticated: boolean;
 }
 
@@ -186,9 +208,10 @@ export type ${idType} =${union};
 
 /**
  * What a caller must hold to call each operation: every \`allOf\` code and, when
- * \`anyOf\` is not empty, at least one \`anyOf\` code. An operation with no entry
- * has unknown requirements and must be refused (fail closed);
- * \`isOperationPermitted\` from @durion-sdk/transport applies both rules.
+ * \`anyOf\` is not empty, at least one \`anyOf\` code. A \`conditional\` code is
+ * asked for on some calls only and is never demanded here. An operation with no
+ * entry has unknown requirements and must be refused (fail closed);
+ * \`isOperationPermitted\` from @durion-sdk/transport applies these rules.
  */
 export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<${idType}, OperationRequirement>>> = {
 ${entries}${entries ? '\n' : ''}};

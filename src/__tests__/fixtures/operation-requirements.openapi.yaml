@@ -1,5 +1,5 @@
 # Fixture for sdk-010: one operation per shape of the x-required-permissions
-# contract, including x-required-permissions-all, which no backend spec emits yet.
+# contract, including x-required-permissions-all.
 openapi: 3.0.1
 info:
   title: Fixture

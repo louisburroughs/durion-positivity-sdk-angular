@@ -12,6 +12,7 @@
 export interface OperationRequirement {
   readonly anyOf: readonly string[];
   readonly allOf: readonly string[];
+  readonly conditional: readonly string[];
   readonly authenticated: boolean;
 }
 
@@ -22,13 +23,14 @@ export type DocumentsOperationId =
 
 /**
  * What a caller must hold to call each operation: every `allOf` code and, when
- * `anyOf` is not empty, at least one `anyOf` code. An operation with no entry
- * has unknown requirements and must be refused (fail closed);
- * `isOperationPermitted` from @durion-sdk/transport applies both rules.
+ * `anyOf` is not empty, at least one `anyOf` code. A `conditional` code is
+ * asked for on some calls only and is never demanded here. An operation with no
+ * entry has unknown requirements and must be refused (fail closed);
+ * `isOperationPermitted` from @durion-sdk/transport applies these rules.
  */
 export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<DocumentsOperationId, OperationRequirement>>> = {
-  composeDocument: { anyOf: ['documents:render'], allOf: [], authenticated: false },
-  renderDocument: { anyOf: ['documents:render'], allOf: [], authenticated: false },
+  composeDocument: { anyOf: ['documents:render'], allOf: [], conditional: [], authenticated: false },
+  renderDocument: { anyOf: ['documents:render'], allOf: [], conditional: [], authenticated: false },
 };
 
 /** Operations whose spec declares no requirement, so they have no entry above. */

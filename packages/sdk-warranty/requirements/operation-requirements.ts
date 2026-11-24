@@ -12,6 +12,7 @@
 export interface OperationRequirement {
   readonly anyOf: readonly string[];
   readonly allOf: readonly string[];
+  readonly conditional: readonly string[];
   readonly authenticated: boolean;
 }
 
@@ -56,47 +57,48 @@ export type WarrantyOperationId =
 
 /**
  * What a caller must hold to call each operation: every `allOf` code and, when
- * `anyOf` is not empty, at least one `anyOf` code. An operation with no entry
- * has unknown requirements and must be refused (fail closed);
- * `isOperationPermitted` from @durion-sdk/transport applies both rules.
+ * `anyOf` is not empty, at least one `anyOf` code. A `conditional` code is
+ * asked for on some calls only and is never demanded here. An operation with no
+ * entry has unknown requirements and must be refused (fail closed);
+ * `isOperationPermitted` from @durion-sdk/transport applies these rules.
  */
 export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<WarrantyOperationId, OperationRequirement>>> = {
-  addClaimLine: { anyOf: ['warranty:claim:create'], allOf: [], authenticated: false },
-  addClaimNote: { anyOf: ['warranty:claim:create'], allOf: [], authenticated: false },
-  addClaimPhoto: { anyOf: ['warranty:claim:create'], allOf: [], authenticated: false },
-  cancelClaim: { anyOf: ['warranty:claim:cancel'], allOf: [], authenticated: false },
-  closeClaim: { anyOf: ['warranty:claim:close'], allOf: [], authenticated: false },
-  createClaim: { anyOf: ['warranty:claim:create'], allOf: [], authenticated: false },
-  createPartReturn: { anyOf: ['warranty:part-return:manage'], allOf: [], authenticated: false },
-  createPolicy: { anyOf: ['warranty:policy:manage'], allOf: [], authenticated: false },
-  createProvider: { anyOf: ['warranty:provider:manage'], allOf: [], authenticated: false },
-  createRegistration: { anyOf: ['warranty:registration:manage'], allOf: [], authenticated: false },
-  createSettlement: { anyOf: ['warranty:claim:settle'], allOf: [], authenticated: false },
-  decideClaim: { anyOf: ['warranty:claim:decide'], allOf: [], authenticated: false },
-  evaluateClaimEligibility: { anyOf: ['warranty:claim:view'], allOf: [], authenticated: false },
-  findApplicablePolicies: { anyOf: ['warranty:policy:view'], allOf: [], authenticated: false },
-  getClaim: { anyOf: ['warranty:claim:view'], allOf: [], authenticated: false },
-  getPolicy: { anyOf: ['warranty:policy:view'], allOf: [], authenticated: false },
-  getProvider: { anyOf: ['warranty:provider:view'], allOf: [], authenticated: false },
-  getRegistration: { anyOf: ['warranty:registration:view'], allOf: [], authenticated: false },
-  listPartReturns: { anyOf: ['warranty:part-return:view'], allOf: [], authenticated: false },
-  listPolicies: { anyOf: ['warranty:policy:view'], allOf: [], authenticated: false },
-  listProviders: { anyOf: ['warranty:provider:view'], allOf: [], authenticated: false },
-  listReimbursements: { anyOf: ['warranty:reimbursement:view'], allOf: [], authenticated: false },
-  reconcileSettlements: { anyOf: ['warranty:claim:settle'], allOf: [], authenticated: false },
-  removeClaimLine: { anyOf: ['warranty:claim:create'], allOf: [], authenticated: false },
-  removeClaimPhoto: { anyOf: ['warranty:claim:create'], allOf: [], authenticated: false },
-  searchCandidateLines: { anyOf: ['warranty:claim:view'], allOf: [], authenticated: false },
-  searchClaims: { anyOf: ['warranty:claim:view'], allOf: [], authenticated: false },
-  searchRegistrations: { anyOf: ['warranty:registration:view'], allOf: [], authenticated: false },
-  submitClaim: { anyOf: ['warranty:claim:submit'], allOf: [], authenticated: false },
-  submitReimbursement: { anyOf: ['warranty:reimbursement:manage'], allOf: [], authenticated: false },
-  updateClaim: { anyOf: ['warranty:claim:create'], allOf: [], authenticated: false },
-  updatePartReturn: { anyOf: ['warranty:part-return:manage'], allOf: [], authenticated: false },
-  updatePolicy: { anyOf: ['warranty:policy:manage'], allOf: [], authenticated: false },
-  updateProvider: { anyOf: ['warranty:provider:manage'], allOf: [], authenticated: false },
-  updateRegistration: { anyOf: ['warranty:registration:manage'], allOf: [], authenticated: false },
-  updateReimbursement: { anyOf: ['warranty:reimbursement:manage'], allOf: [], authenticated: false },
+  addClaimLine: { anyOf: ['warranty:claim:create'], allOf: [], conditional: [], authenticated: false },
+  addClaimNote: { anyOf: ['warranty:claim:create'], allOf: [], conditional: [], authenticated: false },
+  addClaimPhoto: { anyOf: ['warranty:claim:create'], allOf: [], conditional: [], authenticated: false },
+  cancelClaim: { anyOf: ['warranty:claim:cancel'], allOf: [], conditional: [], authenticated: false },
+  closeClaim: { anyOf: ['warranty:claim:close'], allOf: [], conditional: [], authenticated: false },
+  createClaim: { anyOf: ['warranty:claim:create'], allOf: [], conditional: [], authenticated: false },
+  createPartReturn: { anyOf: ['warranty:part-return:manage'], allOf: [], conditional: [], authenticated: false },
+  createPolicy: { anyOf: ['warranty:policy:manage'], allOf: [], conditional: [], authenticated: false },
+  createProvider: { anyOf: ['warranty:provider:manage'], allOf: [], conditional: [], authenticated: false },
+  createRegistration: { anyOf: ['warranty:registration:manage'], allOf: [], conditional: [], authenticated: false },
+  createSettlement: { anyOf: ['warranty:claim:settle'], allOf: [], conditional: [], authenticated: false },
+  decideClaim: { anyOf: ['warranty:claim:decide'], allOf: [], conditional: [], authenticated: false },
+  evaluateClaimEligibility: { anyOf: ['warranty:claim:view'], allOf: [], conditional: [], authenticated: false },
+  findApplicablePolicies: { anyOf: ['warranty:policy:view'], allOf: [], conditional: [], authenticated: false },
+  getClaim: { anyOf: ['warranty:claim:view'], allOf: [], conditional: [], authenticated: false },
+  getPolicy: { anyOf: ['warranty:policy:view'], allOf: [], conditional: [], authenticated: false },
+  getProvider: { anyOf: ['warranty:provider:view'], allOf: [], conditional: [], authenticated: false },
+  getRegistration: { anyOf: ['warranty:registration:view'], allOf: [], conditional: [], authenticated: false },
+  listPartReturns: { anyOf: ['warranty:part-return:view'], allOf: [], conditional: [], authenticated: false },
+  listPolicies: { anyOf: ['warranty:policy:view'], allOf: [], conditional: [], authenticated: false },
+  listProviders: { anyOf: ['warranty:provider:view'], allOf: [], conditional: [], authenticated: false },
+  listReimbursements: { anyOf: ['warranty:reimbursement:view'], allOf: [], conditional: [], authenticated: false },
+  reconcileSettlements: { anyOf: ['warranty:claim:settle'], allOf: [], conditional: [], authenticated: false },
+  removeClaimLine: { anyOf: ['warranty:claim:create'], allOf: [], conditional: [], authenticated: false },
+  removeClaimPhoto: { anyOf: ['warranty:claim:create'], allOf: [], conditional: [], authenticated: false },
+  searchCandidateLines: { anyOf: ['warranty:claim:view'], allOf: [], conditional: [], authenticated: false },
+  searchClaims: { anyOf: ['warranty:claim:view'], allOf: [], conditional: [], authenticated: false },
+  searchRegistrations: { anyOf: ['warranty:registration:view'], allOf: [], conditional: [], authenticated: false },
+  submitClaim: { anyOf: ['warranty:claim:submit'], allOf: [], conditional: [], authenticated: false },
+  submitReimbursement: { anyOf: ['warranty:reimbursement:manage'], allOf: [], conditional: [], authenticated: false },
+  updateClaim: { anyOf: ['warranty:claim:create'], allOf: [], conditional: [], authenticated: false },
+  updatePartReturn: { anyOf: ['warranty:part-return:manage'], allOf: [], conditional: [], authenticated: false },
+  updatePolicy: { anyOf: ['warranty:policy:manage'], allOf: [], conditional: [], authenticated: false },
+  updateProvider: { anyOf: ['warranty:provider:manage'], allOf: [], conditional: [], authenticated: false },
+  updateRegistration: { anyOf: ['warranty:registration:manage'], allOf: [], conditional: [], authenticated: false },
+  updateReimbursement: { anyOf: ['warranty:reimbursement:manage'], allOf: [], conditional: [], authenticated: false },
 };
 
 /** Operations whose spec declares no requirement, so they have no entry above. */

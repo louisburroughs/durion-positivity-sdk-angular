@@ -12,6 +12,7 @@
 export interface OperationRequirement {
   readonly anyOf: readonly string[];
   readonly allOf: readonly string[];
+  readonly conditional: readonly string[];
   readonly authenticated: boolean;
 }
 
@@ -33,24 +34,25 @@ export type EventReceiverOperationId =
 
 /**
  * What a caller must hold to call each operation: every `allOf` code and, when
- * `anyOf` is not empty, at least one `anyOf` code. An operation with no entry
- * has unknown requirements and must be refused (fail closed);
- * `isOperationPermitted` from @durion-sdk/transport applies both rules.
+ * `anyOf` is not empty, at least one `anyOf` code. A `conditional` code is
+ * asked for on some calls only and is never demanded here. An operation with no
+ * entry has unknown requirements and must be refused (fail closed);
+ * `isOperationPermitted` from @durion-sdk/transport applies these rules.
  */
 export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<EventReceiverOperationId, OperationRequirement>>> = {
-  createEventType: { anyOf: [], allOf: [], authenticated: true },
-  deleteEventType: { anyOf: [], allOf: [], authenticated: true },
-  getEventSummaryLastDay: { anyOf: [], allOf: [], authenticated: true },
-  getEventSummaryLastHour: { anyOf: [], allOf: [], authenticated: true },
-  getEventSummaryLastWeek: { anyOf: [], allOf: [], authenticated: true },
-  getEventTypeByCode: { anyOf: [], allOf: [], authenticated: true },
-  getEventTypeById: { anyOf: [], allOf: [], authenticated: true },
-  listActiveEventTypes: { anyOf: [], allOf: [], authenticated: true },
-  listEventTypes: { anyOf: [], allOf: [], authenticated: true },
-  queryEventsByEntity: { anyOf: [], allOf: [], authenticated: true },
-  receiveEvent: { anyOf: [], allOf: [], authenticated: true },
-  updateEventType: { anyOf: [], allOf: [], authenticated: true },
-  upsertEventType: { anyOf: [], allOf: [], authenticated: true },
+  createEventType: { anyOf: [], allOf: [], conditional: [], authenticated: true },
+  deleteEventType: { anyOf: [], allOf: [], conditional: [], authenticated: true },
+  getEventSummaryLastDay: { anyOf: [], allOf: [], conditional: [], authenticated: true },
+  getEventSummaryLastHour: { anyOf: [], allOf: [], conditional: [], authenticated: true },
+  getEventSummaryLastWeek: { anyOf: [], allOf: [], conditional: [], authenticated: true },
+  getEventTypeByCode: { anyOf: [], allOf: [], conditional: [], authenticated: true },
+  getEventTypeById: { anyOf: [], allOf: [], conditional: [], authenticated: true },
+  listActiveEventTypes: { anyOf: [], allOf: [], conditional: [], authenticated: true },
+  listEventTypes: { anyOf: [], allOf: [], conditional: [], authenticated: true },
+  queryEventsByEntity: { anyOf: [], allOf: [], conditional: [], authenticated: true },
+  receiveEvent: { anyOf: [], allOf: [], conditional: [], authenticated: true },
+  updateEventType: { anyOf: [], allOf: [], conditional: [], authenticated: true },
+  upsertEventType: { anyOf: [], allOf: [], conditional: [], authenticated: true },
 };
 
 /** Operations whose spec declares no requirement, so they have no entry above. */

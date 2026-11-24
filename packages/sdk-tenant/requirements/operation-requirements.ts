@@ -12,6 +12,7 @@
 export interface OperationRequirement {
   readonly anyOf: readonly string[];
   readonly allOf: readonly string[];
+  readonly conditional: readonly string[];
   readonly authenticated: boolean;
 }
 
@@ -41,32 +42,33 @@ export type TenantOperationId =
 
 /**
  * What a caller must hold to call each operation: every `allOf` code and, when
- * `anyOf` is not empty, at least one `anyOf` code. An operation with no entry
- * has unknown requirements and must be refused (fail closed);
- * `isOperationPermitted` from @durion-sdk/transport applies both rules.
+ * `anyOf` is not empty, at least one `anyOf` code. A `conditional` code is
+ * asked for on some calls only and is never demanded here. An operation with no
+ * entry has unknown requirements and must be refused (fail closed);
+ * `isOperationPermitted` from @durion-sdk/transport applies these rules.
  */
 export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<TenantOperationId, OperationRequirement>>> = {
-  addAccountContact: { anyOf: ['platform:account:update'], allOf: [], authenticated: false },
-  createAccount: { anyOf: ['platform:account:create'], allOf: [], authenticated: false },
-  createReadingTier: { anyOf: ['platform:reading_tier:manage'], allOf: [], authenticated: false },
-  createTenant: { anyOf: ['platform:tenant:create'], allOf: [], authenticated: false },
-  createTenantSignup: { anyOf: [], allOf: [], authenticated: true },
-  decommissionTenant: { anyOf: ['platform:tenant:decommission'], allOf: [], authenticated: false },
-  getAccount: { anyOf: ['platform:account:read'], allOf: [], authenticated: false },
-  getTenant: { anyOf: ['platform:tenant:read'], allOf: [], authenticated: false },
-  listAccounts: { anyOf: ['platform:account:read'], allOf: [], authenticated: false },
-  listReadingTiers: { anyOf: ['platform:reading_tier:read'], allOf: [], authenticated: false },
-  listTenants: { anyOf: ['platform:tenant:read'], allOf: [], authenticated: false },
-  putAccountBillingProfile: { anyOf: ['platform:account:update'], allOf: [], authenticated: false },
-  reEmitTenants: { anyOf: ['platform:tenant:update'], allOf: [], authenticated: false },
-  reactivateTenant: { anyOf: ['platform:tenant:reactivate'], allOf: [], authenticated: false },
-  removeAccountContact: { anyOf: ['platform:account:update'], allOf: [], authenticated: false },
-  setTenantTaxProviderBinding: { anyOf: ['platform:tenant_tax_provider:manage'], allOf: [], authenticated: false },
-  suspendTenant: { anyOf: ['platform:tenant:suspend'], allOf: [], authenticated: false },
-  updateAccount: { anyOf: ['platform:account:update'], allOf: [], authenticated: false },
-  updateAccountContact: { anyOf: ['platform:account:update'], allOf: [], authenticated: false },
-  updateReadingTier: { anyOf: ['platform:reading_tier:manage'], allOf: [], authenticated: false },
-  updateTenant: { anyOf: ['platform:tenant:update'], allOf: [], authenticated: false },
+  addAccountContact: { anyOf: ['platform:account:update'], allOf: [], conditional: [], authenticated: false },
+  createAccount: { anyOf: ['platform:account:create'], allOf: [], conditional: [], authenticated: false },
+  createReadingTier: { anyOf: ['platform:reading_tier:manage'], allOf: [], conditional: [], authenticated: false },
+  createTenant: { anyOf: ['platform:tenant:create'], allOf: [], conditional: [], authenticated: false },
+  createTenantSignup: { anyOf: [], allOf: [], conditional: [], authenticated: true },
+  decommissionTenant: { anyOf: ['platform:tenant:decommission'], allOf: [], conditional: [], authenticated: false },
+  getAccount: { anyOf: ['platform:account:read'], allOf: [], conditional: [], authenticated: false },
+  getTenant: { anyOf: ['platform:tenant:read'], allOf: [], conditional: [], authenticated: false },
+  listAccounts: { anyOf: ['platform:account:read'], allOf: [], conditional: [], authenticated: false },
+  listReadingTiers: { anyOf: ['platform:reading_tier:read'], allOf: [], conditional: [], authenticated: false },
+  listTenants: { anyOf: ['platform:tenant:read'], allOf: [], conditional: [], authenticated: false },
+  putAccountBillingProfile: { anyOf: ['platform:account:update'], allOf: [], conditional: [], authenticated: false },
+  reEmitTenants: { anyOf: ['platform:tenant:update'], allOf: [], conditional: [], authenticated: false },
+  reactivateTenant: { anyOf: ['platform:tenant:reactivate'], allOf: [], conditional: [], authenticated: false },
+  removeAccountContact: { anyOf: ['platform:account:update'], allOf: [], conditional: [], authenticated: false },
+  setTenantTaxProviderBinding: { anyOf: ['platform:tenant_tax_provider:manage'], allOf: [], conditional: [], authenticated: false },
+  suspendTenant: { anyOf: ['platform:tenant:suspend'], allOf: [], conditional: [], authenticated: false },
+  updateAccount: { anyOf: ['platform:account:update'], allOf: [], conditional: [], authenticated: false },
+  updateAccountContact: { anyOf: ['platform:account:update'], allOf: [], conditional: [], authenticated: false },
+  updateReadingTier: { anyOf: ['platform:reading_tier:manage'], allOf: [], conditional: [], authenticated: false },
+  updateTenant: { anyOf: ['platform:tenant:update'], allOf: [], conditional: [], authenticated: false },
 };
 
 /** Operations whose spec declares no requirement, so they have no entry above. */

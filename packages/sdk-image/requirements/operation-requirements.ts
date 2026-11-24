@@ -12,6 +12,7 @@
 export interface OperationRequirement {
   readonly anyOf: readonly string[];
   readonly allOf: readonly string[];
+  readonly conditional: readonly string[];
   readonly authenticated: boolean;
 }
 
@@ -26,17 +27,18 @@ export type ImageOperationId =
 
 /**
  * What a caller must hold to call each operation: every `allOf` code and, when
- * `anyOf` is not empty, at least one `anyOf` code. An operation with no entry
- * has unknown requirements and must be refused (fail closed);
- * `isOperationPermitted` from @durion-sdk/transport applies both rules.
+ * `anyOf` is not empty, at least one `anyOf` code. A `conditional` code is
+ * asked for on some calls only and is never demanded here. An operation with no
+ * entry has unknown requirements and must be refused (fail closed);
+ * `isOperationPermitted` from @durion-sdk/transport applies these rules.
  */
 export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<ImageOperationId, OperationRequirement>>> = {
-  attachImageOwner: { anyOf: ['image:image:store'], allOf: [], authenticated: false },
-  deleteOwnedImage: { anyOf: ['image:image:delete'], allOf: [], authenticated: false },
-  getImageByFilename: { anyOf: [], allOf: [], authenticated: true },
-  getImageById: { anyOf: [], allOf: [], authenticated: true },
-  listImagesByOwner: { anyOf: ['image:image:view'], allOf: [], authenticated: false },
-  storeImage: { anyOf: ['image:image:store'], allOf: [], authenticated: false },
+  attachImageOwner: { anyOf: ['image:image:store'], allOf: [], conditional: [], authenticated: false },
+  deleteOwnedImage: { anyOf: ['image:image:delete'], allOf: [], conditional: [], authenticated: false },
+  getImageByFilename: { anyOf: [], allOf: [], conditional: [], authenticated: true },
+  getImageById: { anyOf: [], allOf: [], conditional: [], authenticated: true },
+  listImagesByOwner: { anyOf: ['image:image:view'], allOf: [], conditional: [], authenticated: false },
+  storeImage: { anyOf: ['image:image:store'], allOf: [], conditional: [], authenticated: false },
 };
 
 /** Operations whose spec declares no requirement, so they have no entry above. */
