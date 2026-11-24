@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { AssignmentScopeRequest } from './assignmentScopeRequest';
 
 
 export interface CreateUserRequest {
@@ -18,6 +19,7 @@ export interface CreateUserRequest {
      * Keys of existing roles to attach directly
      */
     roles: Set<string>;
+    scope: AssignmentScopeRequest;
     /**
      * Unique login name for the new account
      */
@@ -62,7 +64,7 @@ export function instanceOfCreateUserRequest(value: object): value is CreateUserR
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateUserRequestPropertyNames('roles', 'username', );
+    const requiredProperties = createCreateUserRequestPropertyNames('roles', 'scope', 'username', );
     const optionalStringProperties = createCreateUserRequestOptionalProperties({ name: 'email', nullable: true }, { name: 'username', nullable: false }, );
     const optionalNumberProperties = createCreateUserRequestOptionalProperties();
     const optionalBooleanProperties = createCreateUserRequestOptionalProperties();
