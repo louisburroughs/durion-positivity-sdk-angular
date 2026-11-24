@@ -11,9 +11,9 @@
 
 export interface CreateUserRequest {
     /**
-     * Initial password; hashed server-side before storage. Must meet the password policy GET /v1/auth/capabilities publishes as passwordPolicy (12 to 64 characters by default, not a common password, not containing the username); a refusal is 400 VALIDATION_ERROR with fieldErrors[password] starting PASSWORD_POLICY_VIOLATION
+     * Address to send the activation message to, for a username that is not itself an email address. Never stored; when absent the username is used if it is an address
      */
-    password: string;
+    email?: string | null;
     /**
      * Keys of existing roles to attach directly
      */
@@ -62,8 +62,8 @@ export function instanceOfCreateUserRequest(value: object): value is CreateUserR
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateUserRequestPropertyNames('password', 'roles', 'username', );
-    const optionalStringProperties = createCreateUserRequestOptionalProperties({ name: 'password', nullable: false }, { name: 'username', nullable: false }, );
+    const requiredProperties = createCreateUserRequestPropertyNames('roles', 'username', );
+    const optionalStringProperties = createCreateUserRequestOptionalProperties({ name: 'email', nullable: true }, { name: 'username', nullable: false }, );
     const optionalNumberProperties = createCreateUserRequestOptionalProperties();
     const optionalBooleanProperties = createCreateUserRequestOptionalProperties();
 

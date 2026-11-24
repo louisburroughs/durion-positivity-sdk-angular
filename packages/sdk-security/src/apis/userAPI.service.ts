@@ -17,11 +17,17 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ActivationMessageResponse } from '../models/activationMessageResponse';
+// @ts-ignore
 import { ApiError } from '../models/apiError';
 // @ts-ignore
 import { CreateUserRequest } from '../models/createUserRequest';
 // @ts-ignore
+import { CreateUserResponse } from '../models/createUserResponse';
+// @ts-ignore
 import { LinkUserPersonRequest } from '../models/linkUserPersonRequest';
+// @ts-ignore
+import { SendActivationMessageRequest } from '../models/sendActivationMessageRequest';
 // @ts-ignore
 import { UserDto } from '../models/userDto';
 // @ts-ignore
@@ -118,17 +124,17 @@ export class UserAPIService extends BaseService {
     }
 
     /**
-     * Create a User With Roles
-     * Creates a user account with a username, a hashed password, and an open-ended effective role assignment for each of a set of granted roles, all in one transaction. Use this tool for operator provisioning of accounts; do not use selfRegisterUser, the anonymous customer flow that fixes the role to SELF_SERVICE_CUSTOMER and runs identity resolution first. Preconditions: the caller must hold security:user:create, the username must be unused, and every named role must already exist. Required inputs: username, password, and roles, a non-empty array of existing role names. The password must meet the platform password policy getAuthCapabilities publishes as passwordPolicy (12 to 64 characters by default, not a common password, not containing the username) — an administrator cannot set what a user could not. Emits a SECURITY_USER_CREATE event; the password is hashed before storage. Returns 409 when the username already exists, 400 with INVALID_REQUEST when a required field is missing, 400 with VALIDATION_ERROR and fieldErrors[password] starting PASSWORD_POLICY_VIOLATION when the password fails the policy, and 404 with ROLE_NOT_FOUND when a named role does not exist — in which case no user and no assignment are created.
+     * Create a User Awaiting Activation
+     * Creates a user account awaiting activation with an open-ended effective role assignment for each named role, and mails the user a one-time link to choose their own password. Use this tool for administrator provisioning of a colleague\&#39;s account; do not use selfRegisterUser, the anonymous customer flow, and do not use updateUser to give a new account its first password. Preconditions: the caller must hold security:user:create, the username must be unused, and every named role must already exist. Required inputs: username and roles, a non-empty array of existing role keys; email is optional and names the address when the username is not one, and no password is accepted. Emits a SECURITY_USER_CREATE event and a UserProvisionedAwaitingActivation audit event; the account cannot sign in until the link is exchanged at activateAccount, and only the hash of its 72-hour token is stored. Returns 201 with the user and activation, where activation.sent is false with reason MAIL_NOT_CONFIGURED, NO_ADDRESS or MAIL_FAILED when no message went out; the account exists either way and resendUserActivation sends the message again. Returns 409 with USER_ALREADY_EXISTS when the username is taken, 400 with INVALID_REQUEST for a missing or malformed field or a supplied password, and 404 with ROLE_NOT_FOUND when a named role does not exist, in which case nothing is created.
      * @endpoint post /v1/users
-     * @param createUserRequest Username, password, and role names of the account to create.
+     * @param createUserRequest Username, optional address and role keys of the account to create.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public createUser(createUserRequest: CreateUserRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<UserDto>;
-    public createUser(createUserRequest: CreateUserRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UserDto>>;
-    public createUser(createUserRequest: CreateUserRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UserDto>>;
+    public createUser(createUserRequest: CreateUserRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<CreateUserResponse>;
+    public createUser(createUserRequest: CreateUserRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CreateUserResponse>>;
+    public createUser(createUserRequest: CreateUserRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CreateUserResponse>>;
     public createUser(createUserRequest: CreateUserRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (createUserRequest === null || createUserRequest === undefined) {
             throw new Error('Required parameter createUserRequest was null or undefined when calling createUser.');
@@ -173,7 +179,7 @@ export class UserAPIService extends BaseService {
 
         let localVarPath = `/v1/users`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<UserDto>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<CreateUserResponse>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: createUserRequest,
@@ -427,6 +433,77 @@ export class UserAPIService extends BaseService {
         return this.httpClient.request<Array<UserDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Send a User\&#39;s Activation Message Again
+     * Issues a fresh one-time activation link for an account still awaiting activation and mails it to the user, closing every earlier link of that account. Use this tool when a provisioned user lost or never received the message, or it expired; do not use requestPasswordReset, which refuses an account that has never been activated, and do not use updateUser to set the password for them. Preconditions: the caller must hold security:user:create and the user must exist in the caller\&#39;s organization and still be awaiting activation. Required inputs: userId as a path parameter; the body is optional and its email names the address when the account\&#39;s linked person and username supply none. Emits a SECURITY_USER_ACTIVATION_RESEND event and a UserActivationMessageRequested audit event; the token and the link are never returned. Returns 200 with sent true and expiresAt, or sent false with reason MAIL_NOT_CONFIGURED, NO_ADDRESS or MAIL_FAILED. Returns 404 with USER_NOT_FOUND, 409 with USER_NOT_AWAITING_ACTIVATION when the account already has a password of its own, 429 with ACTIVATION_MESSAGE_THROTTLED and Retry-After inside the per-account window after a sent message, and 400 with INVALID_REQUEST for a malformed email.
+     * @endpoint post /v1/users/{userId}/activation
+     * @param userId ID of the user awaiting activation
+     * @param sendActivationMessageRequest Optional address to send the message to.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public resendUserActivation(userId: string, sendActivationMessageRequest?: SendActivationMessageRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ActivationMessageResponse>;
+    public resendUserActivation(userId: string, sendActivationMessageRequest?: SendActivationMessageRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ActivationMessageResponse>>;
+    public resendUserActivation(userId: string, sendActivationMessageRequest?: SendActivationMessageRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ActivationMessageResponse>>;
+    public resendUserActivation(userId: string, sendActivationMessageRequest?: SendActivationMessageRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (userId === null || userId === undefined) {
+            throw new Error('Required parameter userId was null or undefined when calling resendUserActivation.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/users/${this.configuration.encodeParam({name: "userId", value: userId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/activation`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<ActivationMessageResponse>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: sendActivationMessageRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
