@@ -10,9 +10,13 @@
 
 
 /**
- * Name, description, and optional MCP persona metadata for a new role
+ * Name, description, capabilities and optional MCP persona metadata for a new role
  */
 export interface RoleCreateRequest {
+    /**
+     * Keys of the capabilities the role holds, from GET /v1/capabilities. Omitted or empty creates a role that grants nothing yet.
+     */
+    capabilities?: Array<string>;
     /**
      * Human-readable description of the role. Doubles as the derived persona focus when personaFocus is omitted.
      */
@@ -26,7 +30,7 @@ export interface RoleCreateRequest {
      */
     mcpPersonaRank?: number;
     /**
-     * Role name. Stored unprefixed and upper-case; the ROLE_ authority prefix is applied by the API gateway, not here.
+     * Display name of the role, stored as typed and trimmed. Name it for the access it gives, not for a job title. Unique within the tenant ignoring letter case and repeated spaces. The role\'s immutable key is derived from this name once, at creation.
      */
     name: string;
     /**

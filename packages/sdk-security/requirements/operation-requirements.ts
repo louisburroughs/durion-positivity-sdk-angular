@@ -20,11 +20,8 @@ export interface OperationRequirement {
 export type SecurityOperationId =
   | 'activateAccount'
   | 'activateAccountWithStarterPassword'
-  | 'assignRolePermissionByKey'
   | 'assignUserRole'
   | 'assignUserRolesByUsername'
-  | 'bulkIngestRolePermissions'
-  | 'bulkIngestRoles'
   | 'bulkIngestUserPersonLinks'
   | 'bulkIngestUsers'
   | 'checkPermissionExists'
@@ -53,6 +50,7 @@ export type SecurityOperationId =
   | 'getPersonAuthorizationDecision'
   | 'getPricingSnapshot'
   | 'getRoleById'
+  | 'getRoleByKey'
   | 'getRoleByName'
   | 'getRoleDefaultPermissions'
   | 'getRolePersonas'
@@ -65,7 +63,6 @@ export type SecurityOperationId =
   | 'getUserById'
   | 'getUserPermissions'
   | 'getUserPermissionsLegacy'
-  | 'grantRolePermission'
   | 'issueInternalToken'
   | 'issueTokenPair'
   | 'linkUserPerson'
@@ -93,7 +90,6 @@ export type SecurityOperationId =
   | 'requestUsernameReminder'
   | 'resolveSelfRegistrationReviewCase'
   | 'revokeRoleAssignment'
-  | 'revokeRolePermission'
   | 'revokeToken'
   | 'revokeUserRole'
   | 'searchAuditEvents'
@@ -101,7 +97,7 @@ export type SecurityOperationId =
   | 'selfRegisterUser'
   | 'unlockUserAccount'
   | 'updateRole'
-  | 'updateRolePermissions'
+  | 'updateRoleCapabilities'
   | 'updateUser'
   | 'validatePermissionName'
   | 'validateToken';
@@ -114,11 +110,8 @@ export type SecurityOperationId =
  * `isOperationPermitted` from @durion-sdk/transport applies these rules.
  */
 export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<SecurityOperationId, OperationRequirement>>> = {
-  assignRolePermissionByKey: { anyOf: ['security:role:edit'], allOf: [], conditional: [], authenticated: false },
   assignUserRole: { anyOf: ['security:role:assign'], allOf: [], conditional: [], authenticated: false },
   assignUserRolesByUsername: { anyOf: ['security:role:assign'], allOf: [], conditional: [], authenticated: false },
-  bulkIngestRolePermissions: { anyOf: ['security:role:edit'], allOf: [], conditional: [], authenticated: false },
-  bulkIngestRoles: { anyOf: ['security:role:create'], allOf: [], conditional: [], authenticated: false },
   bulkIngestUserPersonLinks: { anyOf: ['security:user:edit'], allOf: [], conditional: [], authenticated: false },
   bulkIngestUsers: { anyOf: ['security:user:create'], allOf: [], conditional: [], authenticated: false },
   checkPermissionExists: { anyOf: ['security:permission:view'], allOf: [], conditional: [], authenticated: false },
@@ -144,6 +137,7 @@ export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<SecurityOperationId
   getPersonAuthorizationDecision: { anyOf: ['security:authorization:decide'], allOf: [], conditional: [], authenticated: false },
   getPricingSnapshot: { anyOf: ['security:audit:view'], allOf: [], conditional: [], authenticated: false },
   getRoleById: { anyOf: ['security:role:view'], allOf: [], conditional: [], authenticated: false },
+  getRoleByKey: { anyOf: ['security:role:view'], allOf: [], conditional: [], authenticated: false },
   getRoleByName: { anyOf: ['security:role:view'], allOf: [], conditional: [], authenticated: false },
   getRoleDefaultPermissions: { anyOf: ['security:role:view'], allOf: [], conditional: [], authenticated: false },
   getRolePersonas: { anyOf: ['security:role:view'], allOf: [], conditional: [], authenticated: false },
@@ -155,7 +149,6 @@ export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<SecurityOperationId
   getUserById: { anyOf: ['security:user:view'], allOf: [], conditional: [], authenticated: false },
   getUserPermissions: { anyOf: ['security:permission:view'], allOf: [], conditional: [], authenticated: false },
   getUserPermissionsLegacy: { anyOf: ['security:permission:view'], allOf: [], conditional: [], authenticated: false },
-  grantRolePermission: { anyOf: ['security:role:edit'], allOf: [], conditional: [], authenticated: false },
   issueInternalToken: { anyOf: ['security:token:issue_internal'], allOf: [], conditional: [], authenticated: false },
   issueTokenPair: { anyOf: ['security:token:issue_internal'], allOf: [], conditional: [], authenticated: false },
   linkUserPerson: { anyOf: ['security:user:edit'], allOf: [], conditional: [], authenticated: false },
@@ -178,13 +171,12 @@ export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<SecurityOperationId
   requestAuditExport: { anyOf: ['security:audit:export'], allOf: [], conditional: [], authenticated: false },
   resolveSelfRegistrationReviewCase: { anyOf: ['security:user_account_state:manage'], allOf: [], conditional: [], authenticated: false },
   revokeRoleAssignment: { anyOf: ['security:role:assign'], allOf: [], conditional: [], authenticated: false },
-  revokeRolePermission: { anyOf: ['security:role:edit'], allOf: [], conditional: [], authenticated: false },
   revokeToken: { anyOf: [], allOf: [], conditional: [], authenticated: true },
   revokeUserRole: { anyOf: ['security:role:assign'], allOf: [], conditional: [], authenticated: false },
   searchAuditEvents: { anyOf: ['security:audit:view'], allOf: [], conditional: [], authenticated: false },
   unlockUserAccount: { anyOf: ['security:user_account_state:manage'], allOf: [], conditional: [], authenticated: false },
   updateRole: { anyOf: ['security:role:edit'], allOf: [], conditional: [], authenticated: false },
-  updateRolePermissions: { anyOf: ['security:role:edit'], allOf: [], conditional: [], authenticated: false },
+  updateRoleCapabilities: { anyOf: ['security:role:edit'], allOf: [], conditional: [], authenticated: false },
   updateUser: { anyOf: ['security:user:edit'], allOf: [], conditional: [], authenticated: false },
   validatePermissionName: { anyOf: ['security:permission:view'], allOf: [], conditional: [], authenticated: false },
 };

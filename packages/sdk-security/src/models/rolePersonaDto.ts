@@ -18,6 +18,10 @@ export interface RolePersonaDto {
      */
     description?: string;
     /**
+     * The role\'s immutable key: what the access token\'s roles claim carries, and so what a caller\'s roles are matched against
+     */
+    key: string;
+    /**
      * Whether this role participates in persona resolution at all
      */
     mcpPersonaEligible: boolean;
@@ -26,7 +30,7 @@ export interface RolePersonaDto {
      */
     mcpPersonaRank?: number;
     /**
-     * Role name, unprefixed
+     * The role\'s display name as the tenant stores it; used to derive the persona title when personaTitle is absent, never to match a caller\'s roles
      */
     name: string;
     /**
@@ -81,8 +85,8 @@ export function instanceOfRolePersonaDto(value: object): value is RolePersonaDto
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRolePersonaDtoPropertyNames('mcpPersonaEligible', 'name', );
-    const optionalStringProperties = createRolePersonaDtoOptionalProperties({ name: 'description', nullable: false }, { name: 'name', nullable: false }, { name: 'personaFocus', nullable: false }, { name: 'personaTitle', nullable: false }, { name: 'personaTone', nullable: false }, );
+    const requiredProperties = createRolePersonaDtoPropertyNames('key', 'mcpPersonaEligible', 'name', );
+    const optionalStringProperties = createRolePersonaDtoOptionalProperties({ name: 'description', nullable: false }, { name: 'key', nullable: false }, { name: 'name', nullable: false }, { name: 'personaFocus', nullable: false }, { name: 'personaTitle', nullable: false }, { name: 'personaTone', nullable: false }, );
     const optionalNumberProperties = createRolePersonaDtoOptionalProperties({ name: 'mcpPersonaRank', nullable: false }, );
     const optionalBooleanProperties = createRolePersonaDtoOptionalProperties({ name: 'mcpPersonaEligible', nullable: false }, );
 
