@@ -88,6 +88,7 @@ export type SecurityOperationId =
   | 'requestAuditExport'
   | 'requestPasswordReset'
   | 'requestUsernameReminder'
+  | 'resendUserActivation'
   | 'resolveSelfRegistrationReviewCase'
   | 'revokeRoleAssignment'
   | 'revokeToken'
@@ -169,6 +170,7 @@ export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<SecurityOperationId
   rejectAuditEventDelete: { anyOf: ['security:audit:create'], allOf: [], conditional: [], authenticated: false },
   rejectAuditEventUpdate: { anyOf: ['security:audit:create'], allOf: [], conditional: [], authenticated: false },
   requestAuditExport: { anyOf: ['security:audit:export'], allOf: [], conditional: [], authenticated: false },
+  resendUserActivation: { anyOf: ['security:user:create'], allOf: [], conditional: [], authenticated: false },
   resolveSelfRegistrationReviewCase: { anyOf: ['security:user_account_state:manage'], allOf: [], conditional: [], authenticated: false },
   revokeRoleAssignment: { anyOf: ['security:role:assign'], allOf: [], conditional: [], authenticated: false },
   revokeToken: { anyOf: [], allOf: [], conditional: [], authenticated: true },
