@@ -22,7 +22,7 @@ export interface UserDto {
      */
     personId?: string;
     /**
-     * Role names assigned to the user
+     * Keys of the roles assigned to the user
      */
     roles: Set<string>;
     /**

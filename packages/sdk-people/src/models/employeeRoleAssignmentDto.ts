@@ -38,7 +38,7 @@ export interface EmployeeRoleAssignmentDto {
      */
     roleLocationScope: string;
     /**
-     * Assigned role name
+     * Display name of the assigned security role, as the tenant stores it: a label to show, never an identifier
      */
     roleName: string;
 }

@@ -14,7 +14,7 @@
  */
 export interface RoleDto {
     /**
-     * Stable role code, identical to the name
+     * The role code an assignment request names: identical to key
      */
     code: string;
     /**
@@ -26,9 +26,21 @@ export interface RoleDto {
      */
     id: string;
     /**
-     * Role name, which is also its stable code
+     * The role\'s immutable key within the tenant: lower-case letters, digits and underscores. It never changes on rename, and it is the roleCode an assignment names
+     */
+    key: string;
+    /**
+     * Display name, as the tenant typed it. Free text: show it, never compare on it
      */
     name: string;
+    /**
+     * True for a role the platform defines (support, platform operator, self-service customer). A system role cannot be renamed, edited or deleted
+     */
+    system?: boolean;
+    /**
+     * Non-null for a starter role, and then equal to its key, for the client to translate the name of a role the tenant has not renamed. Null for a role the tenant created
+     */
+    templateKey?: string | null;
 }
 
 function isOptionalRoleDtoPropertyOfType(
@@ -69,10 +81,10 @@ export function instanceOfRoleDto(value: object): value is RoleDto {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRoleDtoPropertyNames('code', 'id', 'name', );
-    const optionalStringProperties = createRoleDtoOptionalProperties({ name: 'code', nullable: false }, { name: 'description', nullable: false }, { name: 'id', nullable: false }, { name: 'name', nullable: false }, );
+    const requiredProperties = createRoleDtoPropertyNames('code', 'id', 'key', 'name', );
+    const optionalStringProperties = createRoleDtoOptionalProperties({ name: 'code', nullable: false }, { name: 'description', nullable: false }, { name: 'id', nullable: false }, { name: 'key', nullable: false }, { name: 'name', nullable: false }, { name: 'templateKey', nullable: true }, );
     const optionalNumberProperties = createRoleDtoOptionalProperties();
-    const optionalBooleanProperties = createRoleDtoOptionalProperties();
+    const optionalBooleanProperties = createRoleDtoOptionalProperties({ name: 'system', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalRoleDtoPropertyOfType(_v, property.name, 'string', property.nullable))

@@ -18,7 +18,7 @@ export interface UserUpdateRequest {
      */
     password?: string;
     /**
-     * Replacement set of role names
+     * Replacement set of role keys
      */
     roles?: Set<string>;
     /**
