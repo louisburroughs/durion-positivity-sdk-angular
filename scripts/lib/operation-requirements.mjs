@@ -11,22 +11,19 @@
 //                                signed-in caller, no permission.
 //   x-required-permissions-all:  the subset of those codes that are each
 //                                required. Absent means none.
+//   x-required-permissions-conditional:
+//                                the subset the caller can be let through
+//                                without: asked for on some calls only, as in
+//                                `a and (#param == null or b)` or
+//                                `b or @selfCheck.isSelf(#id)`. Absent means none.
 //
-//   rest        = x-required-permissions - x-required-permissions-all - the sentinel
 //   allOf       = x-required-permissions-all
-//   anyOf       = rest, when allOf is empty; else empty
-//   conditional = rest, when allOf is not empty; else empty
+//   conditional = x-required-permissions-conditional - allOf
+//   anyOf       = x-required-permissions - allOf - conditional - the sentinel
 //   permitted   = holds every allOf code AND (anyOf is empty OR holds one of them)
 //
-// Why `rest` is not always `anyOf`: beside codes that are each required, the
-// spec does not say what the others are for. `a and (b or c)` asks for one of
-// b and c on every call; `a and (#param == null or b)` asks for b only on some
-// calls. Both publish all = [a] and rest = [b, ...]. Reading `rest` as "at
-// least one of" there would refuse a caller the backend serves, so those codes
-// are listed as `conditional` and never demanded. That can let through a caller
-// the backend then refuses with 403, which is the side the backend's own
-// extension errs on (it leaves out of -all whatever it cannot read with
-// certainty).
+// A conditional code is never demanded: the backend serves some caller who does
+// not hold it. A permitted caller can still get a 403 on a call that needs one.
 //
 // An operation with no x-required-permissions has unknown requirements. It gets
 // no entry in the map, and consumers must refuse a missing entry (fail closed).
@@ -34,6 +31,7 @@
 export const AUTHENTICATED_SENTINEL = 'AUTHENTICATED';
 export const REQUIRED_EXTENSION = 'x-required-permissions';
 export const REQUIRED_ALL_EXTENSION = 'x-required-permissions-all';
+export const REQUIRED_CONDITIONAL_EXTENSION = 'x-required-permissions-conditional';
 
 const HTTP_METHODS = ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'];
 
@@ -81,26 +79,27 @@ export function toMethodName(operationId) {
  * is read as that list alone. A code named only in `-all` is still required:
  * the stricter reading is the safe one.
  *
- * The codes that are not in `-all` are alternatives (`anyOf`) when nothing is
- * in `-all`, and `conditional` when something is: see the top of this file.
+ * A code in `-conditional` is never demanded, unless `-all` requires it too.
+ * The codes in neither list are alternatives (`anyOf`).
  */
 export function requirementFor(operation, where = 'operation') {
   const all = readCodeList(operation, REQUIRED_ALL_EXTENSION, where) ?? [];
   const named = readCodeList(operation, REQUIRED_EXTENSION, where) ?? [];
-  const codes = [...named, ...all];
+  const onCondition = readCodeList(operation, REQUIRED_CONDITIONAL_EXTENSION, where) ?? [];
+  const codes = [...named, ...all, ...onCondition];
   if (codes.length === 0) return undefined;
 
   const allOf = sortedUnique(all.filter((code) => code !== AUTHENTICATED_SENTINEL));
   const required = new Set(allOf);
-  const rest = sortedUnique(named.filter((code) => code !== AUTHENTICATED_SENTINEL && !required.has(code)));
-  const alternatives = allOf.length === 0;
+  const conditional = sortedUnique(
+    onCondition.filter((code) => code !== AUTHENTICATED_SENTINEL && !required.has(code)),
+  );
+  const optional = new Set(conditional);
+  const anyOf = sortedUnique(
+    named.filter((code) => code !== AUTHENTICATED_SENTINEL && !required.has(code) && !optional.has(code)),
+  );
 
-  return {
-    anyOf: alternatives ? rest : [],
-    allOf,
-    conditional: alternatives ? [] : rest,
-    authenticated: codes.includes(AUTHENTICATED_SENTINEL),
-  };
+  return { anyOf, allOf, conditional, authenticated: codes.includes(AUTHENTICATED_SENTINEL) };
 }
 
 /**

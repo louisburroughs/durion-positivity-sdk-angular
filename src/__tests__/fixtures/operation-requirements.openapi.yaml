@@ -1,5 +1,5 @@
 # Fixture for sdk-010: one operation per shape of the x-required-permissions
-# contract, including x-required-permissions-all.
+# contract, including x-required-permissions-all and x-required-permissions-conditional.
 openapi: 3.0.1
 info:
   title: Fixture
@@ -47,6 +47,29 @@ paths:
       x-required-permissions:
       - AUTHENTICATED
       - thing:thing:edit
+  /v1/things/import:
+    post:
+      operationId: importThings
+      x-required-permissions:
+      - thing:thing:create
+      - thing:thing:manage
+      x-required-permissions-all:
+      - thing:thing:create
+      x-required-permissions-conditional:
+      - thing:thing:manage
+  /v1/users/{id}/things:
+    parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      operationId: listUserThings
+      x-required-permissions:
+      - thing:thing:view
+      x-required-permissions-conditional:
+      - thing:thing:view
   /v1/public/things:
     get:
       operationId: listPublicThings

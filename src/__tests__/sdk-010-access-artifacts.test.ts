@@ -52,17 +52,44 @@ describe('sdk-010 operation requirements: generator rules', () => {
     });
   });
 
-  it('lists the codes beside allOf as conditional, never as required', () => {
-    // The spec cannot say whether these are asked for on every call (`a and (b or c)`) or
-    // only on some (`a and (#param == null or b)`), so no reading may demand them.
+  it('reads the codes beside allOf as alternatives: one of them on top', () => {
     expect(collected.requirements.approveThing).toEqual({
-      anyOf: [],
+      anyOf: ['thing:approval:approve', 'thing:approval:override'],
       allOf: ['thing:thing:view'],
-      conditional: ['thing:approval:approve', 'thing:approval:override'],
+      conditional: [],
       authenticated: false,
     });
-    expect(isOperationPermitted(collected.requirements.approveThing, new Set(['thing:thing:view']))).toBe(true);
-    expect(isOperationPermitted(collected.requirements.approveThing, new Set(['thing:approval:approve']))).toBe(false);
+    expect(isOperationPermitted(collected.requirements.approveThing, new Set(['thing:thing:view']))).toBe(false);
+  });
+
+  it('never demands an x-required-permissions-conditional code', () => {
+    expect(collected.requirements.importThings).toEqual({
+      anyOf: [],
+      allOf: ['thing:thing:create'],
+      conditional: ['thing:thing:manage'],
+      authenticated: false,
+    });
+    expect(isOperationPermitted(collected.requirements.importThings, new Set(['thing:thing:create']))).toBe(true);
+    expect(isOperationPermitted(collected.requirements.importThings, new Set(['thing:thing:manage']))).toBe(false);
+    // The only code is conditional: some caller is served without it, so none is refused here.
+    expect(collected.requirements.listUserThings).toEqual({
+      anyOf: [],
+      allOf: [],
+      conditional: ['thing:thing:view'],
+      authenticated: false,
+    });
+    expect(isOperationPermitted(collected.requirements.listUserThings, new Set())).toBe(true);
+    expect(collected.authenticatedOnly).not.toContain('listUserThings');
+  });
+
+  it('keeps a code required when -all and -conditional both name it', () => {
+    expect(
+      requirementFor({
+        'x-required-permissions': ['a:b:c', 'd:e:f'],
+        'x-required-permissions-all': ['a:b:c'],
+        'x-required-permissions-conditional': ['a:b:c', 'g:h:i'],
+      }),
+    ).toEqual({ anyOf: ['d:e:f'], allOf: ['a:b:c'], conditional: ['g:h:i'], authenticated: false });
   });
 
   it('turns the AUTHENTICATED sentinel into the flag, never into a code', () => {
@@ -93,9 +120,9 @@ describe('sdk-010 operation requirements: generator rules', () => {
 
   it('keeps a code named only in -all required, and reads -all alone as the whole list', () => {
     expect(requirementFor({ 'x-required-permissions': ['a:b:c'], 'x-required-permissions-all': ['d:e:f'] })).toEqual({
-      anyOf: [],
+      anyOf: ['a:b:c'],
       allOf: ['d:e:f'],
-      conditional: ['a:b:c'],
+      conditional: [],
       authenticated: false,
     });
     expect(requirementFor({ 'x-required-permissions-all': ['d:e:f'] })).toEqual({
@@ -110,6 +137,7 @@ describe('sdk-010 operation requirements: generator rules', () => {
     expect(() => requirementFor({ 'x-required-permissions': 'a:b:c' }, 'GET /x')).toThrow(/GET \/x.*must be a list/);
     expect(() => requirementFor({ 'x-required-permissions': ['a:b:c', 7] })).toThrow(/must be a list/);
     expect(() => requirementFor({ 'x-required-permissions-all': [''] })).toThrow(/must be a list/);
+    expect(() => requirementFor({ 'x-required-permissions-conditional': 'a:b:c' })).toThrow(/must be a list/);
   });
 
   it('keys by the generated service method name, sorted, and lists every operation', () => {
@@ -121,8 +149,10 @@ describe('sdk-010 operation requirements: generator rules', () => {
       'createThing',
       'deleteThing',
       'getThing',
+      'importThings',
       'listPublicThings',
       'listThings',
+      'listUserThings',
       'patchThing1',
       'submitPublicThing',
     ]);
@@ -131,7 +161,9 @@ describe('sdk-010 operation requirements: generator rules', () => {
       'createThing',
       'deleteThing',
       'getThing',
+      'importThings',
       'listThings',
+      'listUserThings',
       'patchThing1',
     ]);
   });
@@ -160,7 +192,7 @@ describe('sdk-010 operation requirements: generator rules', () => {
       'export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<PeopleContactOperationId, OperationRequirement>>> = {',
     );
     expect(rendered).toContain(
-      "  approveThing: { anyOf: [], allOf: ['thing:thing:view'], conditional: ['thing:approval:approve', 'thing:approval:override'], authenticated: false },",
+      "  approveThing: { anyOf: ['thing:approval:approve', 'thing:approval:override'], allOf: ['thing:thing:view'], conditional: [], authenticated: false },",
     );
     expect(rendered).toContain("  getThing: { anyOf: [], allOf: [], conditional: [], authenticated: true },");
     expect(rendered).not.toMatch(/^\s+listPublicThings:/m);
@@ -263,10 +295,7 @@ describe('sdk-010 operation requirements: generated packages', () => {
             [...r.anyOf, ...r.allOf, ...r.conditional].includes('AUTHENTICATED') ||
             new Set([...r.anyOf, ...r.allOf, ...r.conditional]).size !==
               r.anyOf.length + r.allOf.length + r.conditional.length ||
-            // Codes beside allOf are conditional, never alternatives: see scripts/lib/operation-requirements.mjs.
-            (r.allOf.length > 0 && r.anyOf.length > 0) ||
-            (r.allOf.length === 0 && r.conditional.length > 0) ||
-            (!r.authenticated && r.anyOf.length === 0 && r.allOf.length === 0),
+            (!r.authenticated && r.anyOf.length === 0 && r.allOf.length === 0 && r.conditional.length === 0),
         )
         .map(([key]) => key);
       expect(bad).toEqual([]);
