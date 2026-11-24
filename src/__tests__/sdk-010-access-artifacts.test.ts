@@ -32,39 +32,52 @@ describe('sdk-010 operation requirements: generator rules', () => {
     expect(collected.requirements.listThings).toEqual({
       anyOf: ['thing:thing:view'],
       allOf: [],
+      conditional: [],
       authenticated: false,
     });
     expect(collected.requirements.createThing).toEqual({
       anyOf: ['thing:thing:create', 'thing:thing:manage'],
       allOf: [],
+      conditional: [],
       authenticated: false,
     });
   });
 
-  it('moves x-required-permissions-all codes into allOf and out of anyOf', () => {
-    expect(collected.requirements.approveThing).toEqual({
-      anyOf: ['thing:approval:approve', 'thing:approval:override'],
-      allOf: ['thing:thing:view'],
-      authenticated: false,
-    });
+  it('moves x-required-permissions-all codes into allOf', () => {
     expect(collected.requirements.deleteThing).toEqual({
       anyOf: [],
       allOf: ['thing:thing:audit', 'thing:thing:delete'],
+      conditional: [],
       authenticated: false,
     });
   });
 
+  it('lists the codes beside allOf as conditional, never as required', () => {
+    // The spec cannot say whether these are asked for on every call (`a and (b or c)`) or
+    // only on some (`a and (#param == null or b)`), so no reading may demand them.
+    expect(collected.requirements.approveThing).toEqual({
+      anyOf: [],
+      allOf: ['thing:thing:view'],
+      conditional: ['thing:approval:approve', 'thing:approval:override'],
+      authenticated: false,
+    });
+    expect(isOperationPermitted(collected.requirements.approveThing, new Set(['thing:thing:view']))).toBe(true);
+    expect(isOperationPermitted(collected.requirements.approveThing, new Set(['thing:approval:approve']))).toBe(false);
+  });
+
   it('turns the AUTHENTICATED sentinel into the flag, never into a code', () => {
-    expect(collected.requirements.getThing).toEqual({ anyOf: [], allOf: [], authenticated: true });
+    expect(collected.requirements.getThing).toEqual({ anyOf: [], allOf: [], conditional: [], authenticated: true });
     expect(collected.authenticatedOnly).toEqual(['getThing']);
     expect(collected.requirements.patchThing1).toEqual({
       anyOf: ['thing:thing:edit'],
       allOf: [],
+      conditional: [],
       authenticated: true,
     });
     expect(requirementFor({ 'x-required-permissions-all': ['AUTHENTICATED', 'a:b:c'] })).toEqual({
       anyOf: [],
       allOf: ['a:b:c'],
+      conditional: [],
       authenticated: true,
     });
   });
@@ -80,13 +93,15 @@ describe('sdk-010 operation requirements: generator rules', () => {
 
   it('keeps a code named only in -all required, and reads -all alone as the whole list', () => {
     expect(requirementFor({ 'x-required-permissions': ['a:b:c'], 'x-required-permissions-all': ['d:e:f'] })).toEqual({
-      anyOf: ['a:b:c'],
+      anyOf: [],
       allOf: ['d:e:f'],
+      conditional: ['a:b:c'],
       authenticated: false,
     });
     expect(requirementFor({ 'x-required-permissions-all': ['d:e:f'] })).toEqual({
       anyOf: [],
       allOf: ['d:e:f'],
+      conditional: [],
       authenticated: false,
     });
   });
@@ -145,9 +160,9 @@ describe('sdk-010 operation requirements: generator rules', () => {
       'export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<PeopleContactOperationId, OperationRequirement>>> = {',
     );
     expect(rendered).toContain(
-      "  approveThing: { anyOf: ['thing:approval:approve', 'thing:approval:override'], allOf: ['thing:thing:view'], authenticated: false },",
+      "  approveThing: { anyOf: [], allOf: ['thing:thing:view'], conditional: ['thing:approval:approve', 'thing:approval:override'], authenticated: false },",
     );
-    expect(rendered).toContain("  getThing: { anyOf: [], allOf: [], authenticated: true },");
+    expect(rendered).toContain("  getThing: { anyOf: [], allOf: [], conditional: [], authenticated: true },");
     expect(rendered).not.toMatch(/^\s+listPublicThings:/m);
     expect(rendered).toContain(
       "export const OPERATIONS_WITHOUT_REQUIREMENTS: readonly PeopleContactOperationId[] = [\n  'listPublicThings',\n  'submitPublicThing',\n];",
@@ -167,11 +182,12 @@ describe('sdk-010 operation requirements: generator rules', () => {
 });
 
 describe('sdk-010 isOperationPermitted', () => {
-  const requirement = (anyOf: string[], allOf: string[], authenticated = false): OperationRequirement => ({
-    anyOf,
-    allOf,
-    authenticated,
-  });
+  const requirement = (
+    anyOf: string[],
+    allOf: string[],
+    authenticated = false,
+    conditional: string[] = [],
+  ): OperationRequirement => ({ anyOf, allOf, conditional, authenticated });
 
   it('refuses a missing requirement (fail closed)', () => {
     expect(isOperationPermitted(undefined, new Set(['a', 'b']))).toBe(false);
@@ -188,6 +204,11 @@ describe('sdk-010 isOperationPermitted', () => {
     expect(isOperationPermitted(requirement(['c', 'd'], ['a']), new Set(['a', 'd']))).toBe(true);
     expect(isOperationPermitted(requirement(['c', 'd'], ['a']), new Set(['a']))).toBe(false);
     expect(isOperationPermitted(requirement(['c', 'd'], ['a']), new Set(['c', 'd']))).toBe(false);
+  });
+
+  it('never asks for a conditional code', () => {
+    expect(isOperationPermitted(requirement([], ['a'], false, ['b']), new Set(['a']))).toBe(true);
+    expect(isOperationPermitted(requirement([], ['a'], false, ['b']), new Set(['b']))).toBe(false);
   });
 
   it('lets any signed-in caller through an operation that names no code', () => {
@@ -233,14 +254,18 @@ describe('sdk-010 operation requirements: generated packages', () => {
       expect(keys).toEqual([...keys].sort((a, b) => (a < b ? -1 : a > b ? 1 : 0)));
     });
 
-    it('never lists the AUTHENTICATED sentinel as a permission code, or one code on both sides', () => {
+    it('never lists the AUTHENTICATED sentinel as a permission code, or one code in two lists', () => {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const requirements = Object.entries(require(entry).OPERATION_REQUIREMENTS) as [string, OperationRequirement][];
       const bad = requirements
         .filter(
           ([, r]) =>
-            [...r.anyOf, ...r.allOf].includes('AUTHENTICATED') ||
-            r.anyOf.some((code) => r.allOf.includes(code)) ||
+            [...r.anyOf, ...r.allOf, ...r.conditional].includes('AUTHENTICATED') ||
+            new Set([...r.anyOf, ...r.allOf, ...r.conditional]).size !==
+              r.anyOf.length + r.allOf.length + r.conditional.length ||
+            // Codes beside allOf are conditional, never alternatives: see scripts/lib/operation-requirements.mjs.
+            (r.allOf.length > 0 && r.anyOf.length > 0) ||
+            (r.allOf.length === 0 && r.conditional.length > 0) ||
             (!r.authenticated && r.anyOf.length === 0 && r.allOf.length === 0),
         )
         .map(([key]) => key);

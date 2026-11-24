@@ -12,6 +12,7 @@
 export interface OperationRequirement {
   readonly anyOf: readonly string[];
   readonly allOf: readonly string[];
+  readonly conditional: readonly string[];
   readonly authenticated: boolean;
 }
 
@@ -39,30 +40,31 @@ export type ShopManagerOperationId =
 
 /**
  * What a caller must hold to call each operation: every `allOf` code and, when
- * `anyOf` is not empty, at least one `anyOf` code. An operation with no entry
- * has unknown requirements and must be refused (fail closed);
- * `isOperationPermitted` from @durion-sdk/transport applies both rules.
+ * `anyOf` is not empty, at least one `anyOf` code. A `conditional` code is
+ * asked for on some calls only and is never demanded here. An operation with no
+ * entry has unknown requirements and must be refused (fail closed);
+ * `isOperationPermitted` from @durion-sdk/transport applies these rules.
  */
 export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<ShopManagerOperationId, OperationRequirement>>> = {
-  cancelAppointment: { anyOf: ['appointments:cancel'], allOf: [], authenticated: false },
-  createAppointment: { anyOf: ['appointments:create', 'shop:schedule:edit'], allOf: [], authenticated: false },
-  createAssignment: { anyOf: ['shop:bay:assign'], allOf: [], authenticated: false },
-  executeConflictOverride: { anyOf: ['shop:conflict:override'], allOf: [], authenticated: false },
-  getAppointmentById: { anyOf: ['appointments:view', 'shop:schedule:view'], allOf: [], authenticated: false },
-  getScheduleCapacity: { anyOf: ['shop:schedule:view'], allOf: [], authenticated: false },
-  getShopAuditEntry: { anyOf: ['appointments:view', 'shop:schedule:view'], allOf: [], authenticated: false },
-  getShopDashboard: { anyOf: ['shop:dashboard:view'], allOf: [], authenticated: false },
-  getTechnicianPerson: { anyOf: ['shop:technician:view'], allOf: [], authenticated: false },
-  listAppointments: { anyOf: ['appointments:view', 'shop:schedule:view'], allOf: [], authenticated: false },
-  listAssignments: { anyOf: ['appointments:view', 'shop:schedule:view'], allOf: [], authenticated: false },
-  listLocationTechnicians: { anyOf: ['shop:technician:view'], allOf: [], authenticated: false },
-  listMechanics: { anyOf: ['shop:technician:view'], allOf: [], authenticated: false },
-  replayShopManagerOutbox: { anyOf: ['shop:events:replay'], allOf: [], authenticated: false },
-  rescheduleAppointment: { anyOf: ['appointments:reschedule'], allOf: [], authenticated: false },
-  searchOpenings: { anyOf: ['shop:schedule:view'], allOf: [], authenticated: false },
-  searchShopAudit: { anyOf: ['appointments:view', 'shop:schedule:view'], allOf: [], authenticated: false },
-  upsertShop: { anyOf: ['shop:schedule:edit'], allOf: [], authenticated: false },
-  viewSchedule: { anyOf: ['shop:schedule:view'], allOf: [], authenticated: false },
+  cancelAppointment: { anyOf: ['appointments:cancel'], allOf: [], conditional: [], authenticated: false },
+  createAppointment: { anyOf: ['appointments:create', 'shop:schedule:edit'], allOf: [], conditional: [], authenticated: false },
+  createAssignment: { anyOf: ['shop:bay:assign'], allOf: [], conditional: [], authenticated: false },
+  executeConflictOverride: { anyOf: ['shop:conflict:override'], allOf: [], conditional: [], authenticated: false },
+  getAppointmentById: { anyOf: ['appointments:view', 'shop:schedule:view'], allOf: [], conditional: [], authenticated: false },
+  getScheduleCapacity: { anyOf: ['shop:schedule:view'], allOf: [], conditional: [], authenticated: false },
+  getShopAuditEntry: { anyOf: ['appointments:view', 'shop:schedule:view'], allOf: [], conditional: [], authenticated: false },
+  getShopDashboard: { anyOf: ['shop:dashboard:view'], allOf: [], conditional: [], authenticated: false },
+  getTechnicianPerson: { anyOf: ['shop:technician:view'], allOf: [], conditional: [], authenticated: false },
+  listAppointments: { anyOf: ['appointments:view', 'shop:schedule:view'], allOf: [], conditional: [], authenticated: false },
+  listAssignments: { anyOf: ['appointments:view', 'shop:schedule:view'], allOf: [], conditional: [], authenticated: false },
+  listLocationTechnicians: { anyOf: ['shop:technician:view'], allOf: [], conditional: [], authenticated: false },
+  listMechanics: { anyOf: ['shop:technician:view'], allOf: [], conditional: [], authenticated: false },
+  replayShopManagerOutbox: { anyOf: ['shop:events:replay'], allOf: [], conditional: [], authenticated: false },
+  rescheduleAppointment: { anyOf: ['appointments:reschedule'], allOf: [], conditional: [], authenticated: false },
+  searchOpenings: { anyOf: ['shop:schedule:view'], allOf: [], conditional: [], authenticated: false },
+  searchShopAudit: { anyOf: ['appointments:view', 'shop:schedule:view'], allOf: [], conditional: [], authenticated: false },
+  upsertShop: { anyOf: ['shop:schedule:edit'], allOf: [], conditional: [], authenticated: false },
+  viewSchedule: { anyOf: ['shop:schedule:view'], allOf: [], conditional: [], authenticated: false },
 };
 
 /** Operations whose spec declares no requirement, so they have no entry above. */

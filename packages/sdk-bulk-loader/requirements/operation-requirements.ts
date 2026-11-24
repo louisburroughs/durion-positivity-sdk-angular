@@ -12,6 +12,7 @@
 export interface OperationRequirement {
   readonly anyOf: readonly string[];
   readonly allOf: readonly string[];
+  readonly conditional: readonly string[];
   readonly authenticated: boolean;
 }
 
@@ -38,28 +39,29 @@ export type BulkLoaderOperationId =
 
 /**
  * What a caller must hold to call each operation: every `allOf` code and, when
- * `anyOf` is not empty, at least one `anyOf` code. An operation with no entry
- * has unknown requirements and must be refused (fail closed);
- * `isOperationPermitted` from @durion-sdk/transport applies both rules.
+ * `anyOf` is not empty, at least one `anyOf` code. A `conditional` code is
+ * asked for on some calls only and is never demanded here. An operation with no
+ * entry has unknown requirements and must be refused (fail closed);
+ * `isOperationPermitted` from @durion-sdk/transport applies these rules.
  */
 export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<BulkLoaderOperationId, OperationRequirement>>> = {
-  appendTusUploadChunk: { anyOf: ['bulkImport:upload:execute'], allOf: [], authenticated: false },
-  approveColumnMappings: { anyOf: ['bulkImport:upload:execute'], allOf: [], authenticated: false },
-  cancelBulkLoadJob: { anyOf: ['bulkImport:upload:execute'], allOf: [], authenticated: false },
-  cancelTusUpload: { anyOf: ['bulkImport:upload:execute'], allOf: [], authenticated: false },
-  createBulkLoadJob: { anyOf: ['bulkImport:upload:execute'], allOf: [], authenticated: false },
-  createTusUpload: { anyOf: ['bulkImport:upload:execute'], allOf: [], authenticated: false },
-  downloadErrorReport: { anyOf: ['bulkImport:status:read'], allOf: [], authenticated: false },
-  getBulkLoadJob: { anyOf: ['bulkImport:status:read'], allOf: [], authenticated: false },
-  getColumnMappings: { anyOf: ['bulkImport:status:read'], allOf: [], authenticated: false },
-  getTusUploadOffset: { anyOf: ['bulkImport:upload:execute'], allOf: [], authenticated: false },
-  listAuditRecords: { anyOf: ['bulkImport:status:read'], allOf: [], authenticated: false },
-  listBulkLoadJobs: { anyOf: ['bulkImport:status:read'], allOf: [], authenticated: false },
-  retryBulkLoadJob: { anyOf: ['bulkImport:upload:execute'], allOf: [], authenticated: false },
-  startJobProcessing: { anyOf: ['bulkImport:upload:execute'], allOf: [], authenticated: false },
-  submitCorrections: { anyOf: ['bulkImport:upload:execute'], allOf: [], authenticated: false },
-  submitSingleCorrection: { anyOf: ['bulkImport:upload:execute'], allOf: [], authenticated: false },
-  uploadJobFile: { anyOf: ['bulkImport:upload:execute'], allOf: [], authenticated: false },
+  appendTusUploadChunk: { anyOf: ['bulkImport:upload:execute'], allOf: [], conditional: [], authenticated: false },
+  approveColumnMappings: { anyOf: ['bulkImport:upload:execute'], allOf: [], conditional: [], authenticated: false },
+  cancelBulkLoadJob: { anyOf: ['bulkImport:upload:execute'], allOf: [], conditional: [], authenticated: false },
+  cancelTusUpload: { anyOf: ['bulkImport:upload:execute'], allOf: [], conditional: [], authenticated: false },
+  createBulkLoadJob: { anyOf: ['bulkImport:upload:execute'], allOf: [], conditional: [], authenticated: false },
+  createTusUpload: { anyOf: ['bulkImport:upload:execute'], allOf: [], conditional: [], authenticated: false },
+  downloadErrorReport: { anyOf: ['bulkImport:status:read'], allOf: [], conditional: [], authenticated: false },
+  getBulkLoadJob: { anyOf: ['bulkImport:status:read'], allOf: [], conditional: [], authenticated: false },
+  getColumnMappings: { anyOf: ['bulkImport:status:read'], allOf: [], conditional: [], authenticated: false },
+  getTusUploadOffset: { anyOf: ['bulkImport:upload:execute'], allOf: [], conditional: [], authenticated: false },
+  listAuditRecords: { anyOf: ['bulkImport:status:read'], allOf: [], conditional: [], authenticated: false },
+  listBulkLoadJobs: { anyOf: ['bulkImport:status:read'], allOf: [], conditional: [], authenticated: false },
+  retryBulkLoadJob: { anyOf: ['bulkImport:upload:execute'], allOf: [], conditional: [], authenticated: false },
+  startJobProcessing: { anyOf: ['bulkImport:upload:execute'], allOf: [], conditional: [], authenticated: false },
+  submitCorrections: { anyOf: ['bulkImport:upload:execute'], allOf: [], conditional: [], authenticated: false },
+  submitSingleCorrection: { anyOf: ['bulkImport:upload:execute'], allOf: [], conditional: [], authenticated: false },
+  uploadJobFile: { anyOf: ['bulkImport:upload:execute'], allOf: [], conditional: [], authenticated: false },
 };
 
 /** Operations whose spec declares no requirement, so they have no entry above. */

@@ -12,6 +12,7 @@
 export interface OperationRequirement {
   readonly anyOf: readonly string[];
   readonly allOf: readonly string[];
+  readonly conditional: readonly string[];
   readonly authenticated: boolean;
 }
 
@@ -72,61 +73,62 @@ export type InvoiceOperationId =
 
 /**
  * What a caller must hold to call each operation: every `allOf` code and, when
- * `anyOf` is not empty, at least one `anyOf` code. An operation with no entry
- * has unknown requirements and must be refused (fail closed);
- * `isOperationPermitted` from @durion-sdk/transport applies both rules.
+ * `anyOf` is not empty, at least one `anyOf` code. A `conditional` code is
+ * asked for on some calls only and is never demanded here. An operation with no
+ * entry has unknown requirements and must be refused (fail closed);
+ * `isOperationPermitted` from @durion-sdk/transport applies these rules.
  */
 export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<InvoiceOperationId, OperationRequirement>>> = {
-  applyInvoiceAdjustment: { anyOf: ['invoice:manage'], allOf: [], authenticated: false },
-  attachInvoiceEvidence: { anyOf: ['invoice:attachment:create'], allOf: [], authenticated: false },
-  cancelInvoice: { anyOf: ['invoice:manage'], allOf: [], authenticated: false },
-  cancelPayment: { anyOf: ['invoice:payment:process'], allOf: [], authenticated: false },
-  capturePayment: { anyOf: ['invoice:payment:capture'], allOf: [], authenticated: false },
-  createArtifactDownloadToken: { anyOf: [], allOf: [], authenticated: true },
-  createDepositCredit: { anyOf: ['invoice:manage'], allOf: [], authenticated: false },
-  createInvoice: { anyOf: ['invoice:manage'], allOf: [], authenticated: false },
-  createInvoiceFromOrder: { anyOf: ['invoice:manage'], allOf: [], authenticated: false },
-  createPaymentConnectionToken: { anyOf: ['invoice:payment:process'], allOf: [], authenticated: false },
-  createPaymentLink: { anyOf: ['invoice:payment:process'], allOf: [], authenticated: false },
-  createStandaloneInvoiceRefund: { anyOf: ['invoice:refund:issue_manual'], allOf: [], authenticated: false },
-  createStandalonePartyRefund: { anyOf: ['invoice:refund:issue_manual'], allOf: [], authenticated: false },
-  elevateManagerApproval: { anyOf: ['invoice:finalize'], allOf: [], authenticated: false },
-  finalizeInvoice: { anyOf: ['invoice:finalize'], allOf: [], authenticated: false },
-  generateReceipt: { anyOf: ['invoice:receipt:generate'], allOf: [], authenticated: false },
-  getBillingRules: { anyOf: ['invoice:billing-rules'], allOf: [], authenticated: false },
-  getDepositCredit: { anyOf: ['invoice:invoice:view'], allOf: [], authenticated: false },
-  getInvoice: { anyOf: ['invoice:invoice:view'], allOf: [], authenticated: false },
-  getInvoiceByWorkorder: { anyOf: ['invoice:invoice:view'], allOf: [], authenticated: false },
-  getInvoicePayment: { anyOf: ['invoice:invoice:view'], allOf: [], authenticated: false },
-  getInvoicingLag: { anyOf: ['invoice:analytics:view'], allOf: [], authenticated: false },
-  getReceipt: { anyOf: ['invoice:invoice:view'], allOf: [], authenticated: false },
-  getRevenueByCustomer: { anyOf: ['invoice:analytics:view'], allOf: [], authenticated: false },
-  initiatePayment: { anyOf: ['invoice:payment:process'], allOf: [], authenticated: false },
-  listAvailablePaymentReaders: { anyOf: ['invoice:payment:process'], allOf: [], authenticated: false },
-  listDepositCreditsBySource: { anyOf: ['invoice:invoice:view'], allOf: [], authenticated: false },
-  listInvoiceArtifacts: { anyOf: [], allOf: [], authenticated: true },
-  listInvoiceAttachments: { anyOf: ['invoice:invoice:view'], allOf: [], authenticated: false },
-  listInvoicePayments: { anyOf: ['invoice:invoice:view'], allOf: [], authenticated: false },
-  listInvoiceRefunds: { anyOf: ['invoice:invoice:view'], allOf: [], authenticated: false },
-  listMerchantAccounts: { anyOf: ['invoice:merchant_account:manage'], allOf: [], authenticated: false },
-  listPaymentReaders: { anyOf: ['invoice:payment_reader:manage'], allOf: [], authenticated: false },
-  listRecentInvoiceAttachments: { anyOf: ['invoice:invoice:view'], allOf: [], authenticated: false },
-  recordCashPayment: { anyOf: ['invoice:payment:process'], allOf: [], authenticated: false },
-  recordReceiptEmailDelivery: { anyOf: ['invoice:receipt:generate'], allOf: [], authenticated: false },
-  recordReceiptPrintDelivery: { anyOf: ['invoice:receipt:generate'], allOf: [], authenticated: false },
-  refundDepositCredit: { anyOf: ['invoice:manage'], allOf: [], authenticated: false },
-  refundPayment: { anyOf: ['invoice:payment:refund'], allOf: [], authenticated: false },
-  registerPaymentReader: { anyOf: ['invoice:payment_reader:manage'], allOf: [], authenticated: false },
-  removeInvoiceAttachment: { anyOf: ['invoice:attachment:create'], allOf: [], authenticated: false },
-  reprintReceipt: { anyOf: [], allOf: [], authenticated: true },
-  retirePaymentReader: { anyOf: ['invoice:payment_reader:manage'], allOf: [], authenticated: false },
-  revertInvoice: { anyOf: ['invoice:finalize'], allOf: [], authenticated: false },
-  searchInvoiceLines: { anyOf: ['invoice:invoice:view'], allOf: [], authenticated: false },
-  searchInvoices: { anyOf: ['invoice:invoice:view'], allOf: [], authenticated: false },
-  sendInvoice: { anyOf: ['invoice:invoice:send'], allOf: [], authenticated: false },
-  startMerchantOnboarding: { anyOf: ['invoice:merchant_account:manage'], allOf: [], authenticated: false },
-  upsertBillingRules: { anyOf: ['invoice:billing-rules'], allOf: [], authenticated: false },
-  voidPayment: { anyOf: ['invoice:payment:void'], allOf: [], authenticated: false },
+  applyInvoiceAdjustment: { anyOf: ['invoice:manage'], allOf: [], conditional: [], authenticated: false },
+  attachInvoiceEvidence: { anyOf: ['invoice:attachment:create'], allOf: [], conditional: [], authenticated: false },
+  cancelInvoice: { anyOf: ['invoice:manage'], allOf: [], conditional: [], authenticated: false },
+  cancelPayment: { anyOf: ['invoice:payment:process'], allOf: [], conditional: [], authenticated: false },
+  capturePayment: { anyOf: ['invoice:payment:capture'], allOf: [], conditional: [], authenticated: false },
+  createArtifactDownloadToken: { anyOf: [], allOf: [], conditional: [], authenticated: true },
+  createDepositCredit: { anyOf: ['invoice:manage'], allOf: [], conditional: [], authenticated: false },
+  createInvoice: { anyOf: ['invoice:manage'], allOf: [], conditional: [], authenticated: false },
+  createInvoiceFromOrder: { anyOf: ['invoice:manage'], allOf: [], conditional: [], authenticated: false },
+  createPaymentConnectionToken: { anyOf: ['invoice:payment:process'], allOf: [], conditional: [], authenticated: false },
+  createPaymentLink: { anyOf: ['invoice:payment:process'], allOf: [], conditional: [], authenticated: false },
+  createStandaloneInvoiceRefund: { anyOf: ['invoice:refund:issue_manual'], allOf: [], conditional: [], authenticated: false },
+  createStandalonePartyRefund: { anyOf: ['invoice:refund:issue_manual'], allOf: [], conditional: [], authenticated: false },
+  elevateManagerApproval: { anyOf: ['invoice:finalize'], allOf: [], conditional: [], authenticated: false },
+  finalizeInvoice: { anyOf: ['invoice:finalize'], allOf: [], conditional: [], authenticated: false },
+  generateReceipt: { anyOf: ['invoice:receipt:generate'], allOf: [], conditional: [], authenticated: false },
+  getBillingRules: { anyOf: ['invoice:billing-rules'], allOf: [], conditional: [], authenticated: false },
+  getDepositCredit: { anyOf: ['invoice:invoice:view'], allOf: [], conditional: [], authenticated: false },
+  getInvoice: { anyOf: ['invoice:invoice:view'], allOf: [], conditional: [], authenticated: false },
+  getInvoiceByWorkorder: { anyOf: ['invoice:invoice:view'], allOf: [], conditional: [], authenticated: false },
+  getInvoicePayment: { anyOf: ['invoice:invoice:view'], allOf: [], conditional: [], authenticated: false },
+  getInvoicingLag: { anyOf: ['invoice:analytics:view'], allOf: [], conditional: [], authenticated: false },
+  getReceipt: { anyOf: ['invoice:invoice:view'], allOf: [], conditional: [], authenticated: false },
+  getRevenueByCustomer: { anyOf: ['invoice:analytics:view'], allOf: [], conditional: [], authenticated: false },
+  initiatePayment: { anyOf: ['invoice:payment:process'], allOf: [], conditional: [], authenticated: false },
+  listAvailablePaymentReaders: { anyOf: ['invoice:payment:process'], allOf: [], conditional: [], authenticated: false },
+  listDepositCreditsBySource: { anyOf: ['invoice:invoice:view'], allOf: [], conditional: [], authenticated: false },
+  listInvoiceArtifacts: { anyOf: [], allOf: [], conditional: [], authenticated: true },
+  listInvoiceAttachments: { anyOf: ['invoice:invoice:view'], allOf: [], conditional: [], authenticated: false },
+  listInvoicePayments: { anyOf: ['invoice:invoice:view'], allOf: [], conditional: [], authenticated: false },
+  listInvoiceRefunds: { anyOf: ['invoice:invoice:view'], allOf: [], conditional: [], authenticated: false },
+  listMerchantAccounts: { anyOf: ['invoice:merchant_account:manage'], allOf: [], conditional: [], authenticated: false },
+  listPaymentReaders: { anyOf: ['invoice:payment_reader:manage'], allOf: [], conditional: [], authenticated: false },
+  listRecentInvoiceAttachments: { anyOf: ['invoice:invoice:view'], allOf: [], conditional: [], authenticated: false },
+  recordCashPayment: { anyOf: ['invoice:payment:process'], allOf: [], conditional: [], authenticated: false },
+  recordReceiptEmailDelivery: { anyOf: ['invoice:receipt:generate'], allOf: [], conditional: [], authenticated: false },
+  recordReceiptPrintDelivery: { anyOf: ['invoice:receipt:generate'], allOf: [], conditional: [], authenticated: false },
+  refundDepositCredit: { anyOf: ['invoice:manage'], allOf: [], conditional: [], authenticated: false },
+  refundPayment: { anyOf: ['invoice:payment:refund'], allOf: [], conditional: [], authenticated: false },
+  registerPaymentReader: { anyOf: ['invoice:payment_reader:manage'], allOf: [], conditional: [], authenticated: false },
+  removeInvoiceAttachment: { anyOf: ['invoice:attachment:create'], allOf: [], conditional: [], authenticated: false },
+  reprintReceipt: { anyOf: [], allOf: [], conditional: [], authenticated: true },
+  retirePaymentReader: { anyOf: ['invoice:payment_reader:manage'], allOf: [], conditional: [], authenticated: false },
+  revertInvoice: { anyOf: ['invoice:finalize'], allOf: [], conditional: [], authenticated: false },
+  searchInvoiceLines: { anyOf: ['invoice:invoice:view'], allOf: [], conditional: [], authenticated: false },
+  searchInvoices: { anyOf: ['invoice:invoice:view'], allOf: [], conditional: [], authenticated: false },
+  sendInvoice: { anyOf: ['invoice:invoice:send'], allOf: [], conditional: [], authenticated: false },
+  startMerchantOnboarding: { anyOf: ['invoice:merchant_account:manage'], allOf: [], conditional: [], authenticated: false },
+  upsertBillingRules: { anyOf: ['invoice:billing-rules'], allOf: [], conditional: [], authenticated: false },
+  voidPayment: { anyOf: ['invoice:payment:void'], allOf: [], conditional: [], authenticated: false },
 };
 
 /** Operations whose spec declares no requirement, so they have no entry above. */

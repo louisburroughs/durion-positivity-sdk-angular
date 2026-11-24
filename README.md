@@ -81,10 +81,15 @@ const allowed = isOperationPermitted(OPERATION_REQUIREMENTS.getWorkorder, heldPe
   one method name on several services and one key. `<Pkg>OperationId` (`WorkorderOperationId`,
   `PeopleContactOperationId`) is the union of every operation of the package, so a
   reference to a renamed or removed operation stops compiling.
-- **Value.** `{ anyOf, allOf, authenticated }`. The caller is permitted when it holds every
-  `allOf` code and, if `anyOf` is not empty, at least one `anyOf` code. `authenticated` is
-  `true` when the operation names the `AUTHENTICATED` sentinel; with both lists empty,
-  signing in is all it asks.
+- **Value.** `{ anyOf, allOf, conditional, authenticated }`. The caller is permitted when it
+  holds every `allOf` code and, if `anyOf` is not empty, at least one `anyOf` code.
+  `conditional` lists the codes the operation names beside `allOf` without saying when it
+  asks for them: on some calls only (`importBillSpreadsheet` needs
+  `accounting:bill_intake:manage` only with `saveMappingAs`), or as alternatives to one
+  another. They are never demanded, so a permitted caller can still get a 403 on a call
+  that needs one; gate the control that makes that call on the code as well.
+  `authenticated` is `true` when the operation names the `AUTHENTICATED` sentinel; with all
+  three lists empty, signing in is all it asks.
 - **Missing entry: refuse.** An operation whose spec has no `x-required-permissions` has
   unknown requirements. It has no entry (the map is `Partial`, so a lookup is
   `OperationRequirement | undefined`), it is listed in `OPERATIONS_WITHOUT_REQUIREMENTS`
@@ -94,9 +99,11 @@ const allowed = isOperationPermitted(OPERATION_REQUIREMENTS.getWorkorder, heldPe
 - **Source.** `scripts/generate-operation-requirements.mjs` reads the same spec files
   `openapitools.json` gives the client generator: `x-required-permissions` (every code
   the operation's authorization names) and `x-required-permissions-all` (the subset that
-  are each required; absent means none). `allOf` is the second list; `anyOf` is the first
-  minus `allOf` and the sentinel. The script fails when a key matches no generated service
-  method. Rules and rendering are in `scripts/lib/operation-requirements.mjs`.
+  are each required; absent means none). `allOf` is the second list. The first minus
+  `allOf` and the sentinel is `anyOf` when `allOf` is empty and `conditional` when it is
+  not: the spec cannot tell `a and (b or c)` from `a and (#param == null or b)`, and
+  reading the second as "one of" would refuse a caller the backend serves. The script
+  fails when a key matches no generated service method. Rules and rendering are in `scripts/lib/operation-requirements.mjs`.
 
 Import from the `/requirements` entry in code that runs at app startup (route gates), for
 the reason given under "Package Entry Points": it holds no services.
