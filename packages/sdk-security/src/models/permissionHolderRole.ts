@@ -14,15 +14,19 @@
  */
 export interface PermissionHolderRole {
     /**
+     * The role\'s immutable key within the tenant; the identifier to refer to the role by.
+     */
+    key: string;
+    /**
      * ALL when the role holds its permissions at every location; LOCATION when it holds them only at the locations its holder is assigned to (ADR-0061 §2).
      */
     locationScope: PermissionHolderRoleLocationScopeEnum;
     /**
-     * The role\'s name as the tenant stores it. For a custom role this is tenant-authored text; show it as typed.
+     * The role\'s display name as the tenant stores it: tenant-authored text, shown as typed and never compared on.
      */
     name: string;
     /**
-     * The canonical template name when the role was provisioned from the platform role template, for the client to translate; null for a tenant\'s custom role.
+     * The role\'s key when it is one of the platform\'s starter roles, for the client to translate the name of a role the tenant has not renamed; null for a role the tenant created.
      */
     templateKey: string | null;
 }
@@ -71,8 +75,8 @@ export function instanceOfPermissionHolderRole(value: object): value is Permissi
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPermissionHolderRolePropertyNames('locationScope', 'name', 'templateKey', );
-    const optionalStringProperties = createPermissionHolderRoleOptionalProperties({ name: 'locationScope', nullable: false }, { name: 'name', nullable: false }, { name: 'templateKey', nullable: true }, );
+    const requiredProperties = createPermissionHolderRolePropertyNames('key', 'locationScope', 'name', 'templateKey', );
+    const optionalStringProperties = createPermissionHolderRoleOptionalProperties({ name: 'key', nullable: false }, { name: 'locationScope', nullable: false }, { name: 'name', nullable: false }, { name: 'templateKey', nullable: true }, );
     const optionalNumberProperties = createPermissionHolderRoleOptionalProperties();
     const optionalBooleanProperties = createPermissionHolderRoleOptionalProperties();
 

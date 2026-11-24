@@ -38,6 +38,10 @@ export interface CapabilityDto {
      */
     permissions: Array<string>;
     /**
+     * True for a system capability, which only a system role may hold. The capability list never contains one, so this is false there; the field exists so every place a capability is described says which kind it is
+     */
+    system: boolean;
+    /**
      * True when the capability makes no sense at one location: a role holding it can only be assigned tenant-wide
      */
     tenantWideOnly: boolean;
@@ -87,10 +91,10 @@ export function instanceOfCapabilityDto(value: object): value is CapabilityDto {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCapabilityDtoPropertyNames('description', 'hierarchy', 'includes', 'key', 'name', 'permissions', 'tenantWideOnly', );
+    const requiredProperties = createCapabilityDtoPropertyNames('description', 'hierarchy', 'includes', 'key', 'name', 'permissions', 'system', 'tenantWideOnly', );
     const optionalStringProperties = createCapabilityDtoOptionalProperties({ name: 'description', nullable: false }, { name: 'hierarchy', nullable: false }, { name: 'key', nullable: false }, { name: 'name', nullable: false }, );
     const optionalNumberProperties = createCapabilityDtoOptionalProperties();
-    const optionalBooleanProperties = createCapabilityDtoOptionalProperties({ name: 'tenantWideOnly', nullable: false }, );
+    const optionalBooleanProperties = createCapabilityDtoOptionalProperties({ name: 'system', nullable: false }, { name: 'tenantWideOnly', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalCapabilityDtoPropertyOfType(_v, property.name, 'string', property.nullable))

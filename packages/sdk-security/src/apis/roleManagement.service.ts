@@ -27,15 +27,13 @@ import { RoleAssignmentDto } from '../models/roleAssignmentDto';
 // @ts-ignore
 import { RoleAssignmentRequest } from '../models/roleAssignmentRequest';
 // @ts-ignore
+import { RoleCapabilitiesRequest } from '../models/roleCapabilitiesRequest';
+// @ts-ignore
 import { RoleCreateRequest } from '../models/roleCreateRequest';
 // @ts-ignore
 import { RoleDefaultPermissionsResponse } from '../models/roleDefaultPermissionsResponse';
 // @ts-ignore
 import { RoleDto } from '../models/roleDto';
-// @ts-ignore
-import { RolePermissionGrantRequest } from '../models/rolePermissionGrantRequest';
-// @ts-ignore
-import { RolePermissionsRequest } from '../models/rolePermissionsRequest';
 // @ts-ignore
 import { RolePersonasResponse } from '../models/rolePersonasResponse';
 // @ts-ignore
@@ -58,74 +56,10 @@ export class RoleManagementService extends BaseService {
     }
 
     /**
-     * Assign a Registered Permission to a Role
-     * Adds an already-registered permission, identified by its key in the path, to a role\&#39;s grant set. Use this tool when the permission is known to be registered; do not use grantRolePermission, which auto-registers unknown keys, and do not use updateRolePermissions, which replaces the whole set. Preconditions: the caller must hold security:role:edit, the role must exist, and the permission key must already be registered (modules register at startup via registerModulePermissions). Required inputs: roleId (UUID) and permissionKey (domain:resource:action) as path parameters; there is no request body. Emits a SECURITY_ROLE_PERMISSION_ASSIGN event. Returns 404 when the role does not exist or the permission key has not been registered.
-     * @endpoint put /v1/roles/{roleId}/permissions/{permissionKey}
-     * @param roleId
-     * @param permissionKey
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public assignRolePermissionByKey(roleId: string, permissionKey: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public assignRolePermissionByKey(roleId: string, permissionKey: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public assignRolePermissionByKey(roleId: string, permissionKey: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public assignRolePermissionByKey(roleId: string, permissionKey: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (roleId === null || roleId === undefined) {
-            throw new Error('Required parameter roleId was null or undefined when calling assignRolePermissionByKey.');
-        }
-        if (permissionKey === null || permissionKey === undefined) {
-            throw new Error('Required parameter permissionKey was null or undefined when calling assignRolePermissionByKey.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/roles/${this.configuration.encodeParam({name: "roleId", value: roleId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/permissions/${this.configuration.encodeParam({name: "permissionKey", value: permissionKey, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('put', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
      * Create a New Role
-     * Creates a new role with the given name and optional description; the role starts with no permissions and no user assignments. Use this tool to define a new role; do not use createRoleAssignment, which links an existing role to a user, and do not use updateRolePermissions, which changes an existing role\&#39;s grants. Preconditions: the caller must hold security:role:create and no role with the same name (compared case-insensitively) may already exist. Required inputs: name, non-blank; description is optional. Emits a SECURITY_ROLE_CREATE event and records the creating actor and timestamp. Returns 400 when name is missing or blank, and 409 with DUPLICATE_ROLE_NAME when the name is already taken regardless of case.
+     * Creates a role in the caller\&#39;s tenant from a display name, an optional description, optional MCP persona metadata and an optional list of capability keys. A role is a named set of capabilities and holds no permission directly; without capabilities it grants nothing yet. The response carries the role\&#39;s key, derived once from the name (lower-case, underscores, made unique within the tenant) and never changed afterwards. Use this tool to define a new role; do not use createRoleAssignment, which gives an existing role to a user, and do not use updateRoleCapabilities, which changes an existing role\&#39;s set. Preconditions: the caller must hold security:role:create, and no role of the tenant may already carry the name, compared after trimming, collapsing repeated spaces and ignoring letter case. Required inputs: name, non-blank; description, persona fields and capabilities are optional; capability keys come from listCapabilities. Emits a SECURITY_ROLE_CREATE event and records the creating actor and timestamp. Returns 400 when name is missing or blank; 409 DUPLICATE_ROLE_NAME when the name is taken; 422 CAPABILITY_UNKNOWN, with fieldErrors on capabilities, when a key names no capability; and 422 CAPABILITY_NOT_ASSIGNABLE when a key names a system capability, which only a role the platform defines may hold.
      * @endpoint post /v1/roles
-     * @param roleCreateRequest Name, optional description, and optional MCP persona metadata.
+     * @param roleCreateRequest Name, optional description, optional capability keys and optional MCP persona metadata.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -263,7 +197,7 @@ export class RoleManagementService extends BaseService {
 
     /**
      * Delete a Role and Its Associations
-     * Deletes a role by UUID, clearing its permission grants and deleting all of its role assignments in the same transaction. Use this tool to retire a role entirely; do not use revokeRolePermission or revokeRoleAssignment, which remove a single grant or assignment and keep the role. Preconditions: the caller must hold security:role:delete and the role must exist; users holding the role lose it immediately. Required inputs: id (UUID) as a path parameter. Emits a SECURITY_ROLE_DELETE event. Returns 404 when the role does not exist and 409 with code ROLE_TEMPLATE_IMMUTABLE when the role was provisioned from the platform role template (templateKey set): canonical roles keep their name for the life of the tenant; change their grants instead.
+     * Deletes a role by UUID, removing its capabilities and deleting all of its role assignments in the same transaction. Any role that is not a system role can be deleted, a starter role included. Use this tool to retire a role entirely; do not use updateRoleCapabilities or revokeRoleAssignment, which change what the role grants or end one assignment and keep the role. Preconditions: the caller must hold security:role:delete, the role must exist and must not be a system role; users holding the role lose it immediately. Required inputs: id (UUID) as a path parameter. Emits a SECURITY_ROLE_DELETE event. Returns 404 when the role does not exist and 409 with code ROLE_SYSTEM_IMMUTABLE when the role is a system role, which the platform defines.
      * @endpoint delete /v1/roles/{id}
      * @param id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -323,7 +257,7 @@ export class RoleManagementService extends BaseService {
 
     /**
      * Get a Single Role by UUID
-     * Returns a single role looked up by its UUID, including its permission set and audit metadata. Use this tool when the role id is known; use getRoleByName instead when only the name is available, and listRoles to browse. Preconditions: the caller must hold security:role:view and the role must exist. Required inputs: id (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no role exists for the supplied UUID.
+     * Returns a single role looked up by its UUID, including its key, capability keys and audit metadata. Use this tool when the role id is known; use getRoleByKey instead when only the key is, and listRoles to browse. Preconditions: the caller must hold security:role:view and the role must exist. Required inputs: id (UUID) as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 when no role exists for the supplied UUID.
      * @endpoint get /v1/roles/{id}
      * @param id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -382,10 +316,70 @@ export class RoleManagementService extends BaseService {
     }
 
     /**
+     * Get a Single Role by Key
+     * Returns the role of the caller\&#39;s tenant with the given key, including its capability keys. A key is the role\&#39;s immutable identifier: it is what the access token\&#39;s roles claim carries and it survives a rename. Use this tool to resolve a role named in a token, an event or a stored reference; use getRoleById when the UUID is known and listRoles to browse, and do not use getRoleByName, which is only for a name a person typed. Preconditions: the caller must hold security:role:view and a role with that key must exist. Required inputs: key as a path parameter, for example service_desk. A ROLE_ prefix and any letter case are accepted. No events are emitted and no state changes; this is a read-only projection. Returns 404 with ROLE_NOT_FOUND when no role has the supplied key.
+     * @endpoint get /v1/roles/by-key/{key}
+     * @param key The role\&#39;s key; a ROLE_ prefix and any letter case are accepted
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getRoleByKey(key: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RoleDto>;
+    public getRoleByKey(key: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RoleDto>>;
+    public getRoleByKey(key: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RoleDto>>;
+    public getRoleByKey(key: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (key === null || key === undefined) {
+            throw new Error('Required parameter key was null or undefined when calling getRoleByKey.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/roles/by-key/${this.configuration.encodeParam({name: "key", value: key, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<RoleDto>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Get a Single Role by Name
-     * Returns a single role looked up by its exact name, including its permission set. Use this tool when only the role name is known; use getRoleById instead when the UUID is available, and listRoles to browse. Preconditions: the caller must hold security:role:view and a role with that exact (case-sensitive) name must exist. Required inputs: name as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 with ROLE_NOT_FOUND when no role has the supplied name.
+     * Returns the role of the caller\&#39;s tenant whose display name matches, including its capability keys. Names are compared after trimming, collapsing repeated spaces and ignoring letter case, the same comparison that keeps names unique. Use this tool when only what a person typed or reads on screen is known; a name is a label a tenant may change, so do not use it to refer to a role reliably: use getRoleByKey or getRoleById instead, and listRoles to browse. Preconditions: the caller must hold security:role:view and a role with that name must exist. Required inputs: name as a path parameter. No events are emitted and no state changes; this is a read-only projection. Returns 404 with ROLE_NOT_FOUND when no role carries the supplied name.
      * @endpoint get /v1/roles/by-name/{name}
-     * @param name
+     * @param name The role\&#39;s display name; letter case and repeated spaces are ignored
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -443,9 +437,9 @@ export class RoleManagementService extends BaseService {
 
     /**
      * Get a Role\&#39;s Default Authority Expansion
-     * Returns the authority codes a role name expands to: the ROLE_ prefixed authority plus every permission code granted to that role in role_permissions. Use this tool to prebuild per-role permission or tool caches, as pos-mcp-server does; do not use getUserPermissions, which reads one specific user\&#39;s effective role assignments rather than the authority set a role carries. Preconditions: the caller must hold security:role:view; the role name does not need to exist in the database. Required inputs: role name as a path parameter, for example SHOP_MGR. No events are emitted and no state changes; this is a read-only lookup of the role\&#39;s persisted permission grants. Returns 200 in all cases; an unrecognized role, or a role with no grants, yields only its ROLE_ authority with no domain codes rather than an error.
+     * Returns the authority codes a role expands to: ROLE_ followed by the role\&#39;s key, plus every permission code the role grants through its capabilities (every non-system capability when the role holds all of them). Use this tool to prebuild per-role permission or tool caches, as pos-mcp-server does; do not use getUserPermissions, which reads one specific user\&#39;s effective role assignments rather than the authority set a role carries. Preconditions: the caller must hold security:role:view; the role does not need to exist. Required inputs: the role\&#39;s key as a path parameter, for example service_desk. A ROLE_ prefix and any letter case are accepted, so ROLE_SERVICE_DESK names the same role. A display name is not a key and resolves nothing. No events are emitted and no state changes; this is a read-only lookup. Returns 200 in all cases; an unrecognized key, or a role with no capabilities, yields only its ROLE_ authority with no permission codes rather than an error.
      * @endpoint get /v1/roles/{role}/default-permissions
-     * @param role
+     * @param role The role\&#39;s key; a ROLE_ prefix and any letter case are accepted
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -503,7 +497,7 @@ export class RoleManagementService extends BaseService {
 
     /**
      * Get MCP Persona Metadata for Every Role
-     * Returns one row per role with its MCP persona slots, resolution rank, and eligibility flag, ordered by rank then name, plus the timestamp the snapshot was assembled. Use this tool to derive assistant personas and their priority order from role data, as pos-mcp-server does; do not use listRoles, which returns the full role graph including every permission grant and is far more expensive for this purpose. Preconditions: the caller must hold security:role:view. Required inputs: none. No events are emitted and no state changes; this is a read-only projection. Roles that are excluded from persona resolution are included and flagged rather than omitted, so a consumer can distinguish a role excluded by design from one it has never seen. Returns 200 with every role and never 404: an environment holding no roles yields an empty list rather than an error, so a consumer cannot mistake \&quot;not provisioned yet\&quot; for \&quot;endpoint missing\&quot;.
+     * Returns one row per role with its key, its display name, its MCP persona slots, resolution rank, and eligibility flag, ordered by rank then name, plus the timestamp the snapshot was assembled. Match a caller\&#39;s roles on key: the access token carries role keys, and a name is a label a tenant may change. Use this tool to derive assistant personas and their priority order from role data, as pos-mcp-server does; do not use listRoles, which returns every role with its capabilities and is more expensive for this purpose. Preconditions: the caller must hold security:role:view. Required inputs: none. No events are emitted and no state changes; this is a read-only projection. Roles that are excluded from persona resolution are included and flagged rather than omitted, so a consumer can distinguish a role excluded by design from one it has never seen. Returns 200 with every role and never 404: an environment holding no roles yields an empty list rather than an error, so a consumer cannot mistake \&quot;not provisioned yet\&quot; for \&quot;endpoint missing\&quot;.
      * @endpoint get /v1/roles/personas
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -618,82 +612,8 @@ export class RoleManagementService extends BaseService {
     }
 
     /**
-     * Grant a Permission to a Role
-     * Grants a single permission key to a role, auto-registering the key in the permission registry when it is not yet known. Use this tool for additive one-off grants; do not use updateRolePermissions, which replaces the role\&#39;s entire permission set, and do not use assignRolePermissionByKey, which requires the permission to be registered already. Preconditions: the caller must hold security:role:edit and the role must exist; the permission key does not need to exist beforehand. Required inputs: roleId (UUID) as a path parameter and permission (domain:resource:action) in the body; permissionKey is accepted as a field alias. Emits a SECURITY_ROLE_PERMISSION_GRANT event and publishes an internal grant audit record, then returns the updated role. Returns 400 when permission is missing or blank, and 404 when the role does not exist.
-     * @endpoint put /v1/roles/{roleId}/permissions/grant
-     * @param roleId
-     * @param rolePermissionGrantRequest The single permission key to grant to the role.
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public grantRolePermission(roleId: string, rolePermissionGrantRequest: RolePermissionGrantRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RoleDto>;
-    public grantRolePermission(roleId: string, rolePermissionGrantRequest: RolePermissionGrantRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RoleDto>>;
-    public grantRolePermission(roleId: string, rolePermissionGrantRequest: RolePermissionGrantRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RoleDto>>;
-    public grantRolePermission(roleId: string, rolePermissionGrantRequest: RolePermissionGrantRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (roleId === null || roleId === undefined) {
-            throw new Error('Required parameter roleId was null or undefined when calling grantRolePermission.');
-        }
-        if (rolePermissionGrantRequest === null || rolePermissionGrantRequest === undefined) {
-            throw new Error('Required parameter rolePermissionGrantRequest was null or undefined when calling grantRolePermission.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/roles/${this.configuration.encodeParam({name: "roleId", value: roleId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/permissions/grant`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<RoleDto>('put', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: rolePermissionGrantRequest,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
      * List the Roles That Hold Given Permissions
-     * Returns, for each requested permission code, the roles of the caller\&#39;s tenant that currently hold it, each with its name, its templateKey (null for a custom role) and its locationScope; roles are sorted by name, and a code no role holds is answered with an empty roles list. Use this tool to state a tenant\&#39;s real separation of duties, as the Approval limits page does; do not use listRoles or getRoleDefaultPermissions, which return every grant of every role or one role at a time, and do not use it to find users, because it returns no user ids, names or counts. Preconditions: the caller must hold security:role:view, which may ask about any registered code, or accounting:ap_approval_policy:manage, which may ask only about accounting:ap:approve, accounting:ap:approve_over_limit, accounting:ap:reject, accounting:ap:pay and accounting:ap_approval_policy:manage. Required inputs: permission, repeated once per code, 1 to 20 distinct domain:resource:action codes; codes are trimmed, matched case-insensitively and answered in the catalog\&#39;s spelling, and duplicates are answered once in first-seen order. No events are emitted and no state changes; the grants are read live for the caller\&#39;s tenant with no cache, so a token issued before a grant change keeps its old permissions until it is reissued. Returns 400 VALIDATION_ERROR when permission is missing, names more than 20 distinct codes or holds a malformed code, with fieldErrors on permission naming the bad values. Returns 403 when the caller holds neither permission, and 403 PERMISSION_HOLDER_SCOPE_DENIED, naming the codes, before anything is read when a scoped caller asks about a code outside its scope. Returns 422 PERMISSION_NOT_REGISTERED, with fieldErrors on permission, when a well-formed code is not in the permission catalog, rather than answering that nobody holds it.
+     * Returns, for each requested permission code, the roles of the caller\&#39;s tenant that currently hold it through one of their capabilities, each with its key, its display name, its templateKey (null for a role the tenant created) and its locationScope; roles are sorted by name, and a code no role holds is answered with an empty roles list. Use this tool to state a tenant\&#39;s real separation of duties, as the Approval limits page does; do not use listRoles or getRoleDefaultPermissions, which return every role or one role at a time, and do not use it to find users, because it returns no user ids, names or counts. Preconditions: the caller must hold security:role:view, which may ask about any registered code, or accounting:ap_approval_policy:manage, which may ask only about accounting:ap:approve, accounting:ap:approve_over_limit, accounting:ap:reject, accounting:ap:pay and accounting:ap_approval_policy:manage. Required inputs: permission, repeated once per code, 1 to 20 distinct domain:resource:action codes; codes are trimmed, matched case-insensitively and answered in the catalog\&#39;s spelling, and duplicates are answered once in first-seen order. No events are emitted and no state changes; roles and their capabilities are read live for the caller\&#39;s tenant with no cache, so a token issued before a role changed keeps its old permissions until it is reissued. Returns 400 VALIDATION_ERROR when permission is missing, names more than 20 distinct codes or holds a malformed code, with fieldErrors on permission naming the bad values. Returns 403 when the caller holds neither permission, and 403 PERMISSION_HOLDER_SCOPE_DENIED, naming the codes, before anything is read when a scoped caller asks about a code outside its scope. Returns 422 PERMISSION_NOT_REGISTERED, with fieldErrors on permission, when a well-formed code is not in the permission catalog, rather than answering that nobody holds it.
      * @endpoint get /v1/roles/permission-holders
      * @param permission A permission code (domain:resource:action) to report the holders of; repeat the parameter once per code, at least one and at most 20 distinct codes. Matched case-insensitively and answered in the catalog\&#39;s spelling.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -765,7 +685,7 @@ export class RoleManagementService extends BaseService {
 
     /**
      * List All Roles in the System
-     * Returns every role in the system with its permission set and audit metadata. Use this tool to enumerate roles; use getRoleById or getRoleByName instead for a single known role. Preconditions: the caller must hold security:role:view. Required inputs: none; there are no filters or paging parameters. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when no roles exist; there are no business error conditions.
+     * Returns every role of the caller\&#39;s tenant with its key, display name, capability keys, system and allCapabilities flags and audit metadata, sorted by name. Use this tool to enumerate roles; use getRoleById, getRoleByKey or getRoleByName instead for a single known role. Preconditions: the caller must hold security:role:view. Required inputs: none; there are no filters or paging parameters. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when no roles exist; there are no business error conditions.
      * @endpoint get /v1/roles
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -966,75 +886,11 @@ export class RoleManagementService extends BaseService {
     }
 
     /**
-     * Revoke a Permission From a Role
-     * Removes a permission key from a role\&#39;s grant set. Use this tool to take one permission away from a role; do not use deleteRole, which removes the role entirely, and do not use revokeRoleAssignment, which ends a user\&#39;s assignment instead. Preconditions: the caller must hold security:role:edit and the role must exist; revoking a key the role does not hold is a silent no-op. Required inputs: roleId (UUID) and permissionKey (domain:resource:action) as path parameters; there is no request body. Emits a SECURITY_ROLE_PERMISSION_REVOKE event. Returns 404 when the role does not exist; an unknown permission key still yields 204.
-     * @endpoint delete /v1/roles/{roleId}/permissions/{permissionKey}
-     * @param roleId
-     * @param permissionKey
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public revokeRolePermission(roleId: string, permissionKey: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public revokeRolePermission(roleId: string, permissionKey: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public revokeRolePermission(roleId: string, permissionKey: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public revokeRolePermission(roleId: string, permissionKey: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (roleId === null || roleId === undefined) {
-            throw new Error('Required parameter roleId was null or undefined when calling revokeRolePermission.');
-        }
-        if (permissionKey === null || permissionKey === undefined) {
-            throw new Error('Required parameter permissionKey was null or undefined when calling revokeRolePermission.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/roles/${this.configuration.encodeParam({name: "roleId", value: roleId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/permissions/${this.configuration.encodeParam({name: "permissionKey", value: permissionKey, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('delete', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Update a Role\&#39;s Description and Persona Metadata
-     * Replaces a role\&#39;s description and its MCP persona metadata: the persona title, focus, and tone slots, the persona rank, and whether the role participates in persona resolution at all. Use this tool to correct or rank a role\&#39;s assistant persona; do not use updateRolePermissions, which changes the role\&#39;s permission grants, and do not use it to rename a role — the name keys authority resolution and permission grants and is not updatable here. Preconditions: the caller must hold security:role:edit and the role id must exist. Required inputs: role id as a path parameter. Every body field is optional, but an omitted field clears the stored value rather than leaving it unchanged, which is how a persona slot is returned to its derived default. Persona slots must describe the role rather than instruct the assistant: single line, within the length cap, and free of imperative control verbs. Emits a SECURITY_ROLE_UPDATE event and records the modifying actor and timestamp. Returns 400 when a persona slot fails validation and 404 when no role has that id.
+     * Update a Role\&#39;s Name, Description and Persona Metadata
+     * Replaces a role\&#39;s display name, its description and its MCP persona metadata: the persona title, focus, and tone slots, the persona rank, and whether the role participates in persona resolution at all. A new name renames the role and changes nothing else: the role\&#39;s key, its capabilities and its assignments stay as they are. Use this tool to rename a role or correct its description or assistant persona; do not use it to change what the role grants, which is updateRoleCapabilities. Preconditions: the caller must hold security:role:edit, the role id must exist, the role must not be a system role, and no other role of the tenant may carry the new name, compared after trimming, collapsing repeated spaces and ignoring letter case. Required inputs: role id as a path parameter and name in the body; every other body field is optional, but an omitted field clears the stored value rather than leaving it unchanged, which is how a persona slot is returned to its derived default. Persona slots must describe the role rather than instruct the assistant: single line, within the length cap, and free of imperative control verbs. Emits a SECURITY_ROLE_UPDATE event and records the modifying actor and timestamp. Returns 400 when name is blank or a persona slot fails validation, 404 when no role has that id, 409 DUPLICATE_ROLE_NAME when another role carries the name, and 409 ROLE_SYSTEM_IMMUTABLE when the role is a system role.
      * @endpoint put /v1/roles/{id}
-     * @param id
-     * @param roleUpdateRequest Replacement description and MCP persona metadata.
+     * @param id Id of the role to update
+     * @param roleUpdateRequest Replacement name, description and MCP persona metadata.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -1104,20 +960,24 @@ export class RoleManagementService extends BaseService {
     }
 
     /**
-     * Replace a Role\&#39;s Permission Set
-     * Replaces a role\&#39;s entire permission set with the supplied list of permission names. Use this tool for wholesale permission resets; do not use grantRolePermission or revokeRolePermission, which change one key at a time and preserve the rest. Preconditions: the caller must hold security:role:edit, the role must exist, and every named permission must already be registered. Required inputs: roleId (UUID) and permissionNames, a set of domain:resource:action strings; an empty set clears all grants. Emits a SECURITY_ROLE_PERMISSIONS_UPDATE event and returns the updated role with its new permission set. Returns 404 when the role or any named permission does not exist; nothing is applied on failure.
-     * @endpoint put /v1/roles/permissions
-     * @param rolePermissionsRequest The role and the replacement set of permission names it should hold.
+     * Replace a Role\&#39;s Capabilities
+     * Replaces the complete set of capabilities a role holds with the keys supplied: a capability not listed leaves the role, a new one joins it, and an empty list leaves a role that grants nothing. What the role grants is the union of its capabilities\&#39; permissions; nothing grants a permission to a role directly. Use this tool to change what a role can do; do not use updateRole, which renames a role and edits its description and persona, and do not use createRoleAssignment, which gives a role to a user. Preconditions: the caller must hold security:role:edit; the role must exist, must not be a system role and must not be a role that holds every capability; every key must name a capability from listCapabilities. Required inputs: role id as a path parameter and capabilities, the full list of keys, in the body; order and repeats do not matter. Emits a SECURITY_ROLE_CAPABILITIES_UPDATE event and records the modifying actor and timestamp; capabilities the role already held keep the record of who added them. A user who holds the role gets the changed permissions when their access token is next issued or refreshed. Returns 400 when capabilities is missing; 404 when no role has that id; 409 ROLE_SYSTEM_IMMUTABLE when the role is a system role; 409 ROLE_CAPABILITIES_FIXED when the role holds every capability; 422 CAPABILITY_UNKNOWN, with fieldErrors on capabilities, when a key names no capability; and 422 CAPABILITY_NOT_ASSIGNABLE when a key names a system capability.
+     * @endpoint put /v1/roles/{id}/capabilities
+     * @param id Id of the role whose capabilities are replaced
+     * @param roleCapabilitiesRequest The complete set of capability keys the role is to hold.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public updateRolePermissions(rolePermissionsRequest: RolePermissionsRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RoleDto>;
-    public updateRolePermissions(rolePermissionsRequest: RolePermissionsRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RoleDto>>;
-    public updateRolePermissions(rolePermissionsRequest: RolePermissionsRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RoleDto>>;
-    public updateRolePermissions(rolePermissionsRequest: RolePermissionsRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (rolePermissionsRequest === null || rolePermissionsRequest === undefined) {
-            throw new Error('Required parameter rolePermissionsRequest was null or undefined when calling updateRolePermissions.');
+    public updateRoleCapabilities(id: string, roleCapabilitiesRequest: RoleCapabilitiesRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<RoleDto>;
+    public updateRoleCapabilities(id: string, roleCapabilitiesRequest: RoleCapabilitiesRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<RoleDto>>;
+    public updateRoleCapabilities(id: string, roleCapabilitiesRequest: RoleCapabilitiesRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<RoleDto>>;
+    public updateRoleCapabilities(id: string, roleCapabilitiesRequest: RoleCapabilitiesRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling updateRoleCapabilities.');
+        }
+        if (roleCapabilitiesRequest === null || roleCapabilitiesRequest === undefined) {
+            throw new Error('Required parameter roleCapabilitiesRequest was null or undefined when calling updateRoleCapabilities.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1157,12 +1017,12 @@ export class RoleManagementService extends BaseService {
             }
         }
 
-        let localVarPath = `/v1/roles/permissions`;
+        let localVarPath = `/v1/roles/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/capabilities`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<RoleDto>('put', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: rolePermissionsRequest,
+                body: roleCapabilitiesRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

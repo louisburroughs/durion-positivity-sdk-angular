@@ -10,7 +10,7 @@
 
 
 /**
- * Replacement description and MCP persona metadata for an existing role
+ * Replacement name, description and MCP persona metadata for an existing role
  */
 export interface RoleUpdateRequest {
     /**
@@ -25,6 +25,10 @@ export interface RoleUpdateRequest {
      * MCP persona resolution priority, lowest first. Null leaves the role unranked.
      */
     mcpPersonaRank?: number;
+    /**
+     * Display name of the role, stored as typed and trimmed. Changing it renames the role; the role\'s key stays the same. Unique within the tenant ignoring letter case and repeated spaces.
+     */
+    name: string;
     /**
      * What the caller works on. Cleared, and therefore derived from the description, when omitted.
      */
@@ -77,8 +81,8 @@ export function instanceOfRoleUpdateRequest(value: object): value is RoleUpdateR
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRoleUpdateRequestPropertyNames();
-    const optionalStringProperties = createRoleUpdateRequestOptionalProperties({ name: 'description', nullable: false }, { name: 'personaFocus', nullable: false }, { name: 'personaTitle', nullable: false }, { name: 'personaTone', nullable: false }, );
+    const requiredProperties = createRoleUpdateRequestPropertyNames('name', );
+    const optionalStringProperties = createRoleUpdateRequestOptionalProperties({ name: 'description', nullable: false }, { name: 'name', nullable: false }, { name: 'personaFocus', nullable: false }, { name: 'personaTitle', nullable: false }, { name: 'personaTone', nullable: false }, );
     const optionalNumberProperties = createRoleUpdateRequestOptionalProperties({ name: 'mcpPersonaRank', nullable: false }, );
     const optionalBooleanProperties = createRoleUpdateRequestOptionalProperties({ name: 'mcpPersonaEligible', nullable: false }, );
 

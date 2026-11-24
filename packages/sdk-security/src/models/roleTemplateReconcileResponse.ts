@@ -7,29 +7,29 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { GrantAdded } from './grantAdded';
+import { CapabilityAdded } from './capabilityAdded';
 
 
 /**
- * What reconciling the platform role template into a tenant changed; all lists empty when the tenant was already up to the template
+ * What reconciling the role template into a tenant changed; all lists empty when the tenant was already up to the template
  */
 export interface RoleTemplateReconcileResponse {
     /**
-     * Grants the template carries that an existing role of the tenant lacked, now added
+     * Capabilities the template gives a starter role that the tenant\'s role lacked, now added. System roles are not listed here; see systemRolesRewritten
      */
-    grantsAdded?: Array<GrantAdded>;
+    capabilitiesAdded: Array<CapabilityAdded>;
     /**
-     * Template roles the tenant lacked, created with the template\'s grants
+     * Keys of the template roles the tenant lacked, created with the template\'s capabilities
      */
-    rolesCreated?: Array<string>;
+    rolesCreated: Array<string>;
     /**
-     * Existing roles of the tenant that carried no template key and now do
+     * Keys of the system roles that differed from their platform definition and were rewritten to it
      */
-    templateKeysAssigned?: Array<string>;
+    systemRolesRewritten: Array<string>;
     /**
      * The reconciled tenant
      */
-    tenantId?: string;
+    tenantId: string;
 }
 
 function isOptionalRoleTemplateReconcileResponsePropertyOfType(
@@ -70,7 +70,7 @@ export function instanceOfRoleTemplateReconcileResponse(value: object): value is
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRoleTemplateReconcileResponsePropertyNames();
+    const requiredProperties = createRoleTemplateReconcileResponsePropertyNames('capabilitiesAdded', 'rolesCreated', 'systemRolesRewritten', 'tenantId', );
     const optionalStringProperties = createRoleTemplateReconcileResponseOptionalProperties({ name: 'tenantId', nullable: false }, );
     const optionalNumberProperties = createRoleTemplateReconcileResponseOptionalProperties();
     const optionalBooleanProperties = createRoleTemplateReconcileResponseOptionalProperties();

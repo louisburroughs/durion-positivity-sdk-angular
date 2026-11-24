@@ -22,7 +22,7 @@ export interface UserRoleDto {
      */
     endDate?: string;
     /**
-     * Stable role code
+     * Key of the assigned role: immutable, and never its display name
      */
     roleCode?: string;
     /**

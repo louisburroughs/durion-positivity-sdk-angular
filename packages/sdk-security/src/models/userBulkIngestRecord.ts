@@ -14,7 +14,7 @@
  */
 export interface UserBulkIngestRecord {
     /**
-     * Existing role names to attach
+     * Keys of existing roles to attach
      */
     roles: Set<string>;
     /**
