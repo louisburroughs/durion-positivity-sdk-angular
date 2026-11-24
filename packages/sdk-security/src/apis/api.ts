@@ -3,6 +3,7 @@ export * from './audit.service';
 export * from './auditExports.service';
 export * from './authAPI.service';
 export * from './authorization.service';
+export * from './capabilityCatalog.service';
 export * from './jWTAPI.service';
 export * from './permissionRegistry.service';
 export * from './platformAdministratorAPI.service';

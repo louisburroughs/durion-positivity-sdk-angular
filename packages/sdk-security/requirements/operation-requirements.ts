@@ -68,6 +68,7 @@ export type SecurityOperationId =
   | 'issueInternalToken'
   | 'issueTokenPair'
   | 'linkUserPerson'
+  | 'listCapabilities'
   | 'listPermissionHolders'
   | 'listPermissions'
   | 'listPermissionsByDomain'
@@ -156,6 +157,7 @@ export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<SecurityOperationId
   issueInternalToken: { anyOf: ['security:token:issue_internal'], allOf: [], authenticated: false },
   issueTokenPair: { anyOf: ['security:token:issue_internal'], allOf: [], authenticated: false },
   linkUserPerson: { anyOf: ['security:user:edit'], allOf: [], authenticated: false },
+  listCapabilities: { anyOf: ['security:role:view'], allOf: [], authenticated: false },
   listPermissionHolders: { anyOf: ['accounting:ap_approval_policy:manage', 'security:role:view'], allOf: [], authenticated: false },
   listPermissions: { anyOf: ['security:permission:view'], allOf: [], authenticated: false },
   listPermissionsByDomain: { anyOf: ['security:permission:view'], allOf: [], authenticated: false },

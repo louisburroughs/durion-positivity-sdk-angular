@@ -20,6 +20,7 @@ export * from './bulkIngestRequestUserBulkIngestRecord';
 export * from './bulkIngestRequestUserPersonLinkBulkIngestRecord';
 export * from './bulkIngestResponse';
 export * from './bulkIngestResult';
+export * from './capabilityDto';
 export * from './catalogVersionResponse';
 export * from './conflict';
 export * from './createUserRequest';
