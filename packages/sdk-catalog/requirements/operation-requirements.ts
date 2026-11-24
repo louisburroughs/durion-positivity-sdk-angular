@@ -129,6 +129,7 @@ export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<CatalogOperationId,
   bulkIngestServicePackageMembers: { anyOf: ['catalog:service_package:manage'], allOf: [], authenticated: false },
   bulkIngestServicePackages: { anyOf: ['catalog:service_package:manage'], allOf: [], authenticated: false },
   createCatalog: { anyOf: ['catalog:catalog_grouping:edit'], allOf: [], authenticated: false },
+  createCatalogItem: { anyOf: ['catalog:catalog_item:create'], allOf: [], authenticated: false },
   createLocationPriceOverride: { anyOf: ['catalog:location_price_override:write'], allOf: [], authenticated: false },
   createPriceBook: { anyOf: ['catalog:price_book:write'], allOf: [], authenticated: false },
   createPriceBookRule: { anyOf: ['catalog:price_book:write'], allOf: [], authenticated: false },
@@ -141,7 +142,7 @@ export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<CatalogOperationId,
   deactivatePriceBookRule: { anyOf: ['catalog:price_book:write'], allOf: [], authenticated: false },
   deactivateUomConversion: { anyOf: ['catalog:uom_conversion:edit'], allOf: [], authenticated: false },
   deleteCatalog: { anyOf: ['catalog:catalog_grouping:delete'], allOf: [], authenticated: false },
-  deleteCatalogItem: { anyOf: ['catalog:product:delete'], allOf: [], authenticated: false },
+  deleteCatalogItem: { anyOf: ['catalog:catalog_item:delete', 'catalog:product:delete'], allOf: [], authenticated: false },
   deleteProductUom: { anyOf: ['catalog:product_uom:edit'], allOf: [], authenticated: false },
   deleteSubstitutionGroup: { anyOf: ['catalog:substitution_group:edit'], allOf: [], authenticated: false },
   findProductByCode: { anyOf: ['catalog:product:view'], allOf: [], authenticated: false },
@@ -199,6 +200,7 @@ export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<CatalogOperationId,
   setServiceRequirements: { anyOf: ['catalog:service_requirement:manage'], allOf: [], authenticated: false },
   supersedeServiceLaborStandard: { anyOf: ['catalog:labor_standard:manage'], allOf: [], authenticated: false },
   updateCatalog: { anyOf: ['catalog:catalog_grouping:edit'], allOf: [], authenticated: false },
+  updateCatalogItem: { anyOf: ['catalog:catalog_item:edit'], allOf: [], authenticated: false },
   updatePriceBook: { anyOf: ['catalog:price_book:write'], allOf: [], authenticated: false },
   updatePriceBookRule: { anyOf: ['catalog:price_book:write'], allOf: [], authenticated: false },
   updateProduct: { anyOf: ['catalog:product:edit'], allOf: [], authenticated: false },
@@ -212,7 +214,4 @@ export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<CatalogOperationId,
 };
 
 /** Operations whose spec declares no requirement, so they have no entry above. */
-export const OPERATIONS_WITHOUT_REQUIREMENTS: readonly CatalogOperationId[] = [
-  'createCatalogItem',
-  'updateCatalogItem',
-];
+export const OPERATIONS_WITHOUT_REQUIREMENTS: readonly CatalogOperationId[] = [];
