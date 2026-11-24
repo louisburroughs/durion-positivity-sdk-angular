@@ -34,14 +34,24 @@ export interface EmployeeRoleAssignmentDto {
      */
     roleId: string;
     /**
-     * The role\'s location scope: ALL (applies everywhere) or LOCATION (particular locations)
-     */
-    roleLocationScope: string;
-    /**
      * Display name of the assigned security role, as the tenant stores it: a label to show, never an identifier
      */
     roleName: string;
+    /**
+     * Where the role is held: TENANT (at every location) or LOCATIONS (at scopeLocationIds and the locations beneath each)
+     */
+    scopeKind: EmployeeRoleAssignmentDtoScopeKindEnum;
+    /**
+     * Ids of the locations the role is held at, as assigned (not expanded to the locations beneath them). Empty when scopeKind is TENANT
+     */
+    scopeLocationIds: Array<string>;
 }
+export enum EmployeeRoleAssignmentDtoScopeKindEnum {
+    Tenant = 'TENANT',
+    Locations = 'LOCATIONS'
+};
+
+
 
 function isOptionalEmployeeRoleAssignmentDtoPropertyOfType(
     value: Record<string, unknown>,
@@ -81,8 +91,8 @@ export function instanceOfEmployeeRoleAssignmentDto(value: object): value is Emp
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createEmployeeRoleAssignmentDtoPropertyNames('assignmentId', 'effectiveStartDate', 'roleId', 'roleLocationScope', 'roleName', );
-    const optionalStringProperties = createEmployeeRoleAssignmentDtoOptionalProperties({ name: 'assignmentId', nullable: false }, { name: 'effectiveEndDate', nullable: true }, { name: 'effectiveStartDate', nullable: false }, { name: 'revokedAt', nullable: true }, { name: 'roleId', nullable: false }, { name: 'roleLocationScope', nullable: false }, { name: 'roleName', nullable: false }, );
+    const requiredProperties = createEmployeeRoleAssignmentDtoPropertyNames('assignmentId', 'effectiveStartDate', 'roleId', 'roleName', 'scopeKind', 'scopeLocationIds', );
+    const optionalStringProperties = createEmployeeRoleAssignmentDtoOptionalProperties({ name: 'assignmentId', nullable: false }, { name: 'effectiveEndDate', nullable: true }, { name: 'effectiveStartDate', nullable: false }, { name: 'revokedAt', nullable: true }, { name: 'roleId', nullable: false }, { name: 'roleName', nullable: false }, { name: 'scopeKind', nullable: false }, );
     const optionalNumberProperties = createEmployeeRoleAssignmentDtoOptionalProperties();
     const optionalBooleanProperties = createEmployeeRoleAssignmentDtoOptionalProperties();
 

@@ -18,10 +18,6 @@ export interface PermissionHolderRole {
      */
     key: string;
     /**
-     * ALL when the role holds its permissions at every location; LOCATION when it holds them only at the locations its holder is assigned to (ADR-0061 §2).
-     */
-    locationScope: PermissionHolderRoleLocationScopeEnum;
-    /**
      * The role\'s display name as the tenant stores it: tenant-authored text, shown as typed and never compared on.
      */
     name: string;
@@ -30,12 +26,6 @@ export interface PermissionHolderRole {
      */
     templateKey: string | null;
 }
-export enum PermissionHolderRoleLocationScopeEnum {
-    All = 'ALL',
-    Location = 'LOCATION'
-};
-
-
 
 function isOptionalPermissionHolderRolePropertyOfType(
     value: Record<string, unknown>,
@@ -75,8 +65,8 @@ export function instanceOfPermissionHolderRole(value: object): value is Permissi
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPermissionHolderRolePropertyNames('key', 'locationScope', 'name', 'templateKey', );
-    const optionalStringProperties = createPermissionHolderRoleOptionalProperties({ name: 'key', nullable: false }, { name: 'locationScope', nullable: false }, { name: 'name', nullable: false }, { name: 'templateKey', nullable: true }, );
+    const requiredProperties = createPermissionHolderRolePropertyNames('key', 'name', 'templateKey', );
+    const optionalStringProperties = createPermissionHolderRoleOptionalProperties({ name: 'key', nullable: false }, { name: 'name', nullable: false }, { name: 'templateKey', nullable: true }, );
     const optionalNumberProperties = createPermissionHolderRoleOptionalProperties();
     const optionalBooleanProperties = createPermissionHolderRoleOptionalProperties();
 

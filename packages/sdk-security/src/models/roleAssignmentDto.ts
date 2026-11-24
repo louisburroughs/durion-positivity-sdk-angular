@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { AssignmentScopeDto } from './assignmentScopeDto';
 
 
 /**
@@ -57,6 +58,7 @@ export interface RoleAssignmentDto {
      * Display name of the assigned role as the tenant stores it; show it, never compare on it
      */
     roleName: string;
+    scope: AssignmentScopeDto;
     /**
      * Identifier of the user the role is assigned to
      */
@@ -101,7 +103,7 @@ export function instanceOfRoleAssignmentDto(value: object): value is RoleAssignm
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRoleAssignmentDtoPropertyNames('id', 'roleCode', 'roleId', 'roleName', 'userId', );
+    const requiredProperties = createRoleAssignmentDtoPropertyNames('id', 'roleCode', 'roleId', 'roleName', 'scope', 'userId', );
     const optionalStringProperties = createRoleAssignmentDtoOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'effectiveEndDate', nullable: false }, { name: 'effectiveStartDate', nullable: false }, { name: 'id', nullable: false }, { name: 'lastModifiedAt', nullable: false }, { name: 'lastModifiedBy', nullable: false }, { name: 'revokedAt', nullable: false }, { name: 'roleCode', nullable: false }, { name: 'roleId', nullable: false }, { name: 'roleName', nullable: false }, { name: 'userId', nullable: false }, );
     const optionalNumberProperties = createRoleAssignmentDtoOptionalProperties();
     const optionalBooleanProperties = createRoleAssignmentDtoOptionalProperties();

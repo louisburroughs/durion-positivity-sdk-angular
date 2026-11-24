@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { AssignmentScopeRequest } from './assignmentScopeRequest';
 
 
 /**
@@ -17,6 +18,7 @@ export interface UserBulkIngestRecord {
      * Keys of existing roles to attach
      */
     roles: Set<string>;
+    scope: AssignmentScopeRequest;
     /**
      * Unique login name
      */
@@ -61,7 +63,7 @@ export function instanceOfUserBulkIngestRecord(value: object): value is UserBulk
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createUserBulkIngestRecordPropertyNames('roles', 'username', );
+    const requiredProperties = createUserBulkIngestRecordPropertyNames('roles', 'scope', 'username', );
     const optionalStringProperties = createUserBulkIngestRecordOptionalProperties({ name: 'username', nullable: false }, );
     const optionalNumberProperties = createUserBulkIngestRecordOptionalProperties();
     const optionalBooleanProperties = createUserBulkIngestRecordOptionalProperties();

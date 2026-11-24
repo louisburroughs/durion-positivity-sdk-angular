@@ -72,6 +72,7 @@ export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<VehicleInventoryOpe
   listVehicleDueDates: { anyOf: ['vehicle-inventory:due-dates:view'], allOf: [], conditional: [], authenticated: false },
   listVehiclesLegacy: { anyOf: [], allOf: [], conditional: [], authenticated: true },
   mergeVehiclePreferences: { anyOf: ['vehicle-inventory:preferences:manage'], allOf: [], conditional: [], authenticated: false },
+  replayVehicleFacts: { anyOf: ['vehicle-inventory:fact:replay'], allOf: [], conditional: [], authenticated: false },
   searchVehicleDueDates: { anyOf: ['vehicle-inventory:due-dates:view'], allOf: [], conditional: [], authenticated: false },
   searchVehicles: { anyOf: ['vehicle-inventory:search:view'], allOf: [], conditional: [], authenticated: false },
   searchVehiclesByQuery: { anyOf: ['vehicle-inventory:search:view'], allOf: [], conditional: [], authenticated: false },
@@ -83,6 +84,4 @@ export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<VehicleInventoryOpe
 };
 
 /** Operations whose spec declares no requirement, so they have no entry above. */
-export const OPERATIONS_WITHOUT_REQUIREMENTS: readonly VehicleInventoryOperationId[] = [
-  'replayVehicleFacts',
-];
+export const OPERATIONS_WITHOUT_REQUIREMENTS: readonly VehicleInventoryOperationId[] = [];

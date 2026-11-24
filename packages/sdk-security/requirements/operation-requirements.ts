@@ -44,6 +44,7 @@ export type SecurityOperationId =
   | 'getAuditExportJob'
   | 'getAuditExportWebhook'
   | 'getAuthCapabilities'
+  | 'getMyAccess'
   | 'getMyTenant'
   | 'getPermissionById'
   | 'getPermissionCatalogVersion'
@@ -133,6 +134,7 @@ export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<SecurityOperationId
   getAuditEvent: { anyOf: ['security:audit:view'], allOf: [], conditional: [], authenticated: false },
   getAuditExportJob: { anyOf: ['security:audit:export'], allOf: [], conditional: [], authenticated: false },
   getAuditExportWebhook: { anyOf: ['security:audit:export', 'security:audit_export:webhook_manage'], allOf: [], conditional: [], authenticated: false },
+  getMyAccess: { anyOf: [], allOf: [], conditional: [], authenticated: true },
   getMyTenant: { anyOf: [], allOf: [], conditional: [], authenticated: true },
   getPermissionById: { anyOf: ['security:permission:view'], allOf: [], conditional: [], authenticated: false },
   getPersonAuthorizationDecision: { anyOf: ['security:authorization:decide'], allOf: [], conditional: [], authenticated: false },

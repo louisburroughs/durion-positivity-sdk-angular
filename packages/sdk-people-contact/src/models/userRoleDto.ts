@@ -26,6 +26,14 @@ export interface UserRoleDto {
      */
     roleCode?: string;
     /**
+     * Where the role is held: TENANT (at every location) or LOCATIONS (at scopeLocationIds and the locations beneath each)
+     */
+    scopeKind?: UserRoleDtoScopeKindEnum;
+    /**
+     * Ids of the locations the role is held at, as assigned. Empty when scopeKind is TENANT
+     */
+    scopeLocationIds?: Array<string>;
+    /**
      * Inclusive start of the effective window
      */
     startDate?: string;
@@ -34,6 +42,12 @@ export interface UserRoleDto {
      */
     userId?: string;
 }
+export enum UserRoleDtoScopeKindEnum {
+    Tenant = 'TENANT',
+    Locations = 'LOCATIONS'
+};
+
+
 
 function isOptionalUserRoleDtoPropertyOfType(
     value: Record<string, unknown>,
@@ -74,7 +88,7 @@ export function instanceOfUserRoleDto(value: object): value is UserRoleDto {
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createUserRoleDtoPropertyNames();
-    const optionalStringProperties = createUserRoleDtoOptionalProperties({ name: 'endDate', nullable: false }, { name: 'roleCode', nullable: false }, { name: 'startDate', nullable: false }, { name: 'userId', nullable: false }, );
+    const optionalStringProperties = createUserRoleDtoOptionalProperties({ name: 'endDate', nullable: false }, { name: 'roleCode', nullable: false }, { name: 'scopeKind', nullable: false }, { name: 'startDate', nullable: false }, { name: 'userId', nullable: false }, );
     const optionalNumberProperties = createUserRoleDtoOptionalProperties();
     const optionalBooleanProperties = createUserRoleDtoOptionalProperties({ name: 'active', nullable: false }, );
 

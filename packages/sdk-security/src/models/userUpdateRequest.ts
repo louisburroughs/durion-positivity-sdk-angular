@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { AssignmentScopeRequest } from './assignmentScopeRequest';
 
 
 /**
@@ -21,6 +22,7 @@ export interface UserUpdateRequest {
      * Replacement set of role keys
      */
     roles?: Set<string>;
+    scope?: AssignmentScopeRequest;
     /**
      * New login username
      */

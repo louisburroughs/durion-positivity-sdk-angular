@@ -18,14 +18,28 @@ export interface PersonRoleAssignmentRequest {
      */
     endDate?: string;
     /**
+     * Ids of the locations the role is held at. Required and non-empty when scopeKind is LOCATIONS; omitted or empty when it is TENANT. At most 32: a role held at a location is held at everything beneath it, so name the parent instead
+     */
+    locationIds?: Set<string>;
+    /**
      * Key of the role to assign, as listAssignableRoles returns it in key and code. A role\'s display name is not accepted
      */
     roleCode: string;
+    /**
+     * Where the role is held: TENANT (at every location) or LOCATIONS (at locationIds and the locations beneath each)
+     */
+    scopeKind: PersonRoleAssignmentRequestScopeKindEnum;
     /**
      * Date and time the assignment becomes effective
      */
     startDate?: string;
 }
+export enum PersonRoleAssignmentRequestScopeKindEnum {
+    Tenant = 'TENANT',
+    Locations = 'LOCATIONS'
+};
+
+
 
 function isOptionalPersonRoleAssignmentRequestPropertyOfType(
     value: Record<string, unknown>,
@@ -65,8 +79,8 @@ export function instanceOfPersonRoleAssignmentRequest(value: object): value is P
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPersonRoleAssignmentRequestPropertyNames('roleCode', );
-    const optionalStringProperties = createPersonRoleAssignmentRequestOptionalProperties({ name: 'endDate', nullable: false }, { name: 'roleCode', nullable: false }, { name: 'startDate', nullable: false }, );
+    const requiredProperties = createPersonRoleAssignmentRequestPropertyNames('roleCode', 'scopeKind', );
+    const optionalStringProperties = createPersonRoleAssignmentRequestOptionalProperties({ name: 'endDate', nullable: false }, { name: 'roleCode', nullable: false }, { name: 'scopeKind', nullable: false }, { name: 'startDate', nullable: false }, );
     const optionalNumberProperties = createPersonRoleAssignmentRequestOptionalProperties();
     const optionalBooleanProperties = createPersonRoleAssignmentRequestOptionalProperties();
 

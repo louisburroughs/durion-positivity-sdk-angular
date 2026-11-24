@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { AssignmentScopeRequest } from './assignmentScopeRequest';
 
 
 /**
@@ -25,6 +26,7 @@ export interface RoleAssignmentRequest {
      * Identifier of the role to assign
      */
     roleId: string;
+    scope: AssignmentScopeRequest;
     /**
      * Identifier of the user to assign the role to
      */
@@ -69,7 +71,7 @@ export function instanceOfRoleAssignmentRequest(value: object): value is RoleAss
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRoleAssignmentRequestPropertyNames('roleId', 'userId', );
+    const requiredProperties = createRoleAssignmentRequestPropertyNames('roleId', 'scope', 'userId', );
     const optionalStringProperties = createRoleAssignmentRequestOptionalProperties({ name: 'effectiveEndDate', nullable: false }, { name: 'effectiveStartDate', nullable: false }, { name: 'roleId', nullable: false }, { name: 'userId', nullable: false }, );
     const optionalNumberProperties = createRoleAssignmentRequestOptionalProperties();
     const optionalBooleanProperties = createRoleAssignmentRequestOptionalProperties();
