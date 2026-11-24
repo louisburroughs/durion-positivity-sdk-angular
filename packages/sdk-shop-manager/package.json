@@ -1,6 +1,6 @@
 {
   "name": "@durion-sdk/shop-manager",
-  "version": "0.336.0-alpha",
+  "version": "0.337.0-alpha",
   "description": "OpenAPI client for @durion-sdk/shop-manager",
   "author": "OpenAPI-Generator Contributors",
   "repository": {
