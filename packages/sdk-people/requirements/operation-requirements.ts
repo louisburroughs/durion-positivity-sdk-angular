@@ -97,6 +97,7 @@ export type PeopleOperationId =
   | 'submitWorkSession'
   | 'transitionTimePeriod'
   | 'updateEmployee'
+  | 'updateJobRole'
   | 'updateShift'
   | 'updateStaffingAssignment'
   | 'waiveTimeEntryException';
@@ -188,6 +189,7 @@ export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<PeopleOperationId, 
   submitWorkSession: { anyOf: [], allOf: [], conditional: [], authenticated: true },
   transitionTimePeriod: { anyOf: ['people:timePeriod:transition'], allOf: [], conditional: [], authenticated: false },
   updateEmployee: { anyOf: ['people:employee:edit'], allOf: [], conditional: [], authenticated: false },
+  updateJobRole: { anyOf: ['people:jobRole:manage'], allOf: [], conditional: [], authenticated: false },
   updateShift: { anyOf: ['people:shift:manage'], allOf: [], conditional: [], authenticated: false },
   updateStaffingAssignment: { anyOf: ['people:employee:edit'], allOf: [], conditional: [], authenticated: false },
   waiveTimeEntryException: { anyOf: ['people:timeException:resolve'], allOf: [], conditional: [], authenticated: false },

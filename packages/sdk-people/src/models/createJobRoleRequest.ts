@@ -10,7 +10,7 @@
 
 
 /**
- * Request to add a job role to the calling tenant\'s own list
+ * Request to add a job title to the calling tenant\'s own list
  */
 export interface CreateJobRoleRequest {
     /**
@@ -25,7 +25,33 @@ export interface CreateJobRoleRequest {
      * Display name
      */
     name: string;
+    /**
+     * Chatbot persona: what the holder works on; a single descriptive line of at most 200 characters. Omit to derive it from the description.
+     */
+    personaFocus?: string;
+    /**
+     * Chatbot persona: who the holder is, in the second person; a single descriptive line of at most 60 characters. Omit to derive it from the name.
+     */
+    personaTitle?: string;
+    /**
+     * Chatbot persona: how to speak to the holder; a single descriptive line of at most 120 characters. Omit for a neutral default.
+     */
+    personaTone?: string;
+    /**
+     * The position this title fills; dispatch, staffing targets and shift rules key on it
+     */
+    positionType: CreateJobRoleRequestPositionTypeEnum;
 }
+export enum CreateJobRoleRequestPositionTypeEnum {
+    Technician = 'TECHNICIAN',
+    ServiceAdvisor = 'SERVICE_ADVISOR',
+    Parts = 'PARTS',
+    Management = 'MANAGEMENT',
+    Accounting = 'ACCOUNTING',
+    Other = 'OTHER'
+};
+
+
 
 function isOptionalCreateJobRoleRequestPropertyOfType(
     value: Record<string, unknown>,
@@ -65,8 +91,8 @@ export function instanceOfCreateJobRoleRequest(value: object): value is CreateJo
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateJobRoleRequestPropertyNames('code', 'name', );
-    const optionalStringProperties = createCreateJobRoleRequestOptionalProperties({ name: 'code', nullable: false }, { name: 'description', nullable: false }, { name: 'name', nullable: false }, );
+    const requiredProperties = createCreateJobRoleRequestPropertyNames('code', 'name', 'positionType', );
+    const optionalStringProperties = createCreateJobRoleRequestOptionalProperties({ name: 'code', nullable: false }, { name: 'description', nullable: false }, { name: 'name', nullable: false }, { name: 'personaFocus', nullable: false }, { name: 'personaTitle', nullable: false }, { name: 'personaTone', nullable: false }, { name: 'positionType', nullable: false }, );
     const optionalNumberProperties = createCreateJobRoleRequestOptionalProperties();
     const optionalBooleanProperties = createCreateJobRoleRequestOptionalProperties();
 
