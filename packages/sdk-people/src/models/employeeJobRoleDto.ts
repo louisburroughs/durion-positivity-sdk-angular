@@ -25,7 +25,21 @@ export interface EmployeeJobRoleDto {
      * Display name
      */
     name: string;
+    /**
+     * The position the title fills (ADR-0079 section 7); null only when the title could not be read alongside the id
+     */
+    positionType?: EmployeeJobRoleDtoPositionTypeEnum | null;
 }
+export enum EmployeeJobRoleDtoPositionTypeEnum {
+    Technician = 'TECHNICIAN',
+    ServiceAdvisor = 'SERVICE_ADVISOR',
+    Parts = 'PARTS',
+    Management = 'MANAGEMENT',
+    Accounting = 'ACCOUNTING',
+    Other = 'OTHER'
+};
+
+
 
 function isOptionalEmployeeJobRoleDtoPropertyOfType(
     value: Record<string, unknown>,
@@ -66,7 +80,7 @@ export function instanceOfEmployeeJobRoleDto(value: object): value is EmployeeJo
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createEmployeeJobRoleDtoPropertyNames('code', 'id', 'name', );
-    const optionalStringProperties = createEmployeeJobRoleDtoOptionalProperties({ name: 'code', nullable: false }, { name: 'id', nullable: false }, { name: 'name', nullable: false }, );
+    const optionalStringProperties = createEmployeeJobRoleDtoOptionalProperties({ name: 'code', nullable: false }, { name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'positionType', nullable: true }, );
     const optionalNumberProperties = createEmployeeJobRoleDtoOptionalProperties();
     const optionalBooleanProperties = createEmployeeJobRoleDtoOptionalProperties();
 

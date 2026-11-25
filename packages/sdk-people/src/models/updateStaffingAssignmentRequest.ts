@@ -27,6 +27,10 @@ export interface UpdateStaffingAssignmentRequest {
      */
     isPrimary: boolean;
     /**
+     * Job title the person is staffed in, from GET /v1/people/job-roles; it must exist in the tenant and be active (an update may keep a title deactivated since)
+     */
+    jobRoleId: string;
+    /**
      * Location identifier
      */
     locationId: string;
@@ -34,10 +38,6 @@ export interface UpdateStaffingAssignmentRequest {
      * Person identifier
      */
     personId: string;
-    /**
-     * Assignment role
-     */
-    role: string;
 }
 
 function isOptionalUpdateStaffingAssignmentRequestPropertyOfType(
@@ -78,8 +78,8 @@ export function instanceOfUpdateStaffingAssignmentRequest(value: object): value 
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createUpdateStaffingAssignmentRequestPropertyNames('effectiveFrom', 'isPrimary', 'locationId', 'personId', 'role', );
-    const optionalStringProperties = createUpdateStaffingAssignmentRequestOptionalProperties({ name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, { name: 'locationId', nullable: false }, { name: 'personId', nullable: false }, { name: 'role', nullable: false }, );
+    const requiredProperties = createUpdateStaffingAssignmentRequestPropertyNames('effectiveFrom', 'isPrimary', 'jobRoleId', 'locationId', 'personId', );
+    const optionalStringProperties = createUpdateStaffingAssignmentRequestOptionalProperties({ name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, { name: 'jobRoleId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'personId', nullable: false }, );
     const optionalNumberProperties = createUpdateStaffingAssignmentRequestOptionalProperties();
     const optionalBooleanProperties = createUpdateStaffingAssignmentRequestOptionalProperties({ name: 'effectiveDateRangeValid', nullable: false }, { name: 'isPrimary', nullable: false }, );
 

@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { JobRoleRefDto } from './jobRoleRefDto';
 
 
 /**
@@ -45,6 +46,7 @@ export interface PeopleAvailabilityResponse {
      * First name of the person
      */
     firstName?: string;
+    jobRole: JobRoleRefDto;
     /**
      * Last name of the person
      */
@@ -61,10 +63,6 @@ export interface PeopleAvailabilityResponse {
      * Whether this is the person\'s primary assignment
      */
     primary: boolean;
-    /**
-     * Assignment role at the location
-     */
-    role?: string;
     /**
      * The open work session; non-null exactly when clockState is CLOCKED_IN or ON_BREAK. The break endpoints are keyed by this id.
      */
@@ -120,8 +118,8 @@ export function instanceOfPeopleAvailabilityResponse(value: object): value is Pe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPeopleAvailabilityResponsePropertyNames('assignmentStatus', 'locationId', 'personId', 'primary', );
-    const optionalStringProperties = createPeopleAvailabilityResponseOptionalProperties({ name: 'assignmentStatus', nullable: false }, { name: 'availableOn', nullable: false }, { name: 'breakStartedAt', nullable: false }, { name: 'clockState', nullable: false }, { name: 'clockedInAt', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'locationId', nullable: false }, { name: 'personId', nullable: false }, { name: 'role', nullable: false }, { name: 'workSessionId', nullable: false }, );
+    const requiredProperties = createPeopleAvailabilityResponsePropertyNames('assignmentStatus', 'jobRole', 'locationId', 'personId', 'primary', );
+    const optionalStringProperties = createPeopleAvailabilityResponseOptionalProperties({ name: 'assignmentStatus', nullable: false }, { name: 'availableOn', nullable: false }, { name: 'breakStartedAt', nullable: false }, { name: 'clockState', nullable: false }, { name: 'clockedInAt', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, { name: 'firstName', nullable: false }, { name: 'lastName', nullable: false }, { name: 'locationId', nullable: false }, { name: 'personId', nullable: false }, { name: 'workSessionId', nullable: false }, );
     const optionalNumberProperties = createPeopleAvailabilityResponseOptionalProperties();
     const optionalBooleanProperties = createPeopleAvailabilityResponseOptionalProperties({ name: 'primary', nullable: false }, );
 

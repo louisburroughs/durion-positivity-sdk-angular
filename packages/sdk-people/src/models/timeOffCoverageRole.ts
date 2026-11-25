@@ -10,15 +10,15 @@
 
 
 /**
- * A staffing role below its target on the day, with this request counted as approved
+ * A position type below its target on the day, with this request counted as approved
  */
 export interface TimeOffCoverageRole {
     /**
-     * Canonical staffing-assignment role
+     * Position type
      */
-    role: string;
+    positionType: TimeOffCoverageRolePositionTypeEnum;
     /**
-     * SCHEDULED shifts in the role on the day, excluding people on approved time off and this request\'s person
+     * People with a SCHEDULED shift in a job title of the position on the day, excluding people on approved time off and this request\'s person
      */
     scheduled: number;
     /**
@@ -26,6 +26,16 @@ export interface TimeOffCoverageRole {
      */
     target: number;
 }
+export enum TimeOffCoverageRolePositionTypeEnum {
+    Technician = 'TECHNICIAN',
+    ServiceAdvisor = 'SERVICE_ADVISOR',
+    Parts = 'PARTS',
+    Management = 'MANAGEMENT',
+    Accounting = 'ACCOUNTING',
+    Other = 'OTHER'
+};
+
+
 
 function isOptionalTimeOffCoverageRolePropertyOfType(
     value: Record<string, unknown>,
@@ -65,8 +75,8 @@ export function instanceOfTimeOffCoverageRole(value: object): value is TimeOffCo
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTimeOffCoverageRolePropertyNames('role', 'scheduled', 'target', );
-    const optionalStringProperties = createTimeOffCoverageRoleOptionalProperties({ name: 'role', nullable: false }, );
+    const requiredProperties = createTimeOffCoverageRolePropertyNames('positionType', 'scheduled', 'target', );
+    const optionalStringProperties = createTimeOffCoverageRoleOptionalProperties({ name: 'positionType', nullable: false }, );
     const optionalNumberProperties = createTimeOffCoverageRoleOptionalProperties({ name: 'scheduled', nullable: false }, { name: 'target', nullable: false }, );
     const optionalBooleanProperties = createTimeOffCoverageRoleOptionalProperties();
 

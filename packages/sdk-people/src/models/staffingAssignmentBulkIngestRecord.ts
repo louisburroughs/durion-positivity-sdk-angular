@@ -10,7 +10,7 @@
 
 
 /**
- * One person\'s assignment to a location for a role
+ * One person\'s assignment to a location in a job title
  */
 export interface StaffingAssignmentBulkIngestRecord {
     /**
@@ -26,6 +26,10 @@ export interface StaffingAssignmentBulkIngestRecord {
      */
     employeeNumber: string;
     /**
+     * Code of the job title at that location, from the tenant\'s list (GET /v1/people/job-roles), compared ignoring case. Resolved to the title here, as the employee number is resolved to a person, so a file names titles by their stable code.
+     */
+    jobRoleCode: string;
+    /**
      * Location the person is assigned to. Defaults to the request\'s locationId when omitted.
      */
     locationId?: string;
@@ -33,10 +37,6 @@ export interface StaffingAssignmentBulkIngestRecord {
      * Whether this is the person\'s primary assignment
      */
     primary?: boolean;
-    /**
-     * Role at that location
-     */
-    role: string;
 }
 
 function isOptionalStaffingAssignmentBulkIngestRecordPropertyOfType(
@@ -77,8 +77,8 @@ export function instanceOfStaffingAssignmentBulkIngestRecord(value: object): val
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createStaffingAssignmentBulkIngestRecordPropertyNames('employeeNumber', 'role', );
-    const optionalStringProperties = createStaffingAssignmentBulkIngestRecordOptionalProperties({ name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'locationId', nullable: false }, { name: 'role', nullable: false }, );
+    const requiredProperties = createStaffingAssignmentBulkIngestRecordPropertyNames('employeeNumber', 'jobRoleCode', );
+    const optionalStringProperties = createStaffingAssignmentBulkIngestRecordOptionalProperties({ name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, { name: 'employeeNumber', nullable: false }, { name: 'jobRoleCode', nullable: false }, { name: 'locationId', nullable: false }, );
     const optionalNumberProperties = createStaffingAssignmentBulkIngestRecordOptionalProperties();
     const optionalBooleanProperties = createStaffingAssignmentBulkIngestRecordOptionalProperties({ name: 'primary', nullable: false }, );
 

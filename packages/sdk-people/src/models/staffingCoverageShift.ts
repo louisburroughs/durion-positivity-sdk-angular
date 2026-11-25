@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { JobRoleRefDto } from './jobRoleRefDto';
 
 
 /**
@@ -25,14 +26,11 @@ export interface StaffingCoverageShift {
      * Shift end instant
      */
     endAt: string;
+    jobRole: JobRoleRefDto;
     /**
      * Person on the shift
      */
     personId: string;
-    /**
-     * Canonical staffing-assignment role of the shift
-     */
-    role: string;
     /**
      * Shift id
      */
@@ -100,8 +98,8 @@ export function instanceOfStaffingCoverageShift(value: object): value is Staffin
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createStaffingCoverageShiftPropertyNames('endAt', 'personId', 'role', 'shiftId', 'startAt', );
-    const optionalStringProperties = createStaffingCoverageShiftOptionalProperties({ name: 'clockState', nullable: true }, { name: 'displayName', nullable: true }, { name: 'endAt', nullable: false }, { name: 'personId', nullable: false }, { name: 'role', nullable: false }, { name: 'shiftId', nullable: false }, { name: 'startAt', nullable: false }, { name: 'status', nullable: true }, );
+    const requiredProperties = createStaffingCoverageShiftPropertyNames('endAt', 'jobRole', 'personId', 'shiftId', 'startAt', );
+    const optionalStringProperties = createStaffingCoverageShiftOptionalProperties({ name: 'clockState', nullable: true }, { name: 'displayName', nullable: true }, { name: 'endAt', nullable: false }, { name: 'personId', nullable: false }, { name: 'shiftId', nullable: false }, { name: 'startAt', nullable: false }, { name: 'status', nullable: true }, );
     const optionalNumberProperties = createStaffingCoverageShiftOptionalProperties();
     const optionalBooleanProperties = createStaffingCoverageShiftOptionalProperties();
 

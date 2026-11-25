@@ -10,7 +10,7 @@
 
 
 /**
- * A shift to schedule for one person at one location in one staffing-assignment role
+ * A shift to schedule for one person at one location in one of their job titles there
  */
 export interface CreateShiftRequest {
     /**
@@ -18,17 +18,17 @@ export interface CreateShiftRequest {
      */
     endAt: string;
     /**
+     * Job title the shift is worked in, from GET /v1/people/job-roles; an active title the person holds an ACTIVE staffing assignment in at locationId
+     */
+    jobRoleId: string;
+    /**
      * Location the shift is worked at; its replicated time zone decides the shift\'s local date
      */
     locationId: string;
     /**
-     * Person the shift is for; they must hold an ACTIVE staffing assignment at locationId in role covering the shift\'s local date
+     * Person the shift is for; they must hold an ACTIVE staffing assignment at locationId in jobRoleId covering the shift\'s local date
      */
     personId: string;
-    /**
-     * Staffing-assignment role the shift is worked in, e.g. TECHNICIAN; trimmed and upper-cased before it is matched and stored
-     */
-    role: string;
     /**
      * Shift start, an ISO-8601 date-time with offset
      */
@@ -73,8 +73,8 @@ export function instanceOfCreateShiftRequest(value: object): value is CreateShif
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateShiftRequestPropertyNames('endAt', 'locationId', 'personId', 'role', 'startAt', );
-    const optionalStringProperties = createCreateShiftRequestOptionalProperties({ name: 'endAt', nullable: false }, { name: 'locationId', nullable: false }, { name: 'personId', nullable: false }, { name: 'role', nullable: false }, { name: 'startAt', nullable: false }, );
+    const requiredProperties = createCreateShiftRequestPropertyNames('endAt', 'jobRoleId', 'locationId', 'personId', 'startAt', );
+    const optionalStringProperties = createCreateShiftRequestOptionalProperties({ name: 'endAt', nullable: false }, { name: 'jobRoleId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'personId', nullable: false }, { name: 'startAt', nullable: false }, );
     const optionalNumberProperties = createCreateShiftRequestOptionalProperties();
     const optionalBooleanProperties = createCreateShiftRequestOptionalProperties();
 
