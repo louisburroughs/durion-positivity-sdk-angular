@@ -10,7 +10,7 @@
 
 
 /**
- * A tenant-defined job role, e.g. \'Lead Technician\' or \'Parts Counter\'
+ * A tenant-defined job title, e.g. \'Lead Technician\' or \'Parts Counter\': the position it fills and the chatbot persona of the person who holds it. HR master data; it grants no access.
  */
 export interface JobRoleDto {
     /**
@@ -34,8 +34,34 @@ export interface JobRoleDto {
      * Display name
      */
     name: string;
+    /**
+     * Chatbot persona: what the holder works on; absent means derived from the description
+     */
+    personaFocus?: string;
+    /**
+     * Chatbot persona: who the holder is, in the second person; absent means derived from the name
+     */
+    personaTitle?: string;
+    /**
+     * Chatbot persona: how to speak to the holder; absent means a neutral default
+     */
+    personaTone?: string;
+    /**
+     * The position this title fills; dispatch, staffing targets and shift rules key on it, never on the code or name
+     */
+    positionType: JobRoleDtoPositionTypeEnum;
     updatedAt: string;
 }
+export enum JobRoleDtoPositionTypeEnum {
+    Technician = 'TECHNICIAN',
+    ServiceAdvisor = 'SERVICE_ADVISOR',
+    Parts = 'PARTS',
+    Management = 'MANAGEMENT',
+    Accounting = 'ACCOUNTING',
+    Other = 'OTHER'
+};
+
+
 
 function isOptionalJobRoleDtoPropertyOfType(
     value: Record<string, unknown>,
@@ -75,8 +101,8 @@ export function instanceOfJobRoleDto(value: object): value is JobRoleDto {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createJobRoleDtoPropertyNames('active', 'code', 'createdAt', 'id', 'name', 'updatedAt', );
-    const optionalStringProperties = createJobRoleDtoOptionalProperties({ name: 'code', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'description', nullable: false }, { name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const requiredProperties = createJobRoleDtoPropertyNames('active', 'code', 'createdAt', 'id', 'name', 'positionType', 'updatedAt', );
+    const optionalStringProperties = createJobRoleDtoOptionalProperties({ name: 'code', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'description', nullable: false }, { name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'personaFocus', nullable: false }, { name: 'personaTitle', nullable: false }, { name: 'personaTone', nullable: false }, { name: 'positionType', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createJobRoleDtoOptionalProperties();
     const optionalBooleanProperties = createJobRoleDtoOptionalProperties({ name: 'active', nullable: false }, );
 

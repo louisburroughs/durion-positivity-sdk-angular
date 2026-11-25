@@ -22,6 +22,8 @@ import { ApiError } from '../models/apiError';
 import { CreateJobRoleRequest } from '../models/createJobRoleRequest';
 // @ts-ignore
 import { JobRoleDto } from '../models/jobRoleDto';
+// @ts-ignore
+import { UpdateJobRoleRequest } from '../models/updateJobRoleRequest';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -41,9 +43,9 @@ export class JobRoleAPIService extends BaseService {
 
     /**
      * Add A Job Role To The Tenant\&#39;s List
-     * Adds a job role to the calling tenant\&#39;s own list: a code, a display name and an optional description. HR master data only -- it carries no permissions and is never evaluated by security decisions. Use this tool to set up the tenant\&#39;s job titles before assigning them to employees; do not use it to create an application role or a permission, which are pos-security-service concepts. Preconditions: the caller holds people:jobRole:manage; the code must not already be used by another job role in this tenant (another tenant may reuse the same code freely). Required inputs: code and name; description is optional. Emits a PEOPLE_JOB_ROLE_CREATE event; no other state changes. Returns 422 when the code is already in use within this tenant.
+     * Adds a job title to the calling tenant\&#39;s own list: a code, a display name, the position it fills, an optional description and an optional chatbot persona. HR master data only -- it carries no permissions and is never evaluated by security decisions. Use this tool to set up the tenant\&#39;s job titles before assigning them to employees; do not use it to create an application role or a permission, which are pos-security-service concepts. Preconditions: the caller holds people:jobRole:manage; the code must not already be used by another job role in this tenant (another tenant may reuse the same code freely). Required inputs: code, name and positionType (TECHNICIAN, SERVICE_ADVISOR, PARTS, MANAGEMENT, ACCOUNTING or OTHER); description and the persona slots personaTitle, personaFocus and personaTone are optional. The code can never be changed afterwards. Emits a PEOPLE_JOB_ROLE_CREATE event and publishes people.job-role.updated; no other state changes. Returns 400 when a required field is missing or a persona slot is not a single descriptive line, and 422 when the code is already in use within this tenant.
      * @endpoint post /v1/people/job-roles
-     * @param createJobRoleRequest Job role to add to the calling tenant\&#39;s own list: a code, a display name and an optional description.
+     * @param createJobRoleRequest Job title to add to the calling tenant\&#39;s own list: a code, a display name, the position it fills, and an optional description and persona.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
@@ -155,6 +157,80 @@ export class JobRoleAPIService extends BaseService {
         return this.httpClient.request<Array<JobRoleDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Change A Job Title On The Tenant\&#39;s List
+     * Changes one job title on the calling tenant\&#39;s own list: its name, description, active flag, position type or chatbot persona. A field left out of the body is left unchanged; an explicit JSON null clears description or a persona slot. HR master data only -- a title grants no access. Use this tool to rename a title, correct the position it fills (which dispatch, staffing targets and shift rules key on), retire it with active&#x3D;false, or set the persona the chatbot uses for the people who hold it; do not use it to change an application role, which is a pos-security-service concept. Preconditions: the caller holds people:jobRole:manage; the title is on this tenant\&#39;s list. Required inputs: the title id in the path and at least one field in the body; the code is immutable, so a body that sends code is refused. Emits a PEOPLE_JOB_ROLE_UPDATE event and publishes people.job-role.updated; no other state changes. Returns 200 with the title, 400 when the body sends code, a blank name, an unknown positionType or a persona slot that is not a single descriptive line, 404 when the tenant has no title with this id, and 409 when another edit changed the title at the same time.
+     * @endpoint patch /v1/people/job-roles/{id}
+     * @param id Job title id
+     * @param updateJobRoleRequest The fields to change; absent fields are left unchanged.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public updateJobRole(id: string, updateJobRoleRequest: UpdateJobRoleRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<JobRoleDto>;
+    public updateJobRole(id: string, updateJobRoleRequest: UpdateJobRoleRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<JobRoleDto>>;
+    public updateJobRole(id: string, updateJobRoleRequest: UpdateJobRoleRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<JobRoleDto>>;
+    public updateJobRole(id: string, updateJobRoleRequest: UpdateJobRoleRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling updateJobRole.');
+        }
+        if (updateJobRoleRequest === null || updateJobRoleRequest === undefined) {
+            throw new Error('Required parameter updateJobRoleRequest was null or undefined when calling updateJobRole.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/v1/people/job-roles/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<JobRoleDto>('patch', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: updateJobRoleRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
