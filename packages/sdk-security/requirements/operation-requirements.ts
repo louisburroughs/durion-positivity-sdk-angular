@@ -26,16 +26,20 @@ export type SecurityOperationId =
   | 'bulkIngestUsers'
   | 'checkPermissionExists'
   | 'confirmPasswordReset'
+  | 'confirmPendingRoleSuggestion'
   | 'createAuditEvent'
+  | 'createJobTitleRoleSuggestion'
   | 'createPricingSnapshot'
   | 'createRole'
   | 'createRoleAssignment'
   | 'createUser'
   | 'decodePermissionBits'
   | 'deleteAuditExportWebhook'
+  | 'deleteJobTitleRoleSuggestion'
   | 'deleteRole'
   | 'deleteUser'
   | 'disableUserAccount'
+  | 'dismissPendingRoleSuggestion'
   | 'downloadAuditExport'
   | 'enableUserAccount'
   | 'expireUserAccount'
@@ -68,6 +72,8 @@ export type SecurityOperationId =
   | 'issueTokenPair'
   | 'linkUserPerson'
   | 'listCapabilities'
+  | 'listJobTitleRoleSuggestions'
+  | 'listPendingRoleSuggestions'
   | 'listPermissionHolders'
   | 'listPermissions'
   | 'listPermissionsByDomain'
@@ -117,16 +123,20 @@ export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<SecurityOperationId
   bulkIngestUserPersonLinks: { anyOf: ['security:user:edit'], allOf: [], conditional: [], authenticated: false },
   bulkIngestUsers: { anyOf: ['security:user:create'], allOf: [], conditional: [], authenticated: false },
   checkPermissionExists: { anyOf: ['security:permission:view'], allOf: [], conditional: [], authenticated: false },
+  confirmPendingRoleSuggestion: { anyOf: ['security:role:assign'], allOf: [], conditional: [], authenticated: false },
   createAuditEvent: { anyOf: ['security:audit:create'], allOf: [], conditional: [], authenticated: false },
+  createJobTitleRoleSuggestion: { anyOf: ['security:role:edit'], allOf: [], conditional: [], authenticated: false },
   createPricingSnapshot: { anyOf: ['security:audit:create'], allOf: [], conditional: [], authenticated: false },
   createRole: { anyOf: ['security:role:create'], allOf: [], conditional: [], authenticated: false },
   createRoleAssignment: { anyOf: ['security:role:assign'], allOf: [], conditional: [], authenticated: false },
   createUser: { anyOf: ['security:user:create'], allOf: [], conditional: [], authenticated: false },
   decodePermissionBits: { anyOf: ['security:permission:view'], allOf: [], conditional: [], authenticated: false },
   deleteAuditExportWebhook: { anyOf: ['security:audit_export:webhook_manage'], allOf: [], conditional: [], authenticated: false },
+  deleteJobTitleRoleSuggestion: { anyOf: ['security:role:edit'], allOf: [], conditional: [], authenticated: false },
   deleteRole: { anyOf: ['security:role:delete'], allOf: [], conditional: [], authenticated: false },
   deleteUser: { anyOf: ['security:user:delete'], allOf: [], conditional: [], authenticated: false },
   disableUserAccount: { anyOf: ['security:user_account_state:manage'], allOf: [], conditional: [], authenticated: false },
+  dismissPendingRoleSuggestion: { anyOf: ['security:role:assign'], allOf: [], conditional: [], authenticated: false },
   downloadAuditExport: { anyOf: ['security:audit:export'], allOf: [], conditional: [], authenticated: false },
   enableUserAccount: { anyOf: ['security:user_account_state:manage'], allOf: [], conditional: [], authenticated: false },
   expireUserAccount: { anyOf: ['security:user_account_state:manage'], allOf: [], conditional: [], authenticated: false },
@@ -156,6 +166,8 @@ export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<SecurityOperationId
   issueTokenPair: { anyOf: ['security:token:issue_internal'], allOf: [], conditional: [], authenticated: false },
   linkUserPerson: { anyOf: ['security:user:edit'], allOf: [], conditional: [], authenticated: false },
   listCapabilities: { anyOf: ['security:role:view'], allOf: [], conditional: [], authenticated: false },
+  listJobTitleRoleSuggestions: { anyOf: ['security:role:view'], allOf: [], conditional: [], authenticated: false },
+  listPendingRoleSuggestions: { anyOf: ['security:role:view'], allOf: [], conditional: [], authenticated: false },
   listPermissionHolders: { anyOf: ['accounting:ap_approval_policy:manage', 'security:role:view'], allOf: [], conditional: [], authenticated: false },
   listPermissions: { anyOf: ['security:permission:view'], allOf: [], conditional: [], authenticated: false },
   listPermissionsByDomain: { anyOf: ['security:permission:view'], allOf: [], conditional: [], authenticated: false },

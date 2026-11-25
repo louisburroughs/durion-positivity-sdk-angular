@@ -11,6 +11,7 @@ export * from './platformAdministratorAPI.service';
 export * from './platformRoleTemplateAPI.service';
 export * from './platformSupportAPI.service';
 export * from './roleManagement.service';
+export * from './roleSuggestions.service';
 export * from './selfRegistrationReviewAPI.service';
 export * from './tenantAPI.service';
 export * from './userAPI.service';
