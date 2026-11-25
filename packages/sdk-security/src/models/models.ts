@@ -76,7 +76,6 @@ export * from './roleUpdateRequest';
 export * from './selfRegistrationRequest';
 export * from './selfRegistrationResponse';
 export * from './selfRegistrationReviewCaseResponse';
-export * from './sendActivationMessageRequest';
 export * from './sortObject';
 export * from './suggestedAlternative';
 export * from './tenantMeResponse';

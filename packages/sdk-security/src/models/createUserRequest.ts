@@ -12,10 +12,6 @@ import { AssignmentScopeRequest } from './assignmentScopeRequest';
 
 export interface CreateUserRequest {
     /**
-     * Address to send the activation message to, for a username that is not itself an email address. Never stored; when absent the username is used if it is an address
-     */
-    email?: string | null;
-    /**
      * Keys of existing roles to attach directly
      */
     roles: Set<string>;
@@ -65,7 +61,7 @@ export function instanceOfCreateUserRequest(value: object): value is CreateUserR
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createCreateUserRequestPropertyNames('roles', 'scope', 'username', );
-    const optionalStringProperties = createCreateUserRequestOptionalProperties({ name: 'email', nullable: true }, { name: 'username', nullable: false }, );
+    const optionalStringProperties = createCreateUserRequestOptionalProperties({ name: 'username', nullable: false }, );
     const optionalNumberProperties = createCreateUserRequestOptionalProperties();
     const optionalBooleanProperties = createCreateUserRequestOptionalProperties();
 
