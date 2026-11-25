@@ -60,6 +60,10 @@ export interface RoleAssignmentDto {
     roleName: string;
     scope: AssignmentScopeDto;
     /**
+     * The pos-people staffing assignment this assignment was confirmed from; it ends with that record and its end date follows the record\'s. Null for an assignment made directly
+     */
+    readonly sourceStaffingAssignmentId?: string;
+    /**
      * Identifier of the user the role is assigned to
      */
     userId: string;
@@ -104,7 +108,7 @@ export function instanceOfRoleAssignmentDto(value: object): value is RoleAssignm
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createRoleAssignmentDtoPropertyNames('id', 'roleCode', 'roleId', 'roleName', 'scope', 'userId', );
-    const optionalStringProperties = createRoleAssignmentDtoOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'effectiveEndDate', nullable: false }, { name: 'effectiveStartDate', nullable: false }, { name: 'id', nullable: false }, { name: 'lastModifiedAt', nullable: false }, { name: 'lastModifiedBy', nullable: false }, { name: 'revokedAt', nullable: false }, { name: 'roleCode', nullable: false }, { name: 'roleId', nullable: false }, { name: 'roleName', nullable: false }, { name: 'userId', nullable: false }, );
+    const optionalStringProperties = createRoleAssignmentDtoOptionalProperties({ name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'effectiveEndDate', nullable: false }, { name: 'effectiveStartDate', nullable: false }, { name: 'id', nullable: false }, { name: 'lastModifiedAt', nullable: false }, { name: 'lastModifiedBy', nullable: false }, { name: 'revokedAt', nullable: false }, { name: 'roleCode', nullable: false }, { name: 'roleId', nullable: false }, { name: 'roleName', nullable: false }, { name: 'sourceStaffingAssignmentId', nullable: false }, { name: 'userId', nullable: false }, );
     const optionalNumberProperties = createRoleAssignmentDtoOptionalProperties();
     const optionalBooleanProperties = createRoleAssignmentDtoOptionalProperties();
 
