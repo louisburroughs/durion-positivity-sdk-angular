@@ -7,16 +7,18 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { JobRoleRefDto } from './jobRoleRefDto';
 
 
 /**
- * A scheduled shift: one person at one location in one role over a window of at most 24 hours, owned by the local date it starts on
+ * A scheduled shift: one person at one location in one job title over a window of at most 24 hours, owned by the local date it starts on
  */
 export interface ShiftResponse {
     /**
      * Shift end instant
      */
     endAt: string;
+    jobRole: JobRoleRefDto;
     /**
      * Location the shift is worked at
      */
@@ -25,10 +27,6 @@ export interface ShiftResponse {
      * Person the shift is for
      */
     personId: string;
-    /**
-     * Canonical (upper-case) staffing-assignment role
-     */
-    role: string;
     /**
      * Local business date the shift belongs to: the date of startAt in timezone
      */
@@ -99,8 +97,8 @@ export function instanceOfShiftResponse(value: object): value is ShiftResponse {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createShiftResponsePropertyNames('endAt', 'locationId', 'personId', 'role', 'shiftDate', 'shiftId', 'startAt', 'status', 'timezone', 'version', );
-    const optionalStringProperties = createShiftResponseOptionalProperties({ name: 'endAt', nullable: false }, { name: 'locationId', nullable: false }, { name: 'personId', nullable: false }, { name: 'role', nullable: false }, { name: 'shiftDate', nullable: false }, { name: 'shiftId', nullable: false }, { name: 'startAt', nullable: false }, { name: 'status', nullable: false }, { name: 'timezone', nullable: false }, );
+    const requiredProperties = createShiftResponsePropertyNames('endAt', 'jobRole', 'locationId', 'personId', 'shiftDate', 'shiftId', 'startAt', 'status', 'timezone', 'version', );
+    const optionalStringProperties = createShiftResponseOptionalProperties({ name: 'endAt', nullable: false }, { name: 'locationId', nullable: false }, { name: 'personId', nullable: false }, { name: 'shiftDate', nullable: false }, { name: 'shiftId', nullable: false }, { name: 'startAt', nullable: false }, { name: 'status', nullable: false }, { name: 'timezone', nullable: false }, );
     const optionalNumberProperties = createShiftResponseOptionalProperties({ name: 'version', nullable: false }, );
     const optionalBooleanProperties = createShiftResponseOptionalProperties();
 

@@ -10,30 +10,40 @@
 
 
 /**
- * One role\'s target, scheduled and live counts for the coverage date at the location; a role has a row when it has a target for the date\'s weekday, a shift on the date, or someone on the clock under it (live only)
+ * One position type\'s target, scheduled and live counts for the coverage date at the location; a position has a row when it has a target for the date\'s weekday, a shift on the date, or someone on the clock under it (live only)
  */
 export interface StaffingCoverageRole {
     /**
-     * People in this role at the location with an open work session and an open break now; 0 unless live is true
+     * People in this position at the location with an open work session and an open break now; 0 unless live is true
      */
     onBreak: number;
     /**
-     * People in this role at the location with an open work session and no open break now; 0 unless live is true
+     * People in this position at the location with an open work session and no open break now; 0 unless live is true
      */
     onClock: number;
     /**
-     * Canonical staffing-assignment role
+     * Position type; every job title of this position counts here
      */
-    role: string;
+    positionType: StaffingCoverageRolePositionTypeEnum;
     /**
-     * SCHEDULED shifts in this role whose shift date is the coverage date and whose person still holds the matching ACTIVE staffing assignment, excluding shifts covered by the person\'s APPROVED time off (status TIME_OFF)
+     * People with a SCHEDULED shift in a job title of this position whose shift date is the coverage date and who still hold the matching ACTIVE staffing assignment, excluding shifts covered by the person\'s APPROVED time off (status TIME_OFF)
      */
     scheduled: number;
     /**
-     * Head count wanted on the date\'s weekday; null when no target is set for this role and weekday
+     * Head count wanted on the date\'s weekday; null when no target is set for this position and weekday
      */
     target?: number | null;
 }
+export enum StaffingCoverageRolePositionTypeEnum {
+    Technician = 'TECHNICIAN',
+    ServiceAdvisor = 'SERVICE_ADVISOR',
+    Parts = 'PARTS',
+    Management = 'MANAGEMENT',
+    Accounting = 'ACCOUNTING',
+    Other = 'OTHER'
+};
+
+
 
 function isOptionalStaffingCoverageRolePropertyOfType(
     value: Record<string, unknown>,
@@ -73,8 +83,8 @@ export function instanceOfStaffingCoverageRole(value: object): value is Staffing
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createStaffingCoverageRolePropertyNames('onBreak', 'onClock', 'role', 'scheduled', );
-    const optionalStringProperties = createStaffingCoverageRoleOptionalProperties({ name: 'role', nullable: false }, );
+    const requiredProperties = createStaffingCoverageRolePropertyNames('onBreak', 'onClock', 'positionType', 'scheduled', );
+    const optionalStringProperties = createStaffingCoverageRoleOptionalProperties({ name: 'positionType', nullable: false }, );
     const optionalNumberProperties = createStaffingCoverageRoleOptionalProperties({ name: 'onBreak', nullable: false }, { name: 'onClock', nullable: false }, { name: 'scheduled', nullable: false }, { name: 'target', nullable: true }, );
     const optionalBooleanProperties = createStaffingCoverageRoleOptionalProperties();
 

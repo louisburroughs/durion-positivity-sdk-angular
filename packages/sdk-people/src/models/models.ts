@@ -43,6 +43,7 @@ export * from './enableEmployeeRequestDto';
 export * from './fieldError';
 export * from './inactivePersonActiveUserResponse';
 export * from './jobRoleDto';
+export * from './jobRoleRefDto';
 export * from './locationReachItem';
 export * from './locationReachResponse';
 export * from './pagedResponseApprovalPersonDto';

@@ -10,7 +10,7 @@
 
 
 /**
- * Head count wanted on the floor for one staffing-assignment role on one ISO day of the week; advisory only
+ * Head count wanted on the floor for one position type on one ISO day of the week; advisory only
  */
 export interface StaffingTargetItem {
     /**
@@ -22,10 +22,20 @@ export interface StaffingTargetItem {
      */
     headCount: number;
     /**
-     * Staffing-assignment role, e.g. TECHNICIAN; trimmed and upper-cased
+     * Position the head count is wanted for; every job title of that position counts
      */
-    role: string;
+    positionType: StaffingTargetItemPositionTypeEnum;
 }
+export enum StaffingTargetItemPositionTypeEnum {
+    Technician = 'TECHNICIAN',
+    ServiceAdvisor = 'SERVICE_ADVISOR',
+    Parts = 'PARTS',
+    Management = 'MANAGEMENT',
+    Accounting = 'ACCOUNTING',
+    Other = 'OTHER'
+};
+
+
 
 function isOptionalStaffingTargetItemPropertyOfType(
     value: Record<string, unknown>,
@@ -65,8 +75,8 @@ export function instanceOfStaffingTargetItem(value: object): value is StaffingTa
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createStaffingTargetItemPropertyNames('dayOfWeek', 'headCount', 'role', );
-    const optionalStringProperties = createStaffingTargetItemOptionalProperties({ name: 'role', nullable: false }, );
+    const requiredProperties = createStaffingTargetItemPropertyNames('dayOfWeek', 'headCount', 'positionType', );
+    const optionalStringProperties = createStaffingTargetItemOptionalProperties({ name: 'positionType', nullable: false }, );
     const optionalNumberProperties = createStaffingTargetItemOptionalProperties({ name: 'dayOfWeek', nullable: false }, { name: 'headCount', nullable: false }, );
     const optionalBooleanProperties = createStaffingTargetItemOptionalProperties();
 

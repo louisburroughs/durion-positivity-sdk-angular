@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { JobRoleRefDto } from './jobRoleRefDto';
 
 
 /**
@@ -37,6 +38,7 @@ export interface StaffingAssignmentResponse {
      * Whether this assignment is primary
      */
     isPrimary: boolean;
+    jobRole: JobRoleRefDto;
     /**
      * Location identifier
      */
@@ -45,10 +47,6 @@ export interface StaffingAssignmentResponse {
      * Person identifier
      */
     personId: string;
-    /**
-     * Assignment role
-     */
-    role: string;
     /**
      * Assignment lifecycle status
      */
@@ -103,8 +101,8 @@ export function instanceOfStaffingAssignmentResponse(value: object): value is St
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createStaffingAssignmentResponsePropertyNames('assignmentId', 'effectiveFrom', 'isPrimary', 'locationId', 'personId', 'role', 'status', );
-    const optionalStringProperties = createStaffingAssignmentResponseOptionalProperties({ name: 'assignmentId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, { name: 'locationId', nullable: false }, { name: 'personId', nullable: false }, { name: 'role', nullable: false }, { name: 'status', nullable: false }, { name: 'updatedAt', nullable: false }, );
+    const requiredProperties = createStaffingAssignmentResponsePropertyNames('assignmentId', 'effectiveFrom', 'isPrimary', 'jobRole', 'locationId', 'personId', 'status', );
+    const optionalStringProperties = createStaffingAssignmentResponseOptionalProperties({ name: 'assignmentId', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'createdBy', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'effectiveTo', nullable: false }, { name: 'locationId', nullable: false }, { name: 'personId', nullable: false }, { name: 'status', nullable: false }, { name: 'updatedAt', nullable: false }, );
     const optionalNumberProperties = createStaffingAssignmentResponseOptionalProperties();
     const optionalBooleanProperties = createStaffingAssignmentResponseOptionalProperties({ name: 'isPrimary', nullable: false }, );
 

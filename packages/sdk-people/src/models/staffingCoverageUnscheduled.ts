@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { JobRoleRefDto } from './jobRoleRefDto';
 
 
 /**
@@ -21,14 +22,11 @@ export interface StaffingCoverageUnscheduled {
      * The person\'s display name from People\'s person replica; null when it is not known
      */
     displayName?: string | null;
+    jobRole: JobRoleRefDto;
     /**
      * Person id
      */
     personId: string;
-    /**
-     * ACTIVE staffing-assignment role at the location the person is counted under
-     */
-    role: string;
 }
 export enum StaffingCoverageUnscheduledClockStateEnum {
     ClockedIn = 'CLOCKED_IN',
@@ -76,8 +74,8 @@ export function instanceOfStaffingCoverageUnscheduled(value: object): value is S
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createStaffingCoverageUnscheduledPropertyNames('clockState', 'personId', 'role', );
-    const optionalStringProperties = createStaffingCoverageUnscheduledOptionalProperties({ name: 'clockState', nullable: false }, { name: 'displayName', nullable: true }, { name: 'personId', nullable: false }, { name: 'role', nullable: false }, );
+    const requiredProperties = createStaffingCoverageUnscheduledPropertyNames('clockState', 'jobRole', 'personId', );
+    const optionalStringProperties = createStaffingCoverageUnscheduledOptionalProperties({ name: 'clockState', nullable: false }, { name: 'displayName', nullable: true }, { name: 'personId', nullable: false }, );
     const optionalNumberProperties = createStaffingCoverageUnscheduledOptionalProperties();
     const optionalBooleanProperties = createStaffingCoverageUnscheduledOptionalProperties();
 

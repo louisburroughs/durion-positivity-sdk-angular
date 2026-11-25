@@ -11,7 +11,7 @@ import { StaffingTargetItem } from './staffingTargetItem';
 
 
 /**
- * A location\'s staffing targets, ordered by role then dayOfWeek; empty when none are set
+ * A location\'s staffing targets, ordered by positionType (TECHNICIAN, SERVICE_ADVISOR, PARTS, MANAGEMENT, ACCOUNTING, OTHER) then dayOfWeek; empty when none are set
  */
 export interface StaffingTargetsResponse {
     /**
@@ -19,7 +19,7 @@ export interface StaffingTargetsResponse {
      */
     locationId: string;
     /**
-     * Targets ordered by role then dayOfWeek
+     * Targets ordered by positionType then dayOfWeek
      */
     targets: Array<StaffingTargetItem>;
 }

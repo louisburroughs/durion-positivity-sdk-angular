@@ -10,7 +10,7 @@
 
 
 /**
- * Full replacement of a shift\'s location, role and window, guarded by the version last read
+ * Full replacement of a shift\'s location, job title and window, guarded by the version last read
  */
 export interface UpdateShiftRequest {
     /**
@@ -18,13 +18,13 @@ export interface UpdateShiftRequest {
      */
     endAt: string;
     /**
+     * Job title the shift is worked in; one the person holds an ACTIVE staffing assignment in at locationId. A title deactivated since may be kept, not newly chosen
+     */
+    jobRoleId: string;
+    /**
      * Location the shift is worked at; may differ from the current one
      */
     locationId: string;
-    /**
-     * Staffing-assignment role the shift is worked in; trimmed and upper-cased
-     */
-    role: string;
     /**
      * Shift start, an ISO-8601 date-time with offset
      */
@@ -73,8 +73,8 @@ export function instanceOfUpdateShiftRequest(value: object): value is UpdateShif
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createUpdateShiftRequestPropertyNames('endAt', 'locationId', 'role', 'startAt', 'version', );
-    const optionalStringProperties = createUpdateShiftRequestOptionalProperties({ name: 'endAt', nullable: false }, { name: 'locationId', nullable: false }, { name: 'role', nullable: false }, { name: 'startAt', nullable: false }, );
+    const requiredProperties = createUpdateShiftRequestPropertyNames('endAt', 'jobRoleId', 'locationId', 'startAt', 'version', );
+    const optionalStringProperties = createUpdateShiftRequestOptionalProperties({ name: 'endAt', nullable: false }, { name: 'jobRoleId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'startAt', nullable: false }, );
     const optionalNumberProperties = createUpdateShiftRequestOptionalProperties({ name: 'version', nullable: false }, );
     const optionalBooleanProperties = createUpdateShiftRequestOptionalProperties();
 
