@@ -16,14 +16,27 @@
 //                                without: asked for on some calls only, as in
 //                                `a and (#param == null or b)` or
 //                                `b or @selfCheck.isSelf(#id)`. Absent means none.
+//   x-permission-conditions:     the checks the service makes beyond the
+//                                authorization expression, each with a key the
+//                                frontend names (backend #4067, the
+//                                @PermissionCondition annotation). A list of
+//                                { key, permission, kind, when, fields? }, kind
+//                                one of REQUIRED_WHEN (some calls are refused
+//                                without the code), WAIVES (a holder skips a
+//                                step) or FIELDS (some response fields are
+//                                served only to holders; `fields` names them).
+//                                Absent means none.
 //
 //   allOf       = x-required-permissions-all
 //   conditional = x-required-permissions-conditional - allOf
 //   anyOf       = x-required-permissions - allOf - conditional - the sentinel
+//   conditions  = x-permission-conditions by key: { code, kind, fields }
 //   permitted   = holds every allOf code AND (anyOf is empty OR holds one of them)
 //
 // A conditional code is never demanded: the backend serves some caller who does
 // not hold it. A permitted caller can still get a 403 on a call that needs one.
+// Nor is a condition: `conditions` names the codes, so a page can gate the one
+// control (REQUIRED_WHEN, WAIVES) or section (FIELDS) that depends on each.
 //
 // An operation with no x-required-permissions has unknown requirements. It gets
 // no entry in the map, and consumers must refuse a missing entry (fail closed).
@@ -32,6 +45,14 @@ export const AUTHENTICATED_SENTINEL = 'AUTHENTICATED';
 export const REQUIRED_EXTENSION = 'x-required-permissions';
 export const REQUIRED_ALL_EXTENSION = 'x-required-permissions-all';
 export const REQUIRED_CONDITIONAL_EXTENSION = 'x-required-permissions-conditional';
+export const CONDITIONS_EXTENSION = 'x-permission-conditions';
+
+/** The spec's condition kinds, and the name each has in the generated map. */
+export const CONDITION_KINDS = Object.freeze({ REQUIRED_WHEN: 'requiredWhen', WAIVES: 'waives', FIELDS: 'fields' });
+
+/** The pattern the backend's @PermissionCondition key must match (lowerCamel, 2-40 characters). */
+const CONDITION_KEY_PATTERN = /^[a-z][A-Za-z0-9]{1,39}$/;
+const CONDITION_PROPERTIES = new Set(['key', 'permission', 'kind', 'when', 'fields']);
 
 const HTTP_METHODS = ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'];
 
@@ -52,6 +73,63 @@ function readCodeList(operation, extension, where) {
     throw new Error(`${where}: ${extension} must be a list of non-empty strings`);
   }
   return value.map((code) => code.trim());
+}
+
+function isNonEmptyString(value) {
+  return typeof value === 'string' && value.trim() !== '';
+}
+
+/**
+ * The operation's x-permission-conditions as a map by key, in declaration
+ * order, checked by the rules the backend's customizer enforces (a malformed
+ * list throws rather than being guessed at):
+ *   - the extension is a list of objects with only key, permission, kind, when
+ *     and fields;
+ *   - key matches ^[a-z][A-Za-z0-9]{1,39}$ and is unique on the operation;
+ *   - permission and when are non-empty strings, kind is a known kind;
+ *   - fields is a non-empty list of non-empty strings for FIELDS, absent or
+ *     empty for every other kind;
+ *   - a REQUIRED_WHEN code is not one `allOf` already requires on every call.
+ * Absent means none: `{}`.
+ */
+export function conditionsFor(operation, allOf = [], where = 'operation') {
+  const value = operation[CONDITIONS_EXTENSION];
+  if (value === undefined || value === null) return {};
+  const fail = (reason) => new Error(`${where}: ${CONDITIONS_EXTENSION} ${reason}`);
+  if (!Array.isArray(value)) throw fail('must be a list');
+
+  const required = new Set(allOf);
+  const conditions = {};
+  value.forEach((entry, index) => {
+    const at = (reason) => fail(`[${index}]: ${reason}`);
+    if (!entry || typeof entry !== 'object' || Array.isArray(entry)) throw at('must be an object');
+    const unknown = Object.keys(entry).filter((name) => !CONDITION_PROPERTIES.has(name));
+    if (unknown.length > 0) throw at(`has unknown field(s) ${unknown.join(', ')}`);
+
+    const { key, permission, kind, when, fields } = entry;
+    if (typeof key !== 'string' || !CONDITION_KEY_PATTERN.test(key)) {
+      throw at(`key must match ${CONDITION_KEY_PATTERN.source}`);
+    }
+    if (Object.hasOwn(conditions, key)) throw at(`key "${key}" repeats on the operation`);
+    if (!isNonEmptyString(permission)) throw at(`"${key}": permission must be a non-empty string`);
+    if (!Object.hasOwn(CONDITION_KINDS, kind)) {
+      throw at(`"${key}": kind must be one of ${Object.keys(CONDITION_KINDS).join(', ')}`);
+    }
+    if (!isNonEmptyString(when)) throw at(`"${key}": when must be a non-empty string`);
+    if (fields !== undefined && fields !== null && (!Array.isArray(fields) || !fields.every(isNonEmptyString))) {
+      throw at(`"${key}": fields must be a list of non-empty strings`);
+    }
+    const fieldList = (fields ?? []).map((field) => field.trim());
+    if (kind === 'FIELDS' && fieldList.length === 0) throw at(`"${key}": a FIELDS condition names no fields`);
+    if (kind !== 'FIELDS' && fieldList.length > 0) throw at(`"${key}": fields are only for a FIELDS condition`);
+    const code = permission.trim();
+    if (kind === 'REQUIRED_WHEN' && required.has(code)) {
+      throw at(`"${key}": ${code} is already required on every call (x-required-permissions-all)`);
+    }
+
+    conditions[key] = { code, kind: CONDITION_KINDS[kind], fields: fieldList };
+  });
+  return conditions;
 }
 
 /**
@@ -80,16 +158,19 @@ export function toMethodName(operationId) {
  * the stricter reading is the safe one.
  *
  * A code in `-conditional` is never demanded, unless `-all` requires it too.
- * The codes in neither list are alternatives (`anyOf`).
+ * The codes in neither list are alternatives (`anyOf`). `conditions` is
+ * `x-permission-conditions` by key (`{}` when absent); it is read, and checked,
+ * even on an operation with no requirement, so a malformed list always fails.
  */
 export function requirementFor(operation, where = 'operation') {
   const all = readCodeList(operation, REQUIRED_ALL_EXTENSION, where) ?? [];
   const named = readCodeList(operation, REQUIRED_EXTENSION, where) ?? [];
   const onCondition = readCodeList(operation, REQUIRED_CONDITIONAL_EXTENSION, where) ?? [];
   const codes = [...named, ...all, ...onCondition];
+  const allOf = sortedUnique(all.filter((code) => code !== AUTHENTICATED_SENTINEL));
+  const conditions = conditionsFor(operation, allOf, where);
   if (codes.length === 0) return undefined;
 
-  const allOf = sortedUnique(all.filter((code) => code !== AUTHENTICATED_SENTINEL));
   const required = new Set(allOf);
   const conditional = sortedUnique(
     onCondition.filter((code) => code !== AUTHENTICATED_SENTINEL && !required.has(code)),
@@ -99,7 +180,7 @@ export function requirementFor(operation, where = 'operation') {
     named.filter((code) => code !== AUTHENTICATED_SENTINEL && !required.has(code) && !optional.has(code)),
   );
 
-  return { anyOf, allOf, conditional, authenticated: codes.includes(AUTHENTICATED_SENTINEL) };
+  return { anyOf, allOf, conditional, authenticated: codes.includes(AUTHENTICATED_SENTINEL), conditions };
 }
 
 /**
@@ -107,7 +188,8 @@ export function requirementFor(operation, where = 'operation') {
  *
  * @returns {{
  *   operationIds: string[],
- *   requirements: Record<string, {anyOf: string[], allOf: string[], conditional: string[], authenticated: boolean}>,
+ *   requirements: Record<string, {anyOf: string[], allOf: string[], conditional: string[], authenticated: boolean,
+ *     conditions: Record<string, {code: string, kind: 'requiredWhen' | 'waives' | 'fields', fields: string[]}>}>,
  *   missing: string[],
  *   authenticatedOnly: string[],
  * }} `operationIds` is every operation, `missing` those with no requirement
@@ -172,6 +254,16 @@ function renderList(values) {
   return `[${values.map(quote).join(', ')}]`;
 }
 
+/** `{}`, or one `key: { code, kind, fields }` per condition in declaration order. Keys match a safe identifier pattern. */
+function renderConditions(conditions) {
+  const entries = Object.entries(conditions ?? {});
+  if (entries.length === 0) return '{}';
+  const body = entries
+    .map(([key, c]) => `${key}: { code: ${quote(c.code)}, kind: ${quote(c.kind)}, fields: ${renderList(c.fields)} }`)
+    .join(', ');
+  return `{ ${body} }`;
+}
+
 /** The TypeScript source of `packages/sdk-<module>/requirements/operation-requirements.ts`. */
 export function renderOperationRequirementsModule({ moduleName, specLabel, operationIds, requirements, missing }) {
   const idType = `${toTypePrefix(moduleName)}OperationId`;
@@ -179,14 +271,25 @@ export function renderOperationRequirementsModule({ moduleName, specLabel, opera
   const entries = Object.entries(requirements)
     .map(
       ([id, r]) =>
-        `  ${id}: { anyOf: ${renderList(r.anyOf)}, allOf: ${renderList(r.allOf)}, conditional: ${renderList(r.conditional)}, authenticated: ${r.authenticated} },`,
+        `  ${id}: { anyOf: ${renderList(r.anyOf)}, allOf: ${renderList(r.allOf)}, conditional: ${renderList(r.conditional)}, authenticated: ${r.authenticated}, conditions: ${renderConditions(r.conditions)} },`,
     )
     .join('\n');
   const missingList = missing.length === 0 ? '[]' : `[\n${missing.map((id) => `  ${quote(id)},`).join('\n')}\n]`;
 
   return `// GENERATED FILE - do not edit by hand.
 // Written by scripts/generate-operation-requirements.mjs (part of \`npm run generate\`)
-// from the x-required-permissions extensions of ${specLabel}.
+// from the x-required-permissions and x-permission-conditions extensions of ${specLabel}.
+
+/**
+ * One permission check the operation makes beyond its authorization
+ * expression, by the key the spec gives it. The same shape as
+ * \`OperationCondition\` in @durion-sdk/transport, which documents it.
+ */
+export interface OperationCondition {
+  readonly code: string;
+  readonly kind: 'requiredWhen' | 'waives' | 'fields';
+  readonly fields: readonly string[];
+}
 
 /**
  * What a caller must hold to call one operation. The same shape as
@@ -200,6 +303,7 @@ export interface OperationRequirement {
   readonly allOf: readonly string[];
   readonly conditional: readonly string[];
   readonly authenticated: boolean;
+  readonly conditions: Readonly<Record<string, OperationCondition>>;
 }
 
 /** Every operation of @durion-sdk/${moduleName}, by the name of its generated service method. */
@@ -208,7 +312,8 @@ export type ${idType} =${union};
 /**
  * What a caller must hold to call each operation: every \`allOf\` code and, when
  * \`anyOf\` is not empty, at least one \`anyOf\` code. A \`conditional\` code is
- * asked for on some calls only and is never demanded here. An operation with no
+ * asked for on some calls only and is never demanded here, nor is a code in
+ * \`conditions\`, which names each such check by key. An operation with no
  * entry has unknown requirements and must be refused (fail closed);
  * \`isOperationPermitted\` from @durion-sdk/transport applies these rules.
  */

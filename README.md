@@ -64,9 +64,9 @@ after the clients; they are generated files, changed only through the scripts be
 
 | Import | Holds |
 | --- | --- |
-| `@durion-sdk/<pkg>/requirements` | `OPERATION_REQUIREMENTS`, `OPERATIONS_WITHOUT_REQUIREMENTS`, the `<Pkg>OperationId` union, `OperationRequirement` |
+| `@durion-sdk/<pkg>/requirements` | `OPERATION_REQUIREMENTS`, `OPERATIONS_WITHOUT_REQUIREMENTS`, the `<Pkg>OperationId` union, `OperationRequirement`, `OperationCondition` |
 | `@durion-sdk/<pkg>` | re-exports the above |
-| `@durion-sdk/transport` | the documented `OperationRequirement` type and `isOperationPermitted` |
+| `@durion-sdk/transport` | the documented `OperationRequirement` and `OperationCondition` types and `isOperationPermitted` |
 
 ```typescript
 import { OPERATION_REQUIREMENTS, type WorkorderOperationId } from '@durion-sdk/workorder/requirements';
@@ -81,7 +81,7 @@ const allowed = isOperationPermitted(OPERATION_REQUIREMENTS.getWorkorder, heldPe
   one method name on several services and one key. `<Pkg>OperationId` (`WorkorderOperationId`,
   `PeopleContactOperationId`) is the union of every operation of the package, so a
   reference to a renamed or removed operation stops compiling.
-- **Value.** `{ anyOf, allOf, conditional, authenticated }`. The caller is permitted when it
+- **Value.** `{ anyOf, allOf, conditional, authenticated, conditions }`. The caller is permitted when it
   holds every `allOf` code and, if `anyOf` is not empty, at least one `anyOf` code.
   `conditional` lists the codes the operation asks for on some calls only
   (`importBillSpreadsheet` needs `accounting:bill_intake:manage` only with `saveMappingAs`;
@@ -90,6 +90,17 @@ const allowed = isOperationPermitted(OPERATION_REQUIREMENTS.getWorkorder, heldPe
   the control that makes that call on the code as well.
   `authenticated` is `true` when the operation names the `AUTHENTICATED` sentinel; with all
   three lists empty, signing in is all it asks.
+- **Conditions.** `conditions` names, by key, each check the operation's service makes
+  beyond its authorization expression (backend `@PermissionCondition`, published as
+  `x-permission-conditions`; backend #4067). Each is `{ code, kind, fields }`:
+  `requiredWhen` (some calls are refused without `code`: gate the control that makes
+  them), `waives` (a holder skips a step, such as a manager approval token) or `fields`
+  (every call succeeds, but the response `fields`, as JSON paths like
+  `items[].clockState`, are null or absent without `code`: gate the section that shows
+  them). `fields` is empty for the other two kinds. An operation that declares none has
+  `conditions: {}`. A condition is never demanded: `isOperationPermitted` ignores it.
+  `reprintReceipt` reads
+  `{ anyOf: ['invoice:receipt:generate'], ..., conditions: { pastReprintCap: { code: 'invoice:receipt:reprint_override', kind: 'requiredWhen', fields: [] } } }`.
 - **Missing entry: refuse.** An operation whose spec has no `x-required-permissions` has
   unknown requirements. It has no entry (the map is `Partial`, so a lookup is
   `OperationRequirement | undefined`), it is listed in `OPERATIONS_WITHOUT_REQUIREMENTS`
@@ -102,7 +113,13 @@ const allowed = isOperationPermitted(OPERATION_REQUIREMENTS.getWorkorder, heldPe
   are each required; absent means none) and `x-required-permissions-conditional` (the
   subset the caller can be let through without; absent means none). `allOf` is the
   second list, `conditional` the third minus `allOf`, and `anyOf` the first minus both
-  and the sentinel. The script
+  and the sentinel. `x-permission-conditions` gives `conditions`, checked by the rules
+  the backend's customizer enforces: a list of `{ key, permission, kind, when, fields? }`
+  with no other field, a key matching `^[a-z][A-Za-z0-9]{1,39}$` and unique on the
+  operation, a non-empty `permission` and `when`, a kind of `REQUIRED_WHEN`, `WAIVES` or
+  `FIELDS`, `fields` non-empty for `FIELDS` and absent otherwise, and no `REQUIRED_WHEN`
+  code that `x-required-permissions-all` already requires. A malformed list fails
+  generation; it is never skipped. The script
   fails when a key matches no generated service method. Rules and rendering are in `scripts/lib/operation-requirements.mjs`.
 
 Import from the `/requirements` entry in code that runs at app startup (route gates), for

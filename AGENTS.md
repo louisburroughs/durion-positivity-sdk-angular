@@ -36,12 +36,12 @@ npm run version:set -- 1.0.0  # major bumps only, by hand
 
 `npm run generate` also writes three generated artifacts; details in README "Access Artifacts".
 
-- `packages/sdk-<pkg>/requirements/` (`@durion-sdk/<pkg>/requirements`, re-exported by the package root): `OPERATION_REQUIREMENTS`, keyed by generated service method name, from the specs' `x-required-permissions` and `x-required-permissions-all`. Written by `scripts/generate-operation-requirements.mjs`.
+- `packages/sdk-<pkg>/requirements/` (`@durion-sdk/<pkg>/requirements`, re-exported by the package root): `OPERATION_REQUIREMENTS`, keyed by generated service method name, from the specs' `x-required-permissions`, `x-required-permissions-all`, `x-required-permissions-conditional` and `x-permission-conditions` (the `conditions` map by key; `{}` when none; a malformed list fails generation). Written by `scripts/generate-operation-requirements.mjs`.
 - `packages/sdk-security/permission-catalog/` (`@durion-sdk/security/permission-catalog`): `PERMISSION_CATALOG_VERSION` and `PERMISSION_BY_BIT`, from the backend's `PermissionCode.java`. Written by `scripts/generate-permission-catalog.mjs`.
 - `packages/sdk-security/capability-catalog/` (`@durion-sdk/security/capability-catalog`): `CAPABILITY_CATALOG_VERSION` (a content hash) and `CAPABILITY_CATALOG`, from the backend's `capabilities/*.yaml` (not the `_`-prefixed files), validated by the rules of `CapabilityCatalog.java`. Written by `scripts/generate-capability-catalog.mjs`.
 - Fail closed: an operation with no `x-required-permissions` gets no entry and a generation warning. A missing entry means "refuse", never "open"; do not add a default, and do not hand-add entries. The fix is the backend annotation.
 - Change the rules in `scripts/lib/*.mjs` and cover them in `src/__tests__/sdk-010-access-artifacts.test.ts`; never edit the generated files.
-- A generated package cannot import `@durion-sdk/transport` at build time, so each `requirements` entry declares its own `OperationRequirement`. Keep it identical to the one in `packages/sdk-transport/src/operation-requirement.ts`.
+- A generated package cannot import `@durion-sdk/transport` at build time, so each `requirements` entry declares its own `OperationRequirement` and `OperationCondition`. Keep them identical to the ones in `packages/sdk-transport/src/operation-requirement.ts`.
 
 ## Where to Look
 
