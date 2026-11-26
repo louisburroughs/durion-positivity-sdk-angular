@@ -1,4 +1,5 @@
 export * from './adminAccountStateAPI.service';
+export * from './assistantPersona.service';
 export * from './audit.service';
 export * from './auditExports.service';
 export * from './authAPI.service';

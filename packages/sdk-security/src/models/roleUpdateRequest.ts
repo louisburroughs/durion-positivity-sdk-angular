@@ -10,37 +10,17 @@
 
 
 /**
- * Replacement name, description and MCP persona metadata for an existing role
+ * Replacement name and description for an existing role
  */
 export interface RoleUpdateRequest {
     /**
-     * Human-readable description of the role. Doubles as the derived persona focus when personaFocus is omitted.
+     * Human-readable description of the role.
      */
     description?: string;
-    /**
-     * Whether the role participates in MCP persona resolution. Defaults to true when omitted.
-     */
-    mcpPersonaEligible?: boolean;
-    /**
-     * MCP persona resolution priority, lowest first. Null leaves the role unranked.
-     */
-    mcpPersonaRank?: number;
     /**
      * Display name of the role, stored as typed and trimmed. Changing it renames the role; the role\'s key stays the same. Unique within the tenant ignoring letter case and repeated spaces.
      */
     name: string;
-    /**
-     * What the caller works on. Cleared, and therefore derived from the description, when omitted.
-     */
-    personaFocus?: string;
-    /**
-     * Who the caller is, in the second person. Cleared, and therefore derived from the role name, when omitted.
-     */
-    personaTitle?: string;
-    /**
-     * How to speak to the caller. Cleared, and therefore defaulted to a neutral tone, when omitted.
-     */
-    personaTone?: string;
 }
 
 function isOptionalRoleUpdateRequestPropertyOfType(
@@ -82,9 +62,9 @@ export function instanceOfRoleUpdateRequest(value: object): value is RoleUpdateR
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createRoleUpdateRequestPropertyNames('name', );
-    const optionalStringProperties = createRoleUpdateRequestOptionalProperties({ name: 'description', nullable: false }, { name: 'name', nullable: false }, { name: 'personaFocus', nullable: false }, { name: 'personaTitle', nullable: false }, { name: 'personaTone', nullable: false }, );
-    const optionalNumberProperties = createRoleUpdateRequestOptionalProperties({ name: 'mcpPersonaRank', nullable: false }, );
-    const optionalBooleanProperties = createRoleUpdateRequestOptionalProperties({ name: 'mcpPersonaEligible', nullable: false }, );
+    const optionalStringProperties = createRoleUpdateRequestOptionalProperties({ name: 'description', nullable: false }, { name: 'name', nullable: false }, );
+    const optionalNumberProperties = createRoleUpdateRequestOptionalProperties();
+    const optionalBooleanProperties = createRoleUpdateRequestOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalRoleUpdateRequestPropertyOfType(_v, property.name, 'string', property.nullable))

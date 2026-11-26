@@ -58,7 +58,6 @@ export type SecurityOperationId =
   | 'getRoleByKey'
   | 'getRoleByName'
   | 'getRoleDefaultPermissions'
-  | 'getRolePersonas'
   | 'getSelfRegistrationReviewCase'
   | 'getTenantSignup'
   | 'getTokenRoles'
@@ -66,6 +65,7 @@ export type SecurityOperationId =
   | 'getTokenUserId'
   | 'getUserAccountState'
   | 'getUserById'
+  | 'getUserDefaultPersona'
   | 'getUserPermissions'
   | 'getUserPermissionsLegacy'
   | 'issueInternalToken'
@@ -153,13 +153,13 @@ export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<SecurityOperationId
   getRoleByKey: { anyOf: ['security:role:view'], allOf: [], conditional: [], authenticated: false },
   getRoleByName: { anyOf: ['security:role:view'], allOf: [], conditional: [], authenticated: false },
   getRoleDefaultPermissions: { anyOf: ['security:role:view'], allOf: [], conditional: [], authenticated: false },
-  getRolePersonas: { anyOf: ['security:role:view'], allOf: [], conditional: [], authenticated: false },
   getSelfRegistrationReviewCase: { anyOf: ['security:user_account_state:view'], allOf: [], conditional: [], authenticated: false },
   getTokenRoles: { anyOf: [], allOf: [], conditional: [], authenticated: true },
   getTokenSubject: { anyOf: [], allOf: [], conditional: [], authenticated: true },
   getTokenUserId: { anyOf: [], allOf: [], conditional: [], authenticated: true },
   getUserAccountState: { anyOf: ['security:user_account_state:view'], allOf: [], conditional: [], authenticated: false },
   getUserById: { anyOf: ['security:user:view'], allOf: [], conditional: [], authenticated: false },
+  getUserDefaultPersona: { anyOf: ['security:assistant_persona:resolve'], allOf: [], conditional: [], authenticated: false },
   getUserPermissions: { anyOf: [], allOf: [], conditional: ['security:permission:view'], authenticated: false },
   getUserPermissionsLegacy: { anyOf: [], allOf: [], conditional: ['security:permission:view'], authenticated: false },
   issueInternalToken: { anyOf: ['security:token:issue_internal'], allOf: [], conditional: [], authenticated: false },
