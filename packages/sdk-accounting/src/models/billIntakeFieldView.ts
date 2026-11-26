@@ -18,7 +18,7 @@ export interface BillIntakeFieldView {
      * The reader\'s confidence from 0 to 1, when the field was read
      */
     confidence?: number | null;
-    objectValue?: BillIntakeStructuredValueView;
+    objectValue?: BillIntakeStructuredValueView | null;
     /**
      * Why the field is CHECK_THIS when its value is one confirmation would refuse: REQUIRED (a field a bill needs is empty), NOT_A_NUMBER, TOO_MANY_DECIMALS (more than four), NEGATIVE, NOT_POSITIVE (a total of zero), NOT_A_DATE, NOT_A_CURRENCY (not three letters), INVALID_DOCUMENT_TYPE, INVALID_DEBIT_CLASS, TOO_LONG, INVALID_EXPENSE_KEY (not EXPENSE_<CODE>), INVALID_TAX_ENTRY or UNIT_COST_REQUIRED (no unit cost on a line with a zero quantity and an amount). Null in every other state, and for a field marked by the reader, the vendor\'s defaults or the totals check. The code names a rule and never carries the value.
      */

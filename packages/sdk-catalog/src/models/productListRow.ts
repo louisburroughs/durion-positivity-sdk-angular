@@ -15,7 +15,7 @@ import { ProductListSupplier } from './productListSupplier';
  * One product row of the command-center list with its cost, price, margin and stock numbers.
  */
 export interface ProductListRow {
-    category?: ProductListCategory;
+    category?: ProductListCategory | null;
     /**
      * Standard, else last, else average item cost, else the chosen supplier\'s net price; null when none exists.
      */
@@ -64,7 +64,7 @@ export interface ProductListRow {
      * Derived stock state; DISCONTINUED wins over OUT, OUT at zero or less on hand, LOW strictly below the summed minimum.
      */
     stockState?: ProductListRowStockStateEnum;
-    supplier?: ProductListSupplier;
+    supplier?: ProductListSupplier | null;
     /**
      * Product image URL; null when the product has none.
      */

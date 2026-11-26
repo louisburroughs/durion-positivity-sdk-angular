@@ -22,7 +22,7 @@ export interface VinDecodeResponse {
      * Drive type
      */
     driveType?: string | null;
-    engine?: VinDecodeEngine;
+    engine?: VinDecodeEngine | null;
     /**
      * FHWA GVWR class 1-8; null with warning GVWR_UNDETERMINED. Send it on vehicle create, where it is stored as OPERATOR_SET.
      */

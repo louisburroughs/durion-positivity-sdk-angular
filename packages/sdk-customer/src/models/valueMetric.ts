@@ -14,12 +14,12 @@ import { Money } from './money';
  * Closed-workorder money metric; it is not ledger revenue
  */
 export interface ValueMetric {
-    averageInvoiceCommercial?: Money;
-    averageInvoiceIndividual?: Money;
-    commercial?: Money;
-    individual?: Money;
-    prior?: Money;
-    value?: Money;
+    averageInvoiceCommercial?: Money | null;
+    averageInvoiceIndividual?: Money | null;
+    commercial?: Money | null;
+    individual?: Money | null;
+    prior?: Money | null;
+    value?: Money | null;
 }
 
 function isOptionalValueMetricPropertyOfType(
