@@ -1,6 +1,6 @@
 {
   "name": "@durion-sdk/transport",
-  "version": "0.362.0-alpha",
+  "version": "0.363.0-alpha",
   "description": "Shared transport configuration and HTTP client for Durion SDK",
   "main": "src/index.ts",
   "types": "src/index.ts",
