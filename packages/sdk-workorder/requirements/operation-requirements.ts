@@ -228,7 +228,7 @@ export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<WorkorderOperationI
   getTechnicianLaborAnalytics: { anyOf: ['workorder:analytics:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
   getWipDetail: { anyOf: ['workorder:wip:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
   getWorkorder: { anyOf: ['workorder:workorder:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
-  getWorkorderDetail: { anyOf: [], allOf: [], conditional: [], authenticated: true, conditions: {} },
+  getWorkorderDetail: { anyOf: [], allOf: [], conditional: [], authenticated: true, conditions: { lineMoney: { code: 'workorder:financials:view', kind: 'fields', fields: ['services[].unitPrice', 'services[].laborCost', 'services[].lineTotal', 'parts[].unitPrice', 'parts[].partCost', 'parts[].lineTotal', 'estimatedTotal', 'laborTotal', 'partsTotal', 'taxTotal'] } } },
   getWorkorderFleetAuthorization: { anyOf: ['workorder:fleet_auth:request'], allOf: [], conditional: [], authenticated: false, conditions: {} },
   getWorkorderPickList: { anyOf: ['inventory:pick_list:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
   getWorkorderSnapshots: { anyOf: ['workorder:workorder:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
