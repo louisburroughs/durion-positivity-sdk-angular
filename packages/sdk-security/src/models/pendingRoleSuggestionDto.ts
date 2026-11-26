@@ -80,6 +80,10 @@ export interface PendingRoleSuggestionDto {
      */
     staffingAssignmentId: string;
     /**
+     * The start date of the staffing assignment the suggestion was raised from; null when the staffing record is no longer known here or its start date is unknown
+     */
+    readonly staffingEffectiveFrom?: string | null;
+    /**
      * PENDING until decided; CONFIRMED, DISMISSED, or EXPIRED when the staffing record ended or changed or the title-to-role suggestion was removed
      */
     status: PendingRoleSuggestionDtoStatusEnum;
@@ -141,7 +145,7 @@ export function instanceOfPendingRoleSuggestionDto(value: object): value is Pend
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createPendingRoleSuggestionDtoPropertyNames('id', 'jobRoleId', 'locationId', 'personId', 'raisedAt', 'roleId', 'roleKey', 'roleName', 'scope', 'staffingAssignmentId', 'status', 'userLinked', );
-    const optionalStringProperties = createPendingRoleSuggestionDtoOptionalProperties({ name: 'closedReason', nullable: false }, { name: 'confirmedAssignmentId', nullable: false }, { name: 'decidedAt', nullable: false }, { name: 'decidedBy', nullable: false }, { name: 'id', nullable: false }, { name: 'jobRoleId', nullable: false }, { name: 'jobTitleName', nullable: false }, { name: 'linkedUserId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'locationName', nullable: false }, { name: 'personId', nullable: false }, { name: 'raisedAt', nullable: false }, { name: 'roleId', nullable: false }, { name: 'roleKey', nullable: false }, { name: 'roleName', nullable: false }, { name: 'staffingAssignmentId', nullable: false }, { name: 'status', nullable: false }, );
+    const optionalStringProperties = createPendingRoleSuggestionDtoOptionalProperties({ name: 'closedReason', nullable: false }, { name: 'confirmedAssignmentId', nullable: false }, { name: 'decidedAt', nullable: false }, { name: 'decidedBy', nullable: false }, { name: 'id', nullable: false }, { name: 'jobRoleId', nullable: false }, { name: 'jobTitleName', nullable: false }, { name: 'linkedUserId', nullable: false }, { name: 'locationId', nullable: false }, { name: 'locationName', nullable: false }, { name: 'personId', nullable: false }, { name: 'raisedAt', nullable: false }, { name: 'roleId', nullable: false }, { name: 'roleKey', nullable: false }, { name: 'roleName', nullable: false }, { name: 'staffingAssignmentId', nullable: false }, { name: 'staffingEffectiveFrom', nullable: true }, { name: 'status', nullable: false }, );
     const optionalNumberProperties = createPendingRoleSuggestionDtoOptionalProperties();
     const optionalBooleanProperties = createPendingRoleSuggestionDtoOptionalProperties({ name: 'userLinked', nullable: false }, );
 
