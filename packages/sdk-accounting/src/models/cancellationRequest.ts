@@ -14,14 +14,6 @@
  */
 export interface CancellationRequest {
     /**
-     * Legacy client-provided actor identifier; service resolves authoritative actor from security context
-     */
-    actorId?: string;
-    /**
-     * Role of the actor performing the cancellation
-     */
-    actorRole: string;
-    /**
      * Snapshot of state after the cancellation (JSON)
      */
     afterSnapshot: string;
@@ -96,8 +88,8 @@ export function instanceOfCancellationRequest(value: object): value is Cancellat
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCancellationRequestPropertyNames('actorRole', 'afterSnapshot', 'beforeSnapshot', 'cancellationType', 'reason', );
-    const optionalStringProperties = createCancellationRequestOptionalProperties({ name: 'actorId', nullable: false }, { name: 'actorRole', nullable: false }, { name: 'afterSnapshot', nullable: false }, { name: 'beforeSnapshot', nullable: false }, { name: 'cancellationType', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'orderId', nullable: false }, { name: 'partialPaymentInfo', nullable: false }, { name: 'reason', nullable: false }, );
+    const requiredProperties = createCancellationRequestPropertyNames('afterSnapshot', 'beforeSnapshot', 'cancellationType', 'reason', );
+    const optionalStringProperties = createCancellationRequestOptionalProperties({ name: 'afterSnapshot', nullable: false }, { name: 'beforeSnapshot', nullable: false }, { name: 'cancellationType', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'orderId', nullable: false }, { name: 'partialPaymentInfo', nullable: false }, { name: 'reason', nullable: false }, );
     const optionalNumberProperties = createCancellationRequestOptionalProperties();
     const optionalBooleanProperties = createCancellationRequestOptionalProperties();
 

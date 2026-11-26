@@ -26,10 +26,6 @@ export interface AuditTrailResponse {
      */
     actorId?: string;
     /**
-     * Role of the actor who performed the action
-     */
-    actorRole?: string;
-    /**
      * Adjusted price after override
      */
     adjustedPrice?: number;
@@ -42,7 +38,7 @@ export interface AuditTrailResponse {
      */
     auditId: string;
     /**
-     * Authorization level applied to the action
+     * The permission that authorized the action: the price-override tier permission for a price override, accounting:events:submit for a refund or cancellation
      */
     authorizationLevel?: string;
     /**
@@ -234,7 +230,7 @@ export function instanceOfAuditTrailResponse(value: object): value is AuditTrail
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createAuditTrailResponsePropertyNames('auditId', 'exceptionType', 'timestamp', );
-    const optionalStringProperties = createAuditTrailResponseOptionalProperties({ name: 'accountingIntent', nullable: false }, { name: 'accountingStatus', nullable: false }, { name: 'actorId', nullable: false }, { name: 'actorRole', nullable: false }, { name: 'afterSnapshot', nullable: false }, { name: 'auditId', nullable: false }, { name: 'authorizationLevel', nullable: false }, { name: 'beforeSnapshot', nullable: false }, { name: 'cancellationType', nullable: false }, { name: 'exceptionType', nullable: false }, { name: 'expectedAccountingOutcome', nullable: false }, { name: 'forbiddenCategoryCode', nullable: false }, { name: 'glReversalStatus', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'lineItemId', nullable: false }, { name: 'linkedSourceIds', nullable: false }, { name: 'orderId', nullable: false }, { name: 'originalPaymentStatus', nullable: false }, { name: 'overrideAmountOrPercent', nullable: false }, { name: 'partialPaymentInfo', nullable: false }, { name: 'paymentId', nullable: false }, { name: 'policyValidationResult', nullable: false }, { name: 'policyVersion', nullable: false }, { name: 'reason', nullable: false }, { name: 'refundMethod', nullable: false }, { name: 'refundType', nullable: false }, { name: 'sourceDocumentId', nullable: false }, { name: 'sourceEventId', nullable: false }, { name: 'timestamp', nullable: false }, );
+    const optionalStringProperties = createAuditTrailResponseOptionalProperties({ name: 'accountingIntent', nullable: false }, { name: 'accountingStatus', nullable: false }, { name: 'actorId', nullable: false }, { name: 'afterSnapshot', nullable: false }, { name: 'auditId', nullable: false }, { name: 'authorizationLevel', nullable: false }, { name: 'beforeSnapshot', nullable: false }, { name: 'cancellationType', nullable: false }, { name: 'exceptionType', nullable: false }, { name: 'expectedAccountingOutcome', nullable: false }, { name: 'forbiddenCategoryCode', nullable: false }, { name: 'glReversalStatus', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'lineItemId', nullable: false }, { name: 'linkedSourceIds', nullable: false }, { name: 'orderId', nullable: false }, { name: 'originalPaymentStatus', nullable: false }, { name: 'overrideAmountOrPercent', nullable: false }, { name: 'partialPaymentInfo', nullable: false }, { name: 'paymentId', nullable: false }, { name: 'policyValidationResult', nullable: false }, { name: 'policyVersion', nullable: false }, { name: 'reason', nullable: false }, { name: 'refundMethod', nullable: false }, { name: 'refundType', nullable: false }, { name: 'sourceDocumentId', nullable: false }, { name: 'sourceEventId', nullable: false }, { name: 'timestamp', nullable: false }, );
     const optionalNumberProperties = createAuditTrailResponseOptionalProperties({ name: 'adjustedPrice', nullable: false }, { name: 'originalPrice', nullable: false }, { name: 'refundAmount', nullable: false }, );
     const optionalBooleanProperties = createAuditTrailResponseOptionalProperties();
 

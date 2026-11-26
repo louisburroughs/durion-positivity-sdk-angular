@@ -14,10 +14,6 @@
  */
 export interface PriceOverrideRequest {
     /**
-     * Role of the actor performing the override
-     */
-    actorRole: string;
-    /**
      * Adjusted price after the override
      */
     adjustedPrice: number;
@@ -81,8 +77,8 @@ export function instanceOfPriceOverrideRequest(value: object): value is PriceOve
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPriceOverrideRequestPropertyNames('actorRole', 'adjustedPrice', 'lineItemId', 'orderId', 'originalPrice', 'reason', );
-    const optionalStringProperties = createPriceOverrideRequestOptionalProperties({ name: 'actorRole', nullable: false }, { name: 'categoryCode', nullable: false }, { name: 'lineItemId', nullable: false }, { name: 'orderId', nullable: false }, { name: 'reason', nullable: false }, );
+    const requiredProperties = createPriceOverrideRequestPropertyNames('adjustedPrice', 'lineItemId', 'orderId', 'originalPrice', 'reason', );
+    const optionalStringProperties = createPriceOverrideRequestOptionalProperties({ name: 'categoryCode', nullable: false }, { name: 'lineItemId', nullable: false }, { name: 'orderId', nullable: false }, { name: 'reason', nullable: false }, );
     const optionalNumberProperties = createPriceOverrideRequestOptionalProperties({ name: 'adjustedPrice', nullable: false }, { name: 'originalPrice', nullable: false }, );
     const optionalBooleanProperties = createPriceOverrideRequestOptionalProperties();
 

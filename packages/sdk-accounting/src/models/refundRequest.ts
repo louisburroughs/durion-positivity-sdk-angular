@@ -14,14 +14,6 @@
  */
 export interface RefundRequest {
     /**
-     * Legacy client-provided actor identifier; service resolves authoritative actor from security context
-     */
-    actorId?: string;
-    /**
-     * Role of the actor performing the refund
-     */
-    actorRole: string;
-    /**
      * Identifier of the invoice being refunded
      */
     invoiceId: string;
@@ -98,8 +90,8 @@ export function instanceOfRefundRequest(value: object): value is RefundRequest {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createRefundRequestPropertyNames('actorRole', 'invoiceId', 'originalPaymentStatus', 'paymentId', 'reason', 'refundAmount', 'refundType', );
-    const optionalStringProperties = createRefundRequestOptionalProperties({ name: 'actorId', nullable: false }, { name: 'actorRole', nullable: false }, { name: 'invoiceId', nullable: false }, { name: 'originalPaymentStatus', nullable: false }, { name: 'paymentId', nullable: false }, { name: 'reason', nullable: false }, { name: 'refundType', nullable: false }, );
+    const requiredProperties = createRefundRequestPropertyNames('invoiceId', 'originalPaymentStatus', 'paymentId', 'reason', 'refundAmount', 'refundType', );
+    const optionalStringProperties = createRefundRequestOptionalProperties({ name: 'invoiceId', nullable: false }, { name: 'originalPaymentStatus', nullable: false }, { name: 'paymentId', nullable: false }, { name: 'reason', nullable: false }, { name: 'refundType', nullable: false }, );
     const optionalNumberProperties = createRefundRequestOptionalProperties({ name: 'refundAmount', nullable: false }, );
     const optionalBooleanProperties = createRefundRequestOptionalProperties();
 

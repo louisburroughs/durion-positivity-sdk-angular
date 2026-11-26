@@ -38,9 +38,9 @@ export interface PurchaseOrderLineRequest {
      */
     quantity?: number;
     /**
-     * Identifier of the SKU being ordered on this line
+     * Identifier of the SKU being ordered on this line. Required: a purchase-order line names a SKU, and the published order fact (PurchaseOrderLine) keys every consumer on it (#4124)
      */
-    skuId?: string;
+    skuId: string;
     /**
      * Identifier of the tax code applied to this line
      */
@@ -93,7 +93,7 @@ export function instanceOfPurchaseOrderLineRequest(value: object): value is Purc
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createPurchaseOrderLineRequestPropertyNames('description', 'lineNumber', 'unitCostMinor', );
+    const requiredProperties = createPurchaseOrderLineRequestPropertyNames('description', 'lineNumber', 'skuId', 'unitCostMinor', );
     const optionalStringProperties = createPurchaseOrderLineRequestOptionalProperties({ name: 'description', nullable: false }, { name: 'documentUom', nullable: false }, { name: 'glAccountId', nullable: false }, { name: 'skuId', nullable: false }, { name: 'taxCodeId', nullable: false }, { name: 'workorderId', nullable: true }, );
     const optionalNumberProperties = createPurchaseOrderLineRequestOptionalProperties({ name: 'documentQuantity', nullable: false }, { name: 'lineNumber', nullable: false }, { name: 'quantity', nullable: false }, { name: 'unitCostMinor', nullable: false }, );
     const optionalBooleanProperties = createPurchaseOrderLineRequestOptionalProperties();
