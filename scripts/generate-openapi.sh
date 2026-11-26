@@ -19,7 +19,8 @@ set -euo pipefail
 #
 # After the clients, it writes the access artifacts: each package's
 # requirements/ entry (generate-operation-requirements.mjs) and sdk-security's
-# permission-catalog/ entry (generate-permission-catalog.mjs).
+# permission-catalog/ and capability-catalog/ entries
+# (generate-permission-catalog.mjs, generate-capability-catalog.mjs).
 #
 # Valid module names: security, order, inventory, workorder, supplier, accounting, catalog, customer, invoice, location, people, people-contact, price, shop-manager, image, event-receiver, vehicle-fitment, vehicle-inventory, internal, documents, inquiry, bulk-loader, warranty, marketing, tenant, platform-sender
 
@@ -488,9 +489,10 @@ else
 	node scripts/generate-operation-requirements.mjs
 fi
 
-# The permission bit catalog, in @durion-sdk/security only.
+# The permission bit catalog and the capability catalog, in @durion-sdk/security only.
 if [[ -z "$module" || "$module" == "security" ]]; then
 	node scripts/generate-permission-catalog.mjs
+	node scripts/generate-capability-catalog.mjs
 fi
 
 echo "Generation complete at version $(node scripts/version.mjs current)."

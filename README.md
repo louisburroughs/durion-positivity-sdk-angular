@@ -56,8 +56,8 @@ the services never inject, and every request would silently go to the generated 
 
 ## Access Artifacts
 
-Two generated artifacts let an app decide what a signed-in user may do without keeping
-its own copy of the backend's rules (ADR-0079 section 8). `npm run generate` writes both
+Three generated artifacts let an app decide what a signed-in user may do without keeping
+its own copy of the backend's rules (ADR-0079 section 8). `npm run generate` writes them
 after the clients; they are generated files, changed only through the scripts below.
 
 ### Operation requirements, in every generated package
@@ -124,10 +124,30 @@ A duplicate bit index or a gap fails the run. When the checkout has no `Permissi
 (one that holds only the specs), the committed catalog is kept and a warning says so;
 `DURION_PERMISSION_CATALOG_REQUIRED=true` turns that into an error.
 
-Extension point: the capability catalog of ADR-0079 does not exist yet. When the backend
-publishes it, it belongs beside the permission catalog as another generated file of this
-entry (or a sibling entry of `@durion-sdk/security`), written by its own script from
-`scripts/generate-openapi.sh`.
+### Capability catalog, in `@durion-sdk/security`
+
+`@durion-sdk/security/capability-catalog` (re-exported by `@durion-sdk/security`) holds the
+capability catalog of ADR-0079 section 2, for build-time checks such as "every capability
+opens a screen, section or action":
+
+- `CAPABILITY_CATALOG_VERSION: string`, a content hash (16 hex digits of the SHA-256 of the
+  entries); it changes exactly when an entry does
+- `CAPABILITY_CATALOG: readonly CapabilityCatalogEntry[]`, every capability in key order:
+  `key`, `name`, `description`, `area` (the catalog file it is declared in, without
+  `.yaml`), `includes` and `permissions` (each sorted), `tenantWideOnly`, `hierarchy`
+  (`'FINANCIAL' | 'OTHER'`) and `system` (a system capability, which no tenant role can hold)
+
+`scripts/generate-capability-catalog.mjs` reads
+`pos-security-service/src/main/resources/capabilities/*.yaml` in the same backend checkout as
+the permission catalog. Like the backend loader (`CapabilityCatalog.java`) it skips the files
+whose name starts with `_` (the internal permission lists and the starter roles, which are
+not capabilities) and refuses what the loader refuses: an unknown field, a malformed key, a
+blank name or description, a missing `tenantWideOnly` or `hierarchy`, an entry with neither
+`permissions` nor `includes`, a repeated key, and an include that is unknown, crosses the
+system boundary or has includes of its own. The rules are in
+`scripts/lib/capability-catalog.mjs`. With no catalog file in the checkout, the committed
+catalog is kept and a warning says so; `DURION_CAPABILITY_CATALOG_REQUIRED=true` turns that
+into an error.
 
 ## Versioning
 

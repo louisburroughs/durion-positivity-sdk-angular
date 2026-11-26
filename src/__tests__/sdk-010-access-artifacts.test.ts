@@ -6,6 +6,7 @@ import { isOperationPermitted, OperationRequirement } from '../../packages/sdk-t
 //   - OPERATION_REQUIREMENTS, in every generated package: what a caller must
 //     hold to call each operation, from the specs' x-required-permissions.
 //   - the permission bit catalog, in @durion-sdk/security.
+//   - the capability catalog, in @durion-sdk/security.
 // The generator logic lives in scripts/lib/*.mjs; the committed output of
 // `npm run generate` is checked further down.
 
@@ -13,6 +14,7 @@ import { isOperationPermitted, OperationRequirement } from '../../packages/sdk-t
 const yaml = require('js-yaml');
 const requirementsLib = require('../../scripts/lib/operation-requirements.mjs');
 const catalogLib = require('../../scripts/lib/permission-catalog.mjs');
+const capabilityLib = require('../../scripts/lib/capability-catalog.mjs');
 /* eslint-enable @typescript-eslint/no-var-requires */
 
 const ROOT = join(__dirname, '..', '..');
@@ -414,5 +416,233 @@ describe('sdk-010 permission catalog: @durion-sdk/security', () => {
     expect(catalog.PERMISSION_BY_BIT[0]).toBe('accounting:je:view');
     expect(catalog.PERMISSION_BY_BIT[542]).toBe('appointments:reschedule:approve');
     expect(catalog.PERMISSION_BY_BIT[543]).toBe('accounting:reconciliation:approve');
+  });
+});
+
+describe('sdk-010 capability catalog: parser', () => {
+  const { catalogFileNames, parseCapabilityCatalog, renderCapabilityCatalogModule } = capabilityLib;
+  const service = `
+# a comment the version ignores
+- key: workexec.workorder.view
+  name: View work orders
+  description: "  Open a work order's details.  "
+  tenantWideOnly: false
+  hierarchy: OTHER
+  permissions:
+    - workorder:workorder:view
+    - invoice:invoice:view
+- key: workexec.wip.view
+  name: Work in progress board
+  description: See the board.
+  includes: [workexec.workorder.view]
+  tenantWideOnly: false
+  hierarchy: OTHER
+  permissions: [workorder:wip:view]
+`;
+  const platform = `
+- key: platform.operate
+  name: Operate the platform
+  description: Run the platform.
+  system: true
+  tenantWideOnly: true
+  hierarchy: OTHER
+  permissions: [platform:tenant:read]
+`;
+  const files = (sources: Record<string, string>) =>
+    Object.entries(sources).map(([name, text]) => [name, yaml.load(text)]);
+  const parse = (sources: Record<string, string>) => parseCapabilityCatalog(files(sources));
+  const entry = (fields: string) => `- key: a.b\n  name: N\n  description: D\n${fields}`;
+  const valid = '  tenantWideOnly: false\n  hierarchy: OTHER\n  permissions: [a:b:c]\n';
+
+  it('reads the catalog files the backend loader reads, in its order', () => {
+    expect(
+      catalogFileNames([
+        'service.yaml',
+        '_internal-finance.yaml',
+        'administration.yaml',
+        '_starter-roles.yaml',
+        'platform.yaml',
+        'README.md',
+      ]),
+    ).toEqual(['administration.yaml', 'platform.yaml', 'service.yaml']);
+  });
+
+  it('parses every entry in key order, its area the file stem, its lists sorted and trimmed', () => {
+    const catalog = parse({ 'service.yaml': service, 'platform.yaml': platform });
+    expect(catalog.capabilities).toEqual([
+      {
+        key: 'platform.operate',
+        name: 'Operate the platform',
+        description: 'Run the platform.',
+        area: 'platform',
+        includes: [],
+        permissions: ['platform:tenant:read'],
+        tenantWideOnly: true,
+        hierarchy: 'OTHER',
+        system: true,
+      },
+      {
+        key: 'workexec.wip.view',
+        name: 'Work in progress board',
+        description: 'See the board.',
+        area: 'service',
+        includes: ['workexec.workorder.view'],
+        permissions: ['workorder:wip:view'],
+        tenantWideOnly: false,
+        hierarchy: 'OTHER',
+        system: false,
+      },
+      {
+        key: 'workexec.workorder.view',
+        name: 'View work orders',
+        description: "Open a work order's details.",
+        area: 'service',
+        includes: [],
+        permissions: ['invoice:invoice:view', 'workorder:workorder:view'],
+        tenantWideOnly: false,
+        hierarchy: 'OTHER',
+        system: false,
+      },
+    ]);
+    expect(catalog.version).toMatch(/^[0-9a-f]{16}$/);
+  });
+
+  it('accepts an entry that grants only through includes', () => {
+    const only = `${service}- key: workexec.all\n  name: All\n  description: D\n  tenantWideOnly: false\n  hierarchy: OTHER\n  includes: [workexec.workorder.view]\n`;
+    expect(parse({ 'service.yaml': only }).capabilities.map((c: { key: string }) => c.key)).toContain('workexec.all');
+  });
+
+  it('derives the version from the content alone: same entries, same version and same output', () => {
+    const first = parse({ 'service.yaml': service, 'platform.yaml': platform });
+    const reordered = parse({
+      'platform.yaml': platform,
+      'service.yaml': service.replace('# a comment the version ignores', '# another comment'),
+    });
+    expect(reordered).toEqual(first);
+    expect(renderCapabilityCatalogModule(reordered)).toBe(renderCapabilityCatalogModule(first));
+    const changed = parse({ 'service.yaml': service.replace('See the board.', 'See the WIP board.'), 'platform.yaml': platform });
+    expect(changed.version).not.toBe(first.version);
+  });
+
+  it('refuses a missing key, name, tenantWideOnly or hierarchy', () => {
+    expect(() => parse({ 'x.yaml': `- name: N\n  description: D\n${valid}` })).toThrow(
+      'x.yaml entry 1: key must be a non-blank string',
+    );
+    expect(() => parse({ 'x.yaml': entry(valid).replace('  name: N\n', '') })).toThrow(
+      'x.yaml entry 1 (a.b): name must be a non-blank string',
+    );
+    expect(() => parse({ 'x.yaml': entry(valid.replace('  tenantWideOnly: false\n', '')) })).toThrow(
+      'tenantWideOnly must be true or false',
+    );
+    expect(() => parse({ 'x.yaml': entry(valid.replace('OTHER', 'SALES')) })).toThrow(
+      'hierarchy must be FINANCIAL or OTHER',
+    );
+  });
+
+  it('refuses an entry with neither permissions nor includes', () => {
+    expect(() => parse({ 'x.yaml': entry('  tenantWideOnly: false\n  hierarchy: OTHER\n') })).toThrow(
+      'x.yaml entry 1 (a.b): grants nothing; give it permissions or includes',
+    );
+    expect(() => parse({ 'x.yaml': entry(valid.replace('[a:b:c]', '[]')) })).toThrow(/grants nothing/);
+  });
+
+  it('refuses a malformed key, an unknown field, a non-list, and a code listed twice', () => {
+    expect(() => parse({ 'x.yaml': entry(valid).replace('a.b', 'A.b') })).toThrow(/is not a dotted lower-case key/);
+    expect(() => parse({ 'x.yaml': entry(valid).replace('a.b', 'ab') })).toThrow(/is not a dotted lower-case key/);
+    expect(() => parse({ 'x.yaml': entry(`${valid}  grantTo: [owner]\n`) })).toThrow("unknown field 'grantTo'");
+    expect(() => parse({ 'x.yaml': entry(valid.replace('[a:b:c]', 'a:b:c')) })).toThrow('permissions must be a list');
+    expect(() => parse({ 'x.yaml': entry(valid.replace('[a:b:c]', '[a:b:c, a:b:c]')) })).toThrow(
+      "permissions lists 'a:b:c' twice",
+    );
+    expect(() => parse({ 'x.yaml': 'key: a.b' })).toThrow('x.yaml: expected a list of capabilities at the top level');
+    expect(() => parse({ 'x.yaml': '- just a string' })).toThrow('x.yaml entry 1: expected a mapping');
+  });
+
+  it('refuses a key declared twice, in one file or across two', () => {
+    expect(() => parse({ 'x.yaml': entry(valid) + entry(valid) })).toThrow(
+      "x.yaml: capability key 'a.b' is declared more than once",
+    );
+    expect(() => parse({ 'x.yaml': entry(valid), 'y.yaml': entry(valid) })).toThrow(
+      "y.yaml: capability key 'a.b' is declared more than once",
+    );
+  });
+
+  it('refuses an include that is unknown, itself, across the system boundary or more than one level deep', () => {
+    expect(() => parse({ 'x.yaml': entry(`${valid}  includes: [c.d]\n`) })).toThrow(
+      "capability 'a.b' includes 'c.d', which is not in the catalog",
+    );
+    expect(() => parse({ 'x.yaml': entry(`${valid}  includes: [a.b]\n`) })).toThrow(
+      'a capability cannot include itself',
+    );
+    expect(() =>
+      parse({ 'x.yaml': entry(`${valid}  includes: [platform.operate]\n`), 'platform.yaml': platform }),
+    ).toThrow(/across the system boundary/);
+    const nested = `${service}- key: workexec.top\n  name: Top\n  description: D\n  tenantWideOnly: false\n  hierarchy: OTHER\n  includes: [workexec.wip.view]\n`;
+    expect(() => parse({ 'service.yaml': nested })).toThrow(
+      "capability 'workexec.top' includes 'workexec.wip.view', which has includes of its own; includes go one level only",
+    );
+  });
+
+  it('renders the names and shapes the frontend imports, quoting what needs it', () => {
+    const rendered = renderCapabilityCatalogModule({
+      version: '0123456789abcdef',
+      capabilities: [
+        {
+          key: 'a.b',
+          name: "It's",
+          description: 'line\\one\nline two',
+          area: 'x',
+          includes: [],
+          permissions: ['a:b:c'],
+          tenantWideOnly: true,
+          hierarchy: 'FINANCIAL',
+          system: false,
+        },
+      ],
+    });
+    expect(rendered).toContain("export const CAPABILITY_CATALOG_VERSION = '0123456789abcdef';");
+    expect(rendered).toContain('export const CAPABILITY_CATALOG: readonly CapabilityCatalogEntry[] = [\n  {\n');
+    expect(rendered).toContain("    name: 'It\\'s',\n");
+    expect(rendered).toContain("    description: 'line\\\\one\\nline two',\n");
+    expect(rendered).toContain("    includes: [],\n    permissions: ['a:b:c'],\n    tenantWideOnly: true,\n");
+    expect(rendered).toContain('export interface CapabilityCatalogEntry {');
+    expect(renderCapabilityCatalogModule({ version: 'v', capabilities: [] })).toContain(
+      'export const CAPABILITY_CATALOG: readonly CapabilityCatalogEntry[] = [];',
+    );
+  });
+});
+
+describe('sdk-010 capability catalog: @durion-sdk/security', () => {
+  const pkgDir = join(PACKAGES_DIR, 'sdk-security');
+  const entry = '@durion-sdk/security/capability-catalog';
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const catalog = require(entry);
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const { PERMISSION_BY_BIT } = require('@durion-sdk/security/permission-catalog');
+  type Entry = { key: string; includes: string[]; permissions: string[]; system: boolean };
+
+  it('ships the catalog as a secondary entry point, re-exported from the primary one', () => {
+    expect(existsSync(join(pkgDir, 'capability-catalog', 'ng-package.json'))).toBe(true);
+    for (const index of [join(pkgDir, 'index.ts'), join(pkgDir, 'src', 'index.ts')]) {
+      expect(readFileSync(index, 'utf8').split(`export * from '${entry}';`)).toHaveLength(2);
+    }
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    expect(require(join(pkgDir, 'index.ts')).CAPABILITY_CATALOG).toBe(catalog.CAPABILITY_CATALOG);
+  });
+
+  it('matches its own version: the committed file was generated, not edited', () => {
+    expect(capabilityLib.catalogVersion(catalog.CAPABILITY_CATALOG)).toBe(catalog.CAPABILITY_CATALOG_VERSION);
+  });
+
+  it('holds unique keys in order, resolvable includes, and only codes the permission catalog knows', () => {
+    const entries: Entry[] = catalog.CAPABILITY_CATALOG;
+    const keys = entries.map((e) => e.key);
+    expect(keys.length).toBeGreaterThan(0);
+    expect([...keys].sort()).toEqual(keys);
+    expect(new Set(keys).size).toBe(keys.length);
+    expect(entries.flatMap((e) => e.includes).filter((key) => !keys.includes(key))).toEqual([]);
+    const codes = new Set(PERMISSION_BY_BIT);
+    expect(entries.flatMap((e) => e.permissions).filter((code) => !codes.has(code))).toEqual([]);
+    expect(entries.filter((e) => e.system).map((e) => e.key)).toEqual(['platform.operate']);
   });
 });
