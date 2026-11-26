@@ -16,6 +16,7 @@ export * from './roleSuggestions.service';
 export * from './selfRegistrationReviewAPI.service';
 export * from './tenantAPI.service';
 export * from './userAPI.service';
+export * from './userAccess.service';
 export * from './userBulkIngestAPI.service';
 export * from './userPersonLinkBulkIngestAPI.service';
 export * from './userRoleManagement.service';

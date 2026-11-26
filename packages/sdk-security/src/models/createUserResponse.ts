@@ -16,6 +16,10 @@ import { ActivationMessageResponse } from './activationMessageResponse';
 export interface CreateUserResponse {
     activation: ActivationMessageResponse;
     /**
+     * True while the account has never been activated: no password of its own and no sign-in. resendUserActivation accepts exactly these accounts. True on creation.
+     */
+    readonly awaitingActivation: boolean;
+    /**
      * User identifier
      */
     id: string;
@@ -71,10 +75,10 @@ export function instanceOfCreateUserResponse(value: object): value is CreateUser
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCreateUserResponsePropertyNames('activation', 'id', 'roles', 'username', );
+    const requiredProperties = createCreateUserResponsePropertyNames('activation', 'awaitingActivation', 'id', 'roles', 'username', );
     const optionalStringProperties = createCreateUserResponseOptionalProperties({ name: 'id', nullable: false }, { name: 'personId', nullable: true }, { name: 'username', nullable: false }, );
     const optionalNumberProperties = createCreateUserResponseOptionalProperties();
-    const optionalBooleanProperties = createCreateUserResponseOptionalProperties();
+    const optionalBooleanProperties = createCreateUserResponseOptionalProperties({ name: 'awaitingActivation', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalCreateUserResponsePropertyOfType(_v, property.name, 'string', property.nullable))

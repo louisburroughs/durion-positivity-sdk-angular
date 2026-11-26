@@ -14,6 +14,10 @@
  */
 export interface MeAccessLocation {
     /**
+     * The assignments that cover this location: every tenant-wide one, and each located one at this location or above it, in assignments order
+     */
+    assignmentIds: Array<string>;
+    /**
      * Location identifier
      */
     id: string;
@@ -65,7 +69,7 @@ export function instanceOfMeAccessLocation(value: object): value is MeAccessLoca
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createMeAccessLocationPropertyNames('id', 'name', 'primary', );
+    const requiredProperties = createMeAccessLocationPropertyNames('assignmentIds', 'id', 'name', 'primary', );
     const optionalStringProperties = createMeAccessLocationOptionalProperties({ name: 'id', nullable: false }, { name: 'name', nullable: true }, );
     const optionalNumberProperties = createMeAccessLocationOptionalProperties();
     const optionalBooleanProperties = createMeAccessLocationOptionalProperties({ name: 'primary', nullable: false }, );
