@@ -1,5 +1,6 @@
 # Fixture for sdk-010: one operation per shape of the x-required-permissions
-# contract, including x-required-permissions-all and x-required-permissions-conditional.
+# contract, including x-required-permissions-all, x-required-permissions-conditional
+# and x-permission-conditions (one operation per condition kind, and one with several).
 openapi: 3.0.1
 info:
   title: Fixture
@@ -70,6 +71,55 @@ paths:
       - thing:thing:view
       x-required-permissions-conditional:
       - thing:thing:view
+  /v1/things/{id}/reprint:
+    post:
+      operationId: reprintThing
+      x-permission-conditions:
+      - key: pastReprintCap
+        kind: REQUIRED_WHEN
+        permission: thing:thing:reprint_override
+        when: The thing has already been reprinted 5 times.
+      x-required-permissions:
+      - thing:thing:print
+      x-required-permissions-conditional:
+      - thing:thing:reprint_override
+  /v1/things/{id}/finalize:
+    post:
+      operationId: finalizeThing
+      x-permission-conditions:
+      - key: skipApproval
+        kind: WAIVES
+        permission: thing:thing:finalize_override
+        when: A holder finalizes without a manager approval token.
+      x-required-permissions:
+      - thing:thing:finalize
+      x-required-permissions-conditional:
+      - thing:thing:finalize_override
+  /v1/workers:
+    get:
+      operationId: searchWorkers
+      x-permission-conditions:
+      - fields:
+        - items[].clockState
+        - items[].clockedInAt
+        key: clockState
+        kind: FIELDS
+        permission: worker:time:view
+        when: Each row's clock state is served only to a holder.
+      - key: clockStateFilter
+        kind: REQUIRED_WHEN
+        permission: worker:time:view
+        when: The clockState filter is set (403 without it).
+      - fields:
+        - items[].periodTime
+        key: periodTime
+        kind: FIELDS
+        permission: worker:timeEntry:view
+        when: Each row's open-period time is served only to a holder.
+      x-required-permissions:
+      - worker:worker:view
+      x-required-permissions-conditional:
+      - worker:time:view
   /v1/public/things:
     get:
       operationId: listPublicThings

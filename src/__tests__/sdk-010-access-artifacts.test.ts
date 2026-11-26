@@ -36,12 +36,14 @@ describe('sdk-010 operation requirements: generator rules', () => {
       allOf: [],
       conditional: [],
       authenticated: false,
+      conditions: {},
     });
     expect(collected.requirements.createThing).toEqual({
       anyOf: ['thing:thing:create', 'thing:thing:manage'],
       allOf: [],
       conditional: [],
       authenticated: false,
+      conditions: {},
     });
   });
 
@@ -51,6 +53,7 @@ describe('sdk-010 operation requirements: generator rules', () => {
       allOf: ['thing:thing:audit', 'thing:thing:delete'],
       conditional: [],
       authenticated: false,
+      conditions: {},
     });
   });
 
@@ -60,6 +63,7 @@ describe('sdk-010 operation requirements: generator rules', () => {
       allOf: ['thing:thing:view'],
       conditional: [],
       authenticated: false,
+      conditions: {},
     });
     expect(isOperationPermitted(collected.requirements.approveThing, new Set(['thing:thing:view']))).toBe(false);
   });
@@ -70,6 +74,7 @@ describe('sdk-010 operation requirements: generator rules', () => {
       allOf: ['thing:thing:create'],
       conditional: ['thing:thing:manage'],
       authenticated: false,
+      conditions: {},
     });
     expect(isOperationPermitted(collected.requirements.importThings, new Set(['thing:thing:create']))).toBe(true);
     expect(isOperationPermitted(collected.requirements.importThings, new Set(['thing:thing:manage']))).toBe(false);
@@ -79,6 +84,7 @@ describe('sdk-010 operation requirements: generator rules', () => {
       allOf: [],
       conditional: ['thing:thing:view'],
       authenticated: false,
+      conditions: {},
     });
     expect(isOperationPermitted(collected.requirements.listUserThings, new Set())).toBe(true);
     expect(collected.authenticatedOnly).not.toContain('listUserThings');
@@ -91,23 +97,25 @@ describe('sdk-010 operation requirements: generator rules', () => {
         'x-required-permissions-all': ['a:b:c'],
         'x-required-permissions-conditional': ['a:b:c', 'g:h:i'],
       }),
-    ).toEqual({ anyOf: ['d:e:f'], allOf: ['a:b:c'], conditional: ['g:h:i'], authenticated: false });
+    ).toEqual({ anyOf: ['d:e:f'], allOf: ['a:b:c'], conditional: ['g:h:i'], authenticated: false, conditions: {} });
   });
 
   it('turns the AUTHENTICATED sentinel into the flag, never into a code', () => {
-    expect(collected.requirements.getThing).toEqual({ anyOf: [], allOf: [], conditional: [], authenticated: true });
+    expect(collected.requirements.getThing).toEqual({ anyOf: [], allOf: [], conditional: [], authenticated: true, conditions: {} });
     expect(collected.authenticatedOnly).toEqual(['getThing']);
     expect(collected.requirements.patchThing1).toEqual({
       anyOf: ['thing:thing:edit'],
       allOf: [],
       conditional: [],
       authenticated: true,
+      conditions: {},
     });
     expect(requirementFor({ 'x-required-permissions-all': ['AUTHENTICATED', 'a:b:c'] })).toEqual({
       anyOf: [],
       allOf: ['a:b:c'],
       conditional: [],
       authenticated: true,
+      conditions: {},
     });
   });
 
@@ -126,12 +134,14 @@ describe('sdk-010 operation requirements: generator rules', () => {
       allOf: ['d:e:f'],
       conditional: [],
       authenticated: false,
+      conditions: {},
     });
     expect(requirementFor({ 'x-required-permissions-all': ['d:e:f'] })).toEqual({
       anyOf: [],
       allOf: ['d:e:f'],
       conditional: [],
       authenticated: false,
+      conditions: {},
     });
   });
 
@@ -142,6 +152,91 @@ describe('sdk-010 operation requirements: generator rules', () => {
     expect(() => requirementFor({ 'x-required-permissions-conditional': 'a:b:c' })).toThrow(/must be a list/);
   });
 
+  it('gives an operation with no x-permission-conditions an empty conditions map', () => {
+    expect(collected.requirements.listThings.conditions).toEqual({});
+    expect(requirementFor({ 'x-required-permissions': ['a:b:c'], 'x-permission-conditions': null }).conditions).toEqual({});
+    expect(requirementFor({ 'x-required-permissions': ['a:b:c'], 'x-permission-conditions': [] }).conditions).toEqual({});
+  });
+
+  it('reads a REQUIRED_WHEN and a WAIVES condition by key, leaving the other lists as the extensions say', () => {
+    expect(collected.requirements.reprintThing).toEqual({
+      anyOf: ['thing:thing:print'],
+      allOf: [],
+      conditional: ['thing:thing:reprint_override'],
+      authenticated: false,
+      conditions: { pastReprintCap: { code: 'thing:thing:reprint_override', kind: 'requiredWhen', fields: [] } },
+    });
+    expect(collected.requirements.finalizeThing.conditions).toEqual({
+      skipApproval: { code: 'thing:thing:finalize_override', kind: 'waives', fields: [] },
+    });
+    // A condition is never demanded.
+    expect(isOperationPermitted(collected.requirements.reprintThing, new Set(['thing:thing:print']))).toBe(true);
+  });
+
+  it('reads several conditions in declaration order, a FIELDS one with its fields, one code under two keys', () => {
+    const { conditions } = collected.requirements.searchWorkers;
+    expect(Object.keys(conditions)).toEqual(['clockState', 'clockStateFilter', 'periodTime']);
+    expect(conditions).toEqual({
+      clockState: { code: 'worker:time:view', kind: 'fields', fields: ['items[].clockState', 'items[].clockedInAt'] },
+      clockStateFilter: { code: 'worker:time:view', kind: 'requiredWhen', fields: [] },
+      periodTime: { code: 'worker:timeEntry:view', kind: 'fields', fields: ['items[].periodTime'] },
+    });
+    // A FIELDS code the spec does not list as conditional stays out of `conditional`.
+    expect(collected.requirements.searchWorkers.conditional).toEqual(['worker:time:view']);
+    expect(collected.requirements.searchWorkers.anyOf).toEqual(['worker:worker:view']);
+  });
+
+  it('rejects a malformed x-permission-conditions instead of skipping the entry', () => {
+    const base = { 'x-required-permissions': ['a:b:c'] };
+    const entry = { key: 'overLimit', permission: 'a:b:override', kind: 'REQUIRED_WHEN', when: 'Above 500.00.' };
+    const read = (conditions: unknown, extra: Record<string, unknown> = {}) => () =>
+      requirementFor({ ...base, ...extra, 'x-permission-conditions': conditions }, 'POST /x');
+
+    expect(read(entry)).toThrow(/POST \/x: x-permission-conditions must be a list/);
+    expect(read(['overLimit'])).toThrow(/\[0\]: must be an object/);
+    expect(read([{ ...entry, key: 'OverLimit' }])).toThrow(/key must match/);
+    expect(read([{ ...entry, key: 'x' }])).toThrow(/key must match/);
+    expect(read([entry, { ...entry, permission: 'a:b:other' }])).toThrow(/\[1\]: key "overLimit" repeats/);
+    expect(read([{ ...entry, permission: ' ' }])).toThrow(/permission must be a non-empty string/);
+    expect(read([{ ...entry, permission: undefined }])).toThrow(/permission must be a non-empty string/);
+    expect(read([{ ...entry, kind: 'requiredWhen' }])).toThrow(/kind must be one of REQUIRED_WHEN, WAIVES, FIELDS/);
+    expect(read([{ ...entry, when: '' }])).toThrow(/when must be a non-empty string/);
+    expect(read([{ ...entry, kind: 'FIELDS' }])).toThrow(/a FIELDS condition names no fields/);
+    expect(read([{ ...entry, kind: 'FIELDS', fields: [] }])).toThrow(/a FIELDS condition names no fields/);
+    expect(read([{ ...entry, kind: 'FIELDS', fields: 'items[].a' }])).toThrow(/fields must be a list/);
+    expect(read([{ ...entry, kind: 'FIELDS', fields: ['items[].a', ''] }])).toThrow(/fields must be a list/);
+    expect(read([{ ...entry, fields: ['items[].a'] }])).toThrow(/fields are only for a FIELDS condition/);
+    expect(read([{ ...entry, label: 'Over limit' }])).toThrow(/unknown field\(s\) label/);
+    expect(read([{ ...entry, permission: 'a:b:c' }], { 'x-required-permissions-all': ['a:b:c'] })).toThrow(
+      /a:b:c is already required on every call/,
+    );
+    // An operation with no requirement still has its conditions checked.
+    expect(() => requirementFor({ 'x-permission-conditions': [{ ...entry, key: '' }] })).toThrow(/key must match/);
+    // A WAIVES or FIELDS code may be in -all; only a REQUIRED_WHEN one says nothing there.
+    expect(
+      read([{ ...entry, kind: 'WAIVES', permission: 'a:b:c' }], { 'x-required-permissions-all': ['a:b:c'] })(),
+    ).toMatchObject({ conditions: { overLimit: { code: 'a:b:c', kind: 'waives', fields: [] } } });
+  });
+
+  it('refuses a spec whose conditions are malformed, naming the operation', () => {
+    expect(() =>
+      collectOperationRequirements(
+        {
+          paths: {
+            '/a': {
+              post: {
+                operationId: 'createA',
+                'x-required-permissions': ['a:b:c'],
+                'x-permission-conditions': [{ key: 'stats', permission: 'a:b:d', kind: 'FIELDS', when: 'Stats.' }],
+              },
+            },
+          },
+        },
+        'spec',
+      ),
+    ).toThrow(/spec: POST \/a: x-permission-conditions \[0\]: "stats": a FIELDS condition names no fields/);
+  });
+
   it('keys by the generated service method name, sorted, and lists every operation', () => {
     expect(toMethodName('getAuditTrailByOrder_1')).toBe('getAuditTrailByOrder1');
     expect(toMethodName('GetThing')).toBe('getThing');
@@ -150,23 +245,29 @@ describe('sdk-010 operation requirements: generator rules', () => {
       'approveThing',
       'createThing',
       'deleteThing',
+      'finalizeThing',
       'getThing',
       'importThings',
       'listPublicThings',
       'listThings',
       'listUserThings',
       'patchThing1',
+      'reprintThing',
+      'searchWorkers',
       'submitPublicThing',
     ]);
     expect(Object.keys(collected.requirements)).toEqual([
       'approveThing',
       'createThing',
       'deleteThing',
+      'finalizeThing',
       'getThing',
       'importThings',
       'listThings',
       'listUserThings',
       'patchThing1',
+      'reprintThing',
+      'searchWorkers',
     ]);
   });
 
@@ -194,9 +295,17 @@ describe('sdk-010 operation requirements: generator rules', () => {
       'export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<PeopleContactOperationId, OperationRequirement>>> = {',
     );
     expect(rendered).toContain(
-      "  approveThing: { anyOf: ['thing:approval:approve', 'thing:approval:override'], allOf: ['thing:thing:view'], conditional: [], authenticated: false },",
+      "  approveThing: { anyOf: ['thing:approval:approve', 'thing:approval:override'], allOf: ['thing:thing:view'], conditional: [], authenticated: false, conditions: {} },",
     );
-    expect(rendered).toContain("  getThing: { anyOf: [], allOf: [], conditional: [], authenticated: true },");
+    expect(rendered).toContain("  getThing: { anyOf: [], allOf: [], conditional: [], authenticated: true, conditions: {} },");
+    expect(rendered).toContain(
+      "  searchWorkers: { anyOf: ['worker:worker:view'], allOf: [], conditional: ['worker:time:view'], authenticated: false, conditions: { " +
+        "clockState: { code: 'worker:time:view', kind: 'fields', fields: ['items[].clockState', 'items[].clockedInAt'] }, " +
+        "clockStateFilter: { code: 'worker:time:view', kind: 'requiredWhen', fields: [] }, " +
+        "periodTime: { code: 'worker:timeEntry:view', kind: 'fields', fields: ['items[].periodTime'] } } },",
+    );
+    expect(rendered).toContain('  readonly conditions: Readonly<Record<string, OperationCondition>>;');
+    expect(rendered).toContain("  readonly kind: 'requiredWhen' | 'waives' | 'fields';");
     expect(rendered).not.toMatch(/^\s+listPublicThings:/m);
     expect(rendered).toContain(
       "export const OPERATIONS_WITHOUT_REQUIREMENTS: readonly PeopleContactOperationId[] = [\n  'listPublicThings',\n  'submitPublicThing',\n];",
@@ -221,7 +330,7 @@ describe('sdk-010 isOperationPermitted', () => {
     allOf: string[],
     authenticated = false,
     conditional: string[] = [],
-  ): OperationRequirement => ({ anyOf, allOf, conditional, authenticated });
+  ): OperationRequirement => ({ anyOf, allOf, conditional, authenticated, conditions: {} });
 
   it('refuses a missing requirement (fail closed)', () => {
     expect(isOperationPermitted(undefined, new Set(['a', 'b']))).toBe(false);
@@ -298,6 +407,25 @@ describe('sdk-010 operation requirements: generated packages', () => {
             new Set([...r.anyOf, ...r.allOf, ...r.conditional]).size !==
               r.anyOf.length + r.allOf.length + r.conditional.length ||
             (!r.authenticated && r.anyOf.length === 0 && r.allOf.length === 0 && r.conditional.length === 0),
+        )
+        .map(([key]) => key);
+      expect(bad).toEqual([]);
+    });
+
+    it('gives every entry a conditions map of known kinds, with fields only on a fields condition', () => {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const requirements = Object.entries(require(entry).OPERATION_REQUIREMENTS) as [string, OperationRequirement][];
+      const bad = requirements
+        .filter(
+          ([, r]) =>
+            !r.conditions ||
+            Object.values(r.conditions).some(
+              (c) =>
+                !['requiredWhen', 'waives', 'fields'].includes(c.kind) ||
+                (c.kind === 'fields') !== c.fields.length > 0 ||
+                c.code === '' ||
+                c.code === 'AUTHENTICATED',
+            ),
         )
         .map(([key]) => key);
       expect(bad).toEqual([]);
