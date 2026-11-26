@@ -18,7 +18,7 @@ import { VendorStatementComparisonView } from './vendorStatementComparisonView';
  * A vendor statement: header fields and lines with their states, what the reading found, and its life.
  */
 export interface VendorStatementResponse {
-    comparison?: VendorStatementComparisonView;
+    comparison?: VendorStatementComparisonView | null;
     createdAt?: string;
     /**
      * Who uploaded it

@@ -18,7 +18,7 @@ export interface ActivationMessageResponse {
      * When the mailed link stops working (72 hours after it was issued); absent when sent is false
      */
     expiresAt?: string | null;
-    reason?: ActivationMessageNotSentReason;
+    reason?: ActivationMessageNotSentReason | null;
     /**
      * True when pos-platform-sender accepted the activation message for the user\'s address
      */

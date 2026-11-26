@@ -29,7 +29,7 @@ export interface EmployeeSummaryDto {
      */
     allowedActions?: Array<EmployeeSummaryDtoAllowedActionsEnum> | null;
     clock?: EmployeeClockStateDto;
-    contactInfo?: EmployeeContactInfoDto;
+    contactInfo?: EmployeeContactInfoDto | null;
     /**
      * Employee identifier, as accepted by every `/v1/people/employees/{employeeId}` endpoint. An employee is keyed by its person, so this equals `personId`
      */
@@ -46,7 +46,7 @@ export interface EmployeeSummaryDto {
      * Hire date (yyyy-MM-dd). This key is absent (not null) unless `include=EMPLOYMENT` was requested; it is never withheld for permission reasons, since it is an employment attribute and not the personal contact detail `include=CONTACT_INFO` gates.
      */
     hireDate?: string;
-    jobRole?: EmployeeJobRoleDto;
+    jobRole?: EmployeeJobRoleDto | null;
     /**
      * Last (family) name, from the identity replica; null when the replica has not caught up
      */
@@ -55,7 +55,7 @@ export interface EmployeeSummaryDto {
      * Count of the person\'s other active staffing assignments beyond primaryLocation (\"Charlotte Main · +1 more\"); null unless `include=LOCATION` was requested, 0 when requested but the person has no other active assignment
      */
     otherLocationCount?: number | null;
-    periodTime?: PeriodTimeDto;
+    periodTime?: PeriodTimeDto | null;
     /**
      * Stable person identifier the employee maps to
      */
@@ -72,7 +72,7 @@ export interface EmployeeSummaryDto {
      * Preferred name, from the identity replica
      */
     preferredName?: string;
-    primaryLocation?: EmployeeLocationDto;
+    primaryLocation?: EmployeeLocationDto | null;
     propagation?: EmployeePropagationDto;
     /**
      * Active application-role assignments (DECISION-PEOPLE-026); null unless `include=ROLE_ASSIGNMENTS` was requested, empty when requested but the person holds none

@@ -25,7 +25,7 @@ export interface CashMovementOptionsResponse {
      * ISO 4217 code of the limits and running totals (the functional currency)
      */
     currencyCode?: string;
-    evidenceRule?: CashMovementEvidenceRule;
+    evidenceRule?: CashMovementEvidenceRule | null;
     /**
      * One entry per fixed reason
      */

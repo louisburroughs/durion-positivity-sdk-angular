@@ -22,7 +22,7 @@ export interface ShortLineResponse {
      * Quantity that could not be fulfilled
      */
     quantityShort: number;
-    replenishmentRef?: ReplenishmentRefResponse;
+    replenishmentRef?: ReplenishmentRefResponse | null;
     /**
      * Stock item (SKU) that is short
      */

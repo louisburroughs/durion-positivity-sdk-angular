@@ -24,7 +24,7 @@ export interface ApprovalPersonDto {
      * Employee number, when the person has an employee record
      */
     employeeNumber?: string | null;
-    latestApproval?: TimePeriodApprovalDto;
+    latestApproval?: TimePeriodApprovalDto | null;
     /**
      * Person identifier
      */

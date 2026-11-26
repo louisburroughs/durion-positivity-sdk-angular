@@ -117,7 +117,7 @@ export interface LocationResponseDTO {
      * Number of mobile units based at the location with status OUT_OF_SERVICE; reported for an inactive location too
      */
     outOfServiceMobileUnitCount: number;
-    parent?: LocationParentSummary;
+    parent?: LocationParentSummary | null;
     /**
      * Primary phone number for the location
      */

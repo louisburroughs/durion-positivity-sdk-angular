@@ -22,15 +22,15 @@ export interface InventorySummaryResponse {
      * Stock lines with status low from the stock query (#3181) for the same scope; absent without inventory:on_hand:view or when that read does not cover the node\'s site, and null only for a node this module\'s replicas do not know; overlaps outOrShort and must not be summed with it
      */
     belowMin?: number | null;
-    counts?: CountsSummary;
+    counts?: CountsSummary | null;
     /**
      * Stock lines with status out — both SHORT and OUT_OF_STOCK — from the stock query (#3181) for the same scope; absent without inventory:on_hand:view or when that read does not cover the node\'s site, and null only for a node this module\'s replicas do not know; overlaps belowMin
      */
     outOrShort?: number | null;
-    picks?: PicksSummary;
-    putaway?: PutawaySummary;
-    receipts?: ReceiptsSummary;
-    replenish?: ReplenishSummary;
+    picks?: PicksSummary | null;
+    putaway?: PutawaySummary | null;
+    receipts?: ReceiptsSummary | null;
+    replenish?: ReplenishSummary | null;
     /**
      * Sum of on-hand in bins whose storage category is STAGING; absent without inventory:on_hand:view, and null for a permitted caller until the stock query exposes that aggregate
      */

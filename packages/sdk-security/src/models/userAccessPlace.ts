@@ -23,7 +23,7 @@ export interface UserAccessPlace {
      * TENANT for every location of the tenant; LOCATION for one assigned location node
      */
     kind: UserAccessPlaceKindEnum;
-    location: LocationRefDto;
+    location: LocationRefDto | null;
 }
 export enum UserAccessPlaceKindEnum {
     Tenant = 'TENANT',

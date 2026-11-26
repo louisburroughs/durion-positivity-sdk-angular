@@ -34,7 +34,7 @@ export interface EstimateResponse {
      * Customer UUID who approved the estimate
      */
     approvedBy?: string;
-    checkIn?: EstimateCheckInResponse;
+    checkIn?: EstimateCheckInResponse | null;
     /**
      * Date and time the estimate was created
      */

@@ -15,7 +15,7 @@ import { InputTaxRecoveryRegistration } from './inputTaxRecoveryRegistration';
  * One regime the tenant is registered for
  */
 export interface InputTaxRecoveryRegime {
-    account: InputTaxRecoveryAccount;
+    account: InputTaxRecoveryAccount | null;
     /**
      * ISO 3166-1 alpha-2 country
      */
@@ -32,7 +32,7 @@ export interface InputTaxRecoveryRegime {
      * Regime code, as the country profile names it
      */
     regime: string;
-    registration: InputTaxRecoveryRegistration;
+    registration: InputTaxRecoveryRegistration | null;
 }
 
 function isOptionalInputTaxRecoveryRegimePropertyOfType(

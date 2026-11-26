@@ -22,7 +22,7 @@ export interface BillIntakeVendorView {
      * READ, CHECK_THIS, ACCEPTED or CORRECTED
      */
     state?: BillIntakeVendorViewStateEnum;
-    value?: BillIntakeVendorRef;
+    value?: BillIntakeVendorRef | null;
 }
 export enum BillIntakeVendorViewStateEnum {
     Read = 'READ',

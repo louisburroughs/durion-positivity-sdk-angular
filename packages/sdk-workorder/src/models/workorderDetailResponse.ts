@@ -30,7 +30,7 @@ export interface WorkorderDetailResponse {
      */
     assignedTechnicianName?: string | null;
     capabilities: WorkorderCapabilities;
-    checkIn?: EstimateCheckInResponse;
+    checkIn?: EstimateCheckInResponse | null;
     /**
      * Creation timestamp
      */

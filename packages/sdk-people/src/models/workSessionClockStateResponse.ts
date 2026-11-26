@@ -30,7 +30,7 @@ export interface WorkSessionClockStateResponse {
      * Person the state belongs to
      */
     personId: string;
-    todayShift?: ShiftResponse;
+    todayShift?: ShiftResponse | null;
     /**
      * The open work session; non-null exactly when clockState is CLOCKED_IN or ON_BREAK. The break endpoints are keyed by this id.
      */

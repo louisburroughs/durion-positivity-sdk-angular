@@ -14,7 +14,7 @@ import { BankReconciliationExceptionRequest } from './bankReconciliationExceptio
  * Optional close request carrying a bank reconciliation exception
  */
 export interface PeriodCloseRequest {
-    bankReconciliationException?: BankReconciliationExceptionRequest;
+    bankReconciliationException?: BankReconciliationExceptionRequest | null;
 }
 
 function isOptionalPeriodCloseRequestPropertyOfType(

@@ -14,8 +14,8 @@ import { Money } from './money';
  * Monthly closed-workorder value by known customer class
  */
 export interface MonthlyPoint {
-    commercial?: Money;
-    individual?: Money;
+    commercial?: Money | null;
+    individual?: Money | null;
     /**
      * UTC calendar month in YYYY-MM form
      */
