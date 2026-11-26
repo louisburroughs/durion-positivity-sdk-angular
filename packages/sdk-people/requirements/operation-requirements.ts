@@ -51,6 +51,7 @@ export type PeopleOperationId =
   | 'getEmployee'
   | 'getEmployeeByNumber'
   | 'getEmployeeStatusCounts'
+  | 'getJobRole'
   | 'getMyLocationReach'
   | 'getMyPrimaryLocation'
   | 'getPersonPrimaryLocation'
@@ -143,6 +144,7 @@ export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<PeopleOperationId, 
   getEmployee: { anyOf: ['people:employee_pii:view'], allOf: [], conditional: [], authenticated: false },
   getEmployeeByNumber: { anyOf: ['people:employee:view'], allOf: [], conditional: [], authenticated: false },
   getEmployeeStatusCounts: { anyOf: ['people:employee:view'], allOf: [], conditional: [], authenticated: false },
+  getJobRole: { anyOf: ['people:jobRole:view'], allOf: [], conditional: [], authenticated: false },
   getMyLocationReach: { anyOf: ['people:employee:view'], allOf: [], conditional: [], authenticated: false },
   getMyPrimaryLocation: { anyOf: ['people:self:view'], allOf: [], conditional: [], authenticated: false },
   getPersonPrimaryLocation: { anyOf: ['people:employee:view'], allOf: [], conditional: [], authenticated: false },

@@ -15,6 +15,10 @@ import { AssignmentScopeDto } from './assignmentScopeDto';
  */
 export interface MeAccessAssignment {
     /**
+     * The role assignment\'s identifier; what locations[].assignmentIds refer to
+     */
+    assignmentId: string;
+    /**
      * Exclusive end of the assignment\'s effective window; null when it has no end
      */
     effectiveEndDate?: string | null;
@@ -67,8 +71,8 @@ export function instanceOfMeAccessAssignment(value: object): value is MeAccessAs
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createMeAccessAssignmentPropertyNames('roleKey', 'roleName', 'scope', );
-    const optionalStringProperties = createMeAccessAssignmentOptionalProperties({ name: 'effectiveEndDate', nullable: true }, { name: 'roleKey', nullable: false }, { name: 'roleName', nullable: false }, );
+    const requiredProperties = createMeAccessAssignmentPropertyNames('assignmentId', 'roleKey', 'roleName', 'scope', );
+    const optionalStringProperties = createMeAccessAssignmentOptionalProperties({ name: 'assignmentId', nullable: false }, { name: 'effectiveEndDate', nullable: true }, { name: 'roleKey', nullable: false }, { name: 'roleName', nullable: false }, );
     const optionalNumberProperties = createMeAccessAssignmentOptionalProperties();
     const optionalBooleanProperties = createMeAccessAssignmentOptionalProperties();
 

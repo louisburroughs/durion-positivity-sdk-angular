@@ -62,6 +62,7 @@ export type SecurityOperationId =
   | 'getTenantSignup'
   | 'getTokenSubject'
   | 'getTokenUserId'
+  | 'getUserAccess'
   | 'getUserAccountState'
   | 'getUserById'
   | 'getUserDefaultPersona'
@@ -155,6 +156,7 @@ export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<SecurityOperationId
   getSelfRegistrationReviewCase: { anyOf: ['security:user_account_state:view'], allOf: [], conditional: [], authenticated: false },
   getTokenSubject: { anyOf: [], allOf: [], conditional: [], authenticated: true },
   getTokenUserId: { anyOf: [], allOf: [], conditional: [], authenticated: true },
+  getUserAccess: { anyOf: ['security:role:view'], allOf: [], conditional: [], authenticated: false },
   getUserAccountState: { anyOf: ['security:user_account_state:view'], allOf: [], conditional: [], authenticated: false },
   getUserById: { anyOf: ['security:user:view'], allOf: [], conditional: [], authenticated: false },
   getUserDefaultPersona: { anyOf: ['security:assistant_persona:resolve'], allOf: [], conditional: [], authenticated: false },

@@ -14,6 +14,10 @@
  */
 export interface UserDto {
     /**
+     * True while the account has never been activated: no password of its own and no sign-in. resendUserActivation accepts exactly these accounts.
+     */
+    readonly awaitingActivation: boolean;
+    /**
      * User identifier
      */
     id: string;
@@ -69,10 +73,10 @@ export function instanceOfUserDto(value: object): value is UserDto {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createUserDtoPropertyNames('id', 'roles', 'username', );
+    const requiredProperties = createUserDtoPropertyNames('awaitingActivation', 'id', 'roles', 'username', );
     const optionalStringProperties = createUserDtoOptionalProperties({ name: 'id', nullable: false }, { name: 'personId', nullable: false }, { name: 'username', nullable: false }, );
     const optionalNumberProperties = createUserDtoOptionalProperties();
-    const optionalBooleanProperties = createUserDtoOptionalProperties();
+    const optionalBooleanProperties = createUserDtoOptionalProperties({ name: 'awaitingActivation', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalUserDtoPropertyOfType(_v, property.name, 'string', property.nullable))

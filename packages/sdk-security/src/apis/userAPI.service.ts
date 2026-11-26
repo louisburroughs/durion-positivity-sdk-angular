@@ -388,17 +388,39 @@ export class UserAPIService extends BaseService {
     }
 
     /**
-     * List All User Accounts
-     * Returns every user account with its id, username, effective role names, and linked personId. Use this tool to enumerate accounts; use getUserById instead for one known user. Preconditions: the caller must hold security:user:view. Required inputs: none; there are no filters or paging parameters, so the full user table is returned. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when no users exist; there are no business error conditions.
+     * List User Accounts
+     * Returns the tenant\&#39;s user accounts, each with its id, username, effective role keys, linked personId and awaitingActivation. Use this tool to enumerate accounts, to find the account(s) linked to one person, or to list the accounts still awaiting activation; use getUserById instead for one known user. Preconditions: the caller must hold security:user:view. Optional inputs: personId (UUID) keeps the accounts linked to that person; awaitingActivation (boolean) keeps the accounts whose awaitingActivation equals it, so true lists exactly the accounts resendUserActivation accepts. Absent filters keep everything; there is no paging. No events are emitted and no state changes; this is a read-only projection. Returns 200 with an empty list when no account matches; 400 INVALID_REQUEST for a malformed personId or awaitingActivation.
      * @endpoint get /v1/users
+     * @param personId Keep only the accounts linked to this person
+     * @param awaitingActivation Keep only the accounts whose awaitingActivation equals this value
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listUsers(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<UserDto>>;
-    public listUsers(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<UserDto>>>;
-    public listUsers(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<UserDto>>>;
-    public listUsers(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listUsers(personId?: string, awaitingActivation?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<UserDto>>;
+    public listUsers(personId?: string, awaitingActivation?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<UserDto>>>;
+    public listUsers(personId?: string, awaitingActivation?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<UserDto>>>;
+    public listUsers(personId?: string, awaitingActivation?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'personId',
+            <any>personId,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'awaitingActivation',
+            <any>awaitingActivation,
+            QueryParamStyle.Form,
+            true,
+        );
+
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -433,6 +455,7 @@ export class UserAPIService extends BaseService {
         return this.httpClient.request<Array<UserDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
