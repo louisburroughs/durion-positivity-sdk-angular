@@ -1,6 +1,17 @@
 // GENERATED FILE - do not edit by hand.
 // Written by scripts/generate-operation-requirements.mjs (part of `npm run generate`)
-// from the x-required-permissions extensions of durion-positivity-backend/pos-people/openapi.yaml.
+// from the x-required-permissions and x-permission-conditions extensions of durion-positivity-backend/pos-people/openapi.yaml.
+
+/**
+ * One permission check the operation makes beyond its authorization
+ * expression, by the key the spec gives it. The same shape as
+ * `OperationCondition` in @durion-sdk/transport, which documents it.
+ */
+export interface OperationCondition {
+  readonly code: string;
+  readonly kind: 'requiredWhen' | 'waives' | 'fields';
+  readonly fields: readonly string[];
+}
 
 /**
  * What a caller must hold to call one operation. The same shape as
@@ -14,6 +25,7 @@ export interface OperationRequirement {
   readonly allOf: readonly string[];
   readonly conditional: readonly string[];
   readonly authenticated: boolean;
+  readonly conditions: Readonly<Record<string, OperationCondition>>;
 }
 
 /** Every operation of @durion-sdk/people, by the name of its generated service method. */
@@ -106,95 +118,96 @@ export type PeopleOperationId =
 /**
  * What a caller must hold to call each operation: every `allOf` code and, when
  * `anyOf` is not empty, at least one `anyOf` code. A `conditional` code is
- * asked for on some calls only and is never demanded here. An operation with no
+ * asked for on some calls only and is never demanded here, nor is a code in
+ * `conditions`, which names each such check by key. An operation with no
  * entry has unknown requirements and must be refused (fail closed);
  * `isOperationPermitted` from @durion-sdk/transport applies these rules.
  */
 export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<PeopleOperationId, OperationRequirement>>> = {
-  acknowledgeTimeEntryException: { anyOf: ['people:timeException:acknowledge'], allOf: [], conditional: [], authenticated: false },
-  approveTimeEntriesBatch: { anyOf: ['people:timeEntry:approve'], allOf: [], conditional: [], authenticated: false },
-  approveTimeEntryAdjustment: { anyOf: ['people:timeAdjustment:approve'], allOf: [], conditional: [], authenticated: false },
-  approveTimeOffRequest: { anyOf: ['people:time_off:decide'], allOf: [], conditional: [], authenticated: false },
-  approveTimePeriod: { anyOf: ['people:timeEntry:approve'], allOf: [], conditional: [], authenticated: false },
-  bulkIngestPersonCredentials: { anyOf: ['people:employee:edit'], allOf: [], conditional: [], authenticated: false },
-  bulkIngestStaffingAssignments: { anyOf: ['people:employee:edit'], allOf: [], conditional: [], authenticated: false },
-  cancelShift: { anyOf: ['people:shift:manage'], allOf: [], conditional: [], authenticated: false },
-  cancelTimeOffRequest: { anyOf: ['people:time_off:decide', 'people:time_off:request'], allOf: [], conditional: [], authenticated: false },
-  clearEmployeePhoto: { anyOf: ['people:employee:edit', 'people:employee_photo:edit'], allOf: [], conditional: [], authenticated: false },
-  closeMissedWorkSessionClockOut: { anyOf: ['people:timeAdjustment:create'], allOf: [], conditional: [], authenticated: false },
-  closeMissedWorkSessionClockOutForPerson: { anyOf: ['people:timekeeping:approve'], allOf: [], conditional: [], authenticated: false },
-  correctPersonCredential: { anyOf: ['people:credential:manage'], allOf: [], conditional: [], authenticated: false },
-  createEmployee: { anyOf: ['people:employee:create'], allOf: [], conditional: [], authenticated: false },
-  createEmployeesBulk: { anyOf: ['people:employee:create'], allOf: [], conditional: [], authenticated: false },
-  createJobRole: { anyOf: ['people:jobRole:manage'], allOf: [], conditional: [], authenticated: false },
-  createPersonCredential: { anyOf: ['people:credential:manage'], allOf: [], conditional: [], authenticated: false },
-  createShift: { anyOf: ['people:shift:manage'], allOf: [], conditional: [], authenticated: false },
-  createStaffingAssignment: { anyOf: ['people:employee:edit'], allOf: [], conditional: [], authenticated: false },
-  createTimeEntryAdjustment: { anyOf: ['people:timeAdjustment:create'], allOf: [], conditional: [], authenticated: false },
-  createTimeEntryException: { anyOf: ['people:timeException:create'], allOf: [], conditional: [], authenticated: false },
-  createTimeOffRequest: { anyOf: ['people:time_off:decide', 'people:time_off:request'], allOf: [], conditional: [], authenticated: false },
-  createTimePeriod: { anyOf: ['people:timePeriod:create'], allOf: [], conditional: [], authenticated: false },
-  denyTimeOffRequest: { anyOf: ['people:time_off:decide'], allOf: [], conditional: [], authenticated: false },
-  disableEmployee: { anyOf: ['people:employee:activation'], allOf: [], conditional: [], authenticated: false },
-  enableEmployee: { anyOf: ['people:employee:activation'], allOf: [], conditional: [], authenticated: false },
-  endStaffingAssignment: { anyOf: ['people:employee:edit'], allOf: [], conditional: [], authenticated: false },
-  getAttendanceDiscrepancyReport: { anyOf: ['people:attendance_report:view'], allOf: [], conditional: [], authenticated: false },
-  getCredentialAttentionCounts: { anyOf: ['people:employee:view'], allOf: [], conditional: [], authenticated: false },
-  getCurrentWorkSession: { anyOf: ['people:self:view', 'people:timekeeping:view'], allOf: [], conditional: [], authenticated: false },
-  getEmployee: { anyOf: ['people:employee_pii:view'], allOf: [], conditional: [], authenticated: false },
-  getEmployeeByNumber: { anyOf: ['people:employee:view'], allOf: [], conditional: [], authenticated: false },
-  getEmployeeStatusCounts: { anyOf: ['people:employee:view'], allOf: [], conditional: [], authenticated: false },
-  getJobRole: { anyOf: ['people:jobRole:view'], allOf: [], conditional: [], authenticated: false },
-  getMyLocationReach: { anyOf: ['people:employee:view'], allOf: [], conditional: [], authenticated: false },
-  getMyPrimaryLocation: { anyOf: ['people:self:view'], allOf: [], conditional: [], authenticated: false },
-  getPersonPrimaryLocation: { anyOf: ['people:employee:view'], allOf: [], conditional: [], authenticated: false },
-  getStaffingAssignment: { anyOf: ['people:employee:view'], allOf: [], conditional: [], authenticated: false },
-  getStaffingCoverage: { anyOf: ['people:shift:view'], allOf: [], conditional: [], authenticated: false },
-  getStaffingTargets: { anyOf: ['people:shift:view'], allOf: [], conditional: [], authenticated: false },
-  getTimeEntry: { anyOf: ['people:timeEntry:view'], allOf: [], conditional: [], authenticated: false },
-  getTimeOffRequest: { anyOf: ['people:time_off:request', 'people:time_off:view'], allOf: [], conditional: [], authenticated: false },
-  getTimePeriodApproval: { anyOf: ['people:timeEntry:view'], allOf: [], conditional: [], authenticated: false },
-  getWorkSessionDay: { anyOf: ['people:self:view', 'people:timekeeping:view'], allOf: [], conditional: [], authenticated: false },
-  listApprovedTimeForExport: { anyOf: ['accounting:time:export'], allOf: [], conditional: [], authenticated: false },
-  listCredentialDocumentReveals: { anyOf: ['people:credential_document_audit:view'], allOf: [], conditional: [], authenticated: false },
-  listCredentialsNeedingAttention: { anyOf: ['people:employee:view'], allOf: [], conditional: [], authenticated: false },
-  listInactivePersonActiveUsers: { anyOf: ['people:compliance:view'], allOf: [], conditional: [], authenticated: false },
-  listJobRoles: { anyOf: ['people:jobRole:view'], allOf: [], conditional: [], authenticated: false },
-  listMyLocations: { anyOf: ['people:self:view'], allOf: [], conditional: [], authenticated: false },
-  listPeopleAvailability: { anyOf: ['people:availability:view'], allOf: [], conditional: [], authenticated: false },
-  listPersonCredentials: { anyOf: ['people:employee:view'], allOf: [], conditional: [], authenticated: false },
-  listPersonLocations: { anyOf: ['people:employee:view'], allOf: [], conditional: [], authenticated: false },
-  listPersonTimeOffBalances: { anyOf: ['people:time_off:request', 'people:time_off:view'], allOf: [], conditional: [], authenticated: false },
-  listShifts: { anyOf: ['people:shift:view'], allOf: [], conditional: [], authenticated: false },
-  listSkills: { anyOf: ['people:skill:view'], allOf: [], conditional: [], authenticated: false },
-  listStaffingAssignments: { anyOf: ['people:employee:view'], allOf: [], conditional: [], authenticated: false },
-  listStaffingAssignmentsByPath: { anyOf: ['people:employee:view'], allOf: [], conditional: [], authenticated: false },
-  listTimeEntries: { anyOf: ['people:timeEntry:view'], allOf: [], conditional: [], authenticated: false },
-  listTimeEntryAdjustments: { anyOf: ['people:timeAdjustment:view'], allOf: [], conditional: [], authenticated: false },
-  listTimeEntryExceptions: { anyOf: ['people:timeException:view'], allOf: [], conditional: [], authenticated: false },
-  listTimeOffBalances: { anyOf: ['people:time_off:view'], allOf: [], conditional: [], authenticated: false },
-  listTimeOffRequests: { anyOf: ['people:time_off:request', 'people:time_off:view'], allOf: [], conditional: [], authenticated: false },
-  listTimePeriods: { anyOf: ['people:timekeeping:view'], allOf: [], conditional: [], authenticated: false },
-  listTimekeepingApprovalPeople: { anyOf: ['people:timeEntry:view'], allOf: [], conditional: [], authenticated: false },
-  rejectTimeEntriesBatch: { anyOf: ['people:timeEntry:reject'], allOf: [], conditional: [], authenticated: false },
-  rejectTimePeriod: { anyOf: ['people:timeEntry:reject'], allOf: [], conditional: [], authenticated: false },
-  replaceStaffingTargets: { anyOf: ['people:shift:manage'], allOf: [], conditional: [], authenticated: false },
-  resolveTimeEntryException: { anyOf: ['people:timeException:resolve'], allOf: [], conditional: [], authenticated: false },
-  revealCredentialDocument: { anyOf: ['people:credential_document:reveal'], allOf: [], conditional: [], authenticated: false },
-  searchEmployees: { anyOf: ['people:employee:view'], allOf: [], conditional: [], authenticated: false },
-  setEmployeePhoto: { anyOf: ['people:employee:edit', 'people:employee_photo:edit'], allOf: [], conditional: [], authenticated: false },
-  setTimeOffBalance: { anyOf: ['people:time_off_balance:manage'], allOf: [], conditional: [], authenticated: false },
-  startWorkSession: { anyOf: [], allOf: [], conditional: [], authenticated: true },
-  startWorkSessionBreak: { anyOf: [], allOf: [], conditional: [], authenticated: true },
-  stopWorkSession: { anyOf: [], allOf: [], conditional: [], authenticated: true },
-  stopWorkSessionBreak: { anyOf: [], allOf: [], conditional: [], authenticated: true },
-  submitWorkSession: { anyOf: [], allOf: [], conditional: [], authenticated: true },
-  transitionTimePeriod: { anyOf: ['people:timePeriod:transition'], allOf: [], conditional: [], authenticated: false },
-  updateEmployee: { anyOf: ['people:employee:edit'], allOf: [], conditional: [], authenticated: false },
-  updateJobRole: { anyOf: ['people:jobRole:manage'], allOf: [], conditional: [], authenticated: false },
-  updateShift: { anyOf: ['people:shift:manage'], allOf: [], conditional: [], authenticated: false },
-  updateStaffingAssignment: { anyOf: ['people:employee:edit'], allOf: [], conditional: [], authenticated: false },
-  waiveTimeEntryException: { anyOf: ['people:timeException:resolve'], allOf: [], conditional: [], authenticated: false },
+  acknowledgeTimeEntryException: { anyOf: ['people:timeException:acknowledge'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  approveTimeEntriesBatch: { anyOf: ['people:timeEntry:approve'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  approveTimeEntryAdjustment: { anyOf: ['people:timeAdjustment:approve'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  approveTimeOffRequest: { anyOf: ['people:time_off:decide'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  approveTimePeriod: { anyOf: ['people:timeEntry:approve'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  bulkIngestPersonCredentials: { anyOf: ['people:employee:edit'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  bulkIngestStaffingAssignments: { anyOf: ['people:employee:edit'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  cancelShift: { anyOf: ['people:shift:manage'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  cancelTimeOffRequest: { anyOf: ['people:time_off:decide', 'people:time_off:request'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  clearEmployeePhoto: { anyOf: ['people:employee:edit', 'people:employee_photo:edit'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  closeMissedWorkSessionClockOut: { anyOf: ['people:timeAdjustment:create'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  closeMissedWorkSessionClockOutForPerson: { anyOf: ['people:timekeeping:approve'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  correctPersonCredential: { anyOf: ['people:credential:manage'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  createEmployee: { anyOf: ['people:employee:create'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  createEmployeesBulk: { anyOf: ['people:employee:create'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  createJobRole: { anyOf: ['people:jobRole:manage'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  createPersonCredential: { anyOf: ['people:credential:manage'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  createShift: { anyOf: ['people:shift:manage'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  createStaffingAssignment: { anyOf: ['people:employee:edit'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  createTimeEntryAdjustment: { anyOf: ['people:timeAdjustment:create'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  createTimeEntryException: { anyOf: ['people:timeException:create'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  createTimeOffRequest: { anyOf: ['people:time_off:decide', 'people:time_off:request'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  createTimePeriod: { anyOf: ['people:timePeriod:create'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  denyTimeOffRequest: { anyOf: ['people:time_off:decide'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  disableEmployee: { anyOf: ['people:employee:activation'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  enableEmployee: { anyOf: ['people:employee:activation'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  endStaffingAssignment: { anyOf: ['people:employee:edit'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  getAttendanceDiscrepancyReport: { anyOf: ['people:attendance_report:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  getCredentialAttentionCounts: { anyOf: ['people:employee:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  getCurrentWorkSession: { anyOf: ['people:self:view', 'people:timekeeping:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  getEmployee: { anyOf: ['people:employee_pii:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  getEmployeeByNumber: { anyOf: ['people:employee:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  getEmployeeStatusCounts: { anyOf: ['people:employee:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  getJobRole: { anyOf: ['people:jobRole:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  getMyLocationReach: { anyOf: ['people:employee:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  getMyPrimaryLocation: { anyOf: ['people:self:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  getPersonPrimaryLocation: { anyOf: ['people:employee:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  getStaffingAssignment: { anyOf: ['people:employee:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  getStaffingCoverage: { anyOf: ['people:shift:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  getStaffingTargets: { anyOf: ['people:shift:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  getTimeEntry: { anyOf: ['people:timeEntry:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  getTimeOffRequest: { anyOf: ['people:time_off:request', 'people:time_off:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  getTimePeriodApproval: { anyOf: ['people:timeEntry:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  getWorkSessionDay: { anyOf: ['people:self:view', 'people:timekeeping:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  listApprovedTimeForExport: { anyOf: ['accounting:time:export'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  listCredentialDocumentReveals: { anyOf: ['people:credential_document_audit:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  listCredentialsNeedingAttention: { anyOf: ['people:employee:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  listInactivePersonActiveUsers: { anyOf: ['people:compliance:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  listJobRoles: { anyOf: ['people:jobRole:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  listMyLocations: { anyOf: ['people:self:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  listPeopleAvailability: { anyOf: ['people:availability:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  listPersonCredentials: { anyOf: ['people:employee:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  listPersonLocations: { anyOf: ['people:employee:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  listPersonTimeOffBalances: { anyOf: ['people:time_off:request', 'people:time_off:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  listShifts: { anyOf: ['people:shift:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  listSkills: { anyOf: ['people:skill:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  listStaffingAssignments: { anyOf: ['people:employee:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  listStaffingAssignmentsByPath: { anyOf: ['people:employee:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  listTimeEntries: { anyOf: ['people:timeEntry:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  listTimeEntryAdjustments: { anyOf: ['people:timeAdjustment:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  listTimeEntryExceptions: { anyOf: ['people:timeException:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  listTimeOffBalances: { anyOf: ['people:time_off:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  listTimeOffRequests: { anyOf: ['people:time_off:request', 'people:time_off:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  listTimePeriods: { anyOf: ['people:timekeeping:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  listTimekeepingApprovalPeople: { anyOf: ['people:timeEntry:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  rejectTimeEntriesBatch: { anyOf: ['people:timeEntry:reject'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  rejectTimePeriod: { anyOf: ['people:timeEntry:reject'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  replaceStaffingTargets: { anyOf: ['people:shift:manage'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  resolveTimeEntryException: { anyOf: ['people:timeException:resolve'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  revealCredentialDocument: { anyOf: ['people:credential_document:reveal'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  searchEmployees: { anyOf: ['people:employee:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  setEmployeePhoto: { anyOf: ['people:employee:edit', 'people:employee_photo:edit'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  setTimeOffBalance: { anyOf: ['people:time_off_balance:manage'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  startWorkSession: { anyOf: [], allOf: [], conditional: [], authenticated: true, conditions: {} },
+  startWorkSessionBreak: { anyOf: [], allOf: [], conditional: [], authenticated: true, conditions: {} },
+  stopWorkSession: { anyOf: [], allOf: [], conditional: [], authenticated: true, conditions: {} },
+  stopWorkSessionBreak: { anyOf: [], allOf: [], conditional: [], authenticated: true, conditions: {} },
+  submitWorkSession: { anyOf: [], allOf: [], conditional: [], authenticated: true, conditions: {} },
+  transitionTimePeriod: { anyOf: ['people:timePeriod:transition'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  updateEmployee: { anyOf: ['people:employee:edit'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  updateJobRole: { anyOf: ['people:jobRole:manage'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  updateShift: { anyOf: ['people:shift:manage'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  updateStaffingAssignment: { anyOf: ['people:employee:edit'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  waiveTimeEntryException: { anyOf: ['people:timeException:resolve'], allOf: [], conditional: [], authenticated: false, conditions: {} },
 };
 
 /** Operations whose spec declares no requirement, so they have no entry above. */
