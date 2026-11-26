@@ -10,7 +10,7 @@
 
 
 /**
- * Name, description, capabilities and optional MCP persona metadata for a new role
+ * Name, description and capabilities for a new role
  */
 export interface RoleCreateRequest {
     /**
@@ -18,33 +18,13 @@ export interface RoleCreateRequest {
      */
     capabilities?: Array<string>;
     /**
-     * Human-readable description of the role. Doubles as the derived persona focus when personaFocus is omitted.
+     * Human-readable description of the role.
      */
     description?: string;
-    /**
-     * Whether the role participates in MCP persona resolution. Defaults to true; set false for roles with no MCP access so their callers land on the fallback by design.
-     */
-    mcpPersonaEligible?: boolean;
-    /**
-     * MCP persona resolution priority, lowest first. Null leaves the role unranked, which sorts after every ranked role but still ahead of the ROLE_USER fallback.
-     */
-    mcpPersonaRank?: number;
     /**
      * Display name of the role, stored as typed and trimmed. Name it for the access it gives, not for a job title. Unique within the tenant ignoring letter case and repeated spaces. The role\'s immutable key is derived from this name once, at creation.
      */
     name: string;
-    /**
-     * What the caller works on. Derived from the description when omitted.
-     */
-    personaFocus?: string;
-    /**
-     * Who the caller is, in the second person. Derived from the role name when omitted.
-     */
-    personaTitle?: string;
-    /**
-     * How to speak to the caller. Defaults to a neutral tone when omitted.
-     */
-    personaTone?: string;
 }
 
 function isOptionalRoleCreateRequestPropertyOfType(
@@ -86,9 +66,9 @@ export function instanceOfRoleCreateRequest(value: object): value is RoleCreateR
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createRoleCreateRequestPropertyNames('name', );
-    const optionalStringProperties = createRoleCreateRequestOptionalProperties({ name: 'description', nullable: false }, { name: 'name', nullable: false }, { name: 'personaFocus', nullable: false }, { name: 'personaTitle', nullable: false }, { name: 'personaTone', nullable: false }, );
-    const optionalNumberProperties = createRoleCreateRequestOptionalProperties({ name: 'mcpPersonaRank', nullable: false }, );
-    const optionalBooleanProperties = createRoleCreateRequestOptionalProperties({ name: 'mcpPersonaEligible', nullable: false }, );
+    const optionalStringProperties = createRoleCreateRequestOptionalProperties({ name: 'description', nullable: false }, { name: 'name', nullable: false }, );
+    const optionalNumberProperties = createRoleCreateRequestOptionalProperties();
+    const optionalBooleanProperties = createRoleCreateRequestOptionalProperties();
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
         && optionalStringProperties.every((property) => isOptionalRoleCreateRequestPropertyOfType(_v, property.name, 'string', property.nullable))
