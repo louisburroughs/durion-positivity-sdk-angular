@@ -67,7 +67,7 @@ export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<MarketingOperationI
   deleteMessageTemplate: { anyOf: ['marketing:template:manage'], allOf: [], conditional: [], authenticated: false, conditions: {} },
   dispatchCampaign: { anyOf: ['marketing:campaign:send'], allOf: [], conditional: [], authenticated: false, conditions: {} },
   getCampaignById: { anyOf: ['marketing:campaign:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
-  getCampaignOverview: { anyOf: ['marketing:campaign:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  getCampaignOverview: { anyOf: ['marketing:campaign:view'], allOf: [], conditional: [], authenticated: false, conditions: { stats: { code: 'marketing:stats:view', kind: 'fields', fields: ['recent[].sent', 'recent[].openRate'] } } },
   getCampaignStats: { anyOf: ['marketing:stats:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
   getMessageTemplateById: { anyOf: ['marketing:template:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
   getProgramStats: { anyOf: ['marketing:stats:view'], allOf: [], conditional: [], authenticated: false, conditions: {} },
