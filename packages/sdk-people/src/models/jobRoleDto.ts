@@ -51,10 +51,6 @@ export interface JobRoleDto {
      */
     positionType: JobRoleDtoPositionTypeEnum;
     updatedAt: string;
-    /**
-     * Optimistic-lock version; send it back on updateJobRole, which refuses a stale one with 409 OPTIMISTIC_LOCK_FAILED
-     */
-    version: number;
 }
 export enum JobRoleDtoPositionTypeEnum {
     Technician = 'TECHNICIAN',
@@ -105,9 +101,9 @@ export function instanceOfJobRoleDto(value: object): value is JobRoleDto {
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createJobRoleDtoPropertyNames('active', 'code', 'createdAt', 'id', 'name', 'positionType', 'updatedAt', 'version', );
+    const requiredProperties = createJobRoleDtoPropertyNames('active', 'code', 'createdAt', 'id', 'name', 'positionType', 'updatedAt', );
     const optionalStringProperties = createJobRoleDtoOptionalProperties({ name: 'code', nullable: false }, { name: 'createdAt', nullable: false }, { name: 'description', nullable: false }, { name: 'id', nullable: false }, { name: 'name', nullable: false }, { name: 'personaFocus', nullable: false }, { name: 'personaTitle', nullable: false }, { name: 'personaTone', nullable: false }, { name: 'positionType', nullable: false }, { name: 'updatedAt', nullable: false }, );
-    const optionalNumberProperties = createJobRoleDtoOptionalProperties({ name: 'version', nullable: false }, );
+    const optionalNumberProperties = createJobRoleDtoOptionalProperties();
     const optionalBooleanProperties = createJobRoleDtoOptionalProperties({ name: 'active', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)

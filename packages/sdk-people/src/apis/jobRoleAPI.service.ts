@@ -112,89 +112,17 @@ export class JobRoleAPIService extends BaseService {
     }
 
     /**
-     * Get One Job Title On The Tenant\&#39;s List
-     * Returns one job title on the calling tenant\&#39;s own list, active or not, with its current version. Use this tool to open a title for editing (updateJobRole needs the version it returns) or to show a title an employee or staffing record names; do not use it to look up an application role, which is a pos-security-service concept. Preconditions: the caller holds people:jobRole:view. Required inputs: the title id in the path; there is no request body. No events are emitted beyond the audit read and no state changes; this is a read-only projection scoped to the caller\&#39;s tenant. Returns 200 with the title, 403 without the authority, and 404 NOT_FOUND when the tenant has no title with this id (an id of another tenant\&#39;s title included).
-     * @endpoint get /v1/people/job-roles/{id}
-     * @param id Job title id
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public getJobRole(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<JobRoleDto>;
-    public getJobRole(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<JobRoleDto>>;
-    public getJobRole(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<JobRoleDto>>;
-    public getJobRole(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling getJobRole.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/people/job-roles/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<JobRoleDto>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
      * List The Tenant\&#39;s Job Roles
-     * Returns the job titles on the calling tenant\&#39;s own list, ordered by name: the active ones only, or every title, active or not, with includeInactive&#x3D;true. Use this tool to populate a job-role picker when creating or editing an employee (active titles only), to show the whole list for editing including retired titles (includeInactive&#x3D;true), or to look up a title\&#39;s id; do not use it to look up application roles or permissions, which live in pos-security-service and are a different concept entirely. Preconditions: the caller holds people:jobRole:view. Required inputs: none; includeInactive is optional and defaults to false, and there is no request body. No events are emitted beyond the audit read and no state changes; this is a read-only projection scoped to the caller\&#39;s tenant. Returns 200 with the list, empty when the tenant has defined none, and 403 without the authority.
+     * Returns every active job role on the calling tenant\&#39;s own list, ordered by name. Use this tool to populate a job-role picker when creating or editing an employee, or to look up the id createJobRole needs; do not use it to look up application roles or permissions, which live in pos-security-service and are a different concept entirely. Preconditions: the caller holds people:jobRole:view. Required inputs: none; there are no parameters and no request body. No events are emitted beyond the audit read and no state changes; this is a read-only projection scoped to the caller\&#39;s tenant. Returns 200 with the list, empty when the tenant has defined none, and 403 without the authority.
      * @endpoint get /v1/people/job-roles
-     * @param includeInactive Also return inactive (retired) titles; false or absent returns the active ones only
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listJobRoles(includeInactive?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<JobRoleDto>>;
-    public listJobRoles(includeInactive?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<JobRoleDto>>>;
-    public listJobRoles(includeInactive?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<JobRoleDto>>>;
-    public listJobRoles(includeInactive?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-
-        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
-
-        localVarQueryParameters = this.addToHttpParams(
-            localVarQueryParameters,
-            'includeInactive',
-            <any>includeInactive,
-            QueryParamStyle.Form,
-            true,
-        );
-
+    public listJobRoles(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<JobRoleDto>>;
+    public listJobRoles(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<JobRoleDto>>>;
+    public listJobRoles(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<JobRoleDto>>>;
+    public listJobRoles(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -229,7 +157,6 @@ export class JobRoleAPIService extends BaseService {
         return this.httpClient.request<Array<JobRoleDto>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -242,10 +169,10 @@ export class JobRoleAPIService extends BaseService {
 
     /**
      * Change A Job Title On The Tenant\&#39;s List
-     * Changes one job title on the calling tenant\&#39;s own list: its name, description, active flag, position type or chatbot persona. A field left out of the body is left unchanged; an explicit JSON null clears description or a persona slot. HR master data only -- a title grants no access. Use this tool to rename a title, correct the position it fills (which dispatch, staffing targets and shift rules key on), retire it with active&#x3D;false, or set the persona the chatbot uses for the people who hold it; do not use it to change an application role, which is a pos-security-service concept. Preconditions: the caller holds people:jobRole:manage; the title is on this tenant\&#39;s list. Required inputs: the title id in the path, the title\&#39;s version as last read (from getJobRole or listJobRoles) and at least one field to change in the body; the code is immutable, so a body that sends code is refused. Emits a PEOPLE_JOB_ROLE_UPDATE event and publishes people.job-role.updated; no other state changes. Returns 200 with the title and its new version, 400 when the body omits version or sends code, a blank name, an unknown positionType or a persona slot that is not a single descriptive line, 404 when the tenant has no title with this id, and 409 OPTIMISTIC_LOCK_FAILED when the version sent is not the title\&#39;s current one (another edit changed it); read the title again and retry.
+     * Changes one job title on the calling tenant\&#39;s own list: its name, description, active flag, position type or chatbot persona. A field left out of the body is left unchanged; an explicit JSON null clears description or a persona slot. HR master data only -- a title grants no access. Use this tool to rename a title, correct the position it fills (which dispatch, staffing targets and shift rules key on), retire it with active&#x3D;false, or set the persona the chatbot uses for the people who hold it; do not use it to change an application role, which is a pos-security-service concept. Preconditions: the caller holds people:jobRole:manage; the title is on this tenant\&#39;s list. Required inputs: the title id in the path and at least one field in the body; the code is immutable, so a body that sends code is refused. Emits a PEOPLE_JOB_ROLE_UPDATE event and publishes people.job-role.updated; no other state changes. Returns 200 with the title, 400 when the body sends code, a blank name, an unknown positionType or a persona slot that is not a single descriptive line, 404 when the tenant has no title with this id, and 409 when another edit changed the title at the same time.
      * @endpoint patch /v1/people/job-roles/{id}
      * @param id Job title id
-     * @param updateJobRoleRequest The version last read and the fields to change; absent fields are left unchanged.
+     * @param updateJobRoleRequest The fields to change; absent fields are left unchanged.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
