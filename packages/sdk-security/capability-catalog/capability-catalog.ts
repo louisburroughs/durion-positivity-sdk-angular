@@ -33,7 +33,7 @@ export interface CapabilityCatalogEntry {
 }
 
 /** Content hash of CAPABILITY_CATALOG; changes exactly when an entry does. */
-export const CAPABILITY_CATALOG_VERSION = 'c71c84cb6f506ec1';
+export const CAPABILITY_CATALOG_VERSION = 'b81123c7997ef2bc';
 
 /** Every capability, in key order. */
 export const CAPABILITY_CATALOG: readonly CapabilityCatalogEntry[] = [
@@ -964,10 +964,10 @@ export const CAPABILITY_CATALOG: readonly CapabilityCatalogEntry[] = [
   {
     key: 'sales.counter.sell',
     name: 'Sell at the counter',
-    description: 'Start a sale, add, change and remove items, set the customer, give an order discount, turn a cart into a quote, check out and take cash, take a return and ask for a price override.',
+    description: 'Start a sale, add, change and remove items, set the customer, give an order discount, turn a cart into a quote, check out and take cash, take a return and ask for a price override, and record one within the counter limit.',
     area: 'customer',
     includes: ['sales.order.view'],
-    permissions: ['order:line:create', 'order:line:delete', 'order:line:edit', 'order:order:checkout', 'order:order:create', 'order:order:discount', 'order:order:edit', 'order:order:quote', 'order:price_override:apply', 'order:return:create'],
+    permissions: ['accounting:price_override:approve_tier_1', 'order:line:create', 'order:line:delete', 'order:line:edit', 'order:order:checkout', 'order:order:create', 'order:order:discount', 'order:order:edit', 'order:order:quote', 'order:price_override:apply', 'order:return:create'],
     tenantWideOnly: false,
     hierarchy: 'OTHER',
     system: false,
@@ -980,6 +980,17 @@ export const CAPABILITY_CATALOG: readonly CapabilityCatalogEntry[] = [
     includes: [],
     permissions: ['order:order:view', 'order:price_override:view', 'order:return:view', 'order:session:view', 'order:session_policy:view'],
     tenantWideOnly: false,
+    hierarchy: 'OTHER',
+    system: false,
+  },
+  {
+    key: 'sales.price_override.any_amount',
+    name: 'Authorize price overrides of any size',
+    description: 'Authorize a price override above the supervisor limit, up to the business\'s highest override limit (seeded at 10,000.00 or 100 percent off).',
+    area: 'customer',
+    includes: ['sales.order.view'],
+    permissions: ['accounting:price_override:approve_tier_3'],
+    tenantWideOnly: true,
     hierarchy: 'OTHER',
     system: false,
   },
@@ -1008,10 +1019,10 @@ export const CAPABILITY_CATALOG: readonly CapabilityCatalogEntry[] = [
   {
     key: 'sales.supervise',
     name: 'Supervise sales',
-    description: 'Approve or reject price overrides and large returns, approve drawer cash movements and an over or short close with your own sign-in, cancel or void an order, charge a sale to a customer\'s account and enter a price by hand.',
+    description: 'Approve or reject price overrides, and record one within the supervisor limit, and large returns, approve drawer cash movements and an over or short close with your own sign-in, cancel or void an order, charge a sale to a customer\'s account and enter a price by hand.',
     area: 'customer',
     includes: ['sales.order.view'],
-    permissions: ['order:line:enter_manual_price', 'order:order:cancel', 'order:order:charge_on_account', 'order:order:void', 'order:price_override:approve', 'order:price_override:reject', 'order:return:approve', 'order:session:approve_cash_movement', 'order:session:approve_variance'],
+    permissions: ['accounting:price_override:approve_tier_2', 'order:line:enter_manual_price', 'order:order:cancel', 'order:order:charge_on_account', 'order:order:void', 'order:price_override:approve', 'order:price_override:reject', 'order:return:approve', 'order:session:approve_cash_movement', 'order:session:approve_variance'],
     tenantWideOnly: false,
     hierarchy: 'OTHER',
     system: false,

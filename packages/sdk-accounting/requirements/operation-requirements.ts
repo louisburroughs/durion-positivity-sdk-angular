@@ -470,7 +470,7 @@ export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<AccountingOperation
   recordApPaymentReturn: { anyOf: ['accounting:ap:pay'], allOf: [], conditional: [], authenticated: false },
   recordBankDeposit: { anyOf: ['accounting:deposit:create'], allOf: [], conditional: [], authenticated: false },
   recordCancellationAudit: { anyOf: ['accounting:events:submit'], allOf: [], conditional: [], authenticated: false },
-  recordPriceOverrideAudit: { anyOf: ['accounting:events:submit'], allOf: [], conditional: [], authenticated: false },
+  recordPriceOverrideAudit: { anyOf: ['accounting:price_override:approve_tier_1', 'accounting:price_override:approve_tier_2', 'accounting:price_override:approve_tier_3'], allOf: [], conditional: [], authenticated: false },
   recordRefundAudit: { anyOf: ['accounting:events:submit'], allOf: [], conditional: [], authenticated: false },
   recordTaxRegistration: { anyOf: ['accounting:tax_registration:manage'], allOf: [], conditional: [], authenticated: false },
   refundCustomerCredit: { anyOf: ['accounting:customer-credit:refund'], allOf: [], conditional: [], authenticated: false },
