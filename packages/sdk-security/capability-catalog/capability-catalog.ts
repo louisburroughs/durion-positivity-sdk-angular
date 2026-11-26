@@ -33,7 +33,7 @@ export interface CapabilityCatalogEntry {
 }
 
 /** Content hash of CAPABILITY_CATALOG; changes exactly when an entry does. */
-export const CAPABILITY_CATALOG_VERSION = '3443102691fd70e3';
+export const CAPABILITY_CATALOG_VERSION = 'c71c84cb6f506ec1';
 
 /** Every capability, in key order. */
 export const CAPABILITY_CATALOG: readonly CapabilityCatalogEntry[] = [
@@ -491,7 +491,7 @@ export const CAPABILITY_CATALOG: readonly CapabilityCatalogEntry[] = [
   {
     key: 'crm.insights.value',
     name: 'Customer spend figures',
-    description: 'See the money in customer insights, such as spend, balances and the value of closed work orders.',
+    description: 'See the money in customer insights, such as spend, balances and the value of closed workorders.',
     area: 'customer',
     includes: ['crm.customer.view'],
     permissions: ['crm:insights:value_view'],
@@ -535,7 +535,7 @@ export const CAPABILITY_CATALOG: readonly CapabilityCatalogEntry[] = [
   {
     key: 'inventory.floor.work',
     name: 'Stockroom floor work',
-    description: 'Receive deliveries, put stock away, pick parts for work orders, count stock, request and receive transfers, return parts to stock, and request adjustments or scrap.',
+    description: 'Receive deliveries, put stock away, pick parts for workorders, count stock, request and receive transfers, return parts to stock, and request adjustments or scrap.',
     area: 'inventory',
     includes: ['inventory.stock.view'],
     permissions: ['inventory:adjustment:create', 'inventory:asn:create', 'inventory:cycle_count:complete', 'inventory:cycle_count:initiate', 'inventory:goods_receipt:create', 'inventory:issue:parts', 'inventory:pick_list:create', 'inventory:pick_list:execute', 'inventory:pick_list:return_staged', 'inventory:putaway:claim', 'inventory:putaway:execute', 'inventory:putaway:generate', 'inventory:receiving:complete', 'inventory:receiving:create', 'inventory:return:write', 'inventory:scrap:create', 'inventory:transfer:create', 'inventory:transfer:receive', 'order:purchase_order:view'],
@@ -689,7 +689,7 @@ export const CAPABILITY_CATALOG: readonly CapabilityCatalogEntry[] = [
   {
     key: 'media.image.upload',
     name: 'Add photos',
-    description: 'Take or upload photos, attach them to a work order or other record, and see the photos already there.',
+    description: 'Take or upload photos, attach them to a workorder or other record, and see the photos already there.',
     area: 'product',
     includes: [],
     permissions: ['image:image:store', 'image:image:view'],
@@ -733,7 +733,7 @@ export const CAPABILITY_CATALOG: readonly CapabilityCatalogEntry[] = [
   {
     key: 'people.self.service',
     name: 'Employee self-service',
-    description: 'See your own employee record and hours, ask for time off, ask for a correction to your recorded time, and start and stop time on work order jobs.',
+    description: 'See your own employee record and hours, ask for time off, ask for a correction to your recorded time, and start and stop time on workorder jobs.',
     area: 'people',
     includes: [],
     permissions: ['people:self:view', 'people:timeAdjustment:create', 'people:timeAdjustment:view', 'people:timeException:acknowledge', 'people:timeException:create', 'people:timeException:view', 'people:time_off:request', 'timekeeping:work_session:break_start', 'timekeeping:work_session:break_stop', 'timekeeping:work_session:create', 'timekeeping:work_session:stop'],
@@ -1239,7 +1239,7 @@ export const CAPABILITY_CATALOG: readonly CapabilityCatalogEntry[] = [
   {
     key: 'workexec.change_request.view',
     name: 'View change requests',
-    description: 'See the change requests raised on work orders, so the stockroom knows which extra parts a job is waiting on, without the rest of the work order.',
+    description: 'See the change requests raised on workorders, so the stockroom knows which extra parts a job is waiting on, without the rest of the workorder.',
     area: 'service',
     includes: [],
     permissions: ['workorder:change_request:view', 'workorder:open_item:view', 'workorder:workorder:view'],
@@ -1250,7 +1250,7 @@ export const CAPABILITY_CATALOG: readonly CapabilityCatalogEntry[] = [
   {
     key: 'workexec.desk.work',
     name: 'Service desk',
-    description: 'Run the service desk — write and revise estimates, record the customer\'s approval or refusal, turn an estimate into a work order, open and approve work orders, answer a technician\'s change request, request fleet authorization, record sign-off, close the job and raise its invoice.',
+    description: 'Run the service desk — write and revise estimates, record the customer\'s approval or refusal, turn an estimate into a workorder, open and approve workorders, answer a technician\'s change request, request fleet authorization, record sign-off, close the job and raise its invoice.',
     area: 'service',
     includes: ['workexec.workorder.view'],
     permissions: ['catalog:product:view', 'crm:party_summary:search', 'crm:vehicle:view', 'vehicle-inventory:registry:view', 'workorder:change_request:approve', 'workorder:change_request:create', 'workorder:change_request:decline', 'workorder:estimate:approve', 'workorder:estimate:calculate', 'workorder:estimate:check_in', 'workorder:estimate:create', 'workorder:estimate:decline', 'workorder:estimate:edit', 'workorder:estimate:promote', 'workorder:estimate:reopen', 'workorder:estimate:submit', 'workorder:estimate_item:add', 'workorder:estimate_item:delete', 'workorder:estimate_item:edit', 'workorder:estimate_snapshot:create', 'workorder:fleet_auth:request', 'workorder:note:add', 'workorder:workorder:approve', 'workorder:workorder:complete', 'workorder:workorder:create', 'workorder:workorder:generate_invoice', 'workorder:workorder:record_sign_off'],
@@ -1261,7 +1261,7 @@ export const CAPABILITY_CATALOG: readonly CapabilityCatalogEntry[] = [
   {
     key: 'workexec.estimate.work',
     name: 'Estimates at the vehicle',
-    description: 'Check a vehicle in, write an estimate and its lines, send it for approval, record the customer\'s approval or refusal and turn the estimate into a work order.',
+    description: 'Check a vehicle in, write an estimate and its lines, send it for approval, record the customer\'s approval or refusal and turn the estimate into a workorder.',
     area: 'service',
     includes: ['workexec.workorder.view'],
     permissions: ['catalog:product:view', 'crm:party_summary:search', 'crm:vehicle:view', 'vehicle-inventory:registry:view', 'workorder:estimate:approve', 'workorder:estimate:check_in', 'workorder:estimate:create', 'workorder:estimate:decline', 'workorder:estimate:promote', 'workorder:estimate:submit', 'workorder:estimate_item:add', 'workorder:estimate_item:delete', 'workorder:estimate_item:edit'],
@@ -1272,7 +1272,7 @@ export const CAPABILITY_CATALOG: readonly CapabilityCatalogEntry[] = [
   {
     key: 'workexec.financials.view',
     name: 'View job prices and totals',
-    description: 'See the money on a work order\'s lines, which the work order otherwise leaves out; the unit prices, the labor and parts amounts and the line totals.',
+    description: 'See the money on a workorder\'s lines, which the workorder otherwise leaves out; the unit prices, the labor and parts amounts and the line totals.',
     area: 'service',
     includes: ['workexec.workorder.view'],
     permissions: ['workorder:financials:view', 'workorder:invoice:view'],
@@ -1349,7 +1349,7 @@ export const CAPABILITY_CATALOG: readonly CapabilityCatalogEntry[] = [
   {
     key: 'workexec.workorder.supervise',
     name: 'Supervise service work',
-    description: 'Make the manager\'s calls on service work — approve a change request in an emergency without the customer\'s answer, correct labor hours or record labor for a technician, edit, reopen, transfer or delete a work order, delete an estimate, override a job\'s shop, bay or technician, and resolve a refused fleet authorization.',
+    description: 'Make the manager\'s calls on service work — approve a change request in an emergency without the customer\'s answer, correct labor hours or record labor for a technician, edit, reopen, transfer or delete a workorder, delete an estimate, override a job\'s shop, bay or technician, and resolve a refused fleet authorization.',
     area: 'service',
     includes: ['workexec.workorder.view'],
     permissions: ['workorder:change_request:emergency_override', 'workorder:estimate:delete', 'workorder:fleet_auth:resolve', 'workorder:labor:add_on_behalf', 'workorder:labor:adjust', 'workorder:operationalContext:override', 'workorder:workorder:delete', 'workorder:workorder:edit', 'workorder:workorder:reopen_completed', 'workorder:workorder:transfer'],
@@ -1359,8 +1359,8 @@ export const CAPABILITY_CATALOG: readonly CapabilityCatalogEntry[] = [
   },
   {
     key: 'workexec.workorder.view',
-    name: 'View work orders and estimates',
-    description: 'Find and open work orders and estimates and read everything on them — labor, parts, customer notes, change requests and the invoice.',
+    name: 'View workorders and estimates',
+    description: 'Find and open workorders and estimates and read everything on them — labor, parts, customer notes, change requests and the invoice.',
     area: 'service',
     includes: [],
     permissions: ['invoice:invoice:view', 'workorder:change_request:view', 'workorder:estimate:view', 'workorder:labor:view', 'workorder:note:view', 'workorder:open_item:view', 'workorder:parts:view', 'workorder:workorder:view'],
@@ -1371,7 +1371,7 @@ export const CAPABILITY_CATALOG: readonly CapabilityCatalogEntry[] = [
   {
     key: 'workspace.staff.basics',
     name: 'Staff basics',
-    description: 'Sign in to the workspace, look up a product, a vehicle, an order, a work order, an invoice and stock availability, see your own employee record and request time off.',
+    description: 'Sign in to the workspace, look up a product, a vehicle, an order, a workorder, an invoice and stock availability, see your own employee record and request time off.',
     area: 'administration',
     includes: [],
     permissions: ['catalog:product:view', 'crm:insights:view', 'image:image:view', 'inventory:availability:read', 'invoice:invoice:view', 'location:read', 'order:order:view', 'people:self:view', 'people:time_off:request', 'vehicle-inventory:registry:view', 'workorder:open_item:view', 'workorder:workorder:view'],
