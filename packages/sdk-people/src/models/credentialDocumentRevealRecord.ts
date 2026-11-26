@@ -49,10 +49,6 @@ export interface CredentialDocumentRevealRecord {
      * Who revealed it, from the security context
      */
     revealedBy: string;
-    /**
-     * Roles the person held at the time
-     */
-    revealedByRoles: Array<string>;
 }
 export enum CredentialDocumentRevealRecordOutcomeEnum {
     Revealed = 'REVEALED',
@@ -100,7 +96,7 @@ export function instanceOfCredentialDocumentRevealRecord(value: object): value i
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createCredentialDocumentRevealRecordPropertyNames('credentialId', 'documentId', 'outcome', 'personId', 'revealId', 'revealedAt', 'revealedBy', 'revealedByRoles', );
+    const requiredProperties = createCredentialDocumentRevealRecordPropertyNames('credentialId', 'documentId', 'outcome', 'personId', 'revealId', 'revealedAt', 'revealedBy', );
     const optionalStringProperties = createCredentialDocumentRevealRecordOptionalProperties({ name: 'correlationId', nullable: false }, { name: 'credentialId', nullable: false }, { name: 'documentId', nullable: false }, { name: 'outcome', nullable: false }, { name: 'personId', nullable: false }, { name: 'reason', nullable: false }, { name: 'revealId', nullable: false }, { name: 'revealedAt', nullable: false }, { name: 'revealedBy', nullable: false }, );
     const optionalNumberProperties = createCredentialDocumentRevealRecordOptionalProperties();
     const optionalBooleanProperties = createCredentialDocumentRevealRecordOptionalProperties();

@@ -42,10 +42,6 @@ export interface TaxIdRevealRecordView {
      */
     revealedBy: string;
     /**
-     * Roles the person held at the time.
-     */
-    revealedByRoles: Array<string>;
-    /**
      * Its scheme at the time.
      */
     scheme: string;
@@ -96,7 +92,7 @@ export function instanceOfTaxIdRevealRecordView(value: object): value is TaxIdRe
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createTaxIdRevealRecordViewPropertyNames('outcome', 'registrationId', 'revealId', 'revealedAt', 'revealedBy', 'revealedByRoles', 'scheme', );
+    const requiredProperties = createTaxIdRevealRecordViewPropertyNames('outcome', 'registrationId', 'revealId', 'revealedAt', 'revealedBy', 'scheme', );
     const optionalStringProperties = createTaxIdRevealRecordViewOptionalProperties({ name: 'correlationId', nullable: false }, { name: 'outcome', nullable: false }, { name: 'reason', nullable: false }, { name: 'registrationId', nullable: false }, { name: 'revealId', nullable: false }, { name: 'revealedAt', nullable: false }, { name: 'revealedBy', nullable: false }, { name: 'scheme', nullable: false }, );
     const optionalNumberProperties = createTaxIdRevealRecordViewOptionalProperties();
     const optionalBooleanProperties = createTaxIdRevealRecordViewOptionalProperties();

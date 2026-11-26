@@ -48,80 +48,8 @@ export class JWTAPIService extends BaseService {
     }
 
     /**
-     * Extract Roles From JWT Token
-     * Extracts the roles claim from a valid JWT token and returns the normalized role names. Use this tool when a caller holds a token and needs its roles; use getTokenSubject instead for the username, and decodePermissionBits instead to expand the token\&#39;s perm_bits claim into permission codes. Preconditions: the token must pass full validation, including revocation and token-store checks. Required inputs: token as a query parameter. No events are emitted and no state changes; this is a read-only claim extraction. Returns 401 when the token is invalid, expired, revoked, or unknown to the token store.
-     * @endpoint get /v1/auth/roles
-     * @param token
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     * @param options additional options
-     */
-    public getTokenRoles(token: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Set<string>>;
-    public getTokenRoles(token: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Set<string>>>;
-    public getTokenRoles(token: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Set<string>>>;
-    public getTokenRoles(token: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (token === null || token === undefined) {
-            throw new Error('Required parameter token was null or undefined when calling getTokenRoles.');
-        }
-
-        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
-
-        localVarQueryParameters = this.addToHttpParams(
-            localVarQueryParameters,
-            'token',
-            <any>token,
-            QueryParamStyle.Form,
-            true,
-        );
-
-
-        let localVarHeaders = this.defaultHeaders;
-
-        // authentication (bearerAuth) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/v1/auth/roles`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Set<string>>('get', `${basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                params: localVarQueryParameters.toHttpParams(),
-                responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
-                headers: localVarHeaders,
-                observe: observe,
-                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
      * Extract Subject From JWT Token
-     * Extracts the subject claim, the username, from a valid JWT token and returns it as a plain string body. Use this tool to resolve which user a token belongs to; use getTokenUserId instead for the stable UUID identifier, and getTokenRoles for the role claim. Preconditions: the token must pass full validation, including revocation and token-store checks. Required inputs: token as a query parameter. No events are emitted and no state changes; this is a read-only claim extraction. Returns 401 when the token is invalid, expired, revoked, or unknown to the token store.
+     * Extracts the subject claim, the username, from a valid JWT token and returns it as a plain string body. Use this tool to resolve which user a token belongs to; use getTokenUserId instead for the stable UUID identifier. Preconditions: the token must pass full validation, including revocation and token-store checks. Required inputs: token as a query parameter. No events are emitted and no state changes; this is a read-only claim extraction. Returns 401 when the token is invalid, expired, revoked, or unknown to the token store.
      * @endpoint get /v1/auth/subject
      * @param token
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
