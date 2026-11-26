@@ -18,10 +18,6 @@ export interface InputTaxRecoveryHistoryItem {
      */
     actor: string;
     /**
-     * Role the actor acted in, when known
-     */
-    actorRole?: string | null;
-    /**
      * Category code
      */
     code: string;
@@ -90,7 +86,7 @@ export function instanceOfInputTaxRecoveryHistoryItem(value: object): value is I
     const _v = value as Record<string, unknown>;
 
     const requiredProperties = createInputTaxRecoveryHistoryItemPropertyNames('actor', 'code', 'effectiveFrom', 'newTaxRecoverable', 'reason', );
-    const optionalStringProperties = createInputTaxRecoveryHistoryItemOptionalProperties({ name: 'actor', nullable: false }, { name: 'actorRole', nullable: true }, { name: 'code', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'reason', nullable: false }, );
+    const optionalStringProperties = createInputTaxRecoveryHistoryItemOptionalProperties({ name: 'actor', nullable: false }, { name: 'code', nullable: false }, { name: 'effectiveFrom', nullable: false }, { name: 'reason', nullable: false }, );
     const optionalNumberProperties = createInputTaxRecoveryHistoryItemOptionalProperties({ name: 'newRecoverablePercent', nullable: true }, { name: 'oldRecoverablePercent', nullable: true }, );
     const optionalBooleanProperties = createInputTaxRecoveryHistoryItemOptionalProperties({ name: 'newTaxRecoverable', nullable: false }, { name: 'oldTaxRecoverable', nullable: true }, );
 

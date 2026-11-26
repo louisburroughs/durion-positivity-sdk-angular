@@ -26,10 +26,6 @@ export interface ApApprovalPolicyHistoryRow {
      */
     changedByName?: string;
     /**
-     * The caller\'s roles at the time of the change
-     */
-    changedByRoles: Array<string>;
-    /**
      * Why it changed
      */
     justification: string;
@@ -85,7 +81,7 @@ export function instanceOfApApprovalPolicyHistoryRow(value: object): value is Ap
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createApApprovalPolicyHistoryRowPropertyNames('changedAt', 'changedBy', 'changedByRoles', 'justification', 'newValue', 'setting', );
+    const requiredProperties = createApApprovalPolicyHistoryRowPropertyNames('changedAt', 'changedBy', 'justification', 'newValue', 'setting', );
     const optionalStringProperties = createApApprovalPolicyHistoryRowOptionalProperties({ name: 'changedAt', nullable: false }, { name: 'changedBy', nullable: false }, { name: 'changedByName', nullable: false }, { name: 'justification', nullable: false }, { name: 'newValue', nullable: false }, { name: 'oldValue', nullable: false }, { name: 'setting', nullable: false }, );
     const optionalNumberProperties = createApApprovalPolicyHistoryRowOptionalProperties();
     const optionalBooleanProperties = createApApprovalPolicyHistoryRowOptionalProperties();

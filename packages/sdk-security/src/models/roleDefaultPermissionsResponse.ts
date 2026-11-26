@@ -14,7 +14,7 @@
  */
 export interface RoleDefaultPermissionsResponse {
     /**
-     * Sorted authority codes the role expands to (ROLE_* plus domain permission codes)
+     * Sorted permission codes the role grants through its capabilities; never a role
      */
     permissions: Array<string>;
     /**

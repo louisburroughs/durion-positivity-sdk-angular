@@ -60,7 +60,6 @@ export type SecurityOperationId =
   | 'getRoleDefaultPermissions'
   | 'getSelfRegistrationReviewCase'
   | 'getTenantSignup'
-  | 'getTokenRoles'
   | 'getTokenSubject'
   | 'getTokenUserId'
   | 'getUserAccountState'
@@ -154,7 +153,6 @@ export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<SecurityOperationId
   getRoleByName: { anyOf: ['security:role:view'], allOf: [], conditional: [], authenticated: false },
   getRoleDefaultPermissions: { anyOf: ['security:role:view'], allOf: [], conditional: [], authenticated: false },
   getSelfRegistrationReviewCase: { anyOf: ['security:user_account_state:view'], allOf: [], conditional: [], authenticated: false },
-  getTokenRoles: { anyOf: [], allOf: [], conditional: [], authenticated: true },
   getTokenSubject: { anyOf: [], allOf: [], conditional: [], authenticated: true },
   getTokenUserId: { anyOf: [], allOf: [], conditional: [], authenticated: true },
   getUserAccountState: { anyOf: ['security:user_account_state:view'], allOf: [], conditional: [], authenticated: false },
