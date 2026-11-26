@@ -10,7 +10,7 @@
 
 
 /**
- * Partial update of a job title, guarded by the version last read. Absent fields are left unchanged; an explicit JSON null clears description or a persona slot. The code is immutable and a body that sends it is refused.
+ * Partial update of a job title. Absent fields are left unchanged; an explicit JSON null clears description or a persona slot. The code is immutable and a body that sends it is refused.
  */
 export interface UpdateJobRoleRequest {
     /**
@@ -41,10 +41,6 @@ export interface UpdateJobRoleRequest {
      * The position this title fills; dispatch, staffing targets and shift rules key on it
      */
     positionType?: UpdateJobRoleRequestPositionTypeEnum;
-    /**
-     * The title\'s version as last read; a different current version is refused with 409 OPTIMISTIC_LOCK_FAILED
-     */
-    version: number;
 }
 export enum UpdateJobRoleRequestPositionTypeEnum {
     Technician = 'TECHNICIAN',
@@ -95,9 +91,9 @@ export function instanceOfUpdateJobRoleRequest(value: object): value is UpdateJo
 
     const _v = value as Record<string, unknown>;
 
-    const requiredProperties = createUpdateJobRoleRequestPropertyNames('version', );
+    const requiredProperties = createUpdateJobRoleRequestPropertyNames();
     const optionalStringProperties = createUpdateJobRoleRequestOptionalProperties({ name: 'description', nullable: true }, { name: 'name', nullable: false }, { name: 'personaFocus', nullable: true }, { name: 'personaTitle', nullable: true }, { name: 'personaTone', nullable: true }, { name: 'positionType', nullable: false }, );
-    const optionalNumberProperties = createUpdateJobRoleRequestOptionalProperties({ name: 'version', nullable: false }, );
+    const optionalNumberProperties = createUpdateJobRoleRequestOptionalProperties();
     const optionalBooleanProperties = createUpdateJobRoleRequestOptionalProperties({ name: 'active', nullable: false }, );
 
     return requiredProperties.every((propertyName) => propertyName in _v && _v[propertyName] !== undefined)
