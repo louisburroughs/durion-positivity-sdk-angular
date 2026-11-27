@@ -702,6 +702,7 @@ export const DEPRECATED_PERMISSIONS: readonly string[] = [
   'shop:bay:view',
   'shop:bay:create',
   'shop:bay:edit',
+  'workorder:invoice:view',
   'workorder:invoice:create',
   'catalog:supplier_cost:write',
   'people:person:view',
