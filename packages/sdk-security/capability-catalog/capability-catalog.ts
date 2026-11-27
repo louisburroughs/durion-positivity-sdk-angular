@@ -33,7 +33,7 @@ export interface CapabilityCatalogEntry {
 }
 
 /** Content hash of CAPABILITY_CATALOG; changes exactly when an entry does. */
-export const CAPABILITY_CATALOG_VERSION = 'b81123c7997ef2bc';
+export const CAPABILITY_CATALOG_VERSION = 'a3a78b5a042fa33e';
 
 /** Every capability, in key order. */
 export const CAPABILITY_CATALOG: readonly CapabilityCatalogEntry[] = [
@@ -1286,7 +1286,7 @@ export const CAPABILITY_CATALOG: readonly CapabilityCatalogEntry[] = [
     description: 'See the money on a workorder\'s lines, which the workorder otherwise leaves out; the unit prices, the labor and parts amounts and the line totals.',
     area: 'service',
     includes: ['workexec.workorder.view'],
-    permissions: ['workorder:financials:view', 'workorder:invoice:view'],
+    permissions: ['workorder:financials:view'],
     tenantWideOnly: false,
     hierarchy: 'OTHER',
     system: false,
