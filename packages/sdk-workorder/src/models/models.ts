@@ -71,6 +71,7 @@ export * from './openWorkorderCustomerRow';
 export * from './openWorkordersByCustomerResponse';
 export * from './operationalContextOverrideRequest';
 export * from './operationalContextResponse';
+export * from './outboxReplayResponse';
 export * from './pageEstimateSummaryResponse';
 export * from './pageWorkorderSearchResult';
 export * from './pageWorkorderStatusView';

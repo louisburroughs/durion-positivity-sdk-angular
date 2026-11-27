@@ -125,6 +125,7 @@ export type WorkorderOperationId =
   | 'releaseTechnician'
   | 'reopenEstimate'
   | 'reopenWorkorder'
+  | 'replayOutboxEvents'
   | 'requestWorkorderFleetAuthorization'
   | 'resolvePickScan'
   | 'resolveWorkorderFleetAuthorization'
@@ -257,6 +258,7 @@ export const OPERATION_REQUIREMENTS: Readonly<Partial<Record<WorkorderOperationI
   releaseTechnician: { anyOf: ['workorder:workorder:assign-technician'], allOf: [], conditional: [], authenticated: false, conditions: {} },
   reopenEstimate: { anyOf: ['workorder:estimate:reopen'], allOf: [], conditional: [], authenticated: false, conditions: {} },
   reopenWorkorder: { anyOf: ['workorder:workorder:reopen_completed'], allOf: [], conditional: [], authenticated: false, conditions: {} },
+  replayOutboxEvents: { anyOf: ['workorder:events:replay'], allOf: [], conditional: [], authenticated: false, conditions: {} },
   requestWorkorderFleetAuthorization: { anyOf: ['workorder:fleet_auth:request'], allOf: [], conditional: [], authenticated: false, conditions: {} },
   resolvePickScan: { anyOf: ['inventory:pick_list:execute'], allOf: [], conditional: [], authenticated: false, conditions: {} },
   resolveWorkorderFleetAuthorization: { anyOf: ['workorder:fleet_auth:resolve'], allOf: [], conditional: [], authenticated: false, conditions: {} },
